@@ -5,8 +5,8 @@ namespace pw {
 
 template<class Type, Type v>
 struct integral_constant {
-    using value_type = Type;
-    using type = integral_constant;
+    using value_type                  = Type;
+    using type                        = integral_constant;
     static constexpr value_type value = v;
 
     constexpr operator value_type() const noexcept

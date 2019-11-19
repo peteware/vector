@@ -5,13 +5,14 @@
 #include <pw_type_traits.h>
 
 namespace pw {
+
 template<class Type>
 struct allocator 
 {
-    typedef Type          value_type;
-    typedef pw::size_t    size_type;
-    typedef pw::ptrdiff_t difference_type;
-    typedef pw::true_type is_always_equal;
+    using value_type      = Type;
+    using size_type       = pw::size_t;
+    using difference_type = pw::ptrdiff_t;
+    using is_always_equal = pw::true_type;
 };
 
 }
