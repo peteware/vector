@@ -2,7 +2,7 @@
 #define PW_CSTDDEF_H
 
 namespace pw {
-typedef unsigned long long size_t;
-typedef long long ptrdiff_t
+using size_t = unsigned long long;
+using ptrdiff_t = long long ptrdiff_t;
 }
 #endif /*  PW_CSTDDEF_H */
