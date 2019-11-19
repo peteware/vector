@@ -19,8 +19,8 @@ struct integral_constant {
     }
 };
 
-using true_type	 = pw::integral_constant<bool, true>
-using false_type = pw::integral_constant<bool, false>
+using true_type	 = pw::integral_constant<bool, true>;
+using false_type = pw::integral_constant<bool, false>;
 
 }
 #endif /*  PW_TYPE_TRAITS_H */
