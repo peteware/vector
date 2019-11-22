@@ -17,6 +17,14 @@ public:
     using const_reference = value_type const&;
     using pointer = allocator_traits<Allocator>::pointer;
     using const_pointer = allocator_traits<Allocator>::const_pointer;
+
+    // Default constructor
+    vector();
+
+private:
+    pointer m_begin;
+    pointer m_end;
+    pointer m_bufend;
 };
 
 namespace pmr {
@@ -24,6 +32,13 @@ namespace pmr {
     using vector = pw::vector<Type, pw::pmr::polymorphic_allocator<Type>>;
 }
 
+template <class Type, class Allocator>
+vector<Type, Allocator>::vector()
+    : m_begin()
+    , m_end()
+    , m_bufend()
+{
+}
 }
 
 #endif /*  PW_VECTOR_H */

@@ -1,16 +1,35 @@
-#ifndef PW_MEMORY_RESOURCE_H  // -*- c++ -*-
+#ifndef PW_MEMORY_RESOURCE_H // -*- c++ -*-
 #define PW_MEMORY_RESOURCE_H
 
-namespace pw { namespace pmr {
+namespace pw {
 
-template<class Type>
+template <class Alloc>
+struct allocator_traits
+{
+    using allocator_type                         = Alloc;
+    using value_type                             = Alloc::value_type;
+    using pointer                                = value_type*;
+    using const_pointer                          = pointer_traits<pointer>::rebind<const value_type>;
+    using void_pointer                           = pointer_traits<pointer>::rebind<void>;
+    using const_void_pointer                     = pointer_traits<pointer>::rebind<const void>;
+    using difference_type                        = pointer_traits<pointer>::difference_type;
+    using size_type                              = make_unsigned<difference_type>::type;
+    using propagate_on_container_copy_assignment = false_type;
+    using propagate_on_container_move_assignment = false_type;
+    using propagate_on_container_swap            = false_type;
+    using is_always_equal                        = is_empty<Alloc>::type;
+};
+
+namespace pmr {
+
+template <class Type>
 class polymorphic_allocator
 {
 public:
     using value_type = Type;
-
 };
 
-}} // End namespace pw::pmr
+} // namespace pmr
+} // End namespace pw::pmr
 
 #endif /*  PW_MEMORY_RESOURCE_H */
