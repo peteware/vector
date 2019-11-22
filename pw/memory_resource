@@ -3,7 +3,7 @@
 
 namespace pw {
 
-template <class Alloc>
+template<class Alloc>
 struct allocator_traits
 {
     using allocator_type                         = Alloc;
@@ -22,7 +22,7 @@ struct allocator_traits
 
 namespace pmr {
 
-template <class Type>
+template<class Type>
 class polymorphic_allocator
 {
 public:
@@ -30,6 +30,6 @@ public:
 };
 
 } // namespace pmr
-} // End namespace pw::pmr
+} // namespace pw
 
 #endif /*  PW_MEMORY_RESOURCE_H */

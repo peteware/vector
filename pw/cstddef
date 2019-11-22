@@ -1,8 +1,8 @@
-#ifndef PW_CSTDDEF_H   // -*- c++ -*-
+#ifndef PW_CSTDDEF_H // -*- c++ -*-
 #define PW_CSTDDEF_H
 
 namespace pw {
 using size_t    = unsigned long long;
 using ptrdiff_t = long long;
-}
+} // namespace pw
 #endif /*  PW_CSTDDEF_H */

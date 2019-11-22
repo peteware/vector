@@ -3,5 +3,5 @@
 #include <typeinfo>
 
 namespace pw {
-static_assert (sizeof(size_t) == sizeof(void*));
+static_assert(sizeof(size_t) == sizeof(void*));
 }

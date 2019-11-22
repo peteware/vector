@@ -1,6 +1,7 @@
 #include <pw/vector>
 
-void f()
+void
+f()
 {
-    pw::vector<int>  v;
+    pw::vector<int> v;
 }

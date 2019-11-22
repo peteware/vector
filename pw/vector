@@ -6,17 +6,18 @@
 
 namespace pw {
 
-template <class Type, class Allocator = pw::allocator<Type>>
-class vector {
+template<class Type, class Allocator = pw::allocator<Type> >
+class vector
+{
 public:
-    using value_type = Type;
-    using allocator_type = Allocator;
-    using size_type = size_t;
+    using value_type      = Type;
+    using allocator_type  = Allocator;
+    using size_type       = size_t;
     using difference_type = ptrdiff_t;
-    using reference = value_type&;
+    using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer = allocator_traits<Allocator>::pointer;
-    using const_pointer = allocator_traits<Allocator>::const_pointer;
+    using pointer         = allocator_traits<Allocator>::pointer;
+    using const_pointer   = allocator_traits<Allocator>::const_pointer;
 
     // Default constructor
     vector();
@@ -28,17 +29,17 @@ private:
 };
 
 namespace pmr {
-    template <class Type>
-    using vector = pw::vector<Type, pw::pmr::polymorphic_allocator<Type>>;
+template<class Type>
+using vector = pw::vector<Type, pw::pmr::polymorphic_allocator<Type> >;
 }
 
-template <class Type, class Allocator>
+template<class Type, class Allocator>
 vector<Type, Allocator>::vector()
     : m_begin()
     , m_end()
     , m_bufend()
 {
 }
-}
+} // namespace pw
 
 #endif /*  PW_VECTOR_H */

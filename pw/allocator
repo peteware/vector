@@ -1,4 +1,4 @@
-#ifndef PW_ALLOCATOR_H  // -*- c++ -*-
+#ifndef PW_ALLOCATOR_H // -*- c++ -*-
 #define PW_ALLOCATOR_H
 
 #include <pw/cstddef>
@@ -7,7 +7,7 @@
 namespace pw {
 
 template<class Type>
-struct allocator 
+struct allocator
 {
     using value_type      = Type;
     using size_type       = pw::size_t;
@@ -15,7 +15,6 @@ struct allocator
     using is_always_equal = pw::true_type;
 };
 
-}
-
+} // namespace pw
 
 #endif /*  PW_ALLOCATOR_H */
