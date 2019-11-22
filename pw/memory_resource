@@ -1,0 +1,16 @@
+#ifndef PW_MEMORY_RESOURCE_H  // -*- c++ -*-
+#define PW_MEMORY_RESOURCE_H
+
+namespace pw { namespace pmr {
+
+template<class Type>
+class polymorphic_allocator
+{
+public:
+    using value_type = Type;
+
+};
+
+}} // End namespace pw::pmr
+
+#endif /*  PW_MEMORY_RESOURCE_H */

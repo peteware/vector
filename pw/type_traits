@@ -1,4 +1,4 @@
-#ifndef PW_TYPE_TRAITS_H
+#ifndef PW_TYPE_TRAITS_H   // -*- c++ -*-
 #define PW_TYPE_TRAITS_H
 
 namespace pw {

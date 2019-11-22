@@ -1,4 +1,4 @@
-#ifndef PW_CSTDDEF_H
+#ifndef PW_CSTDDEF_H   // -*- c++ -*-
 #define PW_CSTDDEF_H
 
 namespace pw {

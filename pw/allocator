@@ -1,4 +1,4 @@
-#ifndef PW_ALLOCATOR_H
+#ifndef PW_ALLOCATOR_H  // -*- c++ -*-
 #define PW_ALLOCATOR_H
 
 #include <pw/cstddef>
