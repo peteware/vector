@@ -1,8 +1,8 @@
 #ifndef PW_ALLOCATOR_H
 #define PW_ALLOCATOR_H
 
-#include <pw_cstddef.h>
-#include <pw_type_traits.h>
+#include <pw/cstddef>
+#include <pw/type_traits>
 
 namespace pw {
 

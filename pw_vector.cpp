@@ -1,4 +1,4 @@
-#include <pw_vector.h>
+#include <pw/vector>
 
 void f()
 {
