@@ -1,14 +1,16 @@
 #ifndef PW_MEMORY_RESOURCE_H // -*- c++ -*-
 #define PW_MEMORY_RESOURCE_H
 
+#include <pw/memory>
+
 namespace pw {
 
 template<class Alloc>
 struct allocator_traits
 {
     using allocator_type                         = Alloc;
-    using value_type                             = Alloc::value_type;
-    using pointer                                = value_type*;
+    using value_type                             = typename Alloc::value_type;
+    using pointer                                = pointer_traits < value_type*;
     using const_pointer                          = pointer_traits<pointer>::rebind<const value_type>;
     using void_pointer                           = pointer_traits<pointer>::rebind<void>;
     using const_void_pointer                     = pointer_traits<pointer>::rebind<const void>;

@@ -1,0 +1,34 @@
+#ifndef PW_MEMORY_H // -*- c++ -*-
+#define PW_MEMORY_H
+
+#include <pw/internal/meta.h>
+#include <memory>
+
+namespace pw {
+
+template<class Ptr>
+struct pointer_traits
+{
+    using pointer         = Ptr;
+    using element_type    = typename internal::element_type<Ptr>::type;
+    using difference_type = typename internal::difference_type<Ptr>::type;
+    using rebind          = typename internal::rebind_ptr<Ptr, U>::type;
+
+    static pointer pointer_to(element_type& r) { return Ptr::pointer_to(r); }
+};
+
+template<class Type>
+struct pointer_traits<Type*>
+{
+    using pointer         = Type*;
+    using element_type    = Type;
+    using difference_type = ptrdiff_t;
+
+    template<typename U>
+    using rebind = U*;
+
+    static pointer pointer_to(element_type& r) noexcept { return std::addressof(r); };
+};
+
+} // namespace pw
+#endif /* PW_MEMORY_H */
