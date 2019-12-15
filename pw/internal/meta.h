@@ -1,15 +1,17 @@
 #ifndef INCLUDED_PW_INTERNAL_META_H
 #define INCLUDED_PW_INTERNAL_META_H
 
-#include <sysutil_ident.h>
-SYSUTIL_IDENT_RCSID(pw_internal_meta_h, "$Id$ $CSID$")
-SYSUTIL_PRAGMA_ONCE;
-
 // * Meta
 // ** Includes
 // *** meta includes
 
 namespace pw { namespace internal {
+
+template<typename Type>
+using get_const_void_pointer = typename Type::const_void_pointer;
+
+template<typename Type>
+using get_difference_type = typename Type::difference_type;
 
 template<template<typename> class Extract, typename Obj, typename Default, typename>
 struct extract_or
@@ -29,7 +31,7 @@ using extract_or_type = typename extract_or<Extract, Obj, Default, void>::type;
 template<class Type, class = void>
 struct difference_type
 {
-    using type = extract_or_type<get_difference_type, Ptr, std::ptrdiff_t>;
+    using type = extract_or_type<get_difference_type, Type, pw::ptrdiff_t>;
 };
 
 template<typename Type>
@@ -42,7 +44,7 @@ struct get_first_arg<Class<Type, Args...> >
 };
 
 template<class Type, class = void>
-    > struct element_type
+struct element_type
 {
     using type = typename get_first_arg<Type>::type;
 };

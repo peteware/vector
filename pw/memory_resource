@@ -2,24 +2,26 @@
 #define PW_MEMORY_RESOURCE_H
 
 #include <pw/memory>
+#include <pw/internal/make_unsigned.h>
+#include <pw/internal/is_empty.h>
 
 namespace pw {
 
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type                         = Alloc;
-    using value_type                             = typename Alloc::value_type;
-    using pointer                                = pointer_traits < value_type*;
-    using const_pointer                          = pointer_traits<pointer>::rebind<const value_type>;
-    using void_pointer                           = pointer_traits<pointer>::rebind<void>;
-    using const_void_pointer                     = pointer_traits<pointer>::rebind<const void>;
-    using difference_type                        = pointer_traits<pointer>::difference_type;
-    using size_type                              = make_unsigned<difference_type>::type;
+    using allocator_type     = Alloc;
+    using value_type         = typename Alloc::value_type;
+    using pointer            = pointer_traits<value_type*>;
+    using const_pointer      = typename pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer       = typename pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer = typename pointer_traits<pointer>::template rebind<const void>;
+    using difference_type    = typename pointer_traits<pointer>::difference_type;
+    using size_type          = typename internal::make_unsigned<difference_type>::type;
     using propagate_on_container_copy_assignment = false_type;
     using propagate_on_container_move_assignment = false_type;
     using propagate_on_container_swap            = false_type;
-    using is_always_equal                        = is_empty<Alloc>::type;
+    using is_always_equal                        = typename internal::is_empty<Alloc>::type;
 };
 
 namespace pmr {
