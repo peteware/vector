@@ -2,14 +2,13 @@
 #define PW_TYPE_TRAITS_H
 
 #include <pw/internal/bool_type.h>
+#include <pw/internal/void.h>
 
 namespace pw {
 
-using true_type  = internal::true_type;
-using false_type = internal::false_type;
-
-template<class...>
-using void_t = void;
+using internal::false_type;
+using internal::true_type;
+using internal::void_t;
 
 } // namespace pw
 #endif /*  PW_TYPE_TRAITS_H */

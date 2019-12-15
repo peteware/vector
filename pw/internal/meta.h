@@ -3,7 +3,10 @@
 
 // * Meta
 // ** Includes
-// *** meta includes
+// *** pw includes
+#include <pw/internal/void.h>
+#include <pw/internal/ptrdiff.h>
+#include <pw/internal/extract_or.h>
 
 namespace pw { namespace internal {
 
@@ -13,25 +16,10 @@ using get_const_void_pointer = typename Type::const_void_pointer;
 template<typename Type>
 using get_difference_type = typename Type::difference_type;
 
-template<template<typename> class Extract, typename Obj, typename Default, typename>
-struct extract_or
-{
-    using type = Default;
-};
-
-template<template<typename> class Extract, typename Obj, typename Default>
-struct extract_or<Extract, Obj, Default, void_t<Extract<Obj> > >
-{
-    using type = Extract<Obj>;
-};
-
-template<template<typename> class Extract, typename Obj, typename Default>
-using extract_or_type = typename extract_or<Extract, Obj, Default, void>::type;
-
 template<class Type, class = void>
 struct difference_type
 {
-    using type = extract_or_type<get_difference_type, Type, pw::ptrdiff_t>;
+    using type = extract_or_type<get_difference_type, Type, internal::ptrdiff_t>;
 };
 
 template<typename Type>
