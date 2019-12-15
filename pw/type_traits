@@ -1,7 +1,6 @@
 #ifndef PW_TYPE_TRAITS_H // -*- c++ -*-
 #define PW_TYPE_TRAITS_H
 
-#include <pw/internal/integral_constant.h>
 #include <pw/internal/bool_type.h>
 
 namespace pw {

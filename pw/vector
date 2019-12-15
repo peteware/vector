@@ -22,6 +22,10 @@ public:
     // Default constructor
     vector();
 
+    bool      empty() const;
+    size_type size() const;
+    size_type capacity() const;
+
 private:
     pointer m_begin;
     pointer m_end;
@@ -39,6 +43,27 @@ vector<Type, Allocator>::vector()
     , m_end()
     , m_bufend()
 {
+}
+
+template<class Type, class Allocator>
+bool
+vector<Type, Allocator>::empty() const
+{
+    return m_begin == m_end;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::size_type
+vector<Type, Allocator>::size() const
+{
+    return m_end - m_begin;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::size_type
+vector<Type, Allocator>::capacity() const
+{
+    return m_bufend - m_begin;
 }
 } // namespace pw
 
