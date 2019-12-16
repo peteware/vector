@@ -13,11 +13,16 @@ SCENARIO("validate pointer_traits works as expected")
             THEN("it's the same type") { REQUIRE(a == b); }
         }
     }
-    GIVEN("A pointer_traits with an int")
+    GIVEN("A pointer_traits with a struct pointer")
     {
-        pw::pointer_traits<int>::pointer a;
-        int*                             b;
-        WHEN("n int is used")
+        struct FakeAllocator
+        {
+            using pointer = char;
+        };
+
+        pw::pointer_traits<FakeAllocator>::pointer a;
+        char                                       b;
+        WHEN("a pointerused")
         {
             THEN("it's the same type") { REQUIRE(a == b); }
         }
