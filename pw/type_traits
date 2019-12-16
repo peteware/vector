@@ -1,21 +1,14 @@
 #ifndef PW_TYPE_TRAITS_H // -*- c++ -*-
 #define PW_TYPE_TRAITS_H
 
+#include <pw/internal/bool_type.h>
+#include <pw/internal/void.h>
+
 namespace pw {
 
-template<class Type, Type v>
-struct integral_constant
-{
-    using value_type                  = Type;
-    using type                        = integral_constant;
-    static constexpr value_type value = v;
-
-    constexpr            operator value_type() const noexcept { return value; }
-    constexpr value_type operator()() const noexcept { return value; }
-};
-
-using true_type  = pw::integral_constant<bool, true>;
-using false_type = pw::integral_constant<bool, false>;
+using internal::false_type;
+using internal::true_type;
+using internal::void_t;
 
 } // namespace pw
 #endif /*  PW_TYPE_TRAITS_H */
