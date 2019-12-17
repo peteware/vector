@@ -20,16 +20,20 @@ public:
     using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
 
     // Default constructor
-    vector();
+    vector(allocator_type const& alloc = allocator_type());
 
     bool      empty() const;
     size_type size() const;
     size_type capacity() const;
 
+    void push_back(Type const& value);
+    void push_back(Type&& value);
+
 private:
-    pointer m_begin;
-    pointer m_end;
-    pointer m_bufend;
+    pointer               m_begin;
+    pointer               m_end;
+    pointer               m_bufend;
+    allocator_type const& m_alloc;
 };
 
 namespace pmr {
@@ -38,10 +42,11 @@ using vector = vector<Type, polymorphic_allocator<Type>>;
 }
 
 template<class Type, class Allocator>
-vector<Type, Allocator>::vector()
+vector<Type, Allocator>::vector(allocator_type const& alloc)
     : m_begin()
     , m_end()
     , m_bufend()
+    , m_alloc(alloc)
 {
 }
 
@@ -65,6 +70,19 @@ vector<Type, Allocator>::capacity() const
 {
     return m_bufend - m_begin;
 }
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::push_back(Type const& value)
+{
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::push_back(Type&& value)
+{
+}
+
 } // namespace pw
 
 #endif /*  PW_VECTOR_H */
