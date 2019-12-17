@@ -28,7 +28,7 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
 
     REQUIRE(pw::is_same<TestType*, typename pw::vector<TestType>::pointer>::value);
     REQUIRE(pw::is_same<TestType, typename pw::vector<TestType>::value_type>::value);
-    // REQUIRE(v.empty());
-    // REQUIRE(v.size() == 0);
-    // REQUIRE(v.capacity() == 0);
+    REQUIRE(v.empty());
+    REQUIRE(v.size() == 0);
+    REQUIRE(v.capacity() == 0);
 }
