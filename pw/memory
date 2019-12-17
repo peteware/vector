@@ -2,10 +2,16 @@
 #define PW_MEMORY_H
 
 #include <pw/internal/meta.h>
+
 #include <memory>
 
 namespace pw {
 
+/**
+ * The generic template that is used for smart ptrs.
+ *
+ * The specialization for <Type *> is for real ptrs.
+ */
 template<class Ptr>
 struct pointer_traits
 {
@@ -19,6 +25,9 @@ struct pointer_traits
     static pointer pointer_to(element_type& r) { return Ptr::pointer_to(r); }
 };
 
+/**
+ * Specialization for real pointers (Type *)
+ */
 template<class Type>
 struct pointer_traits<Type*>
 {

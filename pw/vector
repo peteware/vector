@@ -6,7 +6,7 @@
 
 namespace pw {
 
-template<class Type, class Allocator = pw::allocator<Type> >
+template<class Type, class Allocator = allocator<Type>>
 class vector
 {
 public:
@@ -34,7 +34,7 @@ private:
 
 namespace pmr {
 template<class Type>
-using vector = pw::vector<Type, pw::pmr::polymorphic_allocator<Type> >;
+using vector = vector<Type, polymorphic_allocator<Type>>;
 }
 
 template<class Type, class Allocator>

@@ -1,30 +1,34 @@
 #include <pw/memory>
+#include <pw/type_traits>
 
 #include <catch2/catch.hpp>
+
+struct FakeAllocator
+{
+    using element_type    = int;
+    using difference_type = char;
+};
 
 SCENARIO("validate pointer_traits works as expected")
 {
     GIVEN("A pointer_traits with an int*")
     {
-        pw::pointer_traits<int*>::pointer a;
-        int*                              b;
-        WHEN("n int is used")
+        WHEN("an int* is used")
         {
-            THEN("it's the same type") { REQUIRE(a == b); }
+            THEN("it's the same type")
+            {
+                REQUIRE(pw::is_same<pw::pointer_traits<int*>::pointer, int*>::value);
+            }
         }
     }
     GIVEN("A pointer_traits with a struct pointer")
     {
-        struct FakeAllocator
+        WHEN("a pointer used")
         {
-            using pointer = char;
-        };
-
-        pw::pointer_traits<FakeAllocator>::pointer a;
-        char                                       b;
-        WHEN("a pointerused")
-        {
-            THEN("it's the same type") { REQUIRE(a == b); }
+            THEN("it's the same type")
+            {
+                REQUIRE(pw::is_same<pw::pointer_traits<FakeAllocator>::pointer, FakeAllocator>::value);
+            }
         }
     }
 }

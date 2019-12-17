@@ -1,8 +1,11 @@
 #ifndef PW_ALLOCATOR_H // -*- c++ -*-
 #define PW_ALLOCATOR_H
 
-#include <pw/cstddef>
 #include <pw/type_traits>
+
+#include <pw/internal/ptrdiff.h>
+#include <pw/internal/size.h>
+#include <pw/internal/bool_type.h>
 
 namespace pw {
 
@@ -10,9 +13,9 @@ template<class Type>
 struct allocator
 {
     using value_type      = Type;
-    using size_type       = pw::size_t;
-    using difference_type = pw::ptrdiff_t;
-    using is_always_equal = pw::true_type;
+    using size_type       = internal::size_t;
+    using difference_type = internal::ptrdiff_t;
+    using is_always_equal = internal::true_type;
 };
 
 } // namespace pw

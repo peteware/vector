@@ -1,6 +1,6 @@
 # base-110width
 Language:        Cpp
-Standard:     Cpp03
+#Standard:     Latest
 BasedOnStyle: WebKit
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true
