@@ -1,7 +1,7 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
-#include <pw/allocator>
+#include <pw/memory>
 #include <pw/memory_resource>
 
 namespace pw {

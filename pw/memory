@@ -2,6 +2,9 @@
 #define PW_MEMORY_H
 
 #include <pw/internal/meta.h>
+#include <pw/internal/ptrdiff.h>
+#include <pw/internal/size.h>
+#include <pw/internal/bool_type.h>
 
 #include <memory>
 
@@ -33,12 +36,22 @@ struct pointer_traits<Type*>
 {
     using pointer         = Type*;
     using element_type    = Type;
-    using difference_type = ptrdiff_t;
+    using difference_type = internal::ptrdiff_t;
 
     template<typename U>
     using rebind = U*;
 
     static pointer pointer_to(element_type& r) noexcept { return std::addressof(r); };
+};
+
+template<class Type>
+struct allocator
+{
+    using value_type                             = Type;
+    using size_type                              = internal::size_t;
+    using difference_type                        = internal::ptrdiff_t;
+    using is_always_equal                        = internal::true_type;
+    using propagate_on_container_move_assignment = internal::true_type;
 };
 
 } // namespace pw
