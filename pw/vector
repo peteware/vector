@@ -29,11 +29,34 @@ public:
     void push_back(Type const& value);
     void push_back(Type&& value);
 
+    struct Allocate
+    {
+        pointer               m_begin;
+        pointer               m_end;
+        pointer               m_bufend;
+        allocator_type const& m_alloc;
+
+        Allocate(allocator_type const& alloc)
+            : m_begin()
+            , m_end()
+            , m_bufend()
+            , m_alloc(alloc)
+        {
+        }
+
+        Allocate(Allocate const& copy)
+            : m_begin(copy.m_begin)
+            , m_end(copy.m_end)
+            , m_bufend(copy.m_bufend)
+            , m_alloc(copy.m_alloc)
+        {
+        }
+
+        ~Allocate() {}
+    };
+
 private:
-    pointer               m_begin;
-    pointer               m_end;
-    pointer               m_bufend;
-    allocator_type const& m_alloc;
+    Allocate m_data;
 };
 
 namespace pmr {
@@ -43,10 +66,7 @@ using vector = vector<Type, polymorphic_allocator<Type>>;
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(allocator_type const& alloc)
-    : m_begin()
-    , m_end()
-    , m_bufend()
-    , m_alloc(alloc)
+    : m_data(alloc)
 {
 }
 
@@ -54,21 +74,21 @@ template<class Type, class Allocator>
 bool
 vector<Type, Allocator>::empty() const
 {
-    return m_begin == m_end;
+    return m_data.m_begin == m_data.m_end;
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::size() const
 {
-    return m_end - m_begin;
+    return m_data.m_end - m_data.m_begin;
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const
 {
-    return m_bufend - m_begin;
+    return m_data.m_bufend - m_data.m_begin;
 }
 
 template<class Type, class Allocator>
