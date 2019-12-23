@@ -2,6 +2,7 @@
 #define PW_VECTOR_H
 
 #include <pw/internal/allocate.h>
+#include <pw/internal/fill.h>
 
 #include <pw/memory>
 #include <pw/memory_resource>
@@ -23,8 +24,10 @@ public:
     using pointer         = typename internal::allocator_traits<Allocator>::pointer;
     using const_pointer   = typename internal::allocator_traits<Allocator>::const_pointer;
 
-    // Default constructor
     vector(allocator_type const& alloc = allocator_type());
+    vector(size_type             count,
+           value_type const&     value = value_type(),
+           allocator_type const& alloc = allocator_type());
 
     allocator_type get_allocator() const;
 
@@ -59,6 +62,16 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(allocator_type const& alloc)
     : m_data(alloc)
 {
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>::vector(size_type             count,
+                                value_type const&     value = value_type(),
+                                allocator_type const& alloc = allocator_type())
+    : m_data(alloc)
+{
+    m_data.resize(count);
+    internal::fill(m_data.m_begin, m_data.m_end, value);
 }
 
 template<class Type, class Allocator>
