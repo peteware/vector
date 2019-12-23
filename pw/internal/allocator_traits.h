@@ -4,6 +4,7 @@
 #include <pw/internal/make_unsigned.h>
 #include <pw/internal/bool_type.h>
 #include <pw/internal/is_empty.h>
+#include <pw/internal/pointer_traits.h>
 
 namespace pw { namespace internal {
 
@@ -12,11 +13,11 @@ struct allocator_traits
 {
     using allocator_type     = Alloc;
     using value_type         = typename Alloc::value_type;
-    using pointer            = typename pointer_traits<value_type*>::pointer;
-    using const_pointer      = typename pointer_traits<pointer>::template rebind<const value_type>;
-    using void_pointer       = typename pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer = typename pointer_traits<pointer>::template rebind<const void>;
-    using difference_type    = typename pointer_traits<pointer>::difference_type;
+    using pointer            = typename internal::pointer_traits<value_type*>::pointer;
+    using const_pointer      = typename internal::pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer       = typename internal::pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer = typename internal::pointer_traits<pointer>::template rebind<const void>;
+    using difference_type    = typename internal::pointer_traits<pointer>::difference_type;
     using size_type          = typename internal::make_unsigned<difference_type>::type;
     using propagate_on_container_copy_assignment = internal::false_type;
     using propagate_on_container_move_assignment = internal::false_type;

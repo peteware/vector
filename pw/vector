@@ -1,6 +1,8 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
+#include <pw/internal/allocate.h>
+
 #include <pw/memory>
 #include <pw/memory_resource>
 
@@ -30,7 +32,7 @@ public:
     void push_back(Type&& value);
 
 private:
-    Allocate m_data;
+    internal::Allocate<Type, Allocator> m_data;
 };
 
 namespace pmr {
@@ -58,21 +60,6 @@ vector<Type, Allocator>::size() const
     return m_data.size();
 }
 
-struct SaveAlloc
-{
-    Allocate& m_orig;
-    Allocate  m_new;
-
-    SaveAlloc(Allocate& orig)
-        : m_orig(orig)
-        , m_new(orig)
-    {
-    }
-    void done() { m_new.swap(m_orig); }
-
-    ~SaveAlloc() { m_orig.swap(m_new); }
-};
-
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const
@@ -84,11 +71,9 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type const& value)
 {
-    SaveAllocate space(m_data);
-
     if (!m_data.hasroom(1))
     {
-        Allocate save(m_data);
+        internal::Allocate save(m_data);
         save.resize();
         m_data.swap(save);
     }

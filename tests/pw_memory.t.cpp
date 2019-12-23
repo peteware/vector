@@ -1,7 +1,7 @@
 #include <pw/memory>
 #include <pw/type_traits>
 
-#include <catch2/catch.hpp>
+#include "catch2/catch.hpp"
 
 struct FakeAllocator
 {

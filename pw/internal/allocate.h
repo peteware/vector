@@ -3,6 +3,7 @@
 
 #include <pw/internal/size.h>
 #include <pw/internal/ptrdiff.h>
+#include <pw/internal/allocator_traits.h>
 #include <pw/internal/allocator.h>
 
 namespace pw { namespace internal {
@@ -16,8 +17,8 @@ struct Allocate
     using difference_type = ptrdiff_t;
     using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer         = typename allocator_traits<Allocator>::pointer;
-    using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
+    using pointer         = typename internal::allocator_traits<Allocator>::pointer;
+    using const_pointer   = typename internal::allocator_traits<Allocator>::const_pointer;
 
     pointer               m_begin;
     pointer               m_end;
