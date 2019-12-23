@@ -1,6 +1,6 @@
 #ifndef INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
 #define INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
-#include <pw/memory>
+
 #include <pw/internal/make_unsigned.h>
 #include <pw/internal/bool_type.h>
 #include <pw/internal/is_empty.h>

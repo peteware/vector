@@ -8,8 +8,9 @@
 namespace pw {
 
 using internal::allocator;
-using internal::allocator_traits;
 using internal::pointer_traits;
+
+using internal::allocator_traits;
 
 } // namespace pw
 #endif /* PW_MEMORY_H */

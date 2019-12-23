@@ -6,6 +6,8 @@
 #include <pw/internal/allocator_traits.h>
 #include <pw/internal/allocator.h>
 
+#include <pw/utility>
+
 namespace pw { namespace internal {
 
 template<class Type, class Allocator>

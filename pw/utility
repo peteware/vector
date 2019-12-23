@@ -1,0 +1,10 @@
+#ifndef INCLUDED_PW_UTILITY /* -*- c++ -*- */
+#define INCLUDED_PW_UTILITY
+
+#include <pw/internal/swap.h>
+
+namespace pw {
+using internal::swap;
+} // namespace pw
+
+#endif /* INCLUDED_PW_UTILITY */
