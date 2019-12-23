@@ -26,6 +26,8 @@ public:
     // Default constructor
     vector(allocator_type const& alloc = allocator_type());
 
+    allocator_type get_allocator() const;
+
     reference       at(size_type position);
     const_reference at(size_type position) const;
     reference       operator[](size_type position);
@@ -57,6 +59,13 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(allocator_type const& alloc)
     : m_data(alloc)
 {
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::allocator_type
+vector<Type, Allocator>::get_allocator() const
+{
+    return m_data.m_alloc;
 }
 
 template<class Type, class Allocator>
