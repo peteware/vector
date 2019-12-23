@@ -1,12 +1,15 @@
 #ifndef INCLUDED_PW_INTERNAL_ALLOCATE_H
 #define INCLUDED_PW_INTERNAL_ALLOCATE_H
 
-#include <pw/internal/size.h>
-#include <pw/internal/ptrdiff.h>
-#include <pw/internal/allocator_traits.h>
 #include <pw/internal/allocator.h>
+#include <pw/internal/allocator_traits.h>
+#include <pw/internal/copy.h>
+#include <pw/internal/max.h>
+#include <pw/internal/ptrdiff.h>
+#include <pw/internal/size.h>
+#include <pw/internal/swap.h>
 
-#include <pw/utility>
+#include <stdexcept>
 
 namespace pw { namespace internal {
 
@@ -22,14 +25,16 @@ struct Allocate
     using pointer         = typename internal::allocator_traits<Allocator>::pointer;
     using const_pointer   = typename internal::allocator_traits<Allocator>::const_pointer;
 
-    pointer               m_begin;
-    pointer               m_end;
-    size_type             m_allocated;
-    allocator_type const& m_alloc;
+    pointer        m_begin;
+    pointer        m_end;
+    size_type      m_allocated;
+    allocator_type m_alloc;
+
+    enum { INITIAL_SIZE = 10 };
 
     Allocate(allocator_type const& alloc)
-        : m_begin()
-        , m_end()
+        : m_begin(0)
+        , m_end(0)
         , m_allocated(0)
         , m_alloc(alloc)
     {
@@ -51,16 +56,39 @@ struct Allocate
     {
         if (m_alloc == op2.m_alloc)
         {
-            pw::swap(m_begin, op2.m_begin);
-            pw::swap(m_end, op2.m_end);
-            pw::swap(m_allocated, op2.m_allocated);
+            internal::swap(m_begin, op2.m_begin);
+            internal::swap(m_end, op2.m_end);
+            internal::swap(m_allocated, op2.m_allocated);
         }
         else
         {
+            throw(std::runtime_error("Allocate::swap() Not implemented"));
         }
     }
 
-    bool hasroom(size_type count) { return m_allocated - size() < count; }
+    bool hasroom(size_type count) { return m_allocated - size() > count; }
+
+    void resize(size_type count)
+    {
+        size_type need;
+
+        if (m_allocated == 0)
+        {
+            need = internal::max(count, static_cast<size_type>(INITIAL_SIZE));
+        }
+        else
+        {
+            need = internal::max(count, 2 * m_allocated);
+        }
+
+        pointer p = allocator_traits<Allocator>::allocate(m_alloc, m_allocated + need);
+        internal::copy(m_begin, m_end, p);
+        m_end       = p + size();
+        m_allocated = m_allocated + need;
+        m_begin     = p;
+    }
+
+    void add(Type const& value) { *m_end++ = value; }
 };
 
 }} // namespace pw::internal

@@ -6,6 +6,8 @@
 #include <pw/memory>
 #include <pw/memory_resource>
 
+#include <stdexcept>
+
 namespace pw {
 
 template<class Type, class Allocator = allocator<Type>>
@@ -74,8 +76,13 @@ vector<Type, Allocator>::push_back(Type const& value)
     if (!m_data.hasroom(1))
     {
         internal::Allocate save(m_data);
-        save.resize();
+        save.resize(1);
+        save.add(value);
         m_data.swap(save);
+    }
+    else
+    {
+        m_data.add(value);
     }
 }
 
@@ -83,6 +90,17 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type&& value)
 {
+    if (!m_data.hasroom(1))
+    {
+        internal::Allocate save(m_data);
+        save.resize(1);
+        save.add(value);
+        m_data.swap(save);
+    }
+    else
+    {
+        m_data.add(value);
+    }
 }
 
 } // namespace pw

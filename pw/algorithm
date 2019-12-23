@@ -1,0 +1,15 @@
+#ifndef INCLUDED_PW_ALGORITHM /* -*- c++ -*- */
+#define INCLUDED_PW_ALGORITHM
+
+#include <pw/internal/copy.h>
+#include <pw/internal/max.h>
+
+namespace pw {
+
+using internal::copy;
+using internal::max;
+
+} // namespace pw
+} // namespace pw::internal
+
+#endif /* INCLUDED_PW_ALGORITHM  */

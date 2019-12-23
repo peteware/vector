@@ -23,7 +23,16 @@ struct allocator_traits
     using propagate_on_container_move_assignment = internal::false_type;
     using propagate_on_container_swap            = internal::false_type;
     using is_always_equal                        = typename internal::is_empty<Alloc>::type;
+
+    static pointer allocate(allocator_type& alloc, size_type n);
 };
+
+template<class Alloc>
+typename allocator_traits<Alloc>::pointer
+allocator_traits<Alloc>::allocate(allocator_type& alloc, size_type n)
+{
+    return alloc.allocate(n);
+}
 
 }} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H */

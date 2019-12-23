@@ -34,6 +34,6 @@ NamespaceIndentation: None
 PenaltyReturnTypeOnItsOwnLine: 100
 PenaltyBreakAssignment: 50
 ReflowComments:  false
-SortIncludes:    false
+SortIncludes:    true
 SpaceAfterTemplateKeyword: false
 ...
