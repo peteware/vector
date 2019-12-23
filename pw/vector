@@ -29,32 +29,6 @@ public:
     void push_back(Type const& value);
     void push_back(Type&& value);
 
-    struct Allocate
-    {
-        pointer               m_begin;
-        pointer               m_end;
-        pointer               m_bufend;
-        allocator_type const& m_alloc;
-
-        Allocate(allocator_type const& alloc)
-            : m_begin()
-            , m_end()
-            , m_bufend()
-            , m_alloc(alloc)
-        {
-        }
-
-        Allocate(Allocate const& copy)
-            : m_begin(copy.m_begin)
-            , m_end(copy.m_end)
-            , m_bufend(copy.m_bufend)
-            , m_alloc(copy.m_alloc)
-        {
-        }
-
-        ~Allocate() {}
-    };
-
 private:
     Allocate m_data;
 };
@@ -81,20 +55,43 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::size() const
 {
-    return m_data.m_end - m_data.m_begin;
+    return m_data.size();
 }
+
+struct SaveAlloc
+{
+    Allocate& m_orig;
+    Allocate  m_new;
+
+    SaveAlloc(Allocate& orig)
+        : m_orig(orig)
+        , m_new(orig)
+    {
+    }
+    void done() { m_new.swap(m_orig); }
+
+    ~SaveAlloc() { m_orig.swap(m_new); }
+};
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const
 {
-    return m_data.m_bufend - m_data.m_begin;
+    return m_data.m_allocated;
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type const& value)
 {
+    SaveAllocate space(m_data);
+
+    if (!m_data.hasroom(1))
+    {
+        Allocate save(m_data);
+        save.resize();
+        m_data.swap(save);
+    }
 }
 
 template<class Type, class Allocator>
