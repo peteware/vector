@@ -47,6 +47,21 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
                 THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
             }
         }
+        WHEN("accessing as a const vector")
+        {
+            pw::vector<TestType> const& c = v;
+            THEN("It is reported as empty")
+            {
+                REQUIRE(v.empty());
+                REQUIRE(v.size() == 0);
+                REQUIRE(v.capacity() == 0);
+            }
+            THEN("at() fails")
+            {
+                THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
+                THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
+            }
+        }
     }
     GIVEN("A vector of TestType with 1 item")
     {
@@ -78,6 +93,25 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
         WHEN("at(1) is called")
         {
             THEN("it raises exception") { CHECK_THROWS_AS(v.at(1), std::out_of_range); }
+        }
+    }
+    GIVEN("A const vector of TestType with 1 item")
+    {
+        pw::vector<TestType> tmp;
+        tmp.push_back(TestType());
+        pw::vector<TestType> const& c = tmp;
+
+        WHEN("at(0) is called")
+        {
+            THEN("it works")
+            {
+                TestType const& r = c.at(0);
+                REQUIRE(r == TestType());
+            }
+        }
+        WHEN("at(1) is called")
+        {
+            THEN("it raises exception") { CHECK_THROWS_AS(c.at(1), std::out_of_range); }
         }
     }
 }
