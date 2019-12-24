@@ -31,24 +31,24 @@ public:
            value_type const&     value = value_type(),
            allocator_type const& alloc = allocator_type());
 
-    allocator_type  get_allocator() const;
-    reference       at(size_type position);
-    const_reference at(size_type position) const;
-    reference       operator[](size_type position);
-    const_reference operator[](size_type position) const;
-    reference       front();
-    const_reference front() const;
-    reference       back();
-    const_reference back() const;
-    Type*           data() noexcept;
-    Type const*     data() const noexcept;
-    bool            empty() const;
-    size_type       size() const;
-    size_type       max_size() const;
-    size_type       capacity() const;
-    void            reserve(size_type count);
-    void            push_back(Type const& value);
-    void            push_back(Type&& value);
+    allocator_type    get_allocator() const;
+    reference         at(size_type position);
+    const_reference   at(size_type position) const;
+    reference         operator[](size_type position);
+    const_reference   operator[](size_type position) const;
+    reference         front();
+    const_reference   front() const;
+    reference         back();
+    const_reference   back() const;
+    value_type*       data() noexcept;
+    value_type const* data() const noexcept;
+    bool              empty() const;
+    size_type         size() const;
+    size_type         max_size() const;
+    size_type         capacity() const;
+    void              reserve(size_type count);
+    void              push_back(Type const& value);
+    void              push_back(Type&& value);
 
 private:
     internal::Allocate<Type, Allocator> m_data;
