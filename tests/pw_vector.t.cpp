@@ -5,6 +5,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <tuple>
 
 // SCENARIO( "vectors can be sized and resized", "[vector]" ) {
 
@@ -24,7 +25,9 @@
 //     }
 // }
 
-TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
+using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
+
+TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
     Vector v;
@@ -73,9 +76,44 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
             THEN("at(10) const fails") { CHECK_THROWS_AS(c.at(10), std::out_of_range); }
         }
     }
+}
+
+TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+
+    GIVEN("A vector constructed with a coune")
+    {
+        size_t const count = 3;
+        Vector       v(count);
+
+        WHEN("empty() is called")
+        {
+            bool e = v.empty();
+            THEN("it is not empty") { REQUIRE(!e); }
+        }
+
+        WHEN("size() is called")
+        {
+            size_t s = v.size();
+            THEN("it is the same as count") { REQUIRE(count == s); }
+        }
+
+        WHEN("capacity() is called")
+        {
+            size_t c = v.capacity();
+            THEN("it is > count") { REQUIRE(count < c); }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][template]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+    Vector v;
+    v.push_back(TestType());
     GIVEN("A vector of TestType with 1 item")
     {
-        v.push_back(TestType());
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -148,11 +186,17 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
             REQUIRE(capacity < v.capacity());
         }
     }
+}
+
+TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][template]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+    Vector v;
+    v.push_back(TestType());
+    Vector const& c = v;
+
     GIVEN("A const vector of TestType with 1 item")
     {
-        v.push_back(TestType());
-        Vector const& c = v;
-
         WHEN("at(0) const is called")
         {
             TestType const& r = c.at(0);
