@@ -7,6 +7,7 @@
 #include <pw/memory>
 #include <pw/memory_resource>
 
+#include <limits>
 #include <stdexcept>
 
 namespace pw {
@@ -29,8 +30,7 @@ public:
            value_type const&     value = value_type(),
            allocator_type const& alloc = allocator_type());
 
-    allocator_type get_allocator() const;
-
+    allocator_type  get_allocator() const;
     reference       at(size_type position);
     const_reference at(size_type position) const;
     reference       operator[](size_type position);
@@ -65,9 +65,7 @@ vector<Type, Allocator>::vector(allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
-vector<Type, Allocator>::vector(size_type             count,
-                                value_type const&     value = value_type(),
-                                allocator_type const& alloc = allocator_type())
+vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
     : m_data(alloc)
 {
     m_data.resize(count);
@@ -104,13 +102,16 @@ vector<Type, Allocator>::at(size_type position) const
 }
 
 template<class Type, class Allocator>
-typename vector<Type, Allocator>::reference vector<Type, Allocator>::operator[](size_type position)
+typename vector<Type, Allocator>::reference
+
+    vector<Type, Allocator>::operator[](size_type position)
 {
     return *(m_data.m_begin + position);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
+
     vector<Type, Allocator>::operator[](size_type position) const
 {
     return *(m_data.m_begin + position);
@@ -134,14 +135,14 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    return *(m_data.m_begin + m_data.m_size - 1);
+    return *(m_data.m_end - 1);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    return *(m_data.m_begin + m_data.m_size - 1);
+    return *(m_data.m_end - 1);
 }
 
 template<class Type, class Allocator>
@@ -174,6 +175,13 @@ vector<Type, Allocator>::size() const
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
+vector<Type, Allocator>::max_size() const
+{
+    return std::numeric_limits<size_type>::max() / sizeof(Type);
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const
 {
     return m_data.m_allocated;
@@ -181,18 +189,28 @@ vector<Type, Allocator>::capacity() const
 
 template<class Type, class Allocator>
 void
+vector<Type, Allocator>::reserve(size_type count)
+{
+    if (count > capacity())
+    {
+        m_data.resize(count);
+    }
+}
+
+template<class Type, class Allocator>
+void
 vector<Type, Allocator>::push_back(Type const& value)
 {
-    if (!m_data.hasroom(1))
+    if (m_data.hasroom(1))
     {
-        internal::Allocate save(m_data);
-        save.resize(1);
-        save.add(value);
-        m_data.swap(save);
+        m_data.add(value);
     }
     else
     {
-        m_data.add(value);
+        internal::Allocate save(m_data);
+        save.expand();
+        save.add(value);
+        m_data.swap(save);
     }
 }
 
@@ -200,16 +218,16 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type&& value)
 {
-    if (!m_data.hasroom(1))
+    if (m_data.hasroom(1))
     {
-        internal::Allocate save(m_data);
-        save.resize(1);
-        save.add(value);
-        m_data.swap(save);
+        m_data.add(value);
     }
     else
     {
-        m_data.add(value);
+        internal::Allocate save(m_data);
+        save.expand();
+        save.add(value);
+        m_data.swap(save);
     }
 }
 

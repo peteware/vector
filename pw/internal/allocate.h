@@ -68,23 +68,32 @@ struct Allocate
 
     bool hasroom(size_type count) { return m_allocated - size() > count; }
 
-    void resize(size_type count)
+    void expand()
     {
         size_type need;
 
         if (m_allocated == 0)
         {
-            need = internal::max(count, static_cast<size_type>(INITIAL_SIZE));
+            need = INITIAL_SIZE;
         }
         else
         {
-            need = internal::max(count, 2 * m_allocated);
+            need = 2 * m_allocated;
         }
 
-        pointer p = allocator_traits<Allocator>::allocate(m_alloc, m_allocated + need);
+        pointer p = allocator_traits<Allocator>::allocate(m_alloc, need);
         internal::copy(m_begin, m_end, p);
         m_end       = p + size();
-        m_allocated = m_allocated + need;
+        m_allocated = need;
+        m_begin     = p;
+    }
+
+    void resize(size_type count)
+    {
+        pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
+        internal::copy(m_begin, m_end, p);
+        m_end       = p + size();
+        m_allocated = count;
         m_begin     = p;
     }
 

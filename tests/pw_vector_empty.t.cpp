@@ -1,4 +1,5 @@
 #include "catch2/catch.hpp"
+#include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
 
@@ -25,93 +26,130 @@
 
 TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
 {
+    using Vector = pw::vector<TestType>;
+    Vector v;
     GIVEN("An empty vector of TestType")
     {
-        pw::vector<TestType> v;
-        WHEN("nothing changes")
+        REQUIRE(pw::is_same<TestType*, typename Vector::pointer>::value);
+        REQUIRE(pw::is_same<TestType, typename Vector::value_type>::value);
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.capacity() == 0);
+
+        WHEN("get_allocator() const is called")
         {
-            THEN("Check the types are expected")
-            {
-                REQUIRE(pw::is_same<TestType*, typename pw::vector<TestType>::pointer>::value);
-                REQUIRE(pw::is_same<TestType, typename pw::vector<TestType>::value_type>::value);
-            }
-            THEN("It is reported as empty")
-            {
-                REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
-                REQUIRE(v.capacity() == 0);
-            }
-            THEN("at() fails")
-            {
-                THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
-                THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
-            }
+            typename Vector::allocator_type a = v.get_allocator();
+            THEN("it returns same allocator") { REQUIRE(a == pw::internal::allocator<TestType>()); }
         }
-        WHEN("accessing as a const vector")
+        WHEN("at() is called")
         {
-            pw::vector<TestType> const& c = v;
-            THEN("It is reported as empty")
-            {
-                REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
-                REQUIRE(v.capacity() == 0);
-            }
-            THEN("at() fails")
-            {
-                THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
-                THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
-            }
+            THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
+            THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
+        }
+    }
+    GIVEN("An empty const vector of TestType")
+    {
+        Vector const& c = v;
+        REQUIRE(c.empty());
+        REQUIRE(c.size() == 0);
+        REQUIRE(c.capacity() == 0);
+
+        WHEN("get_allocator() const is called")
+        {
+            typename Vector::allocator_type a = v.get_allocator();
+            THEN("it returns same allocator") { REQUIRE(a == pw::internal::allocator<TestType>()); }
+        }
+
+        WHEN("at() const is called")
+        {
+            THEN("at(0) const fails") { CHECK_THROWS_AS(c.at(0), std::out_of_range); }
+            THEN("at(10) const fails") { CHECK_THROWS_AS(c.at(10), std::out_of_range); }
         }
     }
     GIVEN("A vector of TestType with 1 item")
     {
-        pw::vector<TestType> v;
         v.push_back(TestType());
-        WHEN("size is checked")
-        {
-            size_t s = v.size();
-            THEN("size is 1") { REQUIRE(s == 1); }
-        }
-        WHEN("empty is checked")
+        WHEN("empty() is called")
         {
             bool e = v.empty();
             THEN("it is not empty") { REQUIRE(!e); }
         }
-        WHEN("capacity is checked")
+        WHEN("size() is called")
+        {
+            size_t s = v.size();
+            THEN("size is 1") { REQUIRE(s == 1); }
+        }
+        WHEN("capacity() is called")
         {
             size_t c = v.capacity();
             THEN("it is at least 1)") { REQUIRE(c >= 1); }
         }
         WHEN("at(0) is called")
         {
-            THEN("it works")
-            {
-                TestType& r = v.at(0);
-                REQUIRE(r == TestType());
-            }
+            TestType& r = v.at(0);
+            THEN("it works") { REQUIRE(r == TestType()); }
         }
         WHEN("at(1) is called")
         {
             THEN("it raises exception") { CHECK_THROWS_AS(v.at(1), std::out_of_range); }
         }
+        WHEN("front() is called")
+        {
+            TestType& r = v.front();
+            THEN("it works") { REQUIRE(r == TestType()); }
+        }
+        WHEN("back() is called")
+        {
+            TestType& r = v.back();
+            THEN("it works") { REQUIRE(r == TestType()); }
+        }
+        WHEN("data() is called")
+        {
+            TestType* p = v.data();
+            THEN("it works") { REQUIRE(*p == TestType()); }
+        }
+        WHEN("reserve() is called")
+        {
+            size_t capacity    = v.capacity();
+            size_t newCapacity = capacity + 3;
+            v.reserve(newCapacity);
+            THEN("capacity increases") { REQUIRE(newCapacity == v.capacity()); }
+        }
+        WHEN("reserve() is called with current capacity")
+        {
+            size_t capacity = v.capacity();
+            v.reserve(capacity);
+            THEN("capacity is unchanged") { REQUIRE(capacity == v.capacity()); }
+        }
     }
     GIVEN("A const vector of TestType with 1 item")
     {
-        pw::vector<TestType> tmp;
-        tmp.push_back(TestType());
-        pw::vector<TestType> const& c = tmp;
+        v.push_back(TestType());
+        Vector const& c = v;
 
-        WHEN("at(0) is called")
+        WHEN("at(0) const is called")
         {
-            THEN("it works")
-            {
-                TestType const& r = c.at(0);
-                REQUIRE(r == TestType());
-            }
+            TestType const& r = c.at(0);
+            THEN("it works") { REQUIRE(r == TestType()); }
         }
-        WHEN("at(1) is called")
+        WHEN("at(1) const is called")
         {
             THEN("it raises exception") { CHECK_THROWS_AS(c.at(1), std::out_of_range); }
+        }
+        WHEN("front() const is called")
+        {
+            TestType const& r = v.front();
+            THEN("it works") { REQUIRE(r == TestType()); }
+        }
+        WHEN("back() const is called")
+        {
+            TestType const& r = v.back();
+            THEN("it works") { REQUIRE(r == TestType()); }
+        }
+        WHEN("data() const is called")
+        {
+            TestType const* p = v.data();
+            THEN("it works") { REQUIRE(*p == TestType()); }
         }
     }
 }
