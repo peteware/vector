@@ -46,6 +46,13 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
             THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
             THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
         }
+        WHEN("reserve() is called")
+        {
+            size_t capacity    = v.capacity();
+            size_t newCapacity = capacity + 3;
+            v.reserve(newCapacity);
+            THEN("capacity increases") { REQUIRE(newCapacity == v.capacity()); }
+        }
     }
     GIVEN("An empty const vector of TestType")
     {
@@ -120,6 +127,25 @@ TEMPLATE_TEST_CASE("empty vectors work", "[vector][template]", int, std::string)
             size_t capacity = v.capacity();
             v.reserve(capacity);
             THEN("capacity is unchanged") { REQUIRE(capacity == v.capacity()); }
+        }
+        WHEN("push_back() const_ref is called to exceed capacity")
+        {
+            size_t capacity = v.capacity();
+            for (size_t i = 0; i < capacity; ++i)
+            {
+                TestType t;
+                v.push_back(t);
+            }
+            REQUIRE(capacity < v.capacity());
+        }
+        WHEN("push_back() move is called to exceed capacity")
+        {
+            size_t capacity = v.capacity();
+            for (size_t i = 0; i < capacity; ++i)
+            {
+                v.push_back(TestType());
+            }
+            REQUIRE(capacity < v.capacity());
         }
     }
     GIVEN("A const vector of TestType with 1 item")
