@@ -97,7 +97,7 @@ struct Allocate
         m_begin     = p;
     }
 
-    void add(Type const& value) { *m_end++ = value; }
+    void add(Type const& value) { allocator_traits<Allocator>::construct(m_alloc, m_end++, value); }
 };
 
 }} // namespace pw::internal

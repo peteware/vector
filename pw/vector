@@ -3,6 +3,7 @@
 
 #include <pw/internal/allocate.h>
 #include <pw/internal/fill.h>
+#include <pw/internal/for_each.h>
 
 #include <pw/memory>
 #include <pw/memory_resource>
@@ -69,7 +70,9 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
     : m_data(alloc)
 {
     m_data.resize(count);
-    internal::fill(m_data.m_begin, m_data.m_end, value);
+    internal::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
+        allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
+    });
 }
 
 template<class Type, class Allocator>

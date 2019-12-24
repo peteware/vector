@@ -1,10 +1,12 @@
 #ifndef INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
 #define INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
 
-#include <pw/internal/make_unsigned.h>
 #include <pw/internal/bool_type.h>
 #include <pw/internal/is_empty.h>
+#include <pw/internal/make_unsigned.h>
 #include <pw/internal/pointer_traits.h>
+
+#include <utility>
 
 namespace pw { namespace internal {
 
@@ -25,6 +27,12 @@ struct allocator_traits
     using is_always_equal                        = typename internal::is_empty<Alloc>::type;
 
     static pointer allocate(allocator_type& alloc, size_type n);
+
+    template<class Type, class... Args>
+    static void construct(allocator_type& alloc, Type* p, Args&&... args)
+    {
+        ::new (static_cast<void*>(p)) Type(std::forward<Args>(args)...);
+    }
 };
 
 template<class Alloc>
