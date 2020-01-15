@@ -102,7 +102,7 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
         WHEN("capacity() is called")
         {
             size_t c = v.capacity();
-            THEN("it is > count") { REQUIRE(count < c); }
+            THEN("capacity is same") { REQUIRE(count == c); }
         }
     }
 }

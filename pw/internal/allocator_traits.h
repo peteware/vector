@@ -26,21 +26,28 @@ struct allocator_traits
     using propagate_on_container_swap            = internal::false_type;
     using is_always_equal                        = typename internal::is_empty<Alloc>::type;
 
-    static pointer allocate(allocator_type& alloc, size_type n);
+    static pointer allocate(allocator_type& alloc, size_type n)
+    {
+        return alloc.allocate(n);
+    }
+
+    static void deallocate(allocator_type& alloc, pointer p, size_type count)
+    {
+        ::operator delete(static_cast<void*>(p), count * sizeof(value_type));
+    }
 
     template<class Type, class... Args>
     static void construct(allocator_type& alloc, Type* p, Args&&... args)
     {
         ::new (static_cast<void*>(p)) Type(std::forward<Args>(args)...);
     }
-};
 
-template<class Alloc>
-typename allocator_traits<Alloc>::pointer
-allocator_traits<Alloc>::allocate(allocator_type& alloc, size_type n)
-{
-    return alloc.allocate(n);
-}
+    template<class Type>
+    static void destroy(Alloc& a, Type* p)
+    {
+        p->~Type();
+    }
+};
 
 }} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H */

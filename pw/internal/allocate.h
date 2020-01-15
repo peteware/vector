@@ -48,9 +48,21 @@ struct Allocate
     {
     }
 
-    ~Allocate() {}
+    ~Allocate()
+    {
+        allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
+    }
 
-    size_type size() const { return m_end - m_begin; }
+    size_type size() const
+    {
+        return m_end - m_begin;
+    }
+
+    void forget()
+    {
+        m_begin = m_end = 0;
+        m_allocated     = 0;
+    }
 
     void swap(Allocate& op2)
     {
@@ -66,7 +78,10 @@ struct Allocate
         }
     }
 
-    bool hasroom(size_type count) { return m_allocated - size() > count; }
+    bool hasroom(size_type count) const
+    {
+        return m_allocated - size() > count;
+    }
 
     void expand()
     {
@@ -81,14 +96,16 @@ struct Allocate
             need = 2 * m_allocated;
         }
 
-        pointer p = allocator_traits<Allocator>::allocate(m_alloc, need);
-        internal::copy(m_begin, m_end, p);
-        m_end       = p + size();
-        m_allocated = need;
-        m_begin     = p;
+        allocate(need);
     }
 
     void resize(size_type count)
+    {
+        allocate(count);
+        m_end = m_begin + m_allocated;
+    }
+
+    void allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
         internal::copy(m_begin, m_end, p);
@@ -97,7 +114,10 @@ struct Allocate
         m_begin     = p;
     }
 
-    void add(Type const& value) { allocator_traits<Allocator>::construct(m_alloc, m_end++, value); }
+    void add(Type const& value)
+    {
+        allocator_traits<Allocator>::construct(m_alloc, m_end++, value);
+    }
 };
 
 }} // namespace pw::internal

@@ -31,6 +31,7 @@ public:
     vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
     vector(vector const& x);
     vector(vector const& x, allocator_type const& alloc);
+    ~vector();
 
     allocator_type    get_allocator() const;
     reference         at(size_type position);
@@ -83,6 +84,14 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
     m_data.resize(count);
     internal::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
+    });
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>::~vector()
+{
+    internal::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
+        allocator_traits<Allocator>::destroy(m_data.m_alloc, &v);
     });
 }
 
@@ -207,7 +216,7 @@ vector<Type, Allocator>::reserve(size_type count)
 {
     if (count > capacity())
     {
-        m_data.resize(count);
+        m_data.allocate(count);
     }
 }
 
@@ -224,7 +233,8 @@ vector<Type, Allocator>::push_back(Type const& value)
         internal::Allocate save(m_data);
         save.expand();
         save.add(value);
-        m_data.swap(save);
+        save.swap(m_data);
+        save.forget();
     }
 }
 
@@ -241,7 +251,8 @@ vector<Type, Allocator>::push_back(Type&& value)
         internal::Allocate save(m_data);
         save.expand();
         save.add(value);
-        m_data.swap(save);
+        save.swap(m_data);
+        save.forget();
     }
 }
 
