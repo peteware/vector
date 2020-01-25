@@ -125,16 +125,13 @@ vector<Type, Allocator>::at(size_type position) const
 }
 
 template<class Type, class Allocator>
-typename vector<Type, Allocator>::reference
-
-    vector<Type, Allocator>::operator[](size_type position)
+typename vector<Type, Allocator>::reference vector<Type, Allocator>::operator[](size_type position)
 {
     return *(m_data.m_begin + position);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
-
     vector<Type, Allocator>::operator[](size_type position) const
 {
     return *(m_data.m_begin + position);

@@ -1,4 +1,5 @@
 #include "catch2/catch.hpp"
+#include "pw_permute.t.h"
 #include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
@@ -6,24 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
-
-// SCENARIO( "vectors can be sized and resized", "[vector]" ) {
-
-//     GIVEN( "A vector with some items" ) {
-//         std::vector<int> v( 5 );
-
-//         REQUIRE( v.size() == 5 );
-//         REQUIRE( v.capacity() >= 5 );
-//         WHEN( "the size is increased" ) {
-//             v.resize( 10 );
-
-//             THEN( "the size and capacity change" ) {
-//                 REQUIRE( v.size() == 10 );
-//                 REQUIRE( v.capacity() >= 10 );
-//             }
-//         }
-//     }
-// }
 
 using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
 
@@ -42,19 +25,31 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
         WHEN("get_allocator() const is called")
         {
             typename Vector::allocator_type a = v.get_allocator();
-            THEN("it returns same allocator") { REQUIRE(a == pw::internal::allocator<TestType>()); }
+            THEN("it returns same allocator")
+            {
+                REQUIRE(a == pw::internal::allocator<TestType>());
+            }
         }
         WHEN("at() is called")
         {
-            THEN("at(0) fails") { CHECK_THROWS_AS(v.at(0), std::out_of_range); }
-            THEN("at(10) fails") { CHECK_THROWS_AS(v.at(10), std::out_of_range); }
+            THEN("at(0) fails")
+            {
+                CHECK_THROWS_AS(v.at(0), std::out_of_range);
+            }
+            THEN("at(10) fails")
+            {
+                CHECK_THROWS_AS(v.at(10), std::out_of_range);
+            }
         }
         WHEN("reserve() is called")
         {
             size_t capacity    = v.capacity();
             size_t newCapacity = capacity + 3;
             v.reserve(newCapacity);
-            THEN("capacity increases") { REQUIRE(newCapacity == v.capacity()); }
+            THEN("capacity increases")
+            {
+                REQUIRE(newCapacity == v.capacity());
+            }
         }
     }
     GIVEN("An empty const vector of TestType")
@@ -67,13 +62,22 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
         WHEN("get_allocator() const is called")
         {
             typename Vector::allocator_type a = v.get_allocator();
-            THEN("it returns same allocator") { REQUIRE(a == pw::internal::allocator<TestType>()); }
+            THEN("it returns same allocator")
+            {
+                REQUIRE(a == pw::internal::allocator<TestType>());
+            }
         }
 
         WHEN("at() const is called")
         {
-            THEN("at(0) const fails") { CHECK_THROWS_AS(c.at(0), std::out_of_range); }
-            THEN("at(10) const fails") { CHECK_THROWS_AS(c.at(10), std::out_of_range); }
+            THEN("at(0) const fails")
+            {
+                CHECK_THROWS_AS(c.at(0), std::out_of_range);
+            }
+            THEN("at(10) const fails")
+            {
+                CHECK_THROWS_AS(c.at(10), std::out_of_range);
+            }
         }
     }
 }
@@ -82,7 +86,7 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
 {
     using Vector = pw::vector<TestType>;
 
-    GIVEN("A vector constructed with a coune")
+    GIVEN("A vector constructed with a count")
     {
         size_t const count = 3;
         Vector       v(count);
@@ -90,19 +94,28 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
         WHEN("empty() is called")
         {
             bool e = v.empty();
-            THEN("it is not empty") { REQUIRE(!e); }
+            THEN("it is not empty")
+            {
+                REQUIRE(!e);
+            }
         }
 
         WHEN("size() is called")
         {
             size_t s = v.size();
-            THEN("it is the same as count") { REQUIRE(count == s); }
+            THEN("it is the same as count")
+            {
+                REQUIRE(count == s);
+            }
         }
 
         WHEN("capacity() is called")
         {
             size_t c = v.capacity();
-            THEN("capacity is same") { REQUIRE(count == c); }
+            THEN("capacity is same")
+            {
+                REQUIRE(count == c);
+            }
         }
     }
 }
