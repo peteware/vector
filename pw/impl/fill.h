@@ -1,7 +1,7 @@
-#ifndef _INCLUDED_PW_INTERNAL_FILL_H_
-#define _INCLUDED_PW_INTERNAL_FILL_H_
+#ifndef _INCLUDED_PW_IMPL_FILL_H_
+#define _INCLUDED_PW_IMPL_FILL_H_
 
-namespace pw { namespace internal {
+namespace pw {
 
 template<class ForwardIterator, class Type>
 void
@@ -13,5 +13,5 @@ fill(ForwardIterator begin, ForwardIterator end, Type const& value)
     }
 }
 
-}} // namespace pw::internal
-#endif /*  _INCLUDED_PW_INTERNAL_FILL_H_ */
+} // namespace pw
+#endif /*  _INCLUDED_PW_IMPL_FILL_H_ */

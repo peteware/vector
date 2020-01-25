@@ -1,10 +1,9 @@
 #ifndef INCLUDED_PW_INTERNAL_ALLOCATE_H
 #define INCLUDED_PW_INTERNAL_ALLOCATE_H
 
+#include <pw/impl/copy.h>
 #include <pw/internal/allocator.h>
 #include <pw/internal/allocator_traits.h>
-#include <pw/internal/copy.h>
-#include <pw/internal/max.h>
 #include <pw/internal/ptrdiff.h>
 #include <pw/internal/size.h>
 #include <pw/internal/swap.h>
@@ -108,7 +107,7 @@ struct Allocate
     void allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
-        internal::copy(m_begin, m_end, p);
+        copy(m_begin, m_end, p);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;
