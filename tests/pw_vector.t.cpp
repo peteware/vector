@@ -204,35 +204,51 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][template]", TestTypeList)
 TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][template]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
-    Vector v;
-    v.push_back(TestType());
+    Vector        v;
     Vector const& c = v;
+
+    v.push_back(TestType());
 
     GIVEN("A const vector of TestType with 1 item")
     {
         WHEN("at(0) const is called")
         {
             TestType const& r = c.at(0);
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("at(1) const is called")
         {
-            THEN("it raises exception") { CHECK_THROWS_AS(c.at(1), std::out_of_range); }
+            THEN("it raises exception")
+            {
+                CHECK_THROWS_AS(c.at(1), std::out_of_range);
+            }
         }
         WHEN("front() const is called")
         {
             TestType const& r = v.front();
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("back() const is called")
         {
             TestType const& r = v.back();
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("data() const is called")
         {
             TestType const* p = v.data();
-            THEN("it works") { REQUIRE(*p == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(*p == TestType());
+            }
         }
     }
 }

@@ -2,11 +2,11 @@
 #define INCLUDED_PW_INTERNAL_ALLOCATE_H
 
 #include <pw/impl/copy.h>
+#include <pw/impl/swap.h>
 #include <pw/internal/allocator.h>
 #include <pw/internal/allocator_traits.h>
 #include <pw/internal/ptrdiff.h>
 #include <pw/internal/size.h>
-#include <pw/internal/swap.h>
 
 #include <stdexcept>
 
@@ -67,9 +67,9 @@ struct Allocate
     {
         if (m_alloc == op2.m_alloc)
         {
-            internal::swap(m_begin, op2.m_begin);
-            internal::swap(m_end, op2.m_end);
-            internal::swap(m_allocated, op2.m_allocated);
+            swap(m_begin, op2.m_begin);
+            swap(m_end, op2.m_end);
+            swap(m_allocated, op2.m_allocated);
         }
         else
         {

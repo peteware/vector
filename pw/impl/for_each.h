@@ -1,7 +1,7 @@
-#ifndef INCLUDED_PW_INTERNAL_FOR_EACH_H
-#define INCLUDED_PW_INTERNAL_FOR_EACH_H
+#ifndef INCLUDED_PW_IMPL_FOR_EACH_H
+#define INCLUDED_PW_IMPL_FOR_EACH_H
 
-namespace pw { namespace internal {
+namespace pw {
 
 template<class InputIterator, class UnaryFunction>
 UnaryFunction
@@ -14,6 +14,6 @@ for_each(InputIterator begin, InputIterator end, UnaryFunction function)
     return function;
 }
 
-}} // namespace pw::internal
+} // namespace pw
 
-#endif /* INCLUDED_PW_INTERNAL_FOR_EACH_H */
+#endif /* INCLUDED_PW_IMPL_FOR_EACH_H */
