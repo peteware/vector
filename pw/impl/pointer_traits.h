@@ -1,11 +1,11 @@
-#ifndef INCLUDED_PW_INTERNAL_POINTER_TRAITS_H
-#define INCLUDED_PW_INTERNAL_POINTER_TRAITS_H
+#ifndef INCLUDED_PW_IMPL_POINTER_TRAITS_H
+#define INCLUDED_PW_IMPL_POINTER_TRAITS_H
 
 #include <memory> // for std::addressof()
 #include <pw/impl/ptrdiff.h>
 #include <pw/internal/meta.h>
 
-namespace pw { namespace internal {
+namespace pw {
 
 /**
  * The generic template that is used for smart ptrs.
@@ -47,5 +47,5 @@ struct pointer_traits<Type*>
     };
 };
 
-}} // namespace pw::internal
-#endif /* INCLUDED_PW_INTERNAL_POINTER_TRAITS_H */
+} // namespace pw
+#endif /* INCLUDED_PW_IMPL_POINTER_TRAITS_H */

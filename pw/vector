@@ -71,7 +71,7 @@ vector<Type, Allocator>::vector(size_type count)
     : m_data(allocator_type())
 {
     m_data.resize(count);
-    for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
+    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v);
     });
 }
@@ -81,7 +81,7 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
     : m_data(alloc)
 {
     m_data.resize(count);
-    for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
+    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
     });
 }
@@ -89,7 +89,7 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
 {
-    for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
+    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::destroy(m_data.m_alloc, &v);
     });
 }

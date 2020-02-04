@@ -3,11 +3,6 @@
 
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
-#include <pw/internal/pointer_traits.h>
+#include <pw/impl/pointer_traits.h>
 
-namespace pw {
-
-using internal::pointer_traits;
-
-} // namespace pw
 #endif /* PW_MEMORY_H */

@@ -67,9 +67,9 @@ struct Allocate
     {
         if (m_alloc == op2.m_alloc)
         {
-            swap(m_begin, op2.m_begin);
-            swap(m_end, op2.m_end);
-            swap(m_allocated, op2.m_allocated);
+            pw::swap(m_begin, op2.m_begin);
+            pw::swap(m_end, op2.m_end);
+            pw::swap(m_allocated, op2.m_allocated);
         }
         else
         {
@@ -107,7 +107,7 @@ struct Allocate
     void allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
-        copy(m_begin, m_end, p);
+        pw::copy(m_begin, m_end, p);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;

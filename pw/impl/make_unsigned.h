@@ -1,7 +1,7 @@
-#ifndef INCLUDED_PW_INTERNAL_MAKE_UNSIGNED_H
-#define INCLUDED_PW_INTERNAL_MAKE_UNSIGNED_H
+#ifndef INCLUDED_PW_IMPL_MAKE_UNSIGNED_H
+#define INCLUDED_PW_IMPL_MAKE_UNSIGNED_H
 
-namespace pw { namespace internal {
+namespace pw {
 template<typename Type>
 struct make_unsigned
 {
@@ -32,5 +32,5 @@ struct make_unsigned<long long>
     using type = unsigned long long;
 };
 
-}} // End of namespace pw::internal
-#endif /* INCLUDED_PW_INTERNAL_MAKE_UNSIGNED_H */
+} // End of namespace pw
+#endif /* INCLUDED_PW_IMPL_MAKE_UNSIGNED_H */
