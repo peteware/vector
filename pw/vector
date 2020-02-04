@@ -2,10 +2,11 @@
 #define PW_VECTOR_H
 
 #include <pw/impl/for_each.h>
+#include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/internal/allocate.h>
 
-#include <pw/memory>
-#include <pw/memory_resource>
+// #include <pw/memory>
+// #include <pw/memory_resource>
 
 #include <limits>
 #include <stdexcept>

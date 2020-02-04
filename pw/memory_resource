@@ -2,16 +2,6 @@
 #define PW_MEMORY_RESOURCE_H
 
 #include <pw/impl/allocator_traits.h>
-
-namespace pw { namespace pmr {
-
-template<class Type>
-class polymorphic_allocator
-{
-public:
-    using value_type = Type;
-};
-
-}} // namespace pw::pmr
+#include <pw/impl/pmr_allocator.h>
 
 #endif /*  PW_MEMORY_RESOURCE_H */
