@@ -22,8 +22,8 @@ public:
     using difference_type = ptrdiff_t;
     using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer         = typename internal::allocator_traits<Allocator>::pointer;
-    using const_pointer   = typename internal::allocator_traits<Allocator>::const_pointer;
+    using pointer         = typename allocator_traits<Allocator>::pointer;
+    using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
 
     explicit vector(allocator_type const& alloc = allocator_type());
     explicit vector(size_type count);

@@ -1,16 +1,9 @@
 #ifndef PW_MEMORY_RESOURCE_H // -*- c++ -*-
 #define PW_MEMORY_RESOURCE_H
 
-#include <pw/impl/is_empty.h>
-#include <pw/internal/bool_type.h>
-#include <pw/internal/make_unsigned.h>
-#include <pw/memory>
+#include <pw/impl/allocator_traits.h>
 
-namespace pw {
-
-using internal::allocator_traits;
-
-namespace pmr {
+namespace pw { namespace pmr {
 
 template<class Type>
 class polymorphic_allocator
@@ -19,7 +12,6 @@ public:
     using value_type = Type;
 };
 
-} // namespace pmr
-} // namespace pw
+}} // namespace pw::pmr
 
 #endif /*  PW_MEMORY_RESOURCE_H */

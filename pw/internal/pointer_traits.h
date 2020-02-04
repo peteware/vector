@@ -2,6 +2,7 @@
 #define INCLUDED_PW_INTERNAL_POINTER_TRAITS_H
 
 #include <memory> // for std::addressof()
+#include <pw/impl/ptrdiff.h>
 #include <pw/internal/meta.h>
 
 namespace pw { namespace internal {
@@ -21,7 +22,10 @@ struct pointer_traits
     template<typename U>
     using rebind = typename internal::rebind_ptr<Ptr, U>::type;
 
-    static pointer pointer_to(element_type& r) { return Ptr::pointer_to(r); }
+    static pointer pointer_to(element_type& r)
+    {
+        return Ptr::pointer_to(r);
+    }
 };
 
 /**
@@ -32,12 +36,15 @@ struct pointer_traits<Type*>
 {
     using pointer         = Type*;
     using element_type    = Type;
-    using difference_type = internal::ptrdiff_t;
+    using difference_type = ptrdiff_t;
 
     template<typename U>
     using rebind = U*;
 
-    static pointer pointer_to(element_type& r) noexcept { return std::addressof(r); };
+    static pointer pointer_to(element_type& r) noexcept
+    {
+        return std::addressof(r);
+    };
 };
 
 }} // namespace pw::internal

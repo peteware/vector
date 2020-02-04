@@ -5,8 +5,8 @@
 // ** Includes
 // *** pw includes
 #include <pw/impl/ptrdiff.h>
+#include <pw/impl/void.h>
 #include <pw/internal/extract_or.h>
-#include <pw/internal/void.h>
 
 namespace pw { namespace internal {
 
@@ -19,7 +19,7 @@ using get_difference_type = typename Type::difference_type;
 template<class Type, class = void>
 struct difference_type
 {
-    using type = extract_or_type<get_difference_type, Type, internal::ptrdiff_t>;
+    using type = extract_or_type<get_difference_type, Type, ptrdiff_t>;
 };
 
 template<typename Type>

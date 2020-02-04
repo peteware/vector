@@ -21,10 +21,10 @@ struct allocator_traits
     using const_void_pointer = typename internal::pointer_traits<pointer>::template rebind<const void>;
     using difference_type    = typename internal::pointer_traits<pointer>::difference_type;
     using size_type          = typename internal::make_unsigned<difference_type>::type;
-    using propagate_on_container_copy_assignment = internal::false_type;
-    using propagate_on_container_move_assignment = internal::false_type;
-    using propagate_on_container_swap            = internal::false_type;
-    using is_always_equal                        = typename internal::is_empty<Alloc>::type;
+    using propagate_on_container_copy_assignment = false_type;
+    using propagate_on_container_move_assignment = false_type;
+    using propagate_on_container_swap            = false_type;
+    using is_always_equal                        = typename is_empty<Alloc>::type;
 
     static pointer allocate(allocator_type& alloc, size_type n)
     {

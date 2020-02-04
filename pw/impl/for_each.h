@@ -15,5 +15,4 @@ for_each(InputIterator begin, InputIterator end, UnaryFunction function)
 }
 
 } // namespace pw
-
 #endif /* INCLUDED_PW_IMPL_FOR_EACH_H */

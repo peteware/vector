@@ -2,11 +2,11 @@
 #define INCLUDED_PW_INTERNAL_ALLOCATE_H
 
 #include <pw/impl/allocator.h>
+#include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/ptrdiff.h>
+#include <pw/impl/size.h>
 #include <pw/impl/swap.h>
-#include <pw/internal/allocator_traits.h>
-#include <pw/internal/size.h>
 
 #include <stdexcept>
 
@@ -21,8 +21,8 @@ struct Allocate
     using difference_type = ptrdiff_t;
     using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer         = typename internal::allocator_traits<Allocator>::pointer;
-    using const_pointer   = typename internal::allocator_traits<Allocator>::const_pointer;
+    using pointer         = typename allocator_traits<Allocator>::pointer;
+    using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
 
     pointer        m_begin;
     pointer        m_end;

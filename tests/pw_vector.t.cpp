@@ -27,7 +27,7 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
             typename Vector::allocator_type a = v.get_allocator();
             THEN("it returns same allocator")
             {
-                REQUIRE(a == pw::internal::allocator<TestType>());
+                REQUIRE(a == pw::allocator<TestType>());
             }
         }
         WHEN("at() is called")
@@ -64,7 +64,7 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
             typename Vector::allocator_type a = v.get_allocator();
             THEN("it returns same allocator")
             {
-                REQUIRE(a == pw::internal::allocator<TestType>());
+                REQUIRE(a == pw::allocator<TestType>());
             }
         }
 
