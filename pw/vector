@@ -5,9 +5,6 @@
 #include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/internal/allocate.h>
 
-// #include <pw/memory>
-// #include <pw/memory_resource>
-
 #include <limits>
 #include <stdexcept>
 
@@ -58,7 +55,7 @@ private:
 
 namespace pmr {
 template<class Type>
-using vector = vector<Type, polymorphic_allocator<Type>>;
+using vector = vector<Type, pmr::polymorphic_allocator<Type>>;
 }
 
 template<class Type, class Allocator>
