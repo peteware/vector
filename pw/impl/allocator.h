@@ -1,11 +1,11 @@
-#ifndef INCLUDED_PW_INTERNAL_ALLOCATOR_H
-#define INCLUDED_PW_INTERNAL_ALLOCATOR_H
+#ifndef INCLUDED_PW_IMPL_ALLOCATOR_H
+#define INCLUDED_PW_IMPL_ALLOCATOR_H
 
-#include <pw/internal/ptrdiff.h>
-#include <pw/internal/size.h>
-#include <pw/internal/bool_type.h>
+#include <pw/impl/bool_type.h>
+#include <pw/impl/ptrdiff.h>
+#include <pw/impl/size.h>
 
-namespace pw { namespace internal {
+namespace pw {
 
 template<class Type>
 struct allocator
@@ -33,5 +33,5 @@ operator==(allocator<Type1> const& op1, allocator<Type2> const& op2)
     return true;
 }
 
-}} // namespace pw::internal
-#endif /*  INCLUDED_PW_INTERNAL_ALLOCATOR_H */
+} // namespace pw
+#endif /*  INCLUDED_PW_IMPL_ALLOCATOR_H */

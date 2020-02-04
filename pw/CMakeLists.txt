@@ -6,18 +6,18 @@ target_sources(pw INTERFACE
     type_traits
     vector
     internal/allocate.h
-    internal/allocator.h
+    impl/allocator.h
     internal/allocator_traits.h
-    internal/bool_type.h
+    impl/bool_type.h
     internal/destroy.h
     internal/extract_or.h
-    internal/integral_constant.h
-    internal/is_class.h
-    internal/is_empty.h
+    impl/integral_constant.h
+    impl/is_class.h
+    impl/is_empty.h
     internal/is_same.h
     internal/make_unsigned.h
     internal/meta.h
-    internal/ptrdiff.h
+    impl/ptrdiff.h
     internal/size.h
     internal/void.h
     

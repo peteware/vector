@@ -1,16 +1,13 @@
 #ifndef PW_MEMORY_H // -*- c++ -*-
 #define PW_MEMORY_H
 
-#include <pw/internal/allocator.h>
-#include <pw/internal/allocator_traits.h>
+#include <pw/impl/allocator.h>
+#include <pw/impl/allocator_traits.h>
 #include <pw/internal/pointer_traits.h>
 
 namespace pw {
 
-using internal::allocator;
 using internal::pointer_traits;
-
-using internal::allocator_traits;
 
 } // namespace pw
 #endif /* PW_MEMORY_H */

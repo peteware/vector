@@ -1,13 +1,7 @@
 #ifndef PW_CSTDDEF_H // -*- c++ -*-
 #define PW_CSTDDEF_H
 
-#include <pw/internal/size.h>
-#include <pw/internal/ptrdiff.h>
+#include <pw/impl/ptrdiff.h>
+#include <pw/impl/size.h>
 
-namespace pw {
-
-using size_t    = internal::size_t;
-using ptrdiff_t = internal::ptrdiff_t;
-
-} // namespace pw
 #endif /*  PW_CSTDDEF_H */

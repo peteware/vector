@@ -4,9 +4,9 @@
 // * Meta
 // ** Includes
 // *** pw includes
-#include <pw/internal/void.h>
-#include <pw/internal/ptrdiff.h>
+#include <pw/impl/ptrdiff.h>
 #include <pw/internal/extract_or.h>
+#include <pw/internal/void.h>
 
 namespace pw { namespace internal {
 
@@ -26,7 +26,7 @@ template<typename Type>
 struct get_first_arg;
 
 template<template<typename...> class Class, typename Type, typename... Args>
-struct get_first_arg<Class<Type, Args...> >
+struct get_first_arg<Class<Type, Args...>>
 {
     using type = Type;
 };
@@ -38,7 +38,7 @@ struct element_type
 };
 
 template<typename Type>
-struct element_type<Type, void_t<typename Type::element_type> >
+struct element_type<Type, void_t<typename Type::element_type>>
 {
     using type = typename Type::element_type;
 };
@@ -59,7 +59,7 @@ struct rebind_ptr
 };
 
 template<typename Type, typename U>
-struct rebind_ptr<Type, U, void_t<typename Type::template rebind<U> > >
+struct rebind_ptr<Type, U, void_t<typename Type::template rebind<U>>>
 {
     using type = typename Type::template rebind<U>;
 };

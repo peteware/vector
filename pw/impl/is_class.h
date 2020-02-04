@@ -1,9 +1,9 @@
-#ifndef INCLUDED_PW_INTERNAL_IS_CLASS_H
-#define INCLUDED_PW_INTERNAL_IS_CLASS_H
+#ifndef INCLUDED_PW_IMPL_IS_CLASS_H
+#define INCLUDED_PW_IMPL_IS_CLASS_H
 
-#include <pw/internal/integral_constant.h>
+#include <pw/impl/integral_constant.h>
 
-namespace pw { namespace internal {
+namespace pw {
 
 namespace is_class_impl {
 template<class Type>
@@ -18,6 +18,6 @@ struct is_class : public integral_constant<bool, sizeof(is_class_impl::test<Type
 {
 };
 
-}} // namespace pw::internal
+} // namespace pw
 
-#endif /* INCLUDED_PW_INTERNAL_IS_CLASS_H */
+#endif /* INCLUDED_PW_IMPL_IS_CLASS_H */

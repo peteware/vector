@@ -1,10 +1,10 @@
 #ifndef PW_MEMORY_RESOURCE_H // -*- c++ -*-
 #define PW_MEMORY_RESOURCE_H
 
-#include <pw/memory>
-#include <pw/internal/make_unsigned.h>
+#include <pw/impl/is_empty.h>
 #include <pw/internal/bool_type.h>
-#include <pw/internal/is_empty.h>
+#include <pw/internal/make_unsigned.h>
+#include <pw/memory>
 
 namespace pw {
 

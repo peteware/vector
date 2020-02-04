@@ -1,18 +1,8 @@
 #ifndef PW_TYPE_TRAITS_H // -*- c++ -*-
 #define PW_TYPE_TRAITS_H
 
-#include <pw/internal/bool_type.h>
-#include <pw/internal/void.h>
-#include <pw/internal/is_same.h>
+#include <pw/impl/bool_type.h>
+#include <pw/impl/is_same.h>
+#include <pw/impl/void.h>
 
-namespace pw {
-
-using internal::false_type;
-using internal::true_type;
-
-using internal::is_same;
-
-using internal::void_t;
-
-} // namespace pw
 #endif /*  PW_TYPE_TRAITS_H */

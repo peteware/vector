@@ -1,14 +1,14 @@
-#ifndef INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
-#define INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H
+#ifndef INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
+#define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
-#include <pw/internal/bool_type.h>
-#include <pw/internal/is_empty.h>
+#include <pw/impl/bool_type.h>
+#include <pw/impl/is_empty.h>
 #include <pw/internal/make_unsigned.h>
 #include <pw/internal/pointer_traits.h>
 
 #include <utility>
 
-namespace pw { namespace internal {
+namespace pw {
 
 template<class Alloc>
 struct allocator_traits
@@ -49,5 +49,5 @@ struct allocator_traits
     }
 };
 
-}} // namespace pw::internal
-#endif /*  INCLUDED_PW_INTERNAL_ALLOCATOR_TRAITS_H */
+} // namespace pw
+#endif /*  INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H */

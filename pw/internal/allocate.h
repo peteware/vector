@@ -1,11 +1,11 @@
 #ifndef INCLUDED_PW_INTERNAL_ALLOCATE_H
 #define INCLUDED_PW_INTERNAL_ALLOCATE_H
 
+#include <pw/impl/allocator.h>
 #include <pw/impl/copy.h>
+#include <pw/impl/ptrdiff.h>
 #include <pw/impl/swap.h>
-#include <pw/internal/allocator.h>
 #include <pw/internal/allocator_traits.h>
-#include <pw/internal/ptrdiff.h>
 #include <pw/internal/size.h>
 
 #include <stdexcept>
