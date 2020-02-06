@@ -1,8 +1,9 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
+//#include <pw/impl/allocator.h>
 #include <pw/impl/for_each.h>
-#include <pw/impl/pmr_polymorphic_allocator.h>
+// #include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/internal/allocate.h>
 
 #include <limits>
@@ -53,10 +54,10 @@ private:
     internal::Allocate<Type, Allocator> m_data;
 };
 
-namespace pmr {
-template<class Type>
-using vector = vector<Type, pmr::polymorphic_allocator<Type>>;
-}
+// namespace pmr {
+// template<class Type>
+// using vector = vector<Type, pmr::polymorphic_allocator<Type>>;
+// }
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(allocator_type const& alloc)
@@ -68,7 +69,7 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count)
     : m_data(allocator_type())
 {
-    m_data.resize(count);
+    m_data.allocate(count).resize(count);
     pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v);
     });
@@ -78,7 +79,7 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
     : m_data(alloc)
 {
-    m_data.resize(count);
+    m_data.allocate(count).resize(count);
     pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
     });
@@ -201,7 +202,7 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const
 {
-    return m_data.m_allocated;
+    return m_data.capacity();
 }
 
 template<class Type, class Allocator>

@@ -4,6 +4,7 @@ add_executable( unittest
                 pw_vector.cpp
                 pw_vector.m.t.cpp
                 pw_vector.t.cpp
+                pw_internal_allocate.t.cpp
                 )
 target_link_libraries(unittest pw)
 add_test( NAME unittest

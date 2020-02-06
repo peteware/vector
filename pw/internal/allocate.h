@@ -59,6 +59,11 @@ struct Allocate
         return m_end - m_begin;
     }
 
+    size_type capacity() const
+    {
+        return m_allocated;
+    }
+
     void forget()
     {
         m_begin = m_end = 0;
@@ -81,10 +86,10 @@ struct Allocate
 
     bool hasroom(size_type count) const
     {
-        return m_allocated - size() > count;
+        return m_allocated - size() >= count;
     }
 
-    void expand()
+    Allocate& expand()
     {
         size_type need;
 
@@ -98,26 +103,29 @@ struct Allocate
         }
 
         allocate(need);
+        return *this;
     }
 
-    void resize(size_type count)
+    Allocate& resize(size_type count)
     {
-        allocate(count);
-        m_end = m_begin + m_allocated;
+        m_end = m_begin + count;
+        return *this;
     }
 
-    void allocate(size_type count)
+    Allocate& allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
         pw::copy(m_begin, m_end, p);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;
+        return *this;
     }
 
-    void add(Type const& value)
+    Allocate& add(Type const& value)
     {
         allocator_traits<Allocator>::construct(m_alloc, m_end++, value);
+        return *this;
     }
 };
 

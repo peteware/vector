@@ -8,7 +8,8 @@
 #include <string>
 #include <tuple>
 
-using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
+//using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
+using TestTypeList = std::tuple<int, std::string, float>;
 
 TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList)
 {
