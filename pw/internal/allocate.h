@@ -40,11 +40,13 @@ struct Allocate
     }
 
     Allocate(Allocate const& copy)
-        : m_begin(copy.m_begin)
-        , m_end(copy.m_end)
-        , m_allocated(copy.m_allocated)
+        : m_begin(0)
+        , m_end(0)
+        , m_allocated(0)
         , m_alloc(copy.m_alloc)
     {
+        allocate(copy.size());
+        pw::copy(copy.m_begin, copy.m_end, m_begin);
     }
 
     ~Allocate()

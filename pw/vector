@@ -218,36 +218,22 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type const& value)
 {
-    if (m_data.hasroom(1))
+    if (!m_data.hasroom(1))
     {
-        m_data.add(value);
+        m_data.expand();
     }
-    else
-    {
-        internal::Allocate save(m_data);
-        save.expand();
-        save.add(value);
-        save.swap(m_data);
-        save.forget();
-    }
+    m_data.add(value);
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type&& value)
 {
-    if (m_data.hasroom(1))
+    if (!m_data.hasroom(1))
     {
-        m_data.add(value);
+        m_data.expand();
     }
-    else
-    {
-        internal::Allocate save(m_data);
-        save.expand();
-        save.add(value);
-        save.swap(m_data);
-        save.forget();
-    }
+    m_data.add(value);
 }
 
 } // namespace pw
