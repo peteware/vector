@@ -4,6 +4,7 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
+#include <pw/impl/move_alg.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
@@ -115,7 +116,7 @@ struct Allocate
     Allocate& allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
-        pw::copy(m_begin, m_end, p);
+        pw::move(m_begin, m_end, p);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;

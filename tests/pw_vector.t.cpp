@@ -253,3 +253,57 @@ TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][template]", TestTypeList
         }
     }
 }
+
+TEMPLATE_LIST_TEST_CASE("vector resize", "[vector][resize]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+    GIVEN("A vector of TestType with 3 elements")
+    {
+        size_t const initsize = 3;
+        Vector       v(initsize);
+
+        REQUIRE(initsize == v.size());
+        REQUIRE(initsize == v.capacity());
+        WHEN("resize() increases size")
+        {
+            size_t const size = initsize + 3;
+
+            v.resize(size);
+            THEN("size is is changed")
+            {
+                REQUIRE(size == v.size());
+                REQUIRE(size <= v.capacity());
+            }
+        }
+        WHEN("resize() decreases size")
+        {
+            size_t const capacity = v.capacity();
+            size_t const size     = initsize - 2;
+
+            v.resize(size);
+            THEN("size is smaller")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
+        }
+        WHEN("resize() does not change size")
+        {
+            size_t const capacity = v.capacity();
+            size_t const size     = initsize;
+
+            v.resize(size);
+            THEN("size is unchanged")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
+        }
+    }
+}
