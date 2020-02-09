@@ -3,6 +3,8 @@
 
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
+#include <pw/impl/destroy.h>
+#include <pw/impl/destroy_at.h>
 #include <pw/impl/pointer_traits.h>
 
 #endif /* PW_MEMORY_H */

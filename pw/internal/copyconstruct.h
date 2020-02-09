@@ -1,6 +1,7 @@
 #ifndef INCLUDED_PW_INTERANL_COPYCONSTRUCT_H
 #define INCLUDED_PW_INTERANL_COPYCONSTRUCT_H
 
+#include <pw/impl/addressof.h>
 #include <pw/impl/allocator_traits.h>
 
 namespace pw { namespace internal {
@@ -14,6 +15,20 @@ copyconstruct(Allocator& alloc, InputIterator begin, InputIterator end, OutputIt
         allocator_traits<Allocator>::construct(alloc, &(*out++), *begin++);
     }
     return out;
+}
+
+template<class InputIterator, class Allocator>
+InputIterator
+copyconstruct(Allocator&                            alloc,
+              InputIterator                         begin,
+              InputIterator                         end,
+              typename Allocator::value_type const& value)
+{
+    while (begin != end)
+    {
+        allocator_traits<Allocator>::construct(alloc, pw::addressof(*begin++), value);
+    }
+    return begin;
 }
 
 }} // namespace pw::internal
