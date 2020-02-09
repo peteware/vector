@@ -1,15 +1,18 @@
 #ifndef INCLUDED_PW_INTERNAL_DESTROY_H
 #define INCLUDED_PW_INTERNAL_DESTROY_H
 
+#include <pw/impl/addressof.h>
+#include <pw/impl/destroy_at.h>
+
 namespace pw { namespace internal {
 
-template<typename Allocator, typename Iterator>
+template<typename Iterator>
 void
-destroy(Allocator& alloc, Iterator first, Iterator end)
+destroy(Iterator first, Iterator end)
 {
     while (first != end)
     {
-        allocator_traits<Allocator>::deallocate(alloc, first++);
+        pw::destroy_at(pw::addressof(*first++));
     }
 }
 

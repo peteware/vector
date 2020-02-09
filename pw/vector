@@ -5,6 +5,7 @@
 #include <pw/impl/for_each.h>
 // #include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/internal/allocate.h>
+#include <pw/internal/destroy.h>
 
 #include <limits>
 #include <stdexcept>
@@ -90,9 +91,7 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
 {
-    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
-        allocator_traits<Allocator>::destroy(m_data.m_alloc, &v);
-    });
+    internal::destroy(m_data.m_begin, m_data.m_end);
 }
 
 template<class Type, class Allocator>

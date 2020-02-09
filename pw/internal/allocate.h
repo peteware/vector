@@ -8,6 +8,8 @@
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
+#include <pw/internal/copyconstruct.h>
+#include <pw/internal/destroy.h>
 
 #include <stdexcept>
 
@@ -116,7 +118,8 @@ struct Allocate
     Allocate& allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
-        pw::move(m_begin, m_end, p);
+        internal::copyconstruct(m_alloc, m_begin, m_end, p);
+        internal::destroy(m_begin, m_end);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;
