@@ -4,12 +4,12 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
+#include <pw/impl/destroy.h>
 #include <pw/impl/move_alg.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
 #include <pw/internal/copyconstruct.h>
-#include <pw/internal/destroy.h>
 
 #include <stdexcept>
 
@@ -109,7 +109,7 @@ struct Allocate
         return *this;
     }
 
-    Allocate& resize(size_type count)
+    Allocate& setsize(size_type count)
     {
         m_end = m_begin + count;
         return *this;
@@ -119,7 +119,7 @@ struct Allocate
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
         internal::copyconstruct(m_alloc, m_begin, m_end, p);
-        internal::destroy(m_begin, m_end);
+        pw::destroy(m_begin, m_end);
         m_end       = p + size();
         m_allocated = count;
         m_begin     = p;

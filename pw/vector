@@ -4,8 +4,8 @@
 //#include <pw/impl/allocator.h>
 #include <pw/impl/for_each.h>
 // #include <pw/impl/pmr_polymorphic_allocator.h>
+#include <pw/impl/destroy.h>
 #include <pw/internal/allocate.h>
-#include <pw/internal/destroy.h>
 
 #include <limits>
 #include <stdexcept>
@@ -72,7 +72,7 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count)
     : m_data(allocator_type())
 {
-    m_data.allocate(count).resize(count);
+    m_data.allocate(count).setsize(count);
     pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v);
     });
@@ -82,7 +82,7 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
     : m_data(alloc)
 {
-    m_data.allocate(count).resize(count);
+    m_data.allocate(count).setsize(count);
     pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
     });
@@ -91,7 +91,7 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
 {
-    internal::destroy(m_data.m_begin, m_data.m_end);
+    pw::destroy(m_data.m_begin, m_data.m_end);
 }
 
 template<class Type, class Allocator>
@@ -251,10 +251,8 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
 {
     if (m_data.size() > count)
     {
-        pw::for_each(m_data.m_begin, m_data.m_begin + count, [=](value_type& v) {
-            allocator_traits<Allocator>::destroy(m_data.m_alloc, &v);
-        });
-        m_data.resize(count);
+        pw::destroy(m_data.m_begin, m_data.m_begin + count);
+        m_data.setsize(count);
     }
     else if (m_data.size() < count)
     {
@@ -262,7 +260,7 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
         pw::for_each(m_data.m_end, m_data.m_begin + count, [=](value_type& v) {
             allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
         });
-        m_data.resize(count);
+        m_data.setsize(count);
     }
 }
 
