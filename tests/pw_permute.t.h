@@ -12,7 +12,6 @@ permute(int& value, int depth)
     }
     ++value;
     return true;
-    ;
 }
 
 inline bool
@@ -30,6 +29,17 @@ permute(std::string& value, int depth)
     {
         value.push_back(value.back() + 1);
     }
+    return true;
+}
+
+inline bool
+permute(float& value, int depth)
+{
+    if (value >= (float)depth)
+    {
+        return false;
+    }
+    ++value;
     return true;
 }
 

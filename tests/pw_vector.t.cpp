@@ -118,6 +118,16 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
                 REQUIRE(count == c);
             }
         }
+
+        WHEN("copy constructor is called")
+        {
+            Vector c(v);
+            THEN("two vectors are same")
+            {
+                REQUIRE(v.size() == c.size());
+                REQUIRE(v[0] == c[0]);
+            }
+        }
     }
 }
 
@@ -303,6 +313,22 @@ TEMPLATE_LIST_TEST_CASE("vector resize", "[vector][resize]", TestTypeList)
             THEN("capacity is unchanged")
             {
                 REQUIRE(capacity == v.capacity());
+            }
+        }
+        WHEN("resize() adds elements with value")
+        {
+            TestType     value;
+            size_t const size = initsize + 3;
+
+            pw::internal::permute(value, 3);
+            v.resize(size, value);
+            THEN("size() is increased")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("each value is same as permute")
+            {
+                REQUIRE(value == v[initsize]);
             }
         }
     }

@@ -1,12 +1,13 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
-//#include <pw/impl/allocator.h>
-#include <pw/impl/for_each.h>
-// #include <pw/impl/pmr_polymorphic_allocator.h>
-#include <pw/impl/destroy.h>
-#include <pw/impl/uninitialized_default_construct.h>
 #include <pw/internal/allocate.h>
+
+#include <pw/impl/destroy.h>
+#include <pw/impl/for_each.h>
+#include <pw/impl/uninitialized_copy.h>
+#include <pw/impl/uninitialized_default_construct.h>
+#include <pw/impl/uninitialized_fill.h>
 
 #include <limits>
 #include <stdexcept>
@@ -29,8 +30,8 @@ public:
     explicit vector(allocator_type const& alloc = allocator_type());
     explicit vector(size_type count);
     vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
-    vector(vector const& x);
-    vector(vector const& x, allocator_type const& alloc);
+    vector(vector const& copy);
+    vector(vector const& copy, allocator_type const& alloc);
     ~vector();
 
     allocator_type    get_allocator() const;
@@ -87,6 +88,12 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
     pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
         allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
     });
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>::vector(vector const& copy)
+    : m_data(copy.m_data)
+{
 }
 
 template<class Type, class Allocator>
@@ -243,7 +250,18 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::resize(size_type count)
 {
-    resize(count, value_type());
+    if (m_data.size() > count)
+    {
+        // TODO: need unit test for this bug: pw::destroy(m_data.m_begin, m_data.m_begin + count);
+        pw::destroy(m_data.m_begin + count, m_data.m_end);
+        m_data.setsize(count);
+    }
+    else if (m_data.size() < count)
+    {
+        m_data.allocate(count);
+        pw::uninitialized_default_construct(m_data.m_end, m_data.m_begin + count);
+        m_data.setsize(count);
+    }
 }
 
 template<class Type, class Allocator>
@@ -252,13 +270,13 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
 {
     if (m_data.size() > count)
     {
-        pw::destroy(m_data.m_begin, m_data.m_begin + count);
+        pw::destroy(m_data.m_begin + count, m_data.m_end);
         m_data.setsize(count);
     }
     else if (m_data.size() < count)
     {
         m_data.allocate(count);
-        pw::uninitialized_default_construct(m_data.m_end, m_data.m_begin + count);
+        pw::uninitialized_fill(m_data.m_end, m_data.m_begin + count, value);
         m_data.setsize(count);
     }
 }

@@ -9,7 +9,7 @@ struct FakeAllocator
     using difference_type = char;
 };
 
-SCENARIO("validate pointer_traits works as expected")
+SCENARIO("validate pointer_traits works as expected", "[memory]")
 {
     GIVEN("A pointer_traits with an int*")
     {

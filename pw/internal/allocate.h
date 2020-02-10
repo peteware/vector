@@ -9,7 +9,8 @@
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
-#include <pw/internal/copyconstruct.h>
+#include <pw/impl/uninitialized_copy.h>
+#include <pw/impl/uninitialized_move.h>
 
 #include <stdexcept>
 
@@ -49,7 +50,8 @@ struct Allocate
         , m_alloc(copy.m_alloc)
     {
         allocate(copy.size());
-        pw::copy(copy.m_begin, copy.m_end, m_begin);
+        pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
+        setsize(copy.size());
     }
 
     ~Allocate()
@@ -118,7 +120,7 @@ struct Allocate
     Allocate& allocate(size_type count)
     {
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
-        internal::copyconstruct(m_alloc, m_begin, m_end, p);
+        pw::uninitialized_move(m_begin, m_end, p);
         pw::destroy(m_begin, m_end);
         m_end       = p + size();
         m_allocated = count;
