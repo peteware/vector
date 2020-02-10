@@ -5,9 +5,11 @@
 
 #include <pw/impl/destroy.h>
 #include <pw/impl/for_each.h>
+#include <pw/impl/iterator_traits.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
+#include <pw/impl/uninitialized_move.h>
 
 #include <limits>
 #include <stdexcept>
@@ -26,6 +28,8 @@ public:
     using const_reference = value_type const&;
     using pointer         = typename allocator_traits<Allocator>::pointer;
     using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
+    using iterator        = typename allocator_traits<Allocator>::pointer;
+    using const_iterator  = typename allocator_traits<Allocator>::const_pointer;
 
     explicit vector(allocator_type const& alloc = allocator_type());
     explicit vector(size_type count);
@@ -45,6 +49,12 @@ public:
     const_reference   back() const;
     value_type*       data() noexcept;
     value_type const* data() const noexcept;
+    iterator          begin() noexcept;
+    iterator          end() noexcept;
+    const_iterator    begin() const noexcept;
+    const_iterator    end() const noexcept;
+    const_iterator    cbegin() const noexcept;
+    const_iterator    cend() const noexcept;
     bool              empty() const;
     size_type         size() const;
     size_type         max_size() const;
@@ -56,6 +66,7 @@ public:
     void              push_back(Type&& value);
     void              resize(size_type count);
     void              resize(size_type count, value_type const& value);
+    iterator          insert(iterator position, value_type const& value);
 
 private:
     internal::Allocate<Type, Allocator> m_data;
@@ -189,6 +200,48 @@ vector<Type, Allocator>::data() const noexcept
 }
 
 template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::begin() noexcept
+{
+    return m_data.m_begin;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::end() noexcept
+{
+    return m_data.m_end;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::const_iterator
+vector<Type, Allocator>::begin() const noexcept
+{
+    return m_data.m_begin;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::const_iterator
+vector<Type, Allocator>::end() const noexcept
+{
+    return m_data.m_end;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::const_iterator
+vector<Type, Allocator>::cbegin() const noexcept
+{
+    return m_data.m_begin;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::const_iterator
+vector<Type, Allocator>::cend() const noexcept
+{
+    return m_data.m_end;
+}
+
+template<class Type, class Allocator>
 bool
 vector<Type, Allocator>::empty() const
 {
@@ -308,6 +361,25 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
         m_data.setsize(count);
     }
 }
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(iterator position, value_type const& value)
+{
+    if (!m_data.hasroom(1))
+    {
+        m_data.expand();
+    }
+    if (position == m_data.m_end)
+    {
+        m_data.add(value);
+        return m_data.m_end - 1;
+    }
+    pw::uninitialized_move(m_data.m_end - 1, m_data.m_end, m_data.m_end + 1);
+    // pw::move(rbegin() + 1, rend(), rbegin());
+    return position;
+}
+
 } // namespace pw
 
 #endif /*  PW_VECTOR_H */

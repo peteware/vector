@@ -52,6 +52,42 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 REQUIRE(newCapacity == v.capacity());
             }
         }
+        WHEN("begin() is called")
+        {
+            typename Vector::iterator iter;
+            iter = v.begin();
+            THEN("cend() is same")
+            {
+                REQUIRE(iter == v.begin());
+            }
+            THEN("end() is same")
+            {
+                REQUIRE(iter == v.end());
+            }
+            THEN("cend() is same as end()")
+            {
+                REQUIRE(iter == v.cend());
+            }
+        }
+        WHEN("insert() is called")
+        {
+            typename Vector::iterator iter;
+            TestType                  value;
+            pw::internal::permute(value, 3);
+            iter = v.insert(v.begin(), value);
+            THEN("size() is increased")
+            {
+                REQUIRE(1 == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("at(0) returns same value")
+            {
+                REQUIRE(value == v.at(0));
+            }
+        }
     }
     GIVEN("An empty const vector of TestType")
     {
@@ -78,6 +114,27 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
             THEN("at(10) const fails")
             {
                 CHECK_THROWS_AS(c.at(10), std::out_of_range);
+            }
+        }
+        WHEN("begin() is called")
+        {
+            typename Vector::const_iterator iter;
+            iter = v.begin();
+            THEN("cend() is same")
+            {
+                REQUIRE(iter == v.cend());
+            }
+            THEN("cbegin() is same")
+            {
+                REQUIRE(iter == v.cbegin());
+            }
+            THEN("end() is same")
+            {
+                REQUIRE(iter == v.end());
+            }
+            THEN("cend() is same as end()")
+            {
+                REQUIRE(iter == v.cend());
             }
         }
     }

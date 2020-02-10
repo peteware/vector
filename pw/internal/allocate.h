@@ -16,6 +16,15 @@
 
 namespace pw { namespace internal {
 
+/**
+ * ┌■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┬─────────────────┐
+ * └■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┼─────────────────┘
+ * │                              │                  
+ * │                              │                  
+ * ▼┌───────┐                     ▼┌──────┐          
+ *  │m_begin│                      │m_end │          
+ *  └───────┘                      └──────┘          
+ *  */
 template<class Type, class Allocator>
 struct Allocate
 {
