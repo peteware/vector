@@ -134,6 +134,9 @@ ConsCounter::operator-=(ConsCounter const& op2)
     m_default -= op2.m_default;
     m_copy -= op2.m_copy;
     m_move -= op2.m_move;
+    m_destructor -= op2.m_destructor;
+    m_assignment -= op2.m_assignment;
+    m_moveassignment -= op2.m_moveassignment;
     m_defaultalloc -= op2.m_defaultalloc;
     m_copyalloc -= op2.m_copyalloc;
 

@@ -69,10 +69,19 @@ struct Allocate
         return m_allocated;
     }
 
+    void clear()
+    {
+        allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
+        m_begin     = 0;
+        m_end       = 0;
+        m_allocated = 0;
+    }
+
     void forget()
     {
-        m_begin = m_end = 0;
-        m_allocated     = 0;
+        m_begin     = 0;
+        m_end       = 0;
+        m_allocated = 0;
     }
 
     void swap(Allocate& op2)
@@ -122,9 +131,11 @@ struct Allocate
         pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
         pw::uninitialized_move(m_begin, m_end, p);
         pw::destroy(m_begin, m_end);
+        // TODO: Allocate::allocate() unit tests didn't detect memory not deallocated
+        allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
         m_end       = p + size();
-        m_allocated = count;
         m_begin     = p;
+        m_allocated = count;
         return *this;
     }
 

@@ -54,4 +54,34 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
             }
         }
     }
+    GIVEN("A vector with elements and extra space")
+    {
+        ConsCounter init(CopyConstructible::getCounter());
+        ConsCounter count;
+        Vector      v(5);
+        v.reserve(10);
+        REQUIRE(10 == v.capacity());
+        WHEN("shrink_to_fit() is called")
+        {
+            v.shrink_to_fit();
+            THEN("size() and capacity() are same")
+            {
+                REQUIRE(v.size() == v.capacity());
+            }
+        }
+
+        WHEN("clear() is called then shrink_to_fit()")
+        {
+            v.clear();
+            v.shrink_to_fit();
+            THEN("size() is 0")
+            {
+                REQUIRE(0 == v.size());
+            }
+            THEN("capacity() is 0")
+            {
+                REQUIRE(0 == v.capacity());
+            }
+        }
+    }
 }
