@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
 #include <pw/impl/pointer_traits.h>
@@ -33,13 +34,13 @@ struct allocator_traits
 
     static void deallocate(allocator_type& alloc, pointer p, size_type count)
     {
-        ::operator delete(static_cast<void*>(p), count * sizeof(value_type));
+        alloc.deallocate(p, count);
     }
 
     template<class Type, class... Args>
     static void construct(allocator_type& alloc, Type* p, Args&&... args)
     {
-        ::new (static_cast<void*>(p)) Type(std::forward<Args>(args)...);
+        ::new (static_cast<void*>(p)) Type(pw::forward<Args>(args)...);
     }
 
     template<class Type>

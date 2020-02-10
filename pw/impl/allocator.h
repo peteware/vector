@@ -17,13 +17,21 @@ struct allocator
     using propagate_on_container_move_assignment = true_type;
 
     Type* allocate(size_type n);
+    void  deallocate(Type* ptr, size_type count);
 };
 
 template<class Type>
 Type*
-allocator<Type>::allocate(size_type n)
+allocator<Type>::allocate(size_type count)
 {
-    return static_cast<Type*>(::operator new(n * sizeof(Type)));
+    return static_cast<Type*>(::operator new(count * sizeof(Type)));
+}
+
+template<class Type>
+void
+allocator<Type>::deallocate(Type* ptr, size_type count)
+{
+    return ::operator delete(static_cast<void*>(ptr));
 }
 
 template<class Type1, class Type2>

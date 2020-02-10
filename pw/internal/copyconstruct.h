@@ -6,15 +6,24 @@
 
 namespace pw { namespace internal {
 
+template<class InputIterator, class Allocator>
+void
+copyconstruct(Allocator& alloc, InputIterator begin, InputIterator end)
+{
+    while (begin != end)
+    {
+        allocator_traits<Allocator>::construct(alloc, pw::addressof(*begin++));
+    }
+}
+
 template<class InputIterator, class OutputIterator, class Allocator>
-OutputIterator
+void
 copyconstruct(Allocator& alloc, InputIterator begin, InputIterator end, OutputIterator out)
 {
     while (begin != end)
     {
         allocator_traits<Allocator>::construct(alloc, &(*out++), *begin++);
     }
-    return out;
 }
 
 template<class InputIterator, class Allocator>

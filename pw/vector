@@ -258,7 +258,7 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
     else if (m_data.size() < count)
     {
         m_data.allocate(count);
-        internal::copyconstruct(m_data.m_alloc, m_data.m_end, m_data.m_end + count);
+        internal::copyconstruct(m_data.m_alloc, m_data.m_end, m_data.m_begin + count);
         m_data.setsize(count);
     }
 }

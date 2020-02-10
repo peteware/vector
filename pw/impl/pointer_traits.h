@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_POINTER_TRAITS_H
 #define INCLUDED_PW_IMPL_POINTER_TRAITS_H
 
-#include <memory> // for std::addressof()
+#include <pw/impl/addressof.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/internal/meta.h>
 
@@ -43,7 +43,7 @@ struct pointer_traits<Type*>
 
     static pointer pointer_to(element_type& r) noexcept
     {
-        return std::addressof(r);
+        return addressof(r);
     };
 };
 

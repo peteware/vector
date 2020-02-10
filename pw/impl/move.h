@@ -6,7 +6,7 @@
 namespace pw {
 
 template<class Type>
-constexpr typename std::remove_reference<Type>::type&&
+constexpr typename pw::remove_reference<Type>::type&&
 move(Type&& value) noexcept
 {
     return static_cast<typename pw::remove_reference<Type>::type&&>(value);
