@@ -1,5 +1,5 @@
 #ifndef INCLUDED_PW_IMPL_UNINITIALIZED_DEFAULT_CONSTRUCT_H
-#defineINCLUDED_PW_IMPL_UNINITIALIZED_DEFAULT_CONSTRUCT_H
+#define INCLUDED_PW_IMPL_UNINITIALIZED_DEFAULT_CONSTRUCT_H
 
 #include <pw/impl/addressof.h>
 #include <pw/impl/destroy.h>
@@ -18,6 +18,7 @@ uninitialized_default_construct(Iterator begin, Iterator end)
         while (current != end)
         {
             ::new (static_cast<void*>(pw::addressof(*current))) Value;
+            ++current;
         }
     }
     catch (...)

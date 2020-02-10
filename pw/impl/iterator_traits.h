@@ -1,23 +1,30 @@
 #ifndef INCLUDED_PW_IMPL_ITERATOR_TRAITS_H
 #define INCLUDED_PW_IMPL_ITERATOR_TRAITS_H
 
+#include <pw/impl/iterator_tags.h>
+#include <pw/impl/ptrdiff.h>
+
+namespace pw {
+
 template<class Iterator>
 struct iterator_traits
 {
-    typedef typename Iterator::iterator_category iterator_category;
-    typedef typename Iterator::value_type        value_type;
-    typedef typename Iterator::difference_type   difference_type;
-    typedef typename Iterator::pointer           pointer;
-    typedef typename Iterator::reference         reference;
+    using iterator_category = typename Iterator::iterator_category;
+    using value_type        = typename Iterator::value_type;
+    using difference_type   = typename Iterator::difference_type;
+    using pointer           = typename Iterator::pointer;
+    using reference         = typename Iterator::reference;
 };
 
 template<class Type>
 struct iterator_traits<Type*>
 {
-    typedef random_access_iterator_tag iterator_category;
-    typedef Type                       value_type;
-    typedef ptrdiff_t                  difference_type;
-    typedef Type*                      pointer;
-    typedef Type&                      reference;
+    using iterator_category = random_access_iterator_tag;
+    using value_type        = Type;
+    using difference_type   = ptrdiff_t;
+    using pointer           = Type*;
+    using reference         = Type&;
 };
+} // namespace pw
+
 #endif /*  INCLUDED_PW_IMPL_ITERATOR_TRAITS_H */

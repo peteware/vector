@@ -5,8 +5,8 @@
 #include <pw/impl/for_each.h>
 // #include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/uninitialized_default_construct.h>
 #include <pw/internal/allocate.h>
-#include <pw/internal/copyconstruct.h>
 
 #include <limits>
 #include <stdexcept>
@@ -258,11 +258,10 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
     else if (m_data.size() < count)
     {
         m_data.allocate(count);
-        internal::copyconstruct(m_data.m_alloc, m_data.m_end, m_data.m_begin + count);
+        pw::uninitialized_default_construct(m_data.m_end, m_data.m_begin + count);
         m_data.setsize(count);
     }
 }
-
 } // namespace pw
 
 #endif /*  PW_VECTOR_H */
