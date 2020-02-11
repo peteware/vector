@@ -24,8 +24,9 @@ namespace pw { namespace internal {
  * ▼┌───────┐                     ▼┌──────┐          
  *  │m_begin│                      │m_end │          
  *  └───────┘                      └──────┘          
- *  */
-template<class Type, class Allocator>
+ *
+ */
+template<class Type, class Allocator = pw::allocator<Type>>
 struct Allocate
 {
     using value_type      = Type;
@@ -44,7 +45,7 @@ struct Allocate
 
     enum { INITIAL_SIZE = 10 };
 
-    Allocate(allocator_type const& alloc)
+    Allocate(allocator_type const& alloc = allocator_type())
         : m_begin(0)
         , m_end(0)
         , m_allocated(0)
@@ -52,14 +53,25 @@ struct Allocate
     {
     }
 
-    Allocate(Allocate const& copy)
+    Allocate(Allocate const& copy, allocator_type const& alloc = allocator_type())
         : m_begin(0)
         , m_end(0)
         , m_allocated(0)
-        , m_alloc(copy.m_alloc)
+        , m_alloc(alloc)
     {
         allocate(copy.size());
         pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
+        setsize(copy.size());
+    }
+
+    Allocate(Allocate&& copy, allocator_type const& alloc = allocator_type())
+        : m_begin(0)
+        , m_end(0)
+        , m_allocated(0)
+        , m_alloc(alloc)
+    {
+        allocate(copy.size());
+        pw::uninitialized_move(copy.m_begin, copy.m_end, m_begin);
         setsize(copy.size());
     }
 
