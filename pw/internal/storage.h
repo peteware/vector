@@ -53,6 +53,7 @@ struct Storage
     Storage(Storage const& copy, allocator_type const& alloc = allocator_type());
     Storage(Storage&& copy, allocator_type const& alloc = allocator_type());
     ~Storage();
+    Storage& operator=(Storage&& op2);
     /**
      * Allocate enough space for count records.  Then up to
      * count records are moved into new Storage.
@@ -60,6 +61,7 @@ struct Storage
     Storage   move(size_type count, allocator_type const& alloc = allocator_type());
     iterator  begin();
     iterator  end();
+    Storage&  set_size(size_type count);
     size_type size() const;
     size_type capacity() const;
     void      push_back(value_type const& value);
@@ -97,15 +99,11 @@ Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& all
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage&& copy, allocator_type const& alloc)
     : m_alloc(alloc)
-    , m_begin(0)
-    , m_end(0)
-    , m_allocated(0)
+    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
+    , m_end(m_begin + copy.size())
+    , m_allocated(copy.size())
 {
-    using pw::swap;
-
-    swap(m_begin, copy.m_begin);
-    swap(m_end, copy.m_end);
-    swap(m_allocated, copy.m_allocated);
+    pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
 }
 
 template<class Type, class Allocator>
@@ -113,6 +111,20 @@ Storage<Type, Allocator>::~Storage()
 {
     pw::destroy(begin(), end());
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
+}
+
+template<class Type, class Allocator>
+Storage<Type, Allocator>&
+Storage<Type, Allocator>::operator=(Storage&& op2)
+{
+    if (this != &op2)
+    {
+        //using pw::swap;
+        pw::swap(m_begin, op2.m_begin);
+        pw::swap(m_end, op2.m_end);
+        pw::swap(m_allocated, op2.m_allocated);
+    }
+    return *this;
 }
 
 /**
@@ -146,6 +158,14 @@ typename Storage<Type, Allocator>::iterator
 Storage<Type, Allocator>::end()
 {
     return m_end;
+}
+
+template<class Type, class Allocator>
+Storage<Type, Allocator>&
+Storage<Type, Allocator>::set_size(size_type count)
+{
+    m_end = m_begin + count;
+    return *this;
 }
 
 template<class Type, class Allocator>

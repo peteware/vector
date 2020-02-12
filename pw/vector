@@ -1,11 +1,12 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
-#include <pw/internal/allocate.h>
+#include <pw/internal/storage.h>
 
 #include <pw/impl/destroy.h>
 #include <pw/impl/for_each.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/max.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
@@ -69,7 +70,7 @@ public:
     iterator          insert(iterator position, value_type const& value);
 
 private:
-    internal::Allocate<Type, Allocator> m_data;
+    internal::Storage<Type, Allocator> m_data;
 };
 
 // namespace pmr {
@@ -85,22 +86,18 @@ vector<Type, Allocator>::vector(allocator_type const& alloc)
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count)
-    : m_data(allocator_type())
+    : m_data(count, allocator_type())
 {
-    m_data.allocate(count).setsize(count);
-    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
-        allocator_traits<Allocator>::construct(m_data.m_alloc, &v);
-    });
+    m_data.set_size(count);
+    pw::uninitialized_default_construct(m_data.begin(), m_data.end());
 }
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
-    : m_data(alloc)
+    : m_data(count, alloc)
 {
-    m_data.allocate(count).setsize(count);
-    pw::for_each(m_data.m_begin, m_data.m_end, [=](value_type& v) {
-        allocator_traits<Allocator>::construct(m_data.m_alloc, &v, value);
-    });
+    m_data.set_size(count);
+    pw::uninitialized_fill(m_data.begin(), m_data.end(), value);
 }
 
 template<class Type, class Allocator>
@@ -112,7 +109,6 @@ vector<Type, Allocator>::vector(vector const& copy)
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
 {
-    pw::destroy(m_data.m_begin, m_data.m_end);
 }
 
 template<class Type, class Allocator>
@@ -275,7 +271,7 @@ vector<Type, Allocator>::reserve(size_type count)
 {
     if (count > capacity())
     {
-        m_data.allocate(count);
+        m_data = m_data.move(count);
     }
 }
 
@@ -289,11 +285,11 @@ vector<Type, Allocator>::shrink_to_fit()
     }
     if (empty())
     {
-        m_data.clear();
+        m_data = internal::Storage<Type, Allocator>(get_allocator());
     }
     else
     {
-        m_data.allocate(m_data.size());
+        m_data = m_data.move(size());
     }
 }
 
@@ -301,30 +297,24 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::clear() noexcept
 {
-    pw::destroy(m_data.m_begin, m_data.m_end);
-    m_data.setsize(0);
+    m_data = internal::Storage<Type, Allocator>(get_allocator());
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type const& value)
 {
-    if (!m_data.hasroom(1))
+    if (m_data.capacity() == m_data.size())
     {
-        m_data.expand();
+        size_type newcount = pw::max((size_type)5, m_data.capacity() * 2);
+        m_data             = m_data.move(newcount, get_allocator());
     }
-    m_data.add(value);
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type&& value)
 {
-    if (!m_data.hasroom(1))
-    {
-        m_data.expand();
-    }
-    m_data.add(value);
 }
 
 template<class Type, class Allocator>
@@ -335,13 +325,13 @@ vector<Type, Allocator>::resize(size_type count)
     {
         // TODO: need unit test for this bug: pw::destroy(m_data.m_begin, m_data.m_begin + count);
         pw::destroy(m_data.m_begin + count, m_data.m_end);
-        m_data.setsize(count);
+        m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
-        m_data.allocate(count);
+        m_data = m_data.move(count);
         pw::uninitialized_default_construct(m_data.m_end, m_data.m_begin + count);
-        m_data.setsize(count);
+        m_data.set_size(count);
     }
 }
 
@@ -352,13 +342,13 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
     if (m_data.size() > count)
     {
         pw::destroy(m_data.m_begin + count, m_data.m_end);
-        m_data.setsize(count);
+        m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
-        m_data.allocate(count);
+        m_data = m_data.move(count);
         pw::uninitialized_fill(m_data.m_end, m_data.m_begin + count, value);
-        m_data.setsize(count);
+        m_data.set_size(count);
     }
 }
 
@@ -366,17 +356,12 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(iterator position, value_type const& value)
 {
-    if (!m_data.hasroom(1))
+    if (m_data.size() < m_data.capacity())
     {
-        m_data.expand();
     }
-    if (position == m_data.m_end)
+    else
     {
-        m_data.add(value);
-        return m_data.m_end - 1;
     }
-    pw::uninitialized_move(m_data.m_end - 1, m_data.m_end, m_data.m_end + 1);
-    // pw::move(rbegin() + 1, rend(), rbegin());
     return position;
 }
 
