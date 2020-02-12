@@ -42,6 +42,16 @@ permute(float& value, int depth)
     ++value;
     return true;
 }
+inline bool
+permute(double& value, int depth)
+{
+    if (value >= (float)depth)
+    {
+        return false;
+    }
+    ++value;
+    return true;
+}
 
 template<class Container>
 inline bool
