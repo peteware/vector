@@ -88,6 +88,38 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 REQUIRE(value == v.at(0));
             }
         }
+        WHEN("insert(count) at begin()")
+        {
+            typename Vector::iterator iter;
+            TestType                  value;
+            size_t                    count = 12;
+
+            pw::internal::permute(value, 3);
+            iter = v.insert(v.begin(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
+        WHEN("insert(12) at end()")
+        {
+            typename Vector::iterator iter;
+            TestType                  value;
+            size_t                    count = 12;
+
+            pw::internal::permute(value, 3);
+            iter = v.insert(v.end(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
     }
     GIVEN("An empty const vector of TestType")
     {

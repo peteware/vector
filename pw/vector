@@ -68,7 +68,8 @@ public:
     void              push_back(Type&& value);
     void              resize(size_type count);
     void              resize(size_type count, value_type const& value);
-    iterator          insert(iterator position, value_type const& value);
+    iterator          insert(const_iterator position, value_type const& value);
+    iterator          insert(const_iterator position, size_type count, value_type const& value);
 
 private:
     internal::Storage<Type, Allocator> m_data;
@@ -308,23 +309,21 @@ vector<Type, Allocator>::push_back(Type const& value)
     if (m_data.capacity() == m_data.size())
     {
         size_type newcount = m_data.newsize();
-        m_data             = m_data.move(newcount, get_allocator());
+        m_data             = m_data.move(newcount);
     }
-    allocator_traits<Allocator>::construct(m_data.m_alloc, m_data.end(), pw::move(value));
-    m_data.set_size(m_data.size() + 1);
+    m_data.push_back(value);
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(Type&& value)
 {
-    if (!m_data.hasroom())
+    if (!m_data.hascapacity())
     {
         size_type newcount = m_data.newsize();
-        m_data             = m_data.move(newcount, get_allocator());
+        m_data             = m_data.move(newcount);
     }
-    allocator_traits<Allocator>::construct(m_data.m_alloc, m_data.end(), pw::move(value));
-    m_data.set_size(m_data.size() + 1);
+    m_data.push_back(pw::move(value));
 }
 
 template<class Type, class Allocator>
@@ -356,7 +355,7 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
     }
     else if (m_data.size() < count)
     {
-        m_data = m_data.move(count, m_data.m_alloc);
+        m_data = m_data.move(count);
         pw::uninitialized_fill(m_data.m_end, m_data.m_begin + count, value);
         m_data.set_size(count);
     }
@@ -364,25 +363,41 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(iterator position, value_type const& value)
+vector<Type, Allocator>::insert(const_iterator position, value_type const& value)
 {
     difference_type offset  = position - m_data.begin();
     size_type       oldsize = m_data.size();
 
-    if (!m_data.hasroom())
+    if (!m_data.hascapacity())
     {
-        internal::Storage s = m_data.move(m_data.newsize(), m_data.m_alloc);
-        m_data              = pw::move(s);
+        m_data = m_data.move(m_data.newsize());
     }
-    if (!m_data.empty())
-    {
-        //allocator_traits<Allocator>::construct(m_data.m_alloc, m_data.end(), value_type());
-        pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
-        pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
-    }
+    pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
+    pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
     m_data.begin()[offset] = pw::move(value);
     m_data.set_size(oldsize + 1);
     return m_data.begin() + offset;
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, size_type count, value_type const& value)
+{
+    return m_data.begin();
+#if 0
+    difference_type offset  = position - m_data.begin();
+    size_type       oldsize = m_data.size();
+
+    if (!m_data.hascapacity(count))
+    {
+        m_data = m_data.move(m_data.size() + count);
+    }
+    pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
+    pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
+    m_data.begin()[offset] = pw::move(value);
+    m_data.set_size(oldsize + 1);
+    return m_data.begin() + offset;
+#endif
 }
 
 } // namespace pw

@@ -67,5 +67,16 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
                 REQUIRE(*s.begin() == value);
             }
         }
+        WHEN("operator=() is called")
+        {
+            Storage s(10, allocator);
+            s.push_back(value);
+            s = storage;
+            THEN("they are same and destruction works")
+            {
+                REQUIRE(s.size() == storage.size());
+                REQUIRE(s.capacity() == s.size());
+            }
+        }
     }
 }
