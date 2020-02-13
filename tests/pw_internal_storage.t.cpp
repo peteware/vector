@@ -21,6 +21,10 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
                 REQUIRE((pw::size_t)0 == storage.capacity());
                 REQUIRE(storage.begin() == storage.end());
             }
+            THEN("newsize() is larger")
+            {
+                REQUIRE(storage.newsize() > 0);
+            }
         }
     }
     GIVEN("An allocated Storage with 10")
@@ -33,6 +37,13 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             {
                 REQUIRE((pw::size_t)0 == s.size());
                 REQUIRE((pw::size_t)20 == s.capacity());
+            }
+        }
+        WHEN("newsize() is called")
+        {
+            THEN("newsize() is larger")
+            {
+                REQUIRE(storage.newsize() > 10);
             }
         }
     }

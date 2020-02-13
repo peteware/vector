@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/max.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
 #include <pw/impl/ptrdiff.h>
@@ -64,6 +65,7 @@ struct Storage
     Storage&  set_size(size_type count);
     size_type size() const;
     size_type capacity() const;
+    size_type newsize() const;
     void      push_back(value_type const& value);
     void      push_back(value_type&& value);
 };
@@ -180,6 +182,13 @@ typename Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::capacity() const
 {
     return m_allocated;
+}
+
+template<class Type, class Allocator>
+typename Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::newsize() const
+{
+    return pw::max((size_type)8, m_allocated * 2);
 }
 
 template<class Type, class Allocator>
