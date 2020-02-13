@@ -66,6 +66,8 @@ struct Storage
     size_type size() const;
     size_type capacity() const;
     size_type newsize() const;
+    bool      hasroom(size_type count = 1) const;
+    bool      empty() const;
     void      push_back(value_type const& value);
     void      push_back(value_type&& value);
 };
@@ -192,6 +194,20 @@ Storage<Type, Allocator>::newsize() const
 }
 
 template<class Type, class Allocator>
+bool
+Storage<Type, Allocator>::hasroom(size_type count) const
+{
+    return count <= capacity() - size();
+}
+
+template<class Type, class Allocator>
+bool
+Storage<Type, Allocator>::empty() const
+{
+    return m_begin == m_end;
+}
+
+template<class Type, class Allocator>
 void
 Storage<Type, Allocator>::push_back(value_type const& value)
 {
@@ -202,6 +218,7 @@ template<class Type, class Allocator>
 void
 Storage<Type, Allocator>::push_back(value_type&& value)
 {
+    *m_end++ = pw::move(value);
 }
 
 }} // namespace pw::internal
