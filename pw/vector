@@ -383,8 +383,6 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, value_type const& value)
 {
-    return m_data.begin();
-#if 0
     difference_type offset  = position - m_data.begin();
     size_type       oldsize = m_data.size();
 
@@ -392,12 +390,17 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
     {
         m_data = m_data.move(m_data.size() + count);
     }
-    pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
+    // Move items into unitialized memory
+    size_type uninit_size = m_data.allocated() - (offset + count);
+    pw::uninitialized_move(m_data.end() - uninit_size, m_data.end(), m_data.end());
+    // Make space for new items
     pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
+    // Now fill space with value
+    pw::fill(
     m_data.begin()[offset] = pw::move(value);
+
     m_data.set_size(oldsize + 1);
     return m_data.begin() + offset;
-#endif
 }
 
 } // namespace pw
