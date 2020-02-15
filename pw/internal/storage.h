@@ -30,15 +30,14 @@ namespace pw { namespace internal {
  * initialized Type objects:
  *
  * @example
- * ┌■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┬─────────────────┐
- * └■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┼─────────────────┘
- * │                              │                  
- * │                              │                  
- * ▼┌───────┐                     ▼┌──────┐          
- *  │m_begin│                      │m_end │          
- *  └───────┘                      └──────┘          
+ *    ┌────┬────┬────┬────┬────┬────┬────┐
+ * ┌─▶│ 1  │ 2  │ 3  │ 4  │◀───┼─┐  │    │
+ * │  └────┴────┴────┴────┴────┴─┼──┴────┘
+ * │                             │        
+ * │        m_allocated = 7      │        
+ * │                             │        
+ * └─── m_begin         m_end  ──┘        
  * @endexample
- *
  * 
  */
 template<class Type, class Allocator = pw::allocator<Type>>

@@ -383,24 +383,61 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, value_type const& value)
 {
-    difference_type offset  = position - m_data.begin();
-    size_type       oldsize = m_data.size();
+    difference_type offset = position - m_data.begin();
 
     if (!m_data.hascapacity(count))
     {
         m_data = m_data.move(m_data.size() + count);
     }
-    // Move items into unitialized memory
-    size_type uninit_size = m_data.allocated() - (offset + count);
-    pw::uninitialized_move(m_data.end() - uninit_size, m_data.end(), m_data.end());
-    // Make space for new items
-    pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
-    // Now fill space with value
-    pw::fill(
-    m_data.begin()[offset] = pw::move(value);
 
-    m_data.set_size(oldsize + 1);
-    return m_data.begin() + offset;
+    /*
+     * This is how we start:
+     * 
+     *                                           
+     *           position                      
+     *               │                         
+     * offset = 2    │   count = 2   value = 5 
+     *               │                         
+     *     ┌────┬────┼────┬────┬────┬────┬────┐
+     *  ┌─▶│ 1  │ 2  ▼ 3  │ 4  │◀───┼─┐  │    │
+     *  │  └────┴────┴────┴────┴────┴─┼──┴────┘
+     *  │                             │        
+     *  │        m_allocated = 7      │        
+     *  │                             │        
+     *  └─── m_begin         m_end  ──┘        
+     *                                         
+     *                                           
+     * And we want to end like this:
+     *                                              
+     *          position                      
+     *              │                         
+     *              │   count = 2   value = 5 
+     *              │                         
+     *    ┌────┬────┼────┬────┬────┬────┬────┐
+     * ┌─▶│ 1  │ 2  ▼ 5  │ 5  │ 3  │ 4  ▲    │
+     * │  └────┴────┴────┴────┴────┴────┼────┘
+     * │                                │     
+     * │        m_allocated = 7         │     
+     * │                                │     
+     * └─── m_begin                   m_end   
+     *                                        
+     */
+    size_type oldsize  = m_data.size();
+    size_type movecons = pw::min(count, oldsize - offset);
+    size_type copycons = ;
+
+    iterator newpos = m_data.begin() + offset;
+    // Move records into uninitialized memory
+    pw::uninitialized_move(m_data.end() - movecons, m_data.end(), m_data.end() + count - movecons);
+    // Copy construct value into uninitialized memory
+    pw::uninitialized_fill(m_data.end(), m_data.end() + count - movecons, value);
+    // Move existing values into new location
+    pw::move_backward(newpos, newpos + count - movecons, m_data.end());
+    // Now fill space with value
+    pw::fill(newpos, newpos + count, value);
+    // And now make
+    m_data.set_size(oldsize + count);
+    return newpos;
 }
 
 } // namespace pw
