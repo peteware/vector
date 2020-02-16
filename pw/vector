@@ -5,6 +5,7 @@
 
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/fill.h>
 #include <pw/impl/for_each.h>
 #include <pw/impl/iterator_traits.h>
 #include <pw/impl/move_backward.h>
@@ -391,51 +392,78 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
     }
 
     /*
+     * Here are two illustrative scenarios.  A blank box means
+     * it is uninitialized; a "?" means it is initialized
+     * but contents undefined (e.g. it was move'd).
+     *    
+     *          Scenario 1                                  Scenario 2
+     *
      * This is how we start:
-     * 
-     *                                           
-     *           position                      
-     *               │                         
-     * offset = 2    │   count = 2   value = 5 
-     *               │                         
-     *     ┌────┬────┼────┬────┬────┬────┬────┐
-     *  ┌─▶│ 1  │ 2  ▼ 3  │ 4  │◀───┼─┐  │    │
-     *  │  └────┴────┴────┴────┴────┴─┼──┴────┘
-     *  │                             │        
-     *  │        m_allocated = 7      │        
-     *  │                             │        
-     *  └─── m_begin         m_end  ──┘        
-     *                                         
-     *                                           
-     * And we want to end like this:
-     *                                              
-     *          position                      
-     *              │                         
-     *              │   count = 2   value = 5 
-     *              │                         
-     *    ┌────┬────┼────┬────┬────┬────┬────┐
-     * ┌─▶│ 1  │ 2  ▼ 5  │ 5  │ 3  │ 4  ▲    │
-     * │  └────┴────┴────┴────┴────┴────┼────┘
-     * │                                │     
-     * │        m_allocated = 7         │     
-     * │                                │     
-     * └─── m_begin                   m_end   
-     *                                        
+     *
+     *          position                                        position                 
+     *              │                                               │                    
+     *  count = 2   │               offset = 2      count = 2       │       offset = 3   
+     *  value = 5   ▼                               value = 5       ▼                    
+     *    ┌────┬────┬────┬────┬────┬────┬────┐       ┌────┬────┬────┬────┬────┬────┬────┐
+     * ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │    ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │
+     * │  └────┴────┴────┴────┴────┴────┴────┘    │  └────┴────┴────┴────┴────┴────┴────┘
+     * │                      ▲                   │                      ▲               
+     * │    m_allocated = 7   │                   │    m_allocated = 7   │               
+     * │                    m_end                 │                      │               
+     * └─── m_begin                               └─── m_begin         m_end             
+     *                                                                                   
+     */
+
+    /*
+     * Intermediate as we make room
+     *          position                                        position                 
+     *              │                                               │                    
+     *  count = 2   │               offset = 2     count = 2        │       offset = 3   
+     *  value = 5   ▼                              value = 5        ▼    move_cons = 1   
+     *    ┌────┬────┬────┬────┬────┬────┬────┐       ┌────┬────┬────┬────┬────┬────┬────┐
+     * ┌─▶│ 1  │ 2  │ ?  │ ?  │ 3  │ 4  │    │    ┌─▶│ 1  │ 2  │ 3  │ ?  │    │ 4  │    │
+     * │  └────┴────┴────┴────┴────┴────┴────┘    │  └────┴────┴────┴────┴────┴────┴────┘
+     * │                      ▲                   │                      ▲               
+     * │    m_allocated = 7   │                   │    m_allocated = 7   │               
+     * │                      │                   │                      │               
+     * └─── m_begin         m_end                 └─── m_begin         m_end             
+     */
+
+    /*                                                                                   
+     * Finally
+     *                                                                                   
+     *          position                                       position                  
+     *              │                                              │                     
+     *  count = 2   │               offset = 2     count = 2       │       offset = 3    
+     *  value = 5   ▼                              value = 5       ▼                     
+     *    ┌────┬────┬────┬────┬────┬────┬────┐      ┌────┬────┬────┬────┬────┬────┬────┐ 
+     * ┌─▶│ 1  │ 2  │ 5  │ 5  │ 3  │ 4  │    │   ┌─▶│ 1  │ 2  │ 3  │ 5  │ 5  │ 4  │    │ 
+     * │  └────┴────┴────┴────┴────┴────┴────┘   │  └────┴────┴────┴────┴────┴────┴────┘ 
+     * │                                ▲        │                                ▲      
+     * │    m_allocated = 7             │        │    m_allocated = 7             │      
+     * │                                │        │                                │      
+     * └─── m_begin                   m_end      └─── m_begin                   m_end    
+     *                                                                                   
      */
     size_type oldsize  = m_data.size();
     size_type movecons = pw::min(count, oldsize - offset);
-    size_type copycons = ;
-
-    iterator newpos = m_data.begin() + offset;
-    // Move records into uninitialized memory
-    pw::uninitialized_move(m_data.end() - movecons, m_data.end(), m_data.end() + count - movecons);
-    // Copy construct value into uninitialized memory
-    pw::uninitialized_fill(m_data.end(), m_data.end() + count - movecons, value);
-    // Move existing values into new location
-    pw::move_backward(newpos, newpos + count - movecons, m_data.end());
-    // Now fill space with value
+    size_type copycons = count - movecons;
+    iterator  newpos   = m_data.begin() + offset;
+    /*
+     * Deal with unitialized memory
+     * - Move existing values into uninitialized memory
+     * - Copy construct value into uninitialized memory
+     */
+    pw::uninitialized_move(m_data.end() - movecons, m_data.end(), m_data.end() + copycons);
+    pw::uninitialized_fill(m_data.end(), m_data.end() + copycons, value);
+    /*
+     * Already constructed
+     * - Move existing values into new location
+     * - Copy construct value into place
+     * - Set m_end
+     */
+    pw::move_backward(newpos, newpos + count, m_data.end());
     pw::fill(newpos, newpos + count, value);
-    // And now make
     m_data.set_size(oldsize + count);
     return newpos;
 }
