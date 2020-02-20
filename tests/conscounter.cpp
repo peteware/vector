@@ -4,11 +4,11 @@ ConsCounter::ConsCounter()
     : m_default(0)
     , m_copy(0)
     , m_move(0)
+    , m_defaultalloc(0)
+    , m_copyalloc(0)
     , m_destructor(0)
     , m_assignment(0)
     , m_moveassignment(0)
-    , m_defaultalloc(0)
-    , m_copyalloc(0)
 {
 }
 
@@ -22,6 +22,18 @@ int
 ConsCounter::constructorCount() const
 {
     return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc;
+}
+
+int
+ConsCounter::destructorCount() const
+{
+    return m_destructor;
+}
+
+int
+ConsCounter::assignmentCount() const
+{
+    return m_assignment + m_moveassignment;
 }
 
 int
