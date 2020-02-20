@@ -23,7 +23,6 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
 
         WHEN("reserve() is increased")
         {
-            init = CopyConstructible::getCounter();
             v.reserve(5);
             count = CopyConstructible::getCounter() - init;
             THEN("copy constructor not called")
@@ -45,9 +44,21 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
         }
         WHEN("resize() is called")
         {
-            init = CopyConstructible::getCounter();
             v.resize(5);
             THEN("Copy construct called same amount")
+            {
+                count = CopyConstructible::getCounter() - init;
+                REQUIRE(5 == count.constructorCount());
+            }
+        }
+        WHEN("insert(count) is called")
+        {
+            CopyConstructible          c;
+            typename Vector::size_type num = 5;
+            init                           = CopyConstructible::getCounter();
+
+            v.insert(v.begin(), num, c);
+            THEN("Copy constructor called 5 times")
             {
                 count = CopyConstructible::getCounter() - init;
                 REQUIRE(5 == count.constructorCount());

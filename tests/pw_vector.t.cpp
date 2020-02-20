@@ -9,7 +9,8 @@
 #include <tuple>
 
 //using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
-using TestTypeList = std::tuple<int, std::string, float>;
+//using TestTypeList = std::tuple<int, std::string, float>;
+using TestTypeList = std::tuple<int>;
 
 TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList)
 {
@@ -69,6 +70,15 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 REQUIRE(iter == v.cend());
             }
         }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+    Vector v;
+    GIVEN("An empty vector of TestType")
+    {
         WHEN("insert() is called")
         {
             typename Vector::iterator iter;
@@ -88,10 +98,48 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 REQUIRE(value == v.at(0));
             }
         }
+        WHEN("insert(count) at begin()")
+        {
+            typename Vector::iterator iter;
+            TestType                  value;
+            size_t                    count = 12;
+
+            pw::internal::permute(value, 3);
+            iter = v.insert(v.begin(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
+        WHEN("insert(12) at end()")
+        {
+            typename Vector::iterator iter;
+            TestType                  value;
+            size_t                    count = 12;
+
+            pw::internal::permute(value, 3);
+            iter = v.insert(v.end(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
     }
+}
+
+TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
+{
+    using Vector = pw::vector<TestType>;
+    Vector        v;
+    Vector const& c = v;
     GIVEN("An empty const vector of TestType")
     {
-        Vector const& c = v;
         REQUIRE(c.empty());
         REQUIRE(c.size() == 0);
         REQUIRE(c.capacity() == 0);
@@ -104,7 +152,6 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 REQUIRE(a == pw::allocator<TestType>());
             }
         }
-
         WHEN("at() const is called")
         {
             THEN("at(0) const fails")
@@ -140,7 +187,7 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
 
@@ -157,7 +204,6 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
                 REQUIRE(!e);
             }
         }
-
         WHEN("size() is called")
         {
             size_t s = v.size();
@@ -166,7 +212,6 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
                 REQUIRE(count == s);
             }
         }
-
         WHEN("capacity() is called")
         {
             size_t c = v.capacity();
@@ -175,7 +220,6 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
                 REQUIRE(count == c);
             }
         }
-
         WHEN("copy constructor is called")
         {
             Vector c(v);
@@ -188,7 +232,7 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][template]", TestTypeLis
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][template]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
     Vector v;
@@ -198,54 +242,84 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][template]", TestTypeList)
         WHEN("empty() is called")
         {
             bool e = v.empty();
-            THEN("it is not empty") { REQUIRE(!e); }
+            THEN("it is not empty")
+            {
+                REQUIRE(!e);
+            }
         }
         WHEN("size() is called")
         {
             size_t s = v.size();
-            THEN("size is 1") { REQUIRE(s == 1); }
+            THEN("size is 1")
+            {
+                REQUIRE(s == 1);
+            }
         }
         WHEN("capacity() is called")
         {
             size_t c = v.capacity();
-            THEN("it is at least 1)") { REQUIRE(c >= 1); }
+            THEN("it is at least 1)")
+            {
+                REQUIRE(c >= 1);
+            }
         }
         WHEN("at(0) is called")
         {
             TestType& r = v.at(0);
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("at(1) is called")
         {
-            THEN("it raises exception") { CHECK_THROWS_AS(v.at(1), std::out_of_range); }
+            THEN("it raises exception")
+            {
+                CHECK_THROWS_AS(v.at(1), std::out_of_range);
+            }
         }
         WHEN("front() is called")
         {
             TestType& r = v.front();
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("back() is called")
         {
             TestType& r = v.back();
-            THEN("it works") { REQUIRE(r == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(r == TestType());
+            }
         }
         WHEN("data() is called")
         {
             TestType* p = v.data();
-            THEN("it works") { REQUIRE(*p == TestType()); }
+            THEN("it works")
+            {
+                REQUIRE(*p == TestType());
+            }
         }
         WHEN("reserve() is called")
         {
             size_t capacity    = v.capacity();
             size_t newCapacity = capacity + 3;
             v.reserve(newCapacity);
-            THEN("capacity increases") { REQUIRE(newCapacity == v.capacity()); }
+            THEN("capacity increases")
+            {
+                REQUIRE(newCapacity == v.capacity());
+            }
         }
         WHEN("reserve() is called with current capacity")
         {
             size_t capacity = v.capacity();
             v.reserve(capacity);
-            THEN("capacity is unchanged") { REQUIRE(capacity == v.capacity()); }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
         }
         WHEN("push_back() const_ref is called to exceed capacity")
         {
@@ -269,7 +343,7 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][template]", TestTypeList)
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][template]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
     Vector        v;

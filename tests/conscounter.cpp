@@ -4,11 +4,11 @@ ConsCounter::ConsCounter()
     : m_default(0)
     , m_copy(0)
     , m_move(0)
+    , m_defaultalloc(0)
+    , m_copyalloc(0)
     , m_destructor(0)
     , m_assignment(0)
     , m_moveassignment(0)
-    , m_defaultalloc(0)
-    , m_copyalloc(0)
 {
 }
 
@@ -22,6 +22,18 @@ int
 ConsCounter::constructorCount() const
 {
     return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc;
+}
+
+int
+ConsCounter::destructorCount() const
+{
+    return m_destructor;
+}
+
+int
+ConsCounter::assignmentCount() const
+{
+    return m_assignment + m_moveassignment;
 }
 
 int
@@ -60,6 +72,32 @@ ConsCounter&
 ConsCounter::addMove()
 {
     ++m_move;
+    return *this;
+}
+
+int
+ConsCounter::getDefaultAlloc() const
+{
+    return m_defaultalloc;
+}
+
+ConsCounter&
+ConsCounter::addDefaultAlloc()
+{
+    ++m_defaultalloc;
+    return *this;
+}
+
+int
+ConsCounter::getCopyAlloc() const
+{
+    return m_copyalloc;
+}
+
+ConsCounter&
+ConsCounter::addCopyAlloc()
+{
+    ++m_copyalloc;
     return *this;
 }
 
@@ -102,43 +140,17 @@ ConsCounter::getMoveAssignment() const
     return m_moveassignment;
 }
 
-int
-ConsCounter::getDefaultAlloc() const
-{
-    return m_defaultalloc;
-}
-
-ConsCounter&
-ConsCounter::addDefaultAlloc()
-{
-    ++m_defaultalloc;
-    return *this;
-}
-
-int
-ConsCounter::getCopyAlloc() const
-{
-    return m_copyalloc;
-}
-
-ConsCounter&
-ConsCounter::addCopyAlloc()
-{
-    ++m_copyalloc;
-    return *this;
-}
-
 ConsCounter&
 ConsCounter::operator-=(ConsCounter const& op2)
 {
     m_default -= op2.m_default;
     m_copy -= op2.m_copy;
     m_move -= op2.m_move;
+    m_defaultalloc -= op2.m_defaultalloc;
+    m_copyalloc -= op2.m_copyalloc;
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
     m_moveassignment -= op2.m_moveassignment;
-    m_defaultalloc -= op2.m_defaultalloc;
-    m_copyalloc -= op2.m_copyalloc;
 
     return *this;
 }

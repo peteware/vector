@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/max.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
 #include <pw/impl/ptrdiff.h>
@@ -18,14 +19,26 @@
 namespace pw { namespace internal {
 
 /**
- * ┌■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┬─────────────────┐
- * └■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■┼─────────────────┘
- * │                              │                  
- * │                              │                  
- * ▼┌───────┐                     ▼┌──────┐          
- *  │m_begin│                      │m_end │          
- *  └───────┘                      └──────┘          
+ * Storage managed contiguous memory of Type objects.
  *
+ * The total memory is allocated when the Storage
+ * object is created.  To change the amount of memory
+ * use move() to create a new Storage object with the
+ * contents move()'d into the new Storage object.
+ *
+ * The region between m_begin and m_end represents
+ * initialized Type objects:
+ *
+ * @example
+ *    ┌────┬────┬────┬────┬────┬────┬────┐
+ * ┌─▶│ 1  │ 2  │ 3  │ 4  │◀───┼─┐  │    │
+ * │  └────┴────┴────┴────┴────┴─┼──┴────┘
+ * │                             │        
+ * │        m_allocated = 7      │        
+ * │                             │        
+ * └─── m_begin         m_end  ──┘        
+ * @endexample
+ * 
  */
 template<class Type, class Allocator = pw::allocator<Type>>
 struct Storage
@@ -50,20 +63,33 @@ struct Storage
 
     Storage(allocator_type const& alloc = allocator_type());
     Storage(size_type count, allocator_type const& alloc = allocator_type());
-    Storage(Storage const& copy, allocator_type const& alloc = allocator_type());
-    Storage(Storage&& copy, allocator_type const& alloc = allocator_type());
+    Storage(Storage const& copy);
+    Storage(Storage const& copy, allocator_type const& alloc);
+    Storage(Storage&& copy);
     ~Storage();
+    Storage& operator=(Storage op2);
     /**
      * Allocate enough space for count records.  Then up to
      * count records are moved into new Storage.
      */
-    Storage   move(size_type count, allocator_type const& alloc = allocator_type());
+    Storage   move(size_type count);
     iterator  begin();
     iterator  end();
+    Storage&  set_size(size_type count);
     size_type size() const;
     size_type capacity() const;
+    size_type newsize() const;
+    bool      hascapacity(size_type count = 1) const;
+    bool      empty() const;
     void      push_back(value_type const& value);
     void      push_back(value_type&& value);
+
+    friend void swap(Storage& op1, Storage& op2)
+    {
+        pw::swap(op1.m_begin, op2.m_begin);
+        pw::swap(op1.m_end, op2.m_end);
+        pw::swap(op1.m_allocated, op2.m_allocated);
+    }
 };
 
 template<class Type, class Allocator>
@@ -85,6 +111,16 @@ Storage<Type, Allocator>::Storage(size_type count, allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
+Storage<Type, Allocator>::Storage(Storage const& copy)
+    : m_alloc(copy.m_alloc)
+    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
+    , m_end(m_begin + copy.size())
+    , m_allocated(copy.size())
+{
+    pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
+}
+
+template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& alloc)
     : m_alloc(alloc)
     , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
@@ -95,17 +131,13 @@ Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& all
 }
 
 template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage&& copy, allocator_type const& alloc)
-    : m_alloc(alloc)
+Storage<Type, Allocator>::Storage(Storage&& copy)
+    : m_alloc(copy.m_alloc)
     , m_begin(0)
     , m_end(0)
     , m_allocated(0)
 {
-    using pw::swap;
-
-    swap(m_begin, copy.m_begin);
-    swap(m_end, copy.m_end);
-    swap(m_allocated, copy.m_allocated);
+    swap(*this, copy);
 }
 
 template<class Type, class Allocator>
@@ -115,6 +147,14 @@ Storage<Type, Allocator>::~Storage()
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
 }
 
+template<class Type, class Allocator>
+Storage<Type, Allocator>&
+Storage<Type, Allocator>::operator=(Storage op2)
+{
+    swap(*this, op2);
+    return *this;
+}
+
 /**
  * Allocate enough space for count records.  Then up to
  * count records are moved into new Storage and others
@@ -122,9 +162,9 @@ Storage<Type, Allocator>::~Storage()
  */
 template<class Type, class Allocator>
 Storage<Type, Allocator>
-Storage<Type, Allocator>::move(size_type count, allocator_type const& alloc)
+Storage<Type, Allocator>::move(size_type count)
 {
-    Storage   s(count, alloc);
+    Storage   s(count, m_alloc);
     size_type final = min(count, size());
 
     pw::uninitialized_move(begin(), begin() + final, s.begin());
@@ -149,6 +189,14 @@ Storage<Type, Allocator>::end()
 }
 
 template<class Type, class Allocator>
+Storage<Type, Allocator>&
+Storage<Type, Allocator>::set_size(size_type count)
+{
+    m_end = m_begin + count;
+    return *this;
+}
+
+template<class Type, class Allocator>
 typename Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::size() const
 {
@@ -163,16 +211,38 @@ Storage<Type, Allocator>::capacity() const
 }
 
 template<class Type, class Allocator>
+typename Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::newsize() const
+{
+    return pw::max((size_type)8, m_allocated * 2);
+}
+
+template<class Type, class Allocator>
+bool
+Storage<Type, Allocator>::hascapacity(size_type count) const
+{
+    return count <= capacity() - size();
+}
+
+template<class Type, class Allocator>
+bool
+Storage<Type, Allocator>::empty() const
+{
+    return m_begin == m_end;
+}
+
+template<class Type, class Allocator>
 void
 Storage<Type, Allocator>::push_back(value_type const& value)
 {
-    *m_end++ = value;
+    allocator_traits<Allocator>::construct(m_alloc, m_end++, pw::move(value));
 }
 
 template<class Type, class Allocator>
 void
 Storage<Type, Allocator>::push_back(value_type&& value)
 {
+    allocator_traits<Allocator>::construct(m_alloc, m_end++, pw::move(value));
 }
 
 }} // namespace pw::internal

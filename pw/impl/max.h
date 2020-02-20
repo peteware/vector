@@ -3,14 +3,14 @@
 namespace pw {
 
 template<class Type>
-Type const&
+constexpr Type const&
 max(Type const& op1, Type const& op2)
 {
     return (op1 < op2) ? op2 : op1;
 }
 
 template<class Type, class Compare>
-Type const&
+constexpr Type const&
 max(Type const& op1, Type const& op2, Compare compare)
 {
     return (compare(op1, op2)) ? op2 : op1;
