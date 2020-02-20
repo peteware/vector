@@ -37,6 +37,18 @@ struct allocator_traits
         alloc.deallocate(p, count);
     }
 
+    /*
+    template <class _Tp, class... _Args>
+        _LIBCPP_INLINE_VISIBILITY
+        static void __construct(true_type, allocator_type& __a, _Tp* __p, _Args&&... __args)
+            {__a.construct(__p, _VSTD::forward<_Args>(__args)...);}
+    template <class _Tp, class... _Args>
+        _LIBCPP_INLINE_VISIBILITY
+        static void __construct(false_type, allocator_type&, _Tp* __p, _Args&&... __args)
+            {
+                ::new ((void*)__p) _Tp(_VSTD::forward<_Args>(__args)...);
+            }
+ */
     template<class Type, class... Args>
     static void construct(allocator_type& alloc, Type* p, Args&&... args)
     {

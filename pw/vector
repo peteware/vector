@@ -447,10 +447,14 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
      * └─── m_begin                   m_end      └─── m_begin                   m_end    
      *                                                                                   
      */
-    size_type oldsize = m_data.size();
-    iterator  newpos  = m_data.begin() + offset;
-    iterator  dest    = newpos + 2 * count - 1;
-    for (iterator iter = newpos + count; iter > newpos; --iter, --dest)
+    iterator newpos = m_data.begin() + offset;
+    /*
+     * copy/move old values backward to avoid overwriting
+     */
+    size_type oldvals = pw::min(count, m_data.size());
+    iterator  dest    = newpos + count + oldvals - 1;
+    // TODO: insert(count) doesn't copy first old element
+    for (iterator iter = newpos + oldvals; iter != newpos; --iter, --dest)
     {
         if (dest < m_data.m_end)
         {
@@ -458,10 +462,12 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
         }
         else
         {
-            ::new (static_cast<void*>(dest)) Type(pw::move(*iter));
-            //allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*dest), pw::move(*iter));
+            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*dest), pw::move(*iter));
         }
     }
+    /*
+     * copy/move value count times starting at new position
+     */
     for (iterator iter = newpos; iter != newpos + count; ++iter)
     {
         if (iter < m_data.m_end)
@@ -470,8 +476,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
         }
         else
         {
-            ::new (static_cast<void*>(dest)) Type(*iter);
-            //allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*iter), value);
+            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*iter), value);
         }
     }
     m_data.set_size(m_data.size() + count);
