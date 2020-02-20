@@ -26,7 +26,6 @@ target_sources(pw INTERFACE
     impl/size.h
     impl/swap.h
     impl/void.h
-    internal/allocate.h
     internal/check_empty.h
     internal/destroy.h
     internal/extract_or.h
