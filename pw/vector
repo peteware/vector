@@ -71,6 +71,7 @@ public:
     void              resize(size_type count, value_type const& value);
     iterator          insert(const_iterator position, value_type const& value);
     iterator          insert(const_iterator position, size_type count, value_type const& value);
+    void              pop_back();
 
 private:
     internal::Storage<Type, Allocator> m_data;
@@ -448,7 +449,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
      */
     size_type oldsize = m_data.size();
     iterator  newpos  = m_data.begin() + offset;
-    iterator  dest    = newpos + 2 * count;
+    iterator  dest    = newpos + 2 * count - 1;
     for (iterator iter = newpos + count; iter > newpos; --iter, --dest)
     {
         if (dest < m_data.m_end)
@@ -457,7 +458,8 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
         }
         else
         {
-            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*dest), pw::move(*iter));
+            ::new (static_cast<void*>(dest)) Type(pw::move(*iter));
+            //allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*dest), pw::move(*iter));
         }
     }
     for (iterator iter = newpos; iter != newpos + count; ++iter)
@@ -468,10 +470,20 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
         }
         else
         {
-            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*iter), value);
+            ::new (static_cast<void*>(dest)) Type(*iter);
+            //allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*iter), value);
         }
     }
+    m_data.set_size(m_data.size() + count);
     return newpos;
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::pop_back()
+{
+    m_data.set_size(m_data.size() - 1);
+    allocator_traits<Allocator>::destroy(m_data.m_alloc, pw::addressof(*m_data.m_end));
 }
 
 } // namespace pw
