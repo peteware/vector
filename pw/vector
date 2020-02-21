@@ -1,8 +1,7 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
-#include <pw/internal/storage.h>
-
+#include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/fill.h>
@@ -13,6 +12,7 @@
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
 #include <pw/impl/uninitialized_move.h>
+#include <pw/internal/storage.h>
 
 #include <limits>
 #include <stdexcept>
