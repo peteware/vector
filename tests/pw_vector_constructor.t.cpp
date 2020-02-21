@@ -55,8 +55,8 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
         {
             CopyConstructible          c;
             typename Vector::size_type num = 5;
-            init                           = CopyConstructible::getCounter();
 
+            init = CopyConstructible::getCounter();
             v.insert(v.begin(), num, c);
             THEN("Copy constructor called 5 times")
             {

@@ -1,5 +1,6 @@
 #include "catch2/catch.hpp"
 #include "pw_permute.t.h"
+#include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
@@ -128,6 +129,45 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
                 REQUIRE(count == v.size());
                 REQUIRE(value == v[0]);
                 REQUIRE(value == v[count - 1]);
+            }
+        }
+    }
+
+    GIVEN("A vector with 5 elements")
+    {
+        size_t   count = 5;
+        TestType value;
+        Vector   values;
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            pw::internal::permute(value, 10);
+            values.push_back(value);
+        }
+        v = values;
+        REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
+        TestType newvalue(value);
+        pw::internal::permute(newvalue, 10);
+        WHEN("insert(3) at begin")
+        {
+            v.insert(v.begin(), 3, newvalue);
+            THEN("size is correct")
+            {
+                REQUIRE(count + 3 == v.size());
+            }
+            THEN("items are the same")
+            {
+                REQUIRE(v[0] == newvalue);
+                REQUIRE(v[1] == newvalue);
+                REQUIRE(v[2] == newvalue);
+                REQUIRE(v[3] == values[0]);
+                REQUIRE(v[4] == values[1]);
+                REQUIRE(v[5] == values[2]);
+                REQUIRE(v[6] == values[3]);
+                REQUIRE(v[7] == values[4]);
+                typename Vector::iterator newpos = v.begin() + 3;
+                REQUIRE(pw::equal(values.begin(), values.end(), newpos, newpos + values.size()));
+                REQUIRE(pw::equal(values.begin(), values.begin() + 3, newpos, newpos + 3));
             }
         }
     }

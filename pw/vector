@@ -452,10 +452,12 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
      * copy/move old values backward to avoid overwriting
      */
     size_type oldvals = pw::min(count, m_data.size());
-    iterator  dest    = newpos + count + oldvals - 1;
+    iterator  dest    = newpos + count + oldvals;
     // TODO: insert(count) doesn't copy first old element
-    for (iterator iter = newpos + oldvals; iter != newpos; --iter, --dest)
+    for (iterator iter = newpos + oldvals; iter != newpos;)
     {
+        --iter;
+        --dest;
         if (dest < m_data.m_end)
         {
             *dest = pw::move(*iter);

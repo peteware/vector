@@ -2,6 +2,9 @@
 #define INCLUDED_PW_ALGORITHM
 
 #include <pw/impl/copy.h>
+#include <pw/impl/equal.h>
+#include <pw/impl/lexicographical_compare.h>
 #include <pw/impl/max.h>
+#include <pw/impl/min.h>
 
 #endif /* INCLUDED_PW_ALGORITHM  */
