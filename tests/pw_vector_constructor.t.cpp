@@ -12,34 +12,50 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
 {
     using Vector = pw::vector<CopyConstructible>;
 
+    CopyConstructible copyObject;
+    ConsCounter       init(CopyConstructible::getCounter());
+    ConsCounter       counter;
+    Vector            v;
+
     GIVEN("An empty vector")
     {
-        ConsCounter init(CopyConstructible::getCounter());
-        ConsCounter count;
-        Vector      v;
-
-        count = CopyConstructible::getCounter() - init;
-        REQUIRE(count.zero());
-
+        WHEN("getCounter()")
+        {
+            counter = CopyConstructible::getCounter() - init;
+            THEN("nothing was called")
+            {
+                REQUIRE(counter.zero());
+            }
+        }
         WHEN("reserve() is increased")
         {
             v.reserve(5);
-            count = CopyConstructible::getCounter() - init;
+            counter = CopyConstructible::getCounter() - init;
             THEN("copy constructor not called")
             {
-                REQUIRE(count.zero());
+                REQUIRE(counter.zero());
             }
         }
-
+        WHEN("resize() is called")
+        {
+            size_t const count = 5;
+            v.resize(count);
+            counter = CopyConstructible::getCounter() - init;
+            THEN("default construted count times")
+            {
+                REQUIRE(count == counter.getDefault());
+                REQUIRE(counter.getDefault() == counter.constructorCount());
+                REQUIRE(counter.allCount() == count);
+            }
+        }
         WHEN("push_back() is called")
         {
-            CopyConstructible c;
-            init = CopyConstructible::getCounter();
-            v.push_back(c);
+            v.push_back(copyObject);
             THEN("Copy construct called once")
             {
-                count = CopyConstructible::getCounter() - init;
-                REQUIRE(1 == count.constructorCount());
+                counter = CopyConstructible::getCounter() - init;
+                REQUIRE(1 == counter.constructorCount());
+                REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
         WHEN("resize() is called")
@@ -47,21 +63,18 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
             v.resize(5);
             THEN("Copy construct called same amount")
             {
-                count = CopyConstructible::getCounter() - init;
-                REQUIRE(5 == count.constructorCount());
+                counter = CopyConstructible::getCounter() - init;
+                REQUIRE(5 == counter.constructorCount());
+                REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
-        WHEN("insert(count) at begin")
+        WHEN("insert(5) at begin")
         {
-            CopyConstructible          c;
-            typename Vector::size_type num = 5;
-
-            init = CopyConstructible::getCounter();
-            v.insert(v.begin(), num, c);
+            v.insert(v.begin(), 5, copyObject);
             THEN("Copy constructor called 5 times")
             {
-                count = CopyConstructible::getCounter() - init;
-                REQUIRE(5 == count.constructorCount());
+                counter = CopyConstructible::getCounter() - init;
+                REQUIRE(5 == counter.constructorCount());
             }
         }
     }

@@ -14,6 +14,7 @@ public:
     int          constructorCount() const;
     int          destructorCount() const;
     int          assignmentCount() const;
+    int          allCount() const;
     bool         zero() const;
     ConsCounter& addDefault();
     int          getDefault() const;

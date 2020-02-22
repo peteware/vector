@@ -35,6 +35,12 @@ ConsCounter::assignmentCount() const
 {
     return m_assignment + m_moveassignment;
 }
+int
+ConsCounter::allCount() const
+{
+    return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc + m_destructor + m_assignment +
+        m_moveassignment;
+}
 
 int
 ConsCounter::getDefault() const
