@@ -1,5 +1,6 @@
 #include "catch2/catch.hpp"
 #include "pw_permute.t.h"
+#include "pw_same.t.h"
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/type_traits>
@@ -13,7 +14,7 @@
 //using TestTypeList = std::tuple<int, std::string, float>;
 using TestTypeList = std::tuple<int>;
 
-TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
 {
     using Vector = pw::vector<TestType>;
     Vector v;
@@ -21,10 +22,6 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
     {
         REQUIRE(pw::is_same<TestType*, typename Vector::pointer>::value);
         REQUIRE(pw::is_same<TestType, typename Vector::value_type>::value);
-        REQUIRE(v.empty());
-        REQUIRE(v.size() == 0);
-        REQUIRE(v.capacity() == 0);
-
         WHEN("get_allocator() const is called")
         {
             typename Vector::allocator_type a = v.get_allocator();
@@ -44,20 +41,21 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
                 CHECK_THROWS_AS(v.at(10), std::out_of_range);
             }
         }
-        WHEN("reserve() is called")
+        WHEN("data() is called")
         {
-            size_t capacity    = v.capacity();
-            size_t newCapacity = capacity + 3;
-            v.reserve(newCapacity);
-            THEN("capacity increases")
+            THEN("it returns NULL")
             {
-                REQUIRE(newCapacity == v.capacity());
+                REQUIRE(!v.data());
             }
         }
         WHEN("begin() is called")
         {
             typename Vector::iterator iter;
             iter = v.begin();
+            THEN("cbegin() is same")
+            {
+                REQUIRE(iter == v.cbegin());
+            }
             THEN("cend() is same")
             {
                 REQUIRE(iter == v.begin());
@@ -69,6 +67,60 @@ TEMPLATE_LIST_TEST_CASE("empty vectors work", "[vector][template]", TestTypeList
             THEN("cend() is same as end()")
             {
                 REQUIRE(iter == v.cend());
+            }
+        }
+        WHEN("empty() is called")
+        {
+            THEN("it is true")
+            {
+                REQUIRE(v.empty());
+            }
+        }
+        WHEN("size() is called")
+        {
+            THEN("it is 0")
+            {
+                REQUIRE(0 == v.size());
+            }
+        }
+        WHEN("max_size() is called")
+        {
+            THEN("it is bigger then 0")
+            {
+                REQUIRE(10000 < v.max_size());
+            }
+        }
+        WHEN("capacity() is called")
+        {
+            THEN("it is 0")
+            {
+                REQUIRE(0 == v.capacity());
+            }
+        }
+        WHEN("shrink_to_fit() is called")
+        {
+            v.shrink_to_fit();
+            THEN("nothing goes wrong")
+            {
+                REQUIRE(v.empty());
+            }
+        }
+        WHEN("reserve() is called")
+        {
+            size_t capacity    = v.capacity();
+            size_t newCapacity = capacity + 3;
+            v.reserve(newCapacity);
+            THEN("capacity increases")
+            {
+                REQUIRE(newCapacity == v.capacity());
+            }
+        }
+        WHEN("clear() is called")
+        {
+            v.clear();
+            THEN("nothing goes wrong")
+            {
+                REQUIRE(v.empty());
             }
         }
     }
@@ -135,9 +187,9 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
 
     GIVEN("A vector with 5 elements")
     {
-        size_t   count = 5;
-        TestType value;
-        Vector   values;
+        size_t const count = 5;
+        TestType     value;
+        Vector       values;
 
         for (size_t i = 0; i < count; ++i)
         {
@@ -148,26 +200,73 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
         TestType newvalue(value);
         pw::internal::permute(newvalue, 10);
+
+        size_t                    added;
+        size_t                    offset;
+        typename Vector::iterator where;
         WHEN("insert(3) at begin")
         {
-            v.insert(v.begin(), 3, newvalue);
+            added  = 3;
+            offset = 0;
+            where  = v.insert(v.begin() + offset, added, newvalue);
             THEN("size is correct")
             {
-                REQUIRE(count + 3 == v.size());
+                REQUIRE(count + added == v.size());
             }
             THEN("items are the same")
             {
-                REQUIRE(v[0] == newvalue);
-                REQUIRE(v[1] == newvalue);
-                REQUIRE(v[2] == newvalue);
-                REQUIRE(v[3] == values[0]);
-                REQUIRE(v[4] == values[1]);
-                REQUIRE(v[5] == values[2]);
-                REQUIRE(v[6] == values[3]);
-                REQUIRE(v[7] == values[4]);
-                typename Vector::iterator newpos = v.begin() + 3;
-                REQUIRE(pw::equal(values.begin(), values.end(), newpos, newpos + values.size()));
-                REQUIRE(pw::equal(values.begin(), values.begin() + 3, newpos, newpos + 3));
+                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+            }
+        }
+        WHEN("insert(3) at end")
+        {
+            added  = 3;
+            offset = v.size();
+            where  = v.insert(v.begin() + offset, added, newvalue);
+            THEN("size is correct")
+            {
+                REQUIRE(count + added == v.size());
+            }
+            THEN("items are the same")
+            {
+                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+            }
+        }
+        WHEN("insert(10) at begin")
+        {
+            added  = 10;
+            offset = 0;
+            where  = v.insert(v.begin() + offset, added, newvalue);
+            THEN("size is correct")
+            {
+                REQUIRE(count + added == v.size());
+            }
+            THEN("items are the same")
+            {
+                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+            }
+        }
+        WHEN("insert(10) at near end")
+        {
+            added  = 10;
+            offset = count - 1;
+            where  = v.begin() + offset;
+            where  = v.insert(where, added, newvalue);
+            THEN("size is correct")
+            {
+                REQUIRE(count + added == v.size());
+            }
+            THEN("items are the same")
+            {
+                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
         }
     }
@@ -231,11 +330,11 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestType
 {
     using Vector = pw::vector<TestType>;
 
+    size_t const count = 3;
+    Vector       v(count);
+
     GIVEN("A vector constructed with a count")
     {
-        size_t const count = 3;
-        Vector       v(count);
-
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -265,8 +364,61 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestType
             Vector c(v);
             THEN("two vectors are same")
             {
-                REQUIRE(v.size() == c.size());
-                REQUIRE(v[0] == c[0]);
+                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+    }
+    GIVEN("A vector with elements and extra space")
+    {
+        v.reserve(10);
+        REQUIRE(10 == v.capacity());
+        WHEN("shrink_to_fit() is called")
+        {
+            v.shrink_to_fit();
+            THEN("size() and capacity() are same")
+            {
+                REQUIRE(v.size() == v.capacity());
+            }
+        }
+
+        WHEN("clear() is called then shrink_to_fit()")
+        {
+            v.clear();
+            v.shrink_to_fit();
+            THEN("size() is 0")
+            {
+                REQUIRE(0 == v.size());
+            }
+            THEN("capacity() is 0")
+            {
+                REQUIRE(0 == v.capacity());
             }
         }
     }

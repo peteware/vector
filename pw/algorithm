@@ -6,5 +6,6 @@
 #include <pw/impl/lexicographical_compare.h>
 #include <pw/impl/max.h>
 #include <pw/impl/min.h>
+#include <pw/impl/move.h>
 
 #endif /* INCLUDED_PW_ALGORITHM  */

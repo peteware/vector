@@ -51,7 +51,7 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
                 REQUIRE(5 == count.constructorCount());
             }
         }
-        WHEN("insert(count) is called")
+        WHEN("insert(count) at begin")
         {
             CopyConstructible          c;
             typename Vector::size_type num = 5;
@@ -62,36 +62,6 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
             {
                 count = CopyConstructible::getCounter() - init;
                 REQUIRE(5 == count.constructorCount());
-            }
-        }
-    }
-    GIVEN("A vector with elements and extra space")
-    {
-        ConsCounter init(CopyConstructible::getCounter());
-        ConsCounter count;
-        Vector      v(5);
-        v.reserve(10);
-        REQUIRE(10 == v.capacity());
-        WHEN("shrink_to_fit() is called")
-        {
-            v.shrink_to_fit();
-            THEN("size() and capacity() are same")
-            {
-                REQUIRE(v.size() == v.capacity());
-            }
-        }
-
-        WHEN("clear() is called then shrink_to_fit()")
-        {
-            v.clear();
-            v.shrink_to_fit();
-            THEN("size() is 0")
-            {
-                REQUIRE(0 == v.size());
-            }
-            THEN("capacity() is 0")
-            {
-                REQUIRE(0 == v.capacity());
             }
         }
     }
