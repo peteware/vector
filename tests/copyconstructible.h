@@ -9,13 +9,14 @@ struct CopyConstructible
 
     CopyConstructible();
     CopyConstructible(CopyConstructible const& copy);
-    CopyConstructible(CopyConstructible&& copy);
+    CopyConstructible(CopyConstructible&& copy) noexcept;
     ~CopyConstructible();
 
     CopyConstructible& operator=(CopyConstructible const& copy);
     CopyConstructible& operator=(CopyConstructible&& copy);
 
 private:
+    int                m_value;
     static ConsCounter s_consCounter;
 };
 
