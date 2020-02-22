@@ -14,13 +14,14 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    CopyConstructible copyObject;
-    ConsCounter       init(CopyConstructible::getCounter());
-    ConsCounter       counter;
-    Vector            v;
+    ConsCounter counter;
 
     GIVEN("An empty vector")
     {
+        Vector            v;
+        CopyConstructible copyObject;
+        ConsCounter       init(CopyConstructible::getCounter());
+
         WHEN("getCounter()")
         {
             counter = CopyConstructible::getCounter() - init;
@@ -90,4 +91,51 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             }
         }
     }
+    counter = CopyConstructible::getCounter();
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
+    GIVEN("A vector with count elements")
+    {
+        size_t const      count = 5;
+        CopyConstructible copyObject;
+        ConsCounter       init(CopyConstructible::getCounter());
+        Vector            v(count);
+
+        WHEN("getCounter()")
+        {
+            counter = CopyConstructible::getCounter() - init;
+            THEN("count items default constructed")
+            {
+                REQUIRE(count == counter.getDefault());
+                REQUIRE(counter.getDefault() == counter.constructorCount());
+            }
+        }
+        WHEN("push_back() is called")
+        {
+            v.push_back(copyObject);
+            counter = CopyConstructible::getCounter() - init;
+            THEN("Move constructed existing items")
+            {
+                REQUIRE(count == counter.getMove());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopy());
+            }
+        }
+        WHEN("insert() at begin")
+        {
+            v.insert(v.begin(), copyObject);
+            counter = CopyConstructible::getCounter() - init;
+            THEN("Move constructed existing items")
+            {
+                REQUIRE(count == counter.getMove());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopy());
+            }
+        }
+    }
+    counter = CopyConstructible::getCounter();
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
