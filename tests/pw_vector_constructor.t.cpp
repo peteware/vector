@@ -58,6 +58,16 @@ TEST_CASE("count constructors in vector", "[vector][constructor]")
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
+        WHEN("push_back(move) is called")
+        {
+            v.push_back(pw::move(copyObject));
+            THEN("Copy construct called once")
+            {
+                counter = CopyConstructible::getCounter() - init;
+                REQUIRE(1 == counter.getMove());
+                REQUIRE(counter.getMove() == counter.allCount());
+            }
+        }
         WHEN("resize() is called")
         {
             v.resize(5);
