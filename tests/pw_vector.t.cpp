@@ -9,27 +9,30 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <vector>
 
-//using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
-//using TestTypeList = std::tuple<int, std::string, float>;
-using TestTypeList = std::tuple<int>;
+// using TestTypeList =
+//     std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>, std::vector<std::string>>;
+using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>, std::vector<std::string>>;
 
 TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
     Vector v;
     GIVEN("An empty vector of TestType")
     {
-        REQUIRE(pw::is_same<TestType*, typename Vector::pointer>::value);
-        REQUIRE(pw::is_same<TestType, typename Vector::value_type>::value);
-        WHEN("get_allocator() const is called")
-        {
-            typename Vector::allocator_type a = v.get_allocator();
-            THEN("it returns same allocator")
-            {
-                REQUIRE(a == pw::allocator<TestType>());
-            }
-        }
+        REQUIRE(pw::is_same<value_type*, typename Vector::pointer>::value);
+        REQUIRE(pw::is_same<value_type, typename Vector::value_type>::value);
+        // WHEN("get_allocator() const is called")
+        // {
+        //     typename Vector::allocator_type a = v.get_allocator();
+        //     THEN("it returns same allocator")
+        //     {
+        //         REQUIRE(a == pw::allocator<value_type>());
+        //     }
+        // }
         WHEN("at() is called")
         {
             THEN("at(0) fails")
@@ -128,14 +131,16 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
 
 TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
     Vector v;
-    GIVEN("An empty vector of TestType")
+    GIVEN("An empty vector of value_type")
     {
         WHEN("insert() is called")
         {
             typename Vector::iterator iter;
-            TestType                  value;
+            value_type                value;
             pw::internal::permute(value, 3);
             iter = v.insert(v.begin(), value);
             THEN("size() is increased")
@@ -154,7 +159,7 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
         WHEN("insert(count) at begin()")
         {
             typename Vector::iterator iter;
-            TestType                  value;
+            value_type                value;
             size_t                    count = 12;
 
             pw::internal::permute(value, 3);
@@ -170,7 +175,7 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
         WHEN("insert(12) at end()")
         {
             typename Vector::iterator iter;
-            TestType                  value;
+            value_type                value;
             size_t                    count = 12;
 
             pw::internal::permute(value, 3);
@@ -188,7 +193,7 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
     GIVEN("A vector with 5 elements")
     {
         size_t const count = 5;
-        TestType     value;
+        value_type   value;
         Vector       values;
 
         for (size_t i = 0; i < count; ++i)
@@ -198,7 +203,7 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
         }
         v = values;
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
-        TestType newvalue(value);
+        value_type newvalue(value);
         pw::internal::permute(newvalue, 10);
 
         size_t                    added;
@@ -274,7 +279,9 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
 
 TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
     Vector        v;
     Vector const& c = v;
     GIVEN("An empty const vector of TestType")
@@ -283,14 +290,14 @@ TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
         REQUIRE(c.size() == 0);
         REQUIRE(c.capacity() == 0);
 
-        WHEN("get_allocator() const is called")
-        {
-            typename Vector::allocator_type a = v.get_allocator();
-            THEN("it returns same allocator")
-            {
-                REQUIRE(a == pw::allocator<TestType>());
-            }
-        }
+        // WHEN("get_allocator() const is called")
+        // {
+        //     typename Vector::allocator_type a = v.get_allocator();
+        //     THEN("it returns same allocator")
+        //     {
+        //         REQUIRE(a == pw::allocator<value_type>());
+        //     }
+        // }
         WHEN("at() const is called")
         {
             THEN("at(0) const fails")
@@ -328,7 +335,8 @@ TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
 
 TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
 
     size_t const count = 3;
     Vector       v(count);
@@ -426,10 +434,12 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestType
 
 TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
     Vector v;
-    v.push_back(TestType());
-    GIVEN("A vector of TestType with 1 item")
+    v.push_back(value_type());
+    GIVEN("A vector of value_type with 1 item")
     {
         WHEN("empty() is called")
         {
@@ -457,10 +467,10 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
         }
         WHEN("at(0) is called")
         {
-            TestType& r = v.at(0);
+            value_type& r = v.at(0);
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("at(1) is called")
@@ -472,26 +482,26 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
         }
         WHEN("front() is called")
         {
-            TestType& r = v.front();
+            value_type& r = v.front();
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("back() is called")
         {
-            TestType& r = v.back();
+            value_type& r = v.back();
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("data() is called")
         {
-            TestType* p = v.data();
+            value_type* p = v.data();
             THEN("it works")
             {
-                REQUIRE(*p == TestType());
+                REQUIRE(*p == value_type());
             }
         }
         WHEN("reserve() is called")
@@ -518,7 +528,7 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
             size_t capacity = v.capacity();
             for (size_t i = 0; i < capacity; ++i)
             {
-                TestType t;
+                value_type t;
                 v.push_back(t);
             }
             REQUIRE(capacity < v.capacity());
@@ -528,7 +538,7 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
             size_t capacity = v.capacity();
             for (size_t i = 0; i < capacity; ++i)
             {
-                v.push_back(TestType());
+                v.push_back(value_type());
             }
             REQUIRE(capacity < v.capacity());
         }
@@ -537,20 +547,22 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
 
 TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
     Vector        v;
     Vector const& c = v;
 
-    v.push_back(TestType());
+    v.push_back(value_type());
 
-    GIVEN("A const vector of TestType with 1 item")
+    GIVEN("A const vector of value_type with 1 item")
     {
         WHEN("at(0) const is called")
         {
-            TestType const& r = c.at(0);
+            value_type const& r = c.at(0);
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("at(1) const is called")
@@ -562,26 +574,26 @@ TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList
         }
         WHEN("front() const is called")
         {
-            TestType const& r = v.front();
+            value_type const& r = v.front();
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("back() const is called")
         {
-            TestType const& r = v.back();
+            value_type const& r = v.back();
             THEN("it works")
             {
-                REQUIRE(r == TestType());
+                REQUIRE(r == value_type());
             }
         }
         WHEN("data() const is called")
         {
-            TestType const* p = v.data();
+            value_type const* p = v.data();
             THEN("it works")
             {
-                REQUIRE(*p == TestType());
+                REQUIRE(*p == value_type());
             }
         }
     }
@@ -589,8 +601,10 @@ TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList
 
 TEMPLATE_LIST_TEST_CASE("vector resize", "[vector][resize]", TestTypeList)
 {
-    using Vector = pw::vector<TestType>;
-    GIVEN("A vector of TestType with 3 elements")
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    GIVEN("A vector of value_type with 3 elements")
     {
         size_t const initsize = 3;
         Vector       v(initsize);
@@ -640,7 +654,7 @@ TEMPLATE_LIST_TEST_CASE("vector resize", "[vector][resize]", TestTypeList)
         }
         WHEN("resize() adds elements with value")
         {
-            TestType     value;
+            value_type   value;
             size_t const size = initsize + 3;
 
             pw::internal::permute(value, 3);

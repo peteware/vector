@@ -4,13 +4,15 @@
 
 #include <stdexcept>
 #include <tuple>
+#include <vector>
 
 #include "catch2/catch.hpp"
-//using TestTypeList = std::tuple<int, std::string, std::vector<int>>;
-//using TestTypeList = std::tuple<int, std::string, float>;
-TEST_CASE("count constructors in vector", "[vector][constructor]")
+
+using TestTypeList = std::tuple<pw::vector<CopyConstructible>, std::vector<CopyConstructible>>;
+TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]", TestTypeList)
 {
-    using Vector = pw::vector<CopyConstructible>;
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
 
     CopyConstructible copyObject;
     ConsCounter       init(CopyConstructible::getCounter());
