@@ -367,6 +367,8 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type const& value)
 {
+    return insert(position, static_cast<size_type>(1), value);
+#if 0
     difference_type offset  = position - m_data.begin();
     size_type       oldsize = m_data.size();
 
@@ -379,6 +381,7 @@ vector<Type, Allocator>::insert(const_iterator position, value_type const& value
     m_data.begin()[offset] = pw::move(value);
     m_data.set_size(oldsize + 1);
     return m_data.begin() + offset;
+#endif
 }
 
 template<class Type, class Allocator>

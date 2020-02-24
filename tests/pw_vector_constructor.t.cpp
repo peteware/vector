@@ -97,12 +97,13 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     {
         size_t const      count = 5;
         CopyConstructible copyObject;
-        ConsCounter       init(CopyConstructible::getCounter());
+        ConsCounter       startCount(CopyConstructible::getCounter());
         Vector            v(count);
+        ConsCounter       init(CopyConstructible::getCounter());
 
         WHEN("getCounter()")
         {
-            counter = CopyConstructible::getCounter() - init;
+            counter = CopyConstructible::getCounter() - startCount;
             THEN("count items default constructed")
             {
                 REQUIRE(count == counter.getDefault());
@@ -126,13 +127,13 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         {
             v.insert(v.begin(), copyObject);
             counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items")
+            THEN("Move constructed existing items for more space")
             {
                 REQUIRE(count == counter.getMove());
             }
-            THEN("Copy constructed new item")
+            THEN("Assigned item")
             {
-                REQUIRE(1 == counter.getCopy());
+                REQUIRE(1 == counter.assignmentCount() + counter.getCopy());
             }
         }
     }
