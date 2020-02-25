@@ -135,7 +135,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             }
             THEN("Assigned item")
             {
-                REQUIRE(1 == counter.assignmentCount() + counter.getCopy());
+                REQUIRE(1 == counter.getCopy());
             }
         }
         WHEN("insert() at end")

@@ -76,8 +76,6 @@ struct Storage
     Storage   move(size_type count);
     void      move(size_type offset, size_type count, Type const& value);
     Storage   resize(size_type offset, size_type count, Type const& value);
-    void      moveto(iterator begin, iterator end, iterator dest);
-    void      cons(iterator begin, iterator end, Type const& value);
     iterator  begin();
     iterator  end();
     Storage&  set_size(size_type count);
@@ -95,6 +93,10 @@ struct Storage
         pw::swap(op1.m_end, op2.m_end);
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
+
+private:
+    void moveto(iterator begin, iterator end, iterator dest);
+    void cons(iterator begin, iterator end, Type const& value);
 };
 
 template<class Type, class Allocator>
@@ -189,43 +191,6 @@ Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& 
     return s;
 }
 
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
-{
-    while (end != begin)
-    {
-        --dest;
-        --end;
-        if (dest >= m_end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
-        }
-        else
-        {
-            *dest = pw::move(*end);
-        }
-    }
-}
-
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
-{
-    while (begin != end)
-    {
-        if (begin < end)
-        {
-            *begin = value;
-        }
-        else
-        {
-            allocator_traits<Allocator>::construct(m_alloc, begin, value);
-        }
-        ++begin;
-    }
-}
-
 /**
  * Allocate enough space for count records.  Then up to
  * count records are moved into new Storage and others
@@ -309,6 +274,43 @@ void
 Storage<Type, Allocator>::push_back(value_type&& value)
 {
     allocator_traits<Allocator>::construct(m_alloc, m_end++, pw::move(value));
+}
+
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
+{
+    while (end != begin)
+    {
+        --dest;
+        --end;
+        if (dest >= m_end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
+        }
+        else
+        {
+            *dest = pw::move(*end);
+        }
+    }
+}
+
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
+{
+    while (begin != end)
+    {
+        if (begin < end)
+        {
+            *begin = value;
+        }
+        else
+        {
+            allocator_traits<Allocator>::construct(m_alloc, begin, value);
+        }
+        ++begin;
+    }
 }
 
 }} // namespace pw::internal
