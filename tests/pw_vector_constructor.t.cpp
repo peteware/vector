@@ -8,7 +8,8 @@
 
 #include "catch2/catch.hpp"
 
-using TestTypeList = std::tuple<pw::vector<CopyConstructible>, std::vector<CopyConstructible>>;
+//using TestTypeList = std::tuple<pw::vector<CopyConstructible>, std::vector<CopyConstructible>>;
+using TestTypeList = std::tuple<std::vector<CopyConstructible>>;
 TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]", TestTypeList)
 {
     using Vector     = TestType;
@@ -101,6 +102,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         Vector            v(count);
         ConsCounter       init(CopyConstructible::getCounter());
 
+        REQUIRE(v.size() == v.capacity());
         WHEN("getCounter()")
         {
             counter = CopyConstructible::getCounter() - startCount;
@@ -134,6 +136,32 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             THEN("Assigned item")
             {
                 REQUIRE(1 == counter.assignmentCount() + counter.getCopy());
+            }
+        }
+        WHEN("insert() at end")
+        {
+            v.insert(v.end(), copyObject);
+            counter = CopyConstructible::getCounter() - init;
+            THEN("Move constructed existing items for more space")
+            {
+                REQUIRE(count == counter.getMove());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopy());
+            }
+        }
+        WHEN("insert() in middle")
+        {
+            v.insert(v.begin() + count - 2, copyObject);
+            counter = CopyConstructible::getCounter() - init;
+            THEN("Move constructed existing items for more space")
+            {
+                REQUIRE(count == counter.getMove());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopy());
             }
         }
     }
