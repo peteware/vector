@@ -8,8 +8,8 @@
 
 #include "catch2/catch.hpp"
 
-//using TestTypeList = std::tuple<pw::vector<CopyConstructible>, std::vector<CopyConstructible>>;
-using TestTypeList = std::tuple<std::vector<CopyConstructible>>;
+using TestTypeList = std::tuple<pw::vector<CopyConstructible>, std::vector<CopyConstructible>>;
+//using TestTypeList = std::tuple<std::vector<CopyConstructible>>;
 TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]", TestTypeList)
 {
     using Vector     = TestType;

@@ -2,7 +2,8 @@
 #include "pw_permute.t.h"
 #include <pw/internal/storage.h>
 
-using TestTypeList = std::tuple<int, double>;
+//using TestTypeList = std::tuple<int, double>;
+using TestTypeList = std::tuple<int>;
 
 TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
 {
@@ -59,7 +60,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             THEN("size() is 1")
             {
                 REQUIRE(1 == s.size());
-                REQUIRE(0 == storage.size());
+                REQUIRE(1 == storage.size());
                 REQUIRE(10 == storage.capacity());
             }
             THEN("element is moved")
@@ -76,6 +77,14 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             {
                 REQUIRE(s.size() == storage.size());
                 REQUIRE(s.capacity() == s.size());
+            }
+        }
+        WHEN("move() is called")
+        {
+            storage.move(0, 3, value);
+            THEN("3 new elements")
+            {
+                REQUIRE(4 == storage.size());
             }
         }
     }

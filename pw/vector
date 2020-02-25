@@ -368,20 +368,6 @@ typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type const& value)
 {
     return insert(position, static_cast<size_type>(1), value);
-#if 0
-    difference_type offset  = position - m_data.begin();
-    size_type       oldsize = m_data.size();
-
-    if (!m_data.hascapacity())
-    {
-        m_data = m_data.move(m_data.newsize());
-    }
-    pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
-    pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end());
-    m_data.begin()[offset] = pw::move(value);
-    m_data.set_size(oldsize + 1);
-    return m_data.begin() + offset;
-#endif
 }
 
 template<class Type, class Allocator>
@@ -392,101 +378,13 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
 
     if (!m_data.hascapacity(count))
     {
-        m_data = m_data.move(m_data.size() + count);
+        m_data = m_data.resize(offset, count, value);
     }
-
-    /*
-     * Here are two illustrative scenarios.  A blank box means
-     * it is uninitialized; a "?" means it is initialized
-     * but contents undefined (e.g. it was move'd).
-     *    
-     *          Scenario 1                                  Scenario 2
-     *
-     * This is how we start:
-     *
-     *          position                                        position                 
-     *              │                                               │                    
-     *  count = 2   │               offset = 2      count = 2       │       offset = 3   
-     *  value = 5   ▼                               value = 5       ▼                    
-     *    ┌────┬────┬────┬────┬────┬────┬────┐       ┌────┬────┬────┬────┬────┬────┬────┐
-     * ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │    ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │
-     * │  └────┴────┴────┴────┴────┴────┴────┘    │  └────┴────┴────┴────┴────┴────┴────┘
-     * │                      ▲                   │                      ▲               
-     * │    m_allocated = 7   │                   │    m_allocated = 7   │               
-     * │                    m_end                 │                      │               
-     * └─── m_begin                               └─── m_begin         m_end             
-     *                                                                                   
-     */
-
-    /*
-     * Intermediate as we make room
-     *
-     *          position                                        position                 
-     *              │                                               │                    
-     *  count = 2   │               offset = 2     count = 2        │       offset = 3   
-     *  value = 5   ▼                              value = 5        ▼    move_cons = 1   
-     *    ┌────┬────┬────┬────┬────┬────┬────┐       ┌────┬────┬────┬────┬────┬────┬────┐
-     * ┌─▶│ 1  │ 2  │ ?  │ ?  │ 3  │ 4  │    │    ┌─▶│ 1  │ 2  │ 3  │ ?  │    │ 4  │    │
-     * │  └────┴────┴────┴────┴────┴────┴────┘    │  └────┴────┴────┴────┴────┴────┴────┘
-     * │                      ▲                   │                      ▲               
-     * │    m_allocated = 7   │                   │    m_allocated = 7   │               
-     * │                      │                   │                      │               
-     * └─── m_begin         m_end                 └─── m_begin         m_end             
-     */
-
-    /*                                                                                   
-     * Finally
-     *                                                                                   
-     *          position                                       position                  
-     *              │                                              │                     
-     *  count = 2   │               offset = 2     count = 2       │       offset = 3    
-     *  value = 5   ▼                              value = 5       ▼                     
-     *    ┌────┬────┬────┬────┬────┬────┬────┐      ┌────┬────┬────┬────┬────┬────┬────┐ 
-     * ┌─▶│ 1  │ 2  │ 5  │ 5  │ 3  │ 4  │    │   ┌─▶│ 1  │ 2  │ 3  │ 5  │ 5  │ 4  │    │ 
-     * │  └────┴────┴────┴────┴────┴────┴────┘   │  └────┴────┴────┴────┴────┴────┴────┘ 
-     * │                                ▲        │                                ▲      
-     * │    m_allocated = 7             │        │    m_allocated = 7             │      
-     * │                                │        │                                │      
-     * └─── m_begin                   m_end      └─── m_begin                   m_end    
-     *                                                                                   
-     */
-    iterator newpos = m_data.begin() + offset;
-    /*
-     * copy/move old values backward to avoid overwriting
-     */
-    //size_type oldvals = pw::min(count, m_data.size());
-    size_type oldvals = m_data.size() - offset;
-    iterator  dest    = newpos + count + oldvals;
-    // TODO: insert(count) doesn't copy first old element
-    for (iterator iter = newpos + oldvals; iter != newpos;)
+    else
     {
-        --iter;
-        --dest;
-        if (dest < m_data.m_end)
-        {
-            *dest = pw::move(*iter);
-        }
-        else
-        {
-            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*dest), pw::move(*iter));
-        }
+        m_data.move(offset, count, value);
     }
-    /*
-     * copy value count times starting at new position
-     */
-    for (iterator iter = newpos; iter != newpos + count; ++iter)
-    {
-        if (iter < m_data.m_end)
-        {
-            *iter = value;
-        }
-        else
-        {
-            allocator_traits<Allocator>::construct(m_data.m_alloc, pw::addressof(*iter), value);
-        }
-    }
-    m_data.set_size(m_data.size() + count);
-    return newpos;
+    return m_data.begin() + offset;
 }
 
 template<class Type, class Allocator>

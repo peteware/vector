@@ -12,6 +12,7 @@
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_copy.h>
+#include <pw/impl/uninitialized_fill.h>
 #include <pw/impl/uninitialized_move.h>
 
 #include <stdexcept>
@@ -73,6 +74,10 @@ struct Storage
      * count records are moved into new Storage.
      */
     Storage   move(size_type count);
+    void      move(size_type offset, size_type count, Type const& value);
+    Storage   resize(size_type offset, size_type count, Type const& value);
+    void      moveto(iterator begin, iterator end, iterator dest);
+    void      cons(iterator begin, iterator end, Type const& value);
     iterator  begin();
     iterator  end();
     Storage&  set_size(size_type count);
@@ -156,9 +161,8 @@ Storage<Type, Allocator>::operator=(Storage op2)
 }
 
 /**
- * Allocate enough space for count records.  Then up to
- * count records are moved into new Storage and others
- * are destroyed.
+ * Allocate enough space for count records and
+ * move/copy them
  */
 template<class Type, class Allocator>
 Storage<Type, Allocator>
@@ -168,10 +172,72 @@ Storage<Type, Allocator>::move(size_type count)
     size_type final = min(count, size());
 
     pw::uninitialized_move(begin(), begin() + final, s.begin());
-    pw::destroy(begin(), end());
-    m_end   = m_begin;
-    s.m_end = s.m_begin + final;
+    s.set_size(final);
     return s;
+}
+
+template<class Type, class Allocator>
+Storage<Type, Allocator>
+Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& value)
+{
+    Storage s(size() + count, m_alloc);
+
+    pw::uninitialized_move(begin(), begin() + offset, s.begin());
+    pw::uninitialized_move(begin() + offset, end(), s.begin() + offset + count);
+    pw::uninitialized_fill(s.begin() + offset, s.begin() + offset + count, value);
+    s.set_size(size() + count);
+    return s;
+}
+
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
+{
+    while (end != begin)
+    {
+        --dest;
+        --end;
+        if (dest >= m_end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
+        }
+        else
+        {
+            *dest = pw::move(*end);
+        }
+    }
+}
+
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
+{
+    while (begin != end)
+    {
+        if (begin < end)
+        {
+            *begin = value;
+        }
+        else
+        {
+            allocator_traits<Allocator>::construct(m_alloc, begin, value);
+        }
+        ++begin;
+    }
+}
+
+/**
+ * Allocate enough space for count records.  Then up to
+ * count records are moved into new Storage and others
+ * are destroyed.
+ */
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::move(size_type offset, size_type count, Type const& value)
+{
+    moveto(m_begin + offset, m_end, m_end + offset);
+    cons(m_begin + offset, m_begin + offset + count, value);
+    set_size(size() + count);
 }
 
 template<class Type, class Allocator>
