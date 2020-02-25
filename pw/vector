@@ -119,7 +119,7 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::allocator_type
 vector<Type, Allocator>::get_allocator() const
 {
-    return m_data.m_alloc;
+    return m_data.get_allocator();
 }
 
 template<class Type, class Allocator>
@@ -130,7 +130,7 @@ vector<Type, Allocator>::at(size_type position)
     {
         throw std::out_of_range("position out of range");
     }
-    return *(m_data.m_begin + position);
+    return *(m_data.begin() + position);
 }
 
 template<class Type, class Allocator>
@@ -141,111 +141,111 @@ vector<Type, Allocator>::at(size_type position) const
     {
         throw std::out_of_range("position out of range");
     }
-    return *(m_data.m_begin + position);
+    return *(m_data.begin() + position);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::reference vector<Type, Allocator>::operator[](size_type position)
 {
-    return *(m_data.m_begin + position);
+    return *(m_data.begin() + position);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
     vector<Type, Allocator>::operator[](size_type position) const
 {
-    return *(m_data.m_begin + position);
+    return *(m_data.begin() + position);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
 {
-    return *m_data.m_begin;
+    return *m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
 {
-    return *m_data.m_begin;
+    return *m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    return *(m_data.m_end - 1);
+    return *(m_data.end() - 1);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    return *(m_data.m_end - 1);
+    return *(m_data.end() - 1);
 }
 
 template<class Type, class Allocator>
 Type*
 vector<Type, Allocator>::data() noexcept
 {
-    return m_data.m_begin;
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
 Type const*
 vector<Type, Allocator>::data() const noexcept
 {
-    return m_data.m_begin;
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::begin() noexcept
 {
-    return m_data.m_begin;
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::end() noexcept
 {
-    return m_data.m_end;
+    return m_data.end();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
 {
-    return m_data.m_begin;
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::end() const noexcept
 {
-    return m_data.m_end;
+    return m_data.end();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cbegin() const noexcept
 {
-    return m_data.m_begin;
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cend() const noexcept
 {
-    return m_data.m_end;
+    return m_data.end();
 }
 
 template<class Type, class Allocator>
 bool
 vector<Type, Allocator>::empty() const
 {
-    return m_data.m_begin == m_data.m_end;
+    return m_data.begin() == m_data.end();
 }
 
 template<class Type, class Allocator>
@@ -334,14 +334,14 @@ vector<Type, Allocator>::resize(size_type count)
 {
     if (m_data.size() > count)
     {
-        // TODO: need unit test for this bug: pw::destroy(m_data.m_begin, m_data.m_begin + count);
-        pw::destroy(m_data.m_begin + count, m_data.m_end);
+        // TODO: need unit test for this bug: pw::destroy(m_data.begin(), m_data.begin() + count);
+        pw::destroy(m_data.begin() + count, m_data.end());
         m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
         m_data = m_data.move(count);
-        pw::uninitialized_default_construct(m_data.m_end, m_data.m_begin + count);
+        pw::uninitialized_default_construct(m_data.end(), m_data.begin() + count);
         m_data.set_size(count);
     }
 }
@@ -352,13 +352,13 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
 {
     if (m_data.size() > count)
     {
-        pw::destroy(m_data.m_begin + count, m_data.m_end);
+        pw::destroy(m_data.begin() + count, m_data.end());
         m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
         m_data = m_data.move(count);
-        pw::uninitialized_fill(m_data.m_end, m_data.m_begin + count, value);
+        pw::uninitialized_fill(m_data.end(), m_data.begin() + count, value);
         m_data.set_size(count);
     }
 }
@@ -392,7 +392,7 @@ void
 vector<Type, Allocator>::pop_back()
 {
     m_data.set_size(m_data.size() - 1);
-    allocator_traits<Allocator>::destroy(m_data.m_alloc, pw::addressof(*m_data.m_end));
+    allocator_traits<Allocator>::destroy(m_data.get_allocator(), pw::addressof(*m_data.end()));
 }
 
 } // namespace pw
