@@ -4,6 +4,7 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/distance.h>
 #include <pw/impl/fill.h>
 #include <pw/impl/for_each.h>
 #include <pw/impl/iterator_traits.h>
@@ -14,6 +15,7 @@
 #include <pw/impl/uninitialized_move.h>
 #include <pw/internal/storage.h>
 
+#include <initializer_list>
 #include <limits>
 #include <stdexcept>
 
@@ -40,6 +42,15 @@ public:
     vector(vector const& copy);
     vector(vector const& copy, allocator_type const& alloc);
     ~vector();
+
+    vector& operator=(const vector& other);
+    vector& operator=(vector&& other) noexcept;
+    vector& operator=(std::initializer_list<Type> ilist);
+
+    void assign(size_type count, value_type const& value);
+    template<class Iterator>
+    void assign(Iterator begin, Iterator end);
+    void assign(std::initializer_list<value_type> ilist);
 
     allocator_type    get_allocator() const;
     reference         at(size_type position);
@@ -112,6 +123,74 @@ vector<Type, Allocator>::vector(vector const& copy)
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
+{
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>&
+vector<Type, Allocator>::operator=(const vector& other)
+{
+    if (m_data.capacity() < other.size())
+    {
+        internal::Storage<Type, Allocator> s(other.m_data, get_allocator());
+        m_data = s;
+    }
+    else
+    {
+        pw::destroy(m_data.begin(), m_data.end());
+        pw::uninitialized_copy(other.begin(), other.end(), m_data.begin());
+        m_data.set_size(other.size());
+    }
+    return *this;
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>&
+vector<Type, Allocator>::operator=(vector&& other) noexcept
+{
+    if (m_data.capacity() < other.size())
+    {
+        internal::Storage<Type, Allocator> s(other.size(), get_allocator());
+        pw::uninitialized_move(other.begin(), other.end(), s.begin());
+        s.set_size(other.size());
+        m_data = s;
+    }
+    else
+    {
+        pw::destroy(m_data.begin(), m_data.end());
+        pw::uninitialized_move(other.begin(), other.end(), m_data.begin());
+        m_data.set_size(other.size());
+    }
+    return *this;
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>&
+vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
+{
+    return *this;
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::assign(size_type count, value_type const& value)
+{
+}
+
+template<class Type, class Allocator>
+template<class Iterator>
+void
+vector<Type, Allocator>::assign(Iterator begin, Iterator end)
+{
+    size_type newsize = pw::distance(begin, end);
+    if (newsize <= m_data.capacity())
+    {
+    }
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::assign(std::initializer_list<value_type> ilist)
 {
 }
 
