@@ -86,6 +86,25 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(v.size() == 5);
             }
         }
+        WHEN("operator=(initializer_list) lhs is empty")
+        {
+            v = { value_type(), value_type(), value_type() };
+
+            THEN("size() is 3")
+            {
+                REQUIRE(v.size() == 3);
+            }
+        }
+        WHEN("operator=(initializer_list) lhs has elements")
+        {
+            v.resize(10);
+            v = { value_type(), value_type(), value_type() };
+
+            THEN("size() is 3")
+            {
+                REQUIRE(v.size() == 3);
+            }
+        }
         WHEN("at() is called")
         {
             THEN("at(0) fails")

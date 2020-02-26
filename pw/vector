@@ -45,7 +45,7 @@ public:
 
     vector& operator=(const vector& other);
     vector& operator=(vector&& other) noexcept;
-    vector& operator=(std::initializer_list<Type> ilist);
+    vector& operator=(std::initializer_list<value_type> ilist);
 
     void assign(size_type count, value_type const& value);
     template<class Iterator>
@@ -76,8 +76,8 @@ public:
     void              shrink_to_fit();
     void              reserve(size_type count);
     void              clear() noexcept;
-    void              push_back(Type const& value);
-    void              push_back(Type&& value);
+    void              push_back(const_reference value);
+    void              push_back(value_type&& value);
     void              resize(size_type count);
     void              resize(size_type count, value_type const& value);
     iterator          insert(const_iterator position, value_type const& value);
@@ -168,6 +168,19 @@ template<class Type, class Allocator>
 vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
 {
+    if (m_data.capacity() < ilist.size())
+    {
+        internal::Storage<Type, Allocator> s(ilist.size(), get_allocator());
+        pw::uninitialized_copy(ilist.begin(), ilist.end(), s.begin());
+        s.set_size(ilist.size());
+        m_data = s;
+    }
+    else
+    {
+        pw::destroy(m_data.begin(), m_data.end());
+        pw::uninitialized_copy(ilist.begin(), ilist.end(), m_data.begin());
+        m_data.set_size(ilist.size());
+    }
     return *this;
 }
 
@@ -175,6 +188,19 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
+    if (m_data.capacity() < count)
+    {
+        internal::Storage<Type, Allocator> s(count, get_allocator());
+        pw::uninitialized_fill(s.begin(), s.begin() + count, value);
+        s.set_size(count);
+        m_data = s;
+    }
+    else
+    {
+        pw::destroy(m_data.begin(), m_data.end());
+        m_data.set_size(count);
+        pw::uninitialized_fill(m_data.begin(), m_data.end(), value);
+    }
 }
 
 template<class Type, class Allocator>
