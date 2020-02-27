@@ -250,6 +250,55 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             }
         }
     }
+    GIVEN("An empty const vector of TestType")
+    {
+        Vector        v;
+        Vector const& c = v;
+        REQUIRE(c.empty());
+        REQUIRE(c.size() == 0);
+        REQUIRE(c.capacity() == 0);
+
+        // WHEN("get_allocator() const is called")
+        // {
+        //     typename Vector::allocator_type a = v.get_allocator();
+        //     THEN("it returns same allocator")
+        //     {
+        //         REQUIRE(a == pw::allocator<value_type>());
+        //     }
+        // }
+        WHEN("at() const is called")
+        {
+            THEN("at(0) const fails")
+            {
+                CHECK_THROWS_AS(c.at(0), std::out_of_range);
+            }
+            THEN("at(10) const fails")
+            {
+                CHECK_THROWS_AS(c.at(10), std::out_of_range);
+            }
+        }
+        WHEN("begin() is called")
+        {
+            typename Vector::const_iterator iter;
+            iter = v.begin();
+            THEN("cend() is same")
+            {
+                REQUIRE(iter == v.cend());
+            }
+            THEN("cbegin() is same")
+            {
+                REQUIRE(iter == v.cbegin());
+            }
+            THEN("end() is same")
+            {
+                REQUIRE(iter == v.end());
+            }
+            THEN("cend() is same as end()")
+            {
+                REQUIRE(iter == v.cend());
+            }
+        }
+    }
     GIVEN("A vector with 5 elements")
     {
         size_t const count = 5;
@@ -332,55 +381,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(pw::internal::same(where, where + added, newvalue));
                 REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
-            }
-        }
-    }
-    GIVEN("An empty const vector of TestType")
-    {
-        Vector        v;
-        Vector const& c = v;
-        REQUIRE(c.empty());
-        REQUIRE(c.size() == 0);
-        REQUIRE(c.capacity() == 0);
-
-        // WHEN("get_allocator() const is called")
-        // {
-        //     typename Vector::allocator_type a = v.get_allocator();
-        //     THEN("it returns same allocator")
-        //     {
-        //         REQUIRE(a == pw::allocator<value_type>());
-        //     }
-        // }
-        WHEN("at() const is called")
-        {
-            THEN("at(0) const fails")
-            {
-                CHECK_THROWS_AS(c.at(0), std::out_of_range);
-            }
-            THEN("at(10) const fails")
-            {
-                CHECK_THROWS_AS(c.at(10), std::out_of_range);
-            }
-        }
-        WHEN("begin() is called")
-        {
-            typename Vector::const_iterator iter;
-            iter = v.begin();
-            THEN("cend() is same")
-            {
-                REQUIRE(iter == v.cend());
-            }
-            THEN("cbegin() is same")
-            {
-                REQUIRE(iter == v.cbegin());
-            }
-            THEN("end() is same")
-            {
-                REQUIRE(iter == v.end());
-            }
-            THEN("cend() is same as end()")
-            {
-                REQUIRE(iter == v.cend());
             }
         }
     }
