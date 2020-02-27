@@ -318,6 +318,65 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         size_t                    added;
         size_t                    offset;
         typename Vector::iterator where;
+        WHEN("empty() is called")
+        {
+            bool e = v.empty();
+            THEN("it is not empty")
+            {
+                REQUIRE(!e);
+            }
+        }
+        WHEN("size() is called")
+        {
+            size_t s = v.size();
+            THEN("it is the same as count")
+            {
+                REQUIRE(count == s);
+            }
+        }
+        WHEN("capacity() is called")
+        {
+            size_t c = v.capacity();
+            THEN("capacity is same")
+            {
+                REQUIRE(count == c);
+            }
+        }
+        WHEN("copy constructor is called")
+        {
+            Vector c(v);
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
         WHEN("insert(3) at begin")
         {
             added  = 3;
@@ -383,71 +442,68 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
         }
+        WHEN("resize() increases size")
+        {
+            size_t const size = count + 3;
+
+            v.resize(size);
+            THEN("size is is changed")
+            {
+                REQUIRE(size == v.size());
+                REQUIRE(size <= v.capacity());
+            }
+        }
+        WHEN("resize() decreases size")
+        {
+            size_t const capacity = v.capacity();
+            size_t const size     = count - 2;
+
+            v.resize(size);
+            THEN("size is smaller")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
+        }
+        WHEN("resize() does not change size")
+        {
+            size_t const capacity = v.capacity();
+            size_t const size     = count;
+
+            v.resize(size);
+            THEN("size is unchanged")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
+        }
+        WHEN("resize() adds elements with value")
+        {
+            value_type   value;
+            size_t const size = count + 3;
+
+            pw::internal::permute(value, 3);
+            v.resize(size, value);
+            THEN("size() is increased")
+            {
+                REQUIRE(size == v.size());
+            }
+            THEN("each value is same as permute")
+            {
+                REQUIRE(value == v[count]);
+            }
+        }
     }
     GIVEN("A vector constructed with a count")
     {
         size_t const count = 3;
         Vector       v(count);
-
-        WHEN("empty() is called")
-        {
-            bool e = v.empty();
-            THEN("it is not empty")
-            {
-                REQUIRE(!e);
-            }
-        }
-        WHEN("size() is called")
-        {
-            size_t s = v.size();
-            THEN("it is the same as count")
-            {
-                REQUIRE(count == s);
-            }
-        }
-        WHEN("capacity() is called")
-        {
-            size_t c = v.capacity();
-            THEN("capacity is same")
-            {
-                REQUIRE(count == c);
-            }
-        }
-        WHEN("copy constructor is called")
-        {
-            Vector c(v);
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
-            }
-        }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-            }
-        }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-            }
-        }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-            }
-        }
     }
     GIVEN("A vector with elements and extra space")
     {
@@ -633,67 +689,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A vector of value_type with 3 elements")
     {
-        size_t const initsize = 3;
-        Vector       v(initsize);
-
-        REQUIRE(initsize == v.size());
-        REQUIRE(initsize == v.capacity());
-        WHEN("resize() increases size")
-        {
-            size_t const size = initsize + 3;
-
-            v.resize(size);
-            THEN("size is is changed")
-            {
-                REQUIRE(size == v.size());
-                REQUIRE(size <= v.capacity());
-            }
-        }
-        WHEN("resize() decreases size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = initsize - 2;
-
-            v.resize(size);
-            THEN("size is smaller")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() does not change size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = initsize;
-
-            v.resize(size);
-            THEN("size is unchanged")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() adds elements with value")
-        {
-            value_type   value;
-            size_t const size = initsize + 3;
-
-            pw::internal::permute(value, 3);
-            v.resize(size, value);
-            THEN("size() is increased")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("each value is same as permute")
-            {
-                REQUIRE(value == v[initsize]);
-            }
-        }
+        size_t const count = 5;
+        Vector       v(count);
     }
 }
