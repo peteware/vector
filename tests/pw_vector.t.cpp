@@ -19,9 +19,9 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    Vector v;
     GIVEN("An empty vector of TestType")
     {
+        Vector v;
         REQUIRE(pw::is_same<value_type*, typename Vector::pointer>::value);
         REQUIRE(pw::is_same<value_type, typename Vector::value_type>::value);
         // WHEN("get_allocator() const is called")
@@ -198,17 +198,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(v.empty());
             }
         }
-    }
-}
-
-TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    Vector v;
-    GIVEN("An empty vector of value_type")
-    {
         WHEN("insert() is called")
         {
             typename Vector::iterator iter;
@@ -261,7 +250,6 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
             }
         }
     }
-
     GIVEN("A vector with 5 elements")
     {
         size_t const count = 5;
@@ -273,7 +261,7 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
             pw::internal::permute(value, 10);
             values.push_back(value);
         }
-        v = values;
+        Vector v(values);
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
         value_type newvalue(value);
         pw::internal::permute(newvalue, 10);
@@ -347,17 +335,10 @@ TEMPLATE_LIST_TEST_CASE("insert vectors work", "[vector][insert]", TestTypeList)
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    Vector        v;
-    Vector const& c = v;
     GIVEN("An empty const vector of TestType")
     {
+        Vector        v;
+        Vector const& c = v;
         REQUIRE(c.empty());
         REQUIRE(c.size() == 0);
         REQUIRE(c.capacity() == 0);
@@ -403,18 +384,11 @@ TEMPLATE_LIST_TEST_CASE("const vectors work", "[vector][const]", TestTypeList)
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    size_t const count = 3;
-    Vector       v(count);
-
     GIVEN("A vector constructed with a count")
     {
+        size_t const count = 3;
+        Vector       v(count);
+
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -477,6 +451,8 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestType
     }
     GIVEN("A vector with elements and extra space")
     {
+        size_t const count = 3;
+        Vector       v(count);
         v.reserve(10);
         REQUIRE(10 == v.capacity());
         WHEN("shrink_to_fit() is called")
@@ -502,17 +478,10 @@ TEMPLATE_LIST_TEST_CASE("vector constructors", "[vector][constructor]", TestType
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    Vector v;
-    v.push_back(value_type());
     GIVEN("A vector of value_type with 1 item")
     {
+        Vector v;
+        v.push_back(value_type());
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -615,20 +584,13 @@ TEMPLATE_LIST_TEST_CASE("vectors work", "[vector][empty]", TestTypeList)
             REQUIRE(capacity < v.capacity());
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    Vector        v;
-    Vector const& c = v;
-
-    v.push_back(value_type());
-
     GIVEN("A const vector of value_type with 1 item")
     {
+        Vector        v;
+        Vector const& c = v;
+
+        v.push_back(value_type());
+
         WHEN("at(0) const is called")
         {
             value_type const& r = c.at(0);
@@ -669,13 +631,6 @@ TEMPLATE_LIST_TEST_CASE("const vectors access", "[vector][single]", TestTypeList
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("vector resize", "[vector][resize]", TestTypeList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
     GIVEN("A vector of value_type with 3 elements")
     {
         size_t const initsize = 3;
