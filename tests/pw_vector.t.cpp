@@ -249,71 +249,66 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(value == v[count - 1]);
             }
         }
-    }
-    GIVEN("An empty const vector of TestType")
-    {
-        Vector        v;
-        Vector const& c = v;
-        REQUIRE(c.empty());
-        REQUIRE(c.size() == 0);
-        REQUIRE(c.capacity() == 0);
+        GIVEN("and it is const")
+        {
+            Vector const& c = v;
+            REQUIRE(c.empty());
+            REQUIRE(c.size() == 0);
+            REQUIRE(c.capacity() == 0);
 
-        // WHEN("get_allocator() const is called")
-        // {
-        //     typename Vector::allocator_type a = v.get_allocator();
-        //     THEN("it returns same allocator")
-        //     {
-        //         REQUIRE(a == pw::allocator<value_type>());
-        //     }
-        // }
-        WHEN("at() const is called")
-        {
-            THEN("at(0) const fails")
+            WHEN("at() const is called")
             {
-                CHECK_THROWS_AS(c.at(0), std::out_of_range);
+                THEN("at(0) const fails")
+                {
+                    CHECK_THROWS_AS(c.at(0), std::out_of_range);
+                }
+                THEN("at(10) const fails")
+                {
+                    CHECK_THROWS_AS(c.at(10), std::out_of_range);
+                }
             }
-            THEN("at(10) const fails")
+            WHEN("begin() is called")
             {
-                CHECK_THROWS_AS(c.at(10), std::out_of_range);
-            }
-        }
-        WHEN("begin() is called")
-        {
-            typename Vector::const_iterator iter;
-            iter = v.begin();
-            THEN("cend() is same")
-            {
-                REQUIRE(iter == v.cend());
-            }
-            THEN("cbegin() is same")
-            {
-                REQUIRE(iter == v.cbegin());
-            }
-            THEN("end() is same")
-            {
-                REQUIRE(iter == v.end());
-            }
-            THEN("cend() is same as end()")
-            {
-                REQUIRE(iter == v.cend());
+                typename Vector::const_iterator iter;
+                iter = v.begin();
+                THEN("cend() is same")
+                {
+                    REQUIRE(iter == v.cend());
+                }
+                THEN("cbegin() is same")
+                {
+                    REQUIRE(iter == v.cbegin());
+                }
+                THEN("end() is same")
+                {
+                    REQUIRE(iter == v.end());
+                }
+                THEN("cend() is same as end()")
+                {
+                    REQUIRE(iter == v.cend());
+                }
             }
         }
     }
     GIVEN("A vector with 5 elements")
     {
         size_t const count = 5;
+        value_type   first_value;
+        value_type   last_value;
         value_type   value;
         Vector       values;
 
         for (size_t i = 0; i < count; ++i)
         {
             pw::internal::permute(value, 10);
+            if (i == 0)
+                first_value = value;
             values.push_back(value);
+            last_value = value;
         }
         Vector v(values);
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
-        value_type newvalue(value);
-        pw::internal::permute(newvalue, 10);
+        pw::internal::permute(value, 10);
 
         size_t                    added;
         size_t                    offset;
@@ -381,14 +376,14 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         {
             added  = 3;
             offset = 0;
-            where  = v.insert(v.begin() + offset, added, newvalue);
+            where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
                 REQUIRE(count + added == v.size());
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::internal::same(where, where + added, value));
                 REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
@@ -397,14 +392,14 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         {
             added  = 3;
             offset = v.size();
-            where  = v.insert(v.begin() + offset, added, newvalue);
+            where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
                 REQUIRE(count + added == v.size());
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::internal::same(where, where + added, value));
                 REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
@@ -413,14 +408,14 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         {
             added  = 10;
             offset = 0;
-            where  = v.insert(v.begin() + offset, added, newvalue);
+            where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
                 REQUIRE(count + added == v.size());
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::internal::same(where, where + added, value));
                 REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
@@ -430,14 +425,14 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             added  = 10;
             offset = count - 1;
             where  = v.begin() + offset;
-            where  = v.insert(where, added, newvalue);
+            where  = v.insert(where, added, value);
             THEN("size is correct")
             {
                 REQUIRE(count + added == v.size());
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, newvalue));
+                REQUIRE(pw::internal::same(where, where + added, value));
                 REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
             }
@@ -499,45 +494,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(value == v[count]);
             }
         }
-    }
-    GIVEN("A vector constructed with a count")
-    {
-        size_t const count = 3;
-        Vector       v(count);
-    }
-    GIVEN("A vector with elements and extra space")
-    {
-        size_t const count = 3;
-        Vector       v(count);
-        v.reserve(10);
-        REQUIRE(10 == v.capacity());
-        WHEN("shrink_to_fit() is called")
-        {
-            v.shrink_to_fit();
-            THEN("size() and capacity() are same")
-            {
-                REQUIRE(v.size() == v.capacity());
-            }
-        }
-
-        WHEN("clear() is called then shrink_to_fit()")
-        {
-            v.clear();
-            v.shrink_to_fit();
-            THEN("size() is 0")
-            {
-                REQUIRE(0 == v.size());
-            }
-            THEN("capacity() is 0")
-            {
-                REQUIRE(0 == v.capacity());
-            }
-        }
-    }
-    GIVEN("A vector of value_type with 1 item")
-    {
-        Vector v;
-        v.push_back(value_type());
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -549,9 +505,9 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         WHEN("size() is called")
         {
             size_t s = v.size();
-            THEN("size is 1")
+            THEN("size is count")
             {
-                REQUIRE(s == 1);
+                REQUIRE(s == count);
             }
         }
         WHEN("capacity() is called")
@@ -559,7 +515,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             size_t c = v.capacity();
             THEN("it is at least 1)")
             {
-                REQUIRE(c >= 1);
+                REQUIRE(c >= count);
             }
         }
         WHEN("at(0) is called")
@@ -567,14 +523,14 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type& r = v.at(0);
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(first_value == r);
             }
         }
-        WHEN("at(1) is called")
+        WHEN("at(count) is called")
         {
             THEN("it raises exception")
             {
-                CHECK_THROWS_AS(v.at(1), std::out_of_range);
+                CHECK_THROWS_AS(v.at(count), std::out_of_range);
             }
         }
         WHEN("front() is called")
@@ -582,7 +538,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type& r = v.front();
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(first_value == r);
             }
         }
         WHEN("back() is called")
@@ -590,7 +546,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type& r = v.back();
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(last_value == r);
             }
         }
         WHEN("data() is called")
@@ -598,7 +554,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type* p = v.data();
             THEN("it works")
             {
-                REQUIRE(*p == value_type());
+                REQUIRE(first_value == *p);
             }
         }
         WHEN("reserve() is called")
@@ -638,6 +594,33 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 v.push_back(value_type());
             }
             REQUIRE(capacity < v.capacity());
+        }
+        GIVEN("And extra capacity")
+        {
+            size_t const total = count + 10;
+            v.reserve(total);
+            REQUIRE(total == v.capacity());
+            WHEN("shrink_to_fit() is called")
+            {
+                v.shrink_to_fit();
+                THEN("size() and capacity() are same")
+                {
+                    REQUIRE(v.size() == v.capacity());
+                }
+            }
+            WHEN("clear() is called then shrink_to_fit()")
+            {
+                v.clear();
+                v.shrink_to_fit();
+                THEN("size() is 0")
+                {
+                    REQUIRE(0 == v.size());
+                }
+                THEN("capacity() is 0")
+                {
+                    REQUIRE(0 == v.capacity());
+                }
+            }
         }
     }
     GIVEN("A const vector of value_type with 1 item")
@@ -686,10 +669,5 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(*p == value_type());
             }
         }
-    }
-    GIVEN("A vector of value_type with 3 elements")
-    {
-        size_t const count = 5;
-        Vector       v(count);
     }
 }
