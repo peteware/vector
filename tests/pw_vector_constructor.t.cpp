@@ -16,23 +16,24 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     using value_type = typename Vector::value_type;
 
     ConsCounter counter;
+    ConsCounter init(CopyConstructible::getCounter());
 
     GIVEN("An empty vector")
     {
-        Vector            v;
-        CopyConstructible copyObject;
-        ConsCounter       init(CopyConstructible::getCounter());
+        Vector v;
 
-        WHEN("getCounter()")
+        WHEN("Nothing was called")
         {
             counter = CopyConstructible::getCounter() - init;
-            THEN("nothing was called")
+            THEN("Nothing was constructed")
             {
                 REQUIRE(counter.zero());
             }
         }
+
         WHEN("reserve() is increased")
         {
+            init = CopyConstructible::getCounter();
             v.reserve(5);
             counter = CopyConstructible::getCounter() - init;
             THEN("copy constructor not called")
@@ -43,6 +44,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         WHEN("resize() is called")
         {
             size_t const count = 5;
+
+            init = CopyConstructible::getCounter();
             v.resize(count);
             counter = CopyConstructible::getCounter() - init;
             THEN("default construted count times")
@@ -52,116 +55,124 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 REQUIRE(counter.allCount() == count);
             }
         }
-        WHEN("push_back() is called")
+        GIVEN("and an object")
         {
-            v.push_back(copyObject);
-            THEN("Copy construct called once")
-            {
-                counter = CopyConstructible::getCounter() - init;
-                REQUIRE(1 == counter.constructorCount());
-                REQUIRE(counter.constructorCount() == counter.allCount());
-            }
-        }
-        WHEN("push_back(move) is called")
-        {
-            v.push_back(pw::move(copyObject));
-            THEN("Copy construct called once")
-            {
-                counter = CopyConstructible::getCounter() - init;
-                REQUIRE(1 == counter.getMove());
-                REQUIRE(counter.getMove() == counter.allCount());
-            }
-        }
-        WHEN("resize() is called")
-        {
-            v.resize(5);
-            THEN("Copy construct called same amount")
-            {
-                counter = CopyConstructible::getCounter() - init;
-                REQUIRE(5 == counter.constructorCount());
-                REQUIRE(counter.constructorCount() == counter.allCount());
-            }
-        }
-        WHEN("insert(5) at begin")
-        {
-            v.insert(v.begin(), 5, copyObject);
-            THEN("Copy constructor called 5 times")
-            {
-                counter = CopyConstructible::getCounter() - init;
-                REQUIRE(5 == counter.constructorCount());
-            }
-        }
-    }
-    counter = CopyConstructible::getCounter();
-    REQUIRE(counter.constructorCount() == counter.destructorCount());
-    GIVEN("A vector with count elements")
-    {
-        size_t const      count = 5;
-        CopyConstructible copyObject;
-        ConsCounter       startCount(CopyConstructible::getCounter());
-        Vector            v(count);
-        ConsCounter       init(CopyConstructible::getCounter());
+            size_t const      count = 5;
+            CopyConstructible copyObject;
 
-        REQUIRE(v.size() == v.capacity());
-        WHEN("getCounter()")
-        {
-            counter = CopyConstructible::getCounter() - startCount;
-            THEN("count items default constructed")
+            WHEN("push_back() is called")
             {
-                REQUIRE(count == counter.getDefault());
-                REQUIRE(counter.getDefault() == counter.constructorCount());
+                init = CopyConstructible::getCounter();
+                v.push_back(copyObject);
+                THEN("Copy construct called once")
+                {
+                    counter = CopyConstructible::getCounter() - init;
+                    REQUIRE(1 == counter.constructorCount());
+                    REQUIRE(counter.constructorCount() == counter.allCount());
+                }
+            }
+            WHEN("push_back(move) is called")
+            {
+                init = CopyConstructible::getCounter();
+                v.push_back(pw::move(copyObject));
+                THEN("Copy construct called once")
+                {
+                    counter = CopyConstructible::getCounter() - init;
+                    REQUIRE(1 == counter.getMove());
+                    REQUIRE(counter.getMove() == counter.allCount());
+                }
+            }
+            WHEN("resize(count) is called")
+            {
+                init = CopyConstructible::getCounter();
+                v.resize(count);
+                THEN("Copy construct called same amount")
+                {
+                    counter = CopyConstructible::getCounter() - init;
+                    REQUIRE(count == counter.constructorCount());
+                    REQUIRE(counter.constructorCount() == counter.allCount());
+                }
+            }
+            WHEN("insert(count) at begin")
+            {
+                init = CopyConstructible::getCounter();
+                v.insert(v.begin(), count, copyObject);
+                THEN("Copy constructor called count times")
+                {
+                    counter = CopyConstructible::getCounter() - init;
+                    REQUIRE(count == counter.constructorCount());
+                }
             }
         }
-        WHEN("push_back() is called")
+        GIVEN("and add count objects")
         {
-            v.push_back(copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items")
+            size_t const      count = 5;
+            CopyConstructible copyObject;
+            ConsCounter       startCount(CopyConstructible::getCounter());
+            Vector            v(count);
+            ConsCounter       init(CopyConstructible::getCounter());
+
+            REQUIRE(v.size() == v.capacity());
+            WHEN("getCounter()")
             {
-                REQUIRE(count == counter.getMove());
+                counter = CopyConstructible::getCounter() - startCount;
+                THEN("count items default constructed")
+                {
+                    REQUIRE(count == counter.getDefault());
+                    REQUIRE(counter.getDefault() == counter.constructorCount());
+                }
             }
-            THEN("Copy constructed new item")
+            WHEN("push_back() is called")
             {
-                REQUIRE(1 == counter.getCopy());
+                v.push_back(copyObject);
+                counter = CopyConstructible::getCounter() - init;
+                THEN("Move constructed existing items")
+                {
+                    REQUIRE(count == counter.getMove());
+                }
+                THEN("Copy constructed new item")
+                {
+                    REQUIRE(1 == counter.getCopy());
+                }
             }
-        }
-        WHEN("insert() at begin")
-        {
-            v.insert(v.begin(), copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
+            WHEN("insert() at begin")
             {
-                REQUIRE(count == counter.getMove());
+                v.insert(v.begin(), copyObject);
+                counter = CopyConstructible::getCounter() - init;
+                THEN("Move constructed existing items for more space")
+                {
+                    REQUIRE(count == counter.getMove());
+                }
+                THEN("Assigned item")
+                {
+                    REQUIRE(1 == counter.getCopy());
+                }
             }
-            THEN("Assigned item")
+            WHEN("insert() at end")
             {
-                REQUIRE(1 == counter.getCopy());
+                v.insert(v.end(), copyObject);
+                counter = CopyConstructible::getCounter() - init;
+                THEN("Move constructed existing items for more space")
+                {
+                    REQUIRE(count == counter.getMove());
+                }
+                THEN("Copy constructed new item")
+                {
+                    REQUIRE(1 == counter.getCopy());
+                }
             }
-        }
-        WHEN("insert() at end")
-        {
-            v.insert(v.end(), copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
+            WHEN("insert() in middle")
             {
-                REQUIRE(count == counter.getMove());
-            }
-            THEN("Copy constructed new item")
-            {
-                REQUIRE(1 == counter.getCopy());
-            }
-        }
-        WHEN("insert() in middle")
-        {
-            v.insert(v.begin() + count - 2, copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
-            {
-                REQUIRE(count == counter.getMove());
-            }
-            THEN("Copy constructed new item")
-            {
-                REQUIRE(1 == counter.getCopy());
+                v.insert(v.begin() + count - 2, copyObject);
+                counter = CopyConstructible::getCounter() - init;
+                THEN("Move constructed existing items for more space")
+                {
+                    REQUIRE(count == counter.getMove());
+                }
+                THEN("Copy constructed new item")
+                {
+                    REQUIRE(1 == counter.getCopy());
+                }
             }
         }
     }
