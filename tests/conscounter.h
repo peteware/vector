@@ -32,16 +32,26 @@ public:
     int          getAssignment() const;
     ConsCounter& addMoveAssignment();
     int          getMoveAssignment() const;
+    ConsCounter& addEqual();
+    int          getEqual() const;
+    ConsCounter& addNotEqual();
+    int          getNotEqual() const;
+    ConsCounter& addLt();
+    int          getLt() const;
+    int          getComparisons();
 
 private:
-    int m_default; ///< Default constructor
-    int m_copy; ///< Copy constructor
-    int m_move; ///< Move constructor
-    int m_defaultalloc; ///< Default constructor with allocator
-    int m_copyalloc; ///< Copy constructor with allocator
-    int m_destructor; ///< destructors
-    int m_assignment; ///< Calls to operator=()
-    int m_moveassignment; ///< Calls to operator=()
+    int m_default        = 0; ///< Default constructor
+    int m_copy           = 0; ///< Copy constructor
+    int m_move           = 0; ///< Move constructor
+    int m_defaultalloc   = 0; ///< Default constructor with allocator
+    int m_copyalloc      = 0; ///< Copy constructor with allocator
+    int m_destructor     = 0; ///< destructors
+    int m_assignment     = 0; ///< Calls to operator=()
+    int m_moveassignment = 0; ///< Calls to operator=()
+    int m_equal          = 0; ///< Calls to operator==()
+    int m_notEqual       = 0; ///< Calls to operator!=()
+    int m_lt             = 0; ///< Calls to operator<()
 };
 
 #endif /*  INCLUDED_PW_CONSCOUNTER_T_H */

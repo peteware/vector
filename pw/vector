@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/distance.h>
+#include <pw/impl/equal.h>
 #include <pw/impl/fill.h>
 #include <pw/impl/for_each.h>
 #include <pw/impl/iterator_traits.h>
@@ -500,6 +501,16 @@ vector<Type, Allocator>::pop_back()
     allocator_traits<Allocator>::destroy(m_data.get_allocator(), pw::addressof(*m_data.end()));
 }
 
-} // namespace pw
+template<class Type, class Allocator>
+bool
+operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
+{
+    if (op1.size() != op2.size())
+    {
+        return false;
+    }
+    return pw::equal(op1.begin(), op1.end(), op2.begin(), op2.end());
+}
 
+} // namespace pw
 #endif /*  PW_VECTOR_H */

@@ -361,6 +361,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             THEN("two vectors are same")
             {
                 REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+                REQUIRE(c == d);
             }
         }
         WHEN("move constructor is called")
@@ -370,6 +371,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             THEN("two vectors are same")
             {
                 REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+                REQUIRE(c == d);
             }
         }
         WHEN("insert(3) at begin")

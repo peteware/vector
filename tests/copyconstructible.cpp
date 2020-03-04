@@ -46,3 +46,24 @@ CopyConstructible::operator=(CopyConstructible&& copy)
     s_consCounter.addMoveAssignment();
     return *this;
 }
+
+bool
+CopyConstructible::operator==(CopyConstructible const& op2) const
+{
+    s_consCounter.addEqual();
+    return m_value == op2.m_value;
+}
+
+bool
+CopyConstructible::operator!=(CopyConstructible const& op2) const
+{
+    s_consCounter.addNotEqual();
+    return m_value != op2.m_value;
+}
+
+bool
+CopyConstructible::operator<(CopyConstructible const& op2) const
+{
+    s_consCounter.addLt();
+    return m_value < op2.m_value;
+}

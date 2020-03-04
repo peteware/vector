@@ -1,14 +1,6 @@
 #include "conscounter.h"
 
 ConsCounter::ConsCounter()
-    : m_default(0)
-    , m_copy(0)
-    , m_move(0)
-    , m_defaultalloc(0)
-    , m_copyalloc(0)
-    , m_destructor(0)
-    , m_assignment(0)
-    , m_moveassignment(0)
 {
 }
 
@@ -147,6 +139,51 @@ ConsCounter::getMoveAssignment() const
 }
 
 ConsCounter&
+ConsCounter::addEqual()
+{
+    ++m_equal;
+    return *this;
+}
+
+int
+ConsCounter::getEqual() const
+{
+    return m_equal;
+}
+
+ConsCounter&
+ConsCounter::addNotEqual()
+{
+    ++m_notEqual;
+    return *this;
+}
+
+int
+ConsCounter::getNotEqual() const
+{
+    return m_notEqual;
+}
+
+ConsCounter&
+ConsCounter::addLt()
+{
+    ++m_lt;
+    return *this;
+}
+
+int
+ConsCounter::getLt() const
+{
+    return m_lt;
+}
+
+int
+ConsCounter::getComparisons()
+{
+    return m_equal + m_notEqual + m_lt;
+}
+
+ConsCounter&
 ConsCounter::operator-=(ConsCounter const& op2)
 {
     m_default -= op2.m_default;
@@ -157,6 +194,9 @@ ConsCounter::operator-=(ConsCounter const& op2)
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
     m_moveassignment -= op2.m_moveassignment;
+    m_equal -= op2.m_equal;
+    m_notEqual -= op2.m_notEqual;
+    m_lt -= op2.m_lt;
 
     return *this;
 }
