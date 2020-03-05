@@ -129,7 +129,8 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(std::initializer_list<value_type> init, const Allocator& alloc)
     : m_data(init.size(), alloc)
 {
-    pw::uninitialized_copy(init.begin(), init.end(), pw::back_inserter(term_data));
+    pw::uninitialized_copy(init.begin(), init.end(), m_data.begin());
+    m_data.set_size(init.size());
 }
 
 template<class Type, class Allocator>
@@ -149,7 +150,8 @@ vector<Type, Allocator>::operator=(const vector& other)
     else
     {
         pw::destroy(m_data.begin(), m_data.end());
-        pw::uninitialized_copy(other.begin(), other.end(), pw::back_inserter(m_data));
+        pw::uninitialized_copy(other.begin(), other.end(), m_data.begin());
+        m_data.set_size(other.size());
     }
     return *this;
 }
