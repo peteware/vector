@@ -3,6 +3,7 @@
 
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
+#include <pw/impl/back_inserter.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/distance.h>
 #include <pw/impl/equal.h>
@@ -42,6 +43,7 @@ public:
     vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
     vector(vector const& copy);
     vector(vector const& copy, allocator_type const& alloc);
+    vector(std::initializer_list<value_type> init, const Allocator& alloc = Allocator());
     ~vector();
 
     vector& operator=(const vector& other);
@@ -122,6 +124,14 @@ vector<Type, Allocator>::vector(vector const& copy)
 {
 }
 
+#include <initializer_list>
+template<class Type, class Allocator>
+vector<Type, Allocator>::vector(std::initializer_list<value_type> init, const Allocator& alloc)
+    : m_data(init.size(), alloc)
+{
+    pw::uninitialized_copy(init.begin(), init.end(), pw::back_inserter(term_data));
+}
+
 template<class Type, class Allocator>
 vector<Type, Allocator>::~vector()
 {
@@ -139,8 +149,7 @@ vector<Type, Allocator>::operator=(const vector& other)
     else
     {
         pw::destroy(m_data.begin(), m_data.end());
-        pw::uninitialized_copy(other.begin(), other.end(), m_data.begin());
-        m_data.set_size(other.size());
+        pw::uninitialized_copy(other.begin(), other.end(), pw::back_inserter(m_data));
     }
     return *this;
 }

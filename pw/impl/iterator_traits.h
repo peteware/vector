@@ -1,7 +1,6 @@
 #ifndef INCLUDED_PW_IMPL_ITERATOR_TRAITS_H
 #define INCLUDED_PW_IMPL_ITERATOR_TRAITS_H
 
-#include <pw/impl/iterator_tags.h>
 #include <pw/impl/ptrdiff.h>
 
 namespace pw {

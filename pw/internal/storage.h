@@ -284,7 +284,7 @@ template<class Type, class Allocator>
 void
 Storage<Type, Allocator>::push_back(value_type const& value)
 {
-    allocator_traits<Allocator>::construct(m_alloc, m_end++, pw::move(value));
+    allocator_traits<Allocator>::construct(m_alloc, m_end++, value);
 }
 
 template<class Type, class Allocator>
