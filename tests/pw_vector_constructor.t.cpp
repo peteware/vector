@@ -50,8 +50,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             counter = CopyConstructible::getCounter() - init;
             THEN("default construted count times")
             {
-                REQUIRE(count == counter.getDefault());
-                REQUIRE(counter.getDefault() == counter.constructorCount());
+                REQUIRE(count == counter.getDefaultConstructor());
+                REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
                 REQUIRE(counter.allCount() == count);
             }
         }
@@ -78,8 +78,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 THEN("Copy construct called once")
                 {
                     counter = CopyConstructible::getCounter() - init;
-                    REQUIRE(1 == counter.getMove());
-                    REQUIRE(counter.getMove() == counter.allCount());
+                    REQUIRE(1 == counter.getMoveConstructor());
+                    REQUIRE(counter.getMoveConstructor() == counter.allCount());
                 }
             }
             WHEN("resize(count) is called")
@@ -118,8 +118,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 counter = CopyConstructible::getCounter() - startCount;
                 THEN("count items default constructed")
                 {
-                    REQUIRE(count == counter.getDefault());
-                    REQUIRE(counter.getDefault() == counter.constructorCount());
+                    REQUIRE(count == counter.getDefaultConstructor());
+                    REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
                 }
             }
             WHEN("push_back() is called")
@@ -128,11 +128,11 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 counter = CopyConstructible::getCounter() - init;
                 THEN("Move constructed existing items")
                 {
-                    REQUIRE(count == counter.getMove());
+                    REQUIRE(count == counter.getMoveConstructor());
                 }
                 THEN("Copy constructed new item")
                 {
-                    REQUIRE(1 == counter.getCopy());
+                    REQUIRE(1 == counter.getCopyConstructor());
                 }
             }
             WHEN("insert() at begin")
@@ -141,11 +141,11 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 counter = CopyConstructible::getCounter() - init;
                 THEN("Move constructed existing items for more space")
                 {
-                    REQUIRE(count == counter.getMove());
+                    REQUIRE(count == counter.getMoveConstructor());
                 }
                 THEN("Assigned item")
                 {
-                    REQUIRE(1 == counter.getCopy());
+                    REQUIRE(1 == counter.getCopyConstructor());
                 }
             }
             WHEN("insert() at end")
@@ -154,11 +154,11 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 counter = CopyConstructible::getCounter() - init;
                 THEN("Move constructed existing items for more space")
                 {
-                    REQUIRE(count == counter.getMove());
+                    REQUIRE(count == counter.getMoveConstructor());
                 }
                 THEN("Copy constructed new item")
                 {
-                    REQUIRE(1 == counter.getCopy());
+                    REQUIRE(1 == counter.getCopyConstructor());
                 }
             }
             WHEN("insert() in middle")
@@ -167,15 +167,69 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 counter = CopyConstructible::getCounter() - init;
                 THEN("Move constructed existing items for more space")
                 {
-                    REQUIRE(count == counter.getMove());
+                    REQUIRE(count == counter.getMoveConstructor());
                 }
                 THEN("Copy constructed new item")
                 {
-                    REQUIRE(1 == counter.getCopy());
+                    REQUIRE(1 == counter.getCopyConstructor());
                 }
             }
         }
     }
     counter = CopyConstructible::getCounter();
     REQUIRE(counter.constructorCount() == counter.destructorCount());
+}
+
+TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    ConsCounter                       init(CopyConstructible::getCounter());
+    ConsCounter                       counter;
+    std::initializer_list<value_type> initlist = { 1, 2, 5 };
+
+    counter = CopyConstructible::getCounter() - init;
+    REQUIRE(3 == counter.constructorCount());
+    REQUIRE(3 == counter.getDefaultConstructor());
+    GIVEN("A vector from an init list")
+    {
+        init = CopyConstructible::getCounter();
+        Vector v { initlist };
+        WHEN("nothing is changed")
+        {
+            THEN("size() is same")
+            {
+                REQUIRE(3 == v.size());
+            }
+            THEN("capacity() is same")
+            {
+                REQUIRE(v.size() == v.capacity());
+            }
+            THEN("constructors called")
+            {
+                counter = CopyConstructible::getCounter() - init;
+                REQUIRE(3 == counter.constructorCount());
+                REQUIRE(3 == counter.getCopyConstructor());
+            }
+        }
+        WHEN("assign vector")
+        {
+            Vector v2;
+            v2.push_back(CopyConstructible(1));
+            v2 = v;
+            THEN("They are the same")
+            {
+                REQUIRE(v == v2);
+            }
+        }
+        WHEN("copy construct")
+        {
+            Vector v2(v);
+            THEN("They are the same")
+            {
+                REQUIRE(v == v2);
+            }
+        }
+    }
 }

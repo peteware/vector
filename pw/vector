@@ -50,11 +50,10 @@ public:
     vector& operator=(vector&& other) noexcept;
     vector& operator=(std::initializer_list<value_type> ilist);
 
-    void assign(size_type count, value_type const& value);
     template<class Iterator>
-    void assign(Iterator begin, Iterator end);
-    void assign(std::initializer_list<value_type> ilist);
-
+    void              assign(Iterator begin, Iterator end);
+    void              assign(size_type count, value_type const& value);
+    void              assign(std::initializer_list<value_type> ilist);
     allocator_type    get_allocator() const;
     reference         at(size_type position);
     const_reference   at(size_type position) const;

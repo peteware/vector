@@ -105,6 +105,39 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(v.size() == 3);
             }
         }
+        WHEN("assign(count,value) and lhs is empty")
+        {
+            value_type value;
+            size_t     count = 12;
+
+            pw::internal::permute(value, 3);
+            v.assign(count, value);
+            THEN("size() is count")
+            {
+                REQUIRE(count == v.size());
+            }
+            THEN("all elements are value")
+            {
+                REQUIRE(pw::internal::same(v.begin(), v.end(), value));
+            }
+        }
+        WHEN("assign(count,value) and lhs items")
+        {
+            value_type value;
+            size_t     count = 12;
+            v.resize(count - 3);
+
+            pw::internal::permute(value, 3);
+            v.assign(count, value);
+            THEN("size() is count")
+            {
+                REQUIRE(count == v.size());
+            }
+            THEN("all elements are value")
+            {
+                REQUIRE(pw::internal::same(v.begin(), v.end(), value));
+            }
+        }
         WHEN("at() is called")
         {
             THEN("at(0) fails")

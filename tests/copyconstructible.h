@@ -7,7 +7,7 @@ struct CopyConstructible
 {
     static ConsCounter getCounter();
 
-    CopyConstructible();
+    CopyConstructible(int value = 0);
     CopyConstructible(CopyConstructible const& copy);
     CopyConstructible(CopyConstructible&& copy) noexcept;
     ~CopyConstructible();

@@ -35,65 +35,65 @@ ConsCounter::allCount() const
 }
 
 int
-ConsCounter::getDefault() const
+ConsCounter::getDefaultConstructor() const
 {
     return m_default;
 }
 
 ConsCounter&
-ConsCounter::addDefault()
+ConsCounter::addDefaultConstructor()
 {
     ++m_default;
     return *this;
 }
 
 int
-ConsCounter::getCopy() const
+ConsCounter::getCopyConstructor() const
 {
     return m_copy;
 }
 
 ConsCounter&
-ConsCounter::addCopy()
+ConsCounter::addCopyConstructor()
 {
     ++m_copy;
     return *this;
 }
 
 int
-ConsCounter::getMove() const
+ConsCounter::getMoveConstructor() const
 {
     return m_move;
 }
 
 ConsCounter&
-ConsCounter::addMove()
+ConsCounter::addMoveConstructor()
 {
     ++m_move;
     return *this;
 }
 
 int
-ConsCounter::getDefaultAlloc() const
+ConsCounter::getDefaultConstructorAlloc() const
 {
     return m_defaultalloc;
 }
 
 ConsCounter&
-ConsCounter::addDefaultAlloc()
+ConsCounter::addDefaultConstructorAlloc()
 {
     ++m_defaultalloc;
     return *this;
 }
 
 int
-ConsCounter::getCopyAlloc() const
+ConsCounter::getCopyConstructorAlloc() const
 {
     return m_copyalloc;
 }
 
 ConsCounter&
-ConsCounter::addCopyAlloc()
+ConsCounter::addCopyConstructorAlloc()
 {
     ++m_copyalloc;
     return *this;

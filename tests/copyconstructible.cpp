@@ -8,22 +8,22 @@ CopyConstructible::getCounter()
     return s_consCounter;
 }
 
-CopyConstructible::CopyConstructible()
-    : m_value(0)
+CopyConstructible::CopyConstructible(int value)
+    : m_value(value)
 {
-    s_consCounter.addDefault();
+    s_consCounter.addDefaultConstructor();
 }
 
 CopyConstructible::CopyConstructible(CopyConstructible const& copy)
     : m_value(copy.m_value)
 {
-    s_consCounter.addCopy();
+    s_consCounter.addCopyConstructor();
 }
 
 CopyConstructible::CopyConstructible(CopyConstructible&& copy) noexcept
     : m_value(copy.m_value)
 {
-    s_consCounter.addMove();
+    s_consCounter.addMoveConstructor();
 }
 
 CopyConstructible::~CopyConstructible()
