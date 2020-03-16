@@ -76,6 +76,15 @@ permute(Container& value, int depth)
     return true;
 }
 
+template<class Type>
+Type
+permute_n(Type& value, int depth, int count)
+{
+    while (count && permute(value, depth))
+        --count;
+
+    return value;
+}
 }} // namespace pw::internal
 
 #endif /* INCLUDED_PW_PERMUTE_T_H */

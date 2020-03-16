@@ -140,19 +140,20 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         }
         WHEN("assign(begin,end)")
         {
-            value_type value;
-            size_t     count = 12;
-            v.resize(count - 3);
+            value_type   value;
+            size_t const count         = 3;
+            value_type   values[count] = { pw::internal::permute_n(value, 4, 1),
+                                         pw::internal::permute_n(value, 4, 1),
+                                         pw::internal::permute_n(value, 4, 1) };
 
-            pw::internal::permute(value, 3);
-            v.assign(count, value);
+            v.assign(&values[0], &values[count]);
             THEN("size() is count")
             {
                 REQUIRE(count == v.size());
             }
-            THEN("all elements are value")
+            THEN("all elements are same")
             {
-                REQUIRE(pw::internal::same(v.begin(), v.end(), value));
+                REQUIRE(pw::lexicographical_compare(&values[0], &values[count], v.begin(), v.end()));
             }
         }
         WHEN("at() is called")

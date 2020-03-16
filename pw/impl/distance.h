@@ -11,7 +11,7 @@ distance(Iterator begin, Iterator end)
 {
     typename pw::iterator_traits<Iterator>::difference_type d {};
 
-    while (begin++ != end++)
+    while (begin++ != end)
     {
         ++d;
     }
