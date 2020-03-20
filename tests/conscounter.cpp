@@ -184,6 +184,70 @@ ConsCounter::getComparisons()
 }
 
 ConsCounter&
+ConsCounter::addIncrement()
+{
+    ++m_increment;
+    return *this;
+}
+
+int
+ConsCounter::getIncrement() const
+{
+    return m_increment;
+}
+
+ConsCounter&
+ConsCounter::addDecrement()
+{
+    ++m_decrement;
+    return *this;
+}
+
+int
+ConsCounter::getDecrement() const
+{
+    return m_decrement;
+}
+
+ConsCounter&
+ConsCounter::addPlus()
+{
+    ++m_plus;
+    return *this;
+}
+
+int
+ConsCounter::getPlus() const
+{
+    return m_plus;
+}
+
+ConsCounter&
+ConsCounter::addMinus()
+{
+    ++m_minus;
+    return *this;
+}
+
+int
+ConsCounter::getMinus() const
+{
+    return m_minus;
+}
+
+int
+ConsCounter::getAddition() const
+{
+    return m_plusassignment + m_plus + m_increment;
+}
+
+int
+ConsCounter::getSubtraction() const
+{
+    return m_minusassignment + m_minus + m_decrement;
+}
+
+ConsCounter&
 ConsCounter::operator-=(ConsCounter const& op2)
 {
     m_default -= op2.m_default;
@@ -194,9 +258,15 @@ ConsCounter::operator-=(ConsCounter const& op2)
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
     m_moveassignment -= op2.m_moveassignment;
+    m_plusassignment -= op2.m_plusassignment;
+    m_minusassignment -= op2.m_minusassignment;
     m_equal -= op2.m_equal;
     m_notEqual -= op2.m_notEqual;
     m_lt -= op2.m_lt;
+    m_increment -= op2.m_increment;
+    m_decrement -= op2.m_decrement;
+    m_plus -= op2.m_plus;
+    m_minus -= op2.m_minus;
 
     return *this;
 }
