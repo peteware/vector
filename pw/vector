@@ -39,10 +39,12 @@ public:
     using const_iterator  = typename allocator_traits<Allocator>::const_pointer;
 
     explicit vector(allocator_type const& alloc = allocator_type());
-    explicit vector(size_type count);
-    vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
     vector(vector const& copy);
     vector(vector const& copy, allocator_type const& alloc);
+    vector(vector&& other) noexcept;
+    vector(vector&& other, const Allocator& alloc);
+    explicit vector(size_type count);
+    vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
     vector(std::initializer_list<value_type> init, const Allocator& alloc = Allocator());
     ~vector();
 
@@ -124,7 +126,19 @@ vector<Type, Allocator>::vector(vector const& copy)
 {
 }
 
-#include <initializer_list>
+template<class Type, class Allocator>
+vector<Type, Allocator>::vector(vector&& other) noexcept
+{
+    swap(m_data, other.m_data);
+}
+
+template<class Type, class Allocator>
+vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc)
+    : m_data(allocator_type())
+{
+    swap(m_data, other.m_data);
+}
+
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(std::initializer_list<value_type> init, const Allocator& alloc)
     : m_data(init.size(), alloc)
