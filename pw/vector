@@ -219,9 +219,20 @@ template<class Iterator>
 void
 vector<Type, Allocator>::assign(Iterator begin, Iterator end)
 {
-    size_type newsize = pw::distance(begin, end);
-    if (newsize <= m_data.capacity())
+    size_type count = pw::distance(begin, end);
+    if (m_data.capacity() < count)
     {
+        internal::Storage<Type, Allocator> s(count, get_allocator());
+        pw::uninitialized_copy(begin, end, s.begin());
+        s.set_size(count);
+        m_data = s;
+    }
+    else
+    {
+        size_type replace = pw::min(count, m_data.size());
+        pw::copy(begin, begin + replace, m_data.begin());
+        pw::uninitialized_copy(begin + replace, end, m_data.begin() + replace);
+        m_data.set_size(count);
     }
 }
 
@@ -229,6 +240,7 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::assign(std::initializer_list<value_type> ilist)
 {
+    assign(ilist.begin(), ilist.end());
 }
 
 template<class Type, class Allocator>

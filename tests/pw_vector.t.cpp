@@ -153,7 +153,18 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             }
             THEN("all elements are same")
             {
-                REQUIRE(pw::lexicographical_compare(&values[0], &values[count], v.begin(), v.end()));
+                REQUIRE(pw::equal(&values[0], &values[count], v.begin(), v.end()));
+            }
+        }
+        WHEN("assign(init_list)")
+        {
+            value_type value;
+            v.assign({ pw::internal::permute_n(value, 4, 1),
+                       pw::internal::permute_n(value, 4, 1),
+                       pw::internal::permute_n(value, 4, 1) });
+            THEN("size() is 3")
+            {
+                REQUIRE(static_cast<size_t>(3) == v.size());
             }
         }
         WHEN("at() is called")
