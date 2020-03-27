@@ -33,10 +33,11 @@ public:
     constexpr reverse_iterator  operator-(difference_type n) const;
     constexpr reverse_iterator& operator+=(difference_type n);
     constexpr reverse_iterator& operator-=(difference_type n);
+    constexpr iterator_type     base() const;
 
 protected:
     iterator_type m_base;
-}
+};
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n,
@@ -69,7 +70,7 @@ constexpr reverse_iterator<Iterator>::reverse_iterator()
 {
 }
 
-constexpr explicit template<class Iterator>
+template<class Iterator>
 constexpr reverse_iterator<Iterator>::reverse_iterator(iterator_type iterator)
     : m_base(--iterator)
 {
@@ -84,7 +85,7 @@ constexpr reverse_iterator<Iterator>::reverse_iterator(const reverse_iterator<Ot
 
 template<class Iterator>
 template<class Other>
-constexpr reverse_iterator<Iterator>::reverse_iterator&
+constexpr reverse_iterator<Iterator>&
 reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
 {
     m_base = other.m_base;
@@ -99,7 +100,7 @@ reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
  * @endcode
  */
 template<class Iterator>
-constexpr reverse_iterator<Iterator>::iterator_type
+constexpr typename reverse_iterator<Iterator>::iterator_type
 reverse_iterator<Iterator>::base() const
 {
     iterator_type iterator = m_base;
@@ -142,7 +143,7 @@ reverse_iterator<Iterator>::operator--(int)
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>
-reverse_iterator<Iterator>::operator+(difference_type n)
+reverse_iterator<Iterator>::operator+(difference_type n) const
 {
     reverse_iterator iterator = this;
     advance(iterator, n);
@@ -151,7 +152,7 @@ reverse_iterator<Iterator>::operator+(difference_type n)
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>
-reverse_iterator<Iterator>::operator-(difference_type n)
+reverse_iterator<Iterator>::operator-(difference_type n) const
 {
     reverse_iterator iterator = this;
     advance(iterator, -n);

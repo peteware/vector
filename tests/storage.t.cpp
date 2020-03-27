@@ -1,5 +1,5 @@
 #include "catch2/catch.hpp"
-#include "pw_permute.t.h"
+#include "permute.t.h"
 #include <pw/internal/storage.h>
 
 //using TestTypeList = std::tuple<int, double>;

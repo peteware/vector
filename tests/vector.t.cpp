@@ -1,6 +1,6 @@
 #include "catch2/catch.hpp"
-#include "pw_permute.t.h"
-#include "pw_same.t.h"
+#include "permute.t.h"
+#include "same.t.h"
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/type_traits>

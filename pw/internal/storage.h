@@ -69,6 +69,7 @@ public:
     Storage(Storage const& copy);
     Storage(Storage const& copy, allocator_type const& alloc);
     Storage(Storage&& copy);
+    Storage(Storage&& copy, size_type count);
     ~Storage();
     Storage& operator=(Storage op2);
     /**
