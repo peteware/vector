@@ -87,7 +87,8 @@ public:
     void              pop_back();
 
 private:
-    internal::Storage<Type, Allocator> m_data;
+    using Storage = internal::Storage<Type, Allocator>;
+    Storage m_data;
 };
 
 // namespace pmr {
@@ -143,8 +144,7 @@ vector<Type, Allocator>::operator=(const vector& other)
 {
     if (m_data.capacity() < other.size())
     {
-        internal::Storage<Type, Allocator> s(other.m_data, get_allocator());
-        m_data = s;
+        m_data = Storage(other.m_data, get_allocator());
     }
     else
     {
@@ -161,7 +161,8 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept
 {
     if (m_data.capacity() < other.size())
     {
-        internal::Storage<Type, Allocator> s(other.size(), get_allocator());
+        Storage s(other.size(), get_allocator());
+
         pw::uninitialized_move(other.begin(), other.end(), s.begin());
         s.set_size(other.size());
         m_data = s;
@@ -181,7 +182,8 @@ vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
 {
     if (m_data.capacity() < ilist.size())
     {
-        internal::Storage<Type, Allocator> s(ilist.size(), get_allocator());
+        Storage s(ilist.size(), get_allocator());
+
         pw::uninitialized_copy(ilist.begin(), ilist.end(), s.begin());
         s.set_size(ilist.size());
         m_data = s;
@@ -201,7 +203,8 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
     if (m_data.capacity() < count)
     {
-        internal::Storage<Type, Allocator> s(count, get_allocator());
+        Storage s(count, get_allocator());
+
         pw::uninitialized_fill(s.begin(), s.begin() + count, value);
         s.set_size(count);
         m_data = s;
@@ -222,7 +225,8 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
     size_type count = pw::distance(begin, end);
     if (m_data.capacity() < count)
     {
-        internal::Storage<Type, Allocator> s(count, get_allocator());
+        Storage s(count, get_allocator());
+
         pw::uninitialized_copy(begin, end, s.begin());
         s.set_size(count);
         m_data = s;
@@ -417,7 +421,7 @@ vector<Type, Allocator>::shrink_to_fit()
     }
     if (empty())
     {
-        m_data = internal::Storage<Type, Allocator>(get_allocator());
+        m_data = Storage(get_allocator());
     }
     else
     {
@@ -429,7 +433,7 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::clear() noexcept
 {
-    m_data = internal::Storage<Type, Allocator>(get_allocator());
+    m_data = Storage(get_allocator());
 }
 
 template<class Type, class Allocator>
