@@ -31,13 +31,18 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
     GIVEN("An allocated Storage with 10")
     {
         Storage storage(10, allocator);
-        WHEN("move(20) is called")
+        WHEN("Storage(move, 20)")
         {
-            Storage s = storage.move(20);
+            Storage s = Storage(pw::move(storage), 20);
             THEN("size() is 0 but capacity increased")
             {
                 REQUIRE((pw::size_t)0 == s.size());
                 REQUIRE((pw::size_t)20 == s.capacity());
+            }
+            THEN("storage is empty")
+            {
+                REQUIRE(0 == storage.size());
+                REQUIRE((pw::size_t)10 == storage.capacity());
             }
         }
         WHEN("newsize() is called")
@@ -54,12 +59,13 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         TestType value;
         pw::internal::permute(value, 3);
         storage.push_back(value);
-        WHEN("move(20) is called")
+        WHEN("Storage (move, 20)")
         {
-            Storage s = storage.move(20);
+            Storage s = Storage(pw::move(storage), 20);
             THEN("size() is 1")
             {
                 REQUIRE(1 == s.size());
+                REQUIRE(20 == s.capacity());
                 REQUIRE(1 == storage.size());
                 REQUIRE(10 == storage.capacity());
             }

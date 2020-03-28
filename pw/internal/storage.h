@@ -76,7 +76,6 @@ public:
      * Allocate enough space for count records.  Then up to
      * count records are moved into new Storage.
      */
-    Storage        move(size_type count);
     void           move(size_type offset, size_type count, Type const& value);
     Storage        resize(size_type offset, size_type count, Type const& value);
     iterator       begin();
@@ -152,6 +151,23 @@ Storage<Type, Allocator>::Storage(Storage&& copy)
     swap(*this, copy);
 }
 
+/**
+ * Allocate enough space for count records and
+ * move/copy them
+ */
+template<class Type, class Allocator>
+Storage<Type, Allocator>::Storage(Storage&& copy, size_type count)
+    : m_alloc(copy.m_alloc)
+    , m_begin(0)
+    , m_end(0)
+    , m_allocated(count)
+{
+    size_type final = min(count, copy.size());
+
+    pw::uninitialized_move(copy.begin(), copy.begin() + final, m_begin);
+    m_end = m_begin + final;
+}
+
 template<class Type, class Allocator>
 Storage<Type, Allocator>::~Storage()
 {
@@ -165,22 +181,6 @@ Storage<Type, Allocator>::operator=(Storage op2)
 {
     swap(*this, op2);
     return *this;
-}
-
-/**
- * Allocate enough space for count records and
- * move/copy them
- */
-template<class Type, class Allocator>
-Storage<Type, Allocator>
-Storage<Type, Allocator>::move(size_type count)
-{
-    Storage   s(count, m_alloc);
-    size_type final = min(count, size());
-
-    pw::uninitialized_move(begin(), begin() + final, s.begin());
-    s.set_size(final);
-    return s;
 }
 
 template<class Type, class Allocator>
