@@ -1,5 +1,5 @@
 #include "catch2/catch.hpp"
-#include "permute.t.h"
+#include "permute.h"
 #include "same.t.h"
 #include <pw/algorithm>
 #include <pw/allocator>
@@ -110,7 +110,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type value;
             size_t     count = 12;
 
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             v.assign(count, value);
             THEN("size() is count")
             {
@@ -127,7 +127,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             size_t     count = 12;
             v.resize(count - 3);
 
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             v.assign(count, value);
             THEN("size() is count")
             {
@@ -142,9 +142,9 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         {
             value_type   value;
             size_t const count         = 3;
-            value_type   values[count] = { pw::internal::permute_n(value, 4, 1),
-                                         pw::internal::permute_n(value, 4, 1),
-                                         pw::internal::permute_n(value, 4, 1) };
+            value_type   values[count] = { permute_n(value, 4, 1),
+                                         permute_n(value, 4, 1),
+                                         permute_n(value, 4, 1) };
 
             v.assign(&values[0], &values[count]);
             THEN("size() is count")
@@ -159,9 +159,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         WHEN("assign(init_list)")
         {
             value_type value;
-            v.assign({ pw::internal::permute_n(value, 4, 1),
-                       pw::internal::permute_n(value, 4, 1),
-                       pw::internal::permute_n(value, 4, 1) });
+            v.assign({ permute_n(value, 4, 1), permute_n(value, 4, 1), permute_n(value, 4, 1) });
             THEN("size() is 3")
             {
                 REQUIRE(static_cast<size_t>(3) == v.size());
@@ -264,7 +262,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         {
             typename Vector::iterator iter;
             value_type                value;
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             iter = v.insert(v.begin(), value);
             THEN("size() is increased")
             {
@@ -285,7 +283,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type                value;
             size_t                    count = 12;
 
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             iter = v.insert(v.begin(), count, value);
             THEN("there are count values")
             {
@@ -301,7 +299,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type                value;
             size_t                    count = 12;
 
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             iter = v.insert(v.end(), count, value);
             THEN("there are count values")
             {
@@ -362,7 +360,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
 
         for (size_t i = 0; i < count; ++i)
         {
-            pw::internal::permute(value, 10);
+            permute(value, 10);
             if (i == 0)
                 first_value = value;
             values.push_back(value);
@@ -370,7 +368,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         }
         Vector v(values);
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
-        pw::internal::permute(value, 10);
+        permute(value, 10);
 
         size_t                    added;
         size_t                    offset;
@@ -547,7 +545,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type   value;
             size_t const size = count + 3;
 
-            pw::internal::permute(value, 3);
+            permute(value, 3);
             v.resize(size, value);
             THEN("size() is increased")
             {

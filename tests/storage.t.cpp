@@ -1,5 +1,5 @@
 #include "catch2/catch.hpp"
-#include "permute.t.h"
+#include "permute.h"
 #include <pw/internal/storage.h>
 
 //using TestTypeList = std::tuple<int, double>;
@@ -57,7 +57,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
     {
         Storage  storage(10, allocator);
         TestType value;
-        pw::internal::permute(value, 3);
+        permute(value, 3);
         WHEN("push_back(value)")
         {
             storage.push_back(value);
@@ -79,7 +79,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
     {
         Storage  storage(10, allocator);
         TestType value;
-        pw::internal::permute(value, 3);
+        permute(value, 3);
         storage.push_back(value);
         REQUIRE(*storage.begin() == value);
         WHEN("Storage (move, 20)")

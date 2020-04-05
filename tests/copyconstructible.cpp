@@ -1,5 +1,5 @@
 #include "copyconstructible.h"
-#include "permute.t.h"
+#include "permute.h"
 
 ConsCounter CopyConstructible::s_consCounter;
 
@@ -88,7 +88,7 @@ bool
 permute(CopyConstructible& value, int depth)
 {
     int val = value.value();
-    if (pw::internal::permute(val, depth))
+    if (permute(val, depth))
     {
         value.setValue(val);
         return true;

@@ -3,6 +3,7 @@ add_executable( unittest
                 copyconstructible.cpp
                 cstddef.t.cpp
                 memory.t.cpp
+                permute.cpp
                 reverse_iterator.t.cpp
                 storage.t.cpp
                 uninitialized_move.t.cpp

@@ -33,9 +33,9 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
 
         WHEN("reserve() is increased")
         {
-            init = CopyConstructible::getCounter();
+            counter = CopyConstructible::getCounter();
             v.reserve(5);
-            counter = CopyConstructible::getCounter() - init;
+            counter = CopyConstructible::getCounter() - counter;
             THEN("copy constructor not called")
             {
                 REQUIRE(counter.zero());
@@ -45,9 +45,9 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         {
             size_t const count = 5;
 
-            init = CopyConstructible::getCounter();
+            counter = CopyConstructible::getCounter();
             v.resize(count);
-            counter = CopyConstructible::getCounter() - init;
+            counter = CopyConstructible::getCounter() - counter;
             THEN("default construted count times")
             {
                 REQUIRE(count == counter.getDefaultConstructor());
@@ -55,6 +55,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 REQUIRE(counter.allCount() == count);
             }
         }
+#if 0
         GIVEN("and an object")
         {
             size_t const      count = 5;
@@ -175,6 +176,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 }
             }
         }
+#endif
     }
     counter = CopyConstructible::getCounter();
     REQUIRE(counter.constructorCount() == counter.destructorCount());

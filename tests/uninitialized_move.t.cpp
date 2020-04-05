@@ -1,7 +1,7 @@
 #include "catch2/catch.hpp"
 #include "conscounter.h"
 #include "copyconstructible.h"
-#include "permute.t.h"
+#include "permute.h"
 #include <pw/impl/uninitialized_move.h>
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")
