@@ -15,8 +15,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    ConsCounter counter;
-    ConsCounter init(CopyConstructible::getCounter());
+    ConsCounter       counter;
+    ConsCounter const init(CopyConstructible::getCounter());
 
     GIVEN("An empty vector")
     {
@@ -178,7 +178,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         }
 #endif
     }
-    counter = CopyConstructible::getCounter();
+    counter = CopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 

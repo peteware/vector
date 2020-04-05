@@ -65,7 +65,7 @@ private:
 
 public:
     Storage(allocator_type const& alloc = allocator_type());
-    Storage(size_type count, allocator_type const& alloc = allocator_type());
+    explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
     Storage(Storage const& copy);
     Storage(Storage const& copy, allocator_type const& alloc);
     Storage(Storage&& copy);

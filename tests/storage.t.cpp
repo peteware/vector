@@ -1,6 +1,9 @@
-#include "catch2/catch.hpp"
-#include "permute.h"
 #include <pw/internal/storage.h>
+
+#include "catch2/catch.hpp"
+#include "conscounter.h"
+#include "copyconstructible.h"
+#include "permute.h"
 
 //using TestTypeList = std::tuple<int, double>;
 using TestTypeList = std::tuple<int>;
@@ -117,4 +120,53 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             }
         }
     }
+}
+
+SCENARIO("Storage construct counts", "[storage][count]")
+{
+    using Storage = pw::internal::Storage<CopyConstructible>;
+
+    ConsCounter const init = CopyConstructible::getCounter();
+    ConsCounter       counter;
+    GIVEN("An empty Storage")
+    {
+        Storage storage;
+        WHEN("Nothing happens")
+        {
+            REQUIRE(storage.empty());
+            counter = CopyConstructible::getCounter();
+            REQUIRE(counter.zero());
+        }
+        WHEN("Allocate items")
+        {
+            Storage s(10);
+            REQUIRE(s.capacity() == 10);
+        }
+    }
+    GIVEN("A Storage with one item")
+    {
+        Storage storage(5);
+        WHEN("item is push_back()")
+        {
+            storage.push_back(1);
+            THEN("it is added")
+            {
+                REQUIRE(1 == storage.size());
+                REQUIRE(1 == storage.begin()->value());
+            }
+        }
+        WHEN("Storage with 1 item is moved")
+        {
+            storage.push_back(1);
+            Storage s(pw::move(storage), 10);
+            THEN("item is moved")
+            {
+                REQUIRE(1 == s.size());
+                REQUIRE(10 == s.capacity());
+            }
+        }
+    }
+
+    counter = CopyConstructible::getCounter() - init;
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
