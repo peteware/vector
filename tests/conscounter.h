@@ -11,11 +11,15 @@ public:
 
     ConsCounter& operator-=(ConsCounter const& op2);
     ConsCounter  operator-(ConsCounter const& op2) const;
+    bool         zero() const;
+    int          allCount() const;
     int          constructorCount() const;
     int          destructorCount() const;
     int          assignmentCount() const;
-    int          allCount() const;
-    bool         zero() const;
+    int          additionCount() const;
+    int          subtractionCount() const;
+    int          arithmeticCount() const;
+    int          comparisonCount() const;
     ConsCounter& addDefaultConstructor();
     int          getDefaultConstructor() const;
     ConsCounter& addCopyConstructor();
@@ -42,7 +46,6 @@ public:
     int          getNotEqual() const;
     ConsCounter& addLt();
     int          getLt() const;
-    int          getComparisons();
     ConsCounter& addIncrement();
     int          getIncrement() const;
     ConsCounter& addDecrement();
@@ -51,8 +54,6 @@ public:
     int          getPlus() const;
     ConsCounter& addMinus();
     int          getMinus() const;
-    int          getAddition() const;
-    int          getSubtraction() const;
 
 private:
     int m_default         = 0; ///< Default constructor
@@ -65,13 +66,13 @@ private:
     int m_moveassignment  = 0; ///< Calls to operator=()
     int m_plusassignment  = 0; ///< Calls to operator+=()
     int m_minusassignment = 0; ///< Calls to operator-=()
-    int m_equal           = 0; ///< Calls to operator==()
-    int m_notEqual        = 0; ///< Calls to operator!=()
-    int m_lt              = 0; ///< Calls to operator<()
     int m_increment       = 0; ///< Calls to operator++()
     int m_decrement       = 0; ///< Calls to operator--()
     int m_plus            = 0; ///< Calls to operator+()
     int m_minus           = 0; ///< Calls to operator-()
+    int m_equal           = 0; ///< Calls to operator==()
+    int m_notEqual        = 0; ///< Calls to operator!=()
+    int m_lt              = 0; ///< Calls to operator<()
 };
 
 #endif /*  INCLUDED_PW_CONSCOUNTER_T_H */

@@ -53,12 +53,35 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             }
         }
     }
+    GIVEN("An allocated Storage with 10")
+    {
+        Storage  storage(10, allocator);
+        TestType value;
+        pw::internal::permute(value, 3);
+        WHEN("push_back(value)")
+        {
+            storage.push_back(value);
+            THEN("size() == 1")
+            {
+                REQUIRE(1 == storage.size());
+            }
+            THEN("capacity() == 10")
+            {
+                REQUIRE(10 == storage.capacity());
+            }
+            THEN("*begin() == value")
+            {
+                REQUIRE(value == *storage.begin());
+            }
+        }
+    }
     GIVEN("An allocated Storage with 10 and one element")
     {
         Storage  storage(10, allocator);
         TestType value;
         pw::internal::permute(value, 3);
         storage.push_back(value);
+        REQUIRE(*storage.begin() == value);
         WHEN("Storage (move, 20)")
         {
             Storage s = Storage(pw::move(storage), 20);

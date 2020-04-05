@@ -158,7 +158,7 @@ Storage<Type, Allocator>::Storage(Storage&& copy)
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage&& copy, size_type count)
     : m_alloc(copy.m_alloc)
-    , m_begin(0)
+    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
     , m_end(0)
     , m_allocated(count)
 {

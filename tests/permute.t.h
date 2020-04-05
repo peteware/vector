@@ -1,6 +1,8 @@
 #ifndef INCLUDED_PW_PERMUTE_T_H
 #define INCLUDED_PW_PERMUTE_T_H
 
+#include <string>
+
 namespace pw { namespace internal {
 
 inline bool

@@ -5,6 +5,7 @@ add_executable( unittest
                 memory.t.cpp
                 reverse_iterator.t.cpp
                 storage.t.cpp
+                uninitialized_move.t.cpp
                 unittest.m.cpp
                 vector.t.cpp
                 vector_1.t.cpp

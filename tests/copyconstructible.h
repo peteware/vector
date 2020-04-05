@@ -12,6 +12,9 @@ struct CopyConstructible
     CopyConstructible(CopyConstructible&& copy) noexcept;
     ~CopyConstructible();
 
+    int                value() const;
+    CopyConstructible& setValue(int value);
+
     CopyConstructible& operator=(CopyConstructible const& copy);
     CopyConstructible& operator=(CopyConstructible&& copy);
     bool               operator==(CopyConstructible const& op2) const;
@@ -22,5 +25,7 @@ private:
     int                m_value;
     static ConsCounter s_consCounter;
 };
+
+bool permute(CopyConstructible& value, int depth);
 
 #endif /*  INCLUDED_COPYCONSTRUCTIBLE_H */

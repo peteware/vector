@@ -11,6 +11,12 @@ ConsCounter::zero() const
 }
 
 int
+ConsCounter::allCount() const
+{
+    return constructorCount() + destructorCount() + assignmentCount();
+}
+
+int
 ConsCounter::constructorCount() const
 {
     return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc;
@@ -27,11 +33,29 @@ ConsCounter::assignmentCount() const
 {
     return m_assignment + m_moveassignment;
 }
+
 int
-ConsCounter::allCount() const
+ConsCounter::additionCount() const
 {
-    return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc + m_destructor + m_assignment +
-        m_moveassignment;
+    return m_plusassignment + m_plus + m_increment;
+}
+
+int
+ConsCounter::subtractionCount() const
+{
+    return m_minusassignment + m_minus + m_decrement;
+}
+
+int
+ConsCounter::arithmeticCount() const
+{
+    return subtractionCount() + additionCount();
+}
+
+int
+ConsCounter::comparisonCount() const
+{
+    return m_equal + m_notEqual + m_lt;
 }
 
 int
@@ -139,48 +163,29 @@ ConsCounter::getMoveAssignment() const
 }
 
 ConsCounter&
-ConsCounter::addEqual()
+ConsCounter::addPlusAssignment()
 {
-    ++m_equal;
+    ++m_plusassignment;
     return *this;
 }
 
 int
-ConsCounter::getEqual() const
+ConsCounter::getPlusAssignment() const
 {
-    return m_equal;
+    return m_plusassignment;
 }
 
 ConsCounter&
-ConsCounter::addNotEqual()
+ConsCounter::addMinusAssignment()
 {
-    ++m_notEqual;
+    ++m_minusassignment;
     return *this;
 }
 
 int
-ConsCounter::getNotEqual() const
+ConsCounter::getMinusAssignment() const
 {
-    return m_notEqual;
-}
-
-ConsCounter&
-ConsCounter::addLt()
-{
-    ++m_lt;
-    return *this;
-}
-
-int
-ConsCounter::getLt() const
-{
-    return m_lt;
-}
-
-int
-ConsCounter::getComparisons()
-{
-    return m_equal + m_notEqual + m_lt;
+    return m_minusassignment;
 }
 
 ConsCounter&
@@ -235,16 +240,43 @@ ConsCounter::getMinus() const
     return m_minus;
 }
 
-int
-ConsCounter::getAddition() const
+ConsCounter&
+ConsCounter::addEqual()
 {
-    return m_plusassignment + m_plus + m_increment;
+    ++m_equal;
+    return *this;
 }
 
 int
-ConsCounter::getSubtraction() const
+ConsCounter::getEqual() const
 {
-    return m_minusassignment + m_minus + m_decrement;
+    return m_equal;
+}
+
+ConsCounter&
+ConsCounter::addNotEqual()
+{
+    ++m_notEqual;
+    return *this;
+}
+
+int
+ConsCounter::getNotEqual() const
+{
+    return m_notEqual;
+}
+
+ConsCounter&
+ConsCounter::addLt()
+{
+    ++m_lt;
+    return *this;
+}
+
+int
+ConsCounter::getLt() const
+{
+    return m_lt;
 }
 
 ConsCounter&
@@ -260,13 +292,13 @@ ConsCounter::operator-=(ConsCounter const& op2)
     m_moveassignment -= op2.m_moveassignment;
     m_plusassignment -= op2.m_plusassignment;
     m_minusassignment -= op2.m_minusassignment;
-    m_equal -= op2.m_equal;
-    m_notEqual -= op2.m_notEqual;
-    m_lt -= op2.m_lt;
     m_increment -= op2.m_increment;
     m_decrement -= op2.m_decrement;
     m_plus -= op2.m_plus;
     m_minus -= op2.m_minus;
+    m_equal -= op2.m_equal;
+    m_notEqual -= op2.m_notEqual;
+    m_lt -= op2.m_lt;
 
     return *this;
 }
