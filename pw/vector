@@ -16,6 +16,7 @@
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
 #include <pw/impl/uninitialized_move.h>
+#include <pw/internal/compare.h>
 #include <pw/internal/storage.h>
 
 #include <initializer_list>
@@ -96,13 +97,40 @@ public:
     void      resize(size_type count);
     void      resize(size_type count, value_type const& value);
     iterator  insert(const_iterator position, value_type const& value);
+    iterator  insert(const_iterator position, value_type&& value);
     iterator  insert(const_iterator position, size_type count, value_type const& value);
-    void      pop_back();
+    iterator  insert(const_iterator position, std::initializer_list<value_type> ilist);
+    template<class Iterator>
+    iterator insert(const_iterator position, Iterator first, Iterator last);
+    iterator erase(const_iterator position);
+    iterator erase(const_iterator begin, const_iterator end);
+    void     pop_back();
 
 private:
     using Storage = internal::Storage<Type, Allocator>;
     Storage m_data;
 };
+
+template<class Type, class Allocator>
+void swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept;
+
+template<class Type, class Allocator>
+bool operator==(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
+
+template<class Type, class Allocator>
+bool operator!=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
+
+template<class Type, class Allocator>
+bool operator<(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
+
+template<class Type, class Allocator>
+bool operator<=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
+
+template<class Type, class Allocator>
+bool operator>(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
+
+template<class Type, class Allocator>
+bool operator>=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2);
 
 // namespace pmr {
 // template<class Type>
@@ -589,6 +617,13 @@ vector<Type, Allocator>::pop_back()
 }
 
 template<class Type, class Allocator>
+void
+swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept
+{
+    op1.swap(op2);
+}
+
+template<class Type, class Allocator>
 bool
 operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
 {
@@ -597,6 +632,45 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
         return false;
     }
     return pw::equal(op1.begin(), op1.end(), op2.begin(), op2.end());
+}
+
+template<class Type, class Allocator>
+bool
+operator!=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2)
+{
+    if (op1.size() != op2.size())
+    {
+        return true;
+    }
+    return !pw::equal(op1.begin(), op1.end(), op2.begin(), op2.end());
+}
+
+template<class Type, class Allocator>
+bool
+operator<(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2)
+{
+    return internal::compare(op1.begin(), op1.end(), op2.begin(), op2.end()) < 0;
+}
+
+template<class Type, class Allocator>
+bool
+operator<=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2)
+{
+    return internal::compare(op1.begin(), op1.end(), op2.begin(), op2.end()) <= 0;
+}
+
+template<class Type, class Allocator>
+bool
+operator>(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2)
+{
+    return internal::compare(op1.begin(), op1.end(), op2.begin(), op2.end()) > 0;
+}
+
+template<class Type, class Allocator>
+bool
+operator>=(const std::vector<Type, Allocator>& op1, const std::vector<Type, Allocator>& op2)
+{
+    return internal::compare(op1.begin(), op1.end(), op2.begin(), op2.end()) >= 0;
 }
 
 } // namespace pw
