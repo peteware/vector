@@ -1,286 +1,286 @@
-#include "conscounter.h"
+#include "opcounter.h"
 
-ConsCounter::ConsCounter()
+OpCounter::OpCounter()
 {
 }
 
 bool
-ConsCounter::zero() const
+OpCounter::zero() const
 {
     return constructorCount() == 0;
 }
 
 int
-ConsCounter::allCount() const
+OpCounter::allCount() const
 {
     return constructorCount() + destructorCount() + assignmentCount();
 }
 
 int
-ConsCounter::constructorCount() const
+OpCounter::constructorCount() const
 {
     return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc;
 }
 
 int
-ConsCounter::destructorCount() const
+OpCounter::destructorCount() const
 {
     return m_destructor;
 }
 
 int
-ConsCounter::assignmentCount() const
+OpCounter::assignmentCount() const
 {
     return m_assignment + m_moveassignment;
 }
 
 int
-ConsCounter::additionCount() const
+OpCounter::additionCount() const
 {
     return m_plusassignment + m_plus + m_increment;
 }
 
 int
-ConsCounter::subtractionCount() const
+OpCounter::subtractionCount() const
 {
     return m_minusassignment + m_minus + m_decrement;
 }
 
 int
-ConsCounter::arithmeticCount() const
+OpCounter::arithmeticCount() const
 {
     return subtractionCount() + additionCount();
 }
 
 int
-ConsCounter::comparisonCount() const
+OpCounter::comparisonCount() const
 {
     return m_equal + m_notEqual + m_lt;
 }
 
 int
-ConsCounter::getDefaultConstructor() const
+OpCounter::getDefaultConstructor() const
 {
     return m_default;
 }
 
-ConsCounter&
-ConsCounter::addDefaultConstructor()
+OpCounter&
+OpCounter::addDefaultConstructor()
 {
     ++m_default;
     return *this;
 }
 
 int
-ConsCounter::getCopyConstructor() const
+OpCounter::getCopyConstructor() const
 {
     return m_copy;
 }
 
-ConsCounter&
-ConsCounter::addCopyConstructor()
+OpCounter&
+OpCounter::addCopyConstructor()
 {
     ++m_copy;
     return *this;
 }
 
 int
-ConsCounter::getMoveConstructor() const
+OpCounter::getMoveConstructor() const
 {
     return m_move;
 }
 
-ConsCounter&
-ConsCounter::addMoveConstructor()
+OpCounter&
+OpCounter::addMoveConstructor()
 {
     ++m_move;
     return *this;
 }
 
 int
-ConsCounter::getDefaultConstructorAlloc() const
+OpCounter::getDefaultConstructorAlloc() const
 {
     return m_defaultalloc;
 }
 
-ConsCounter&
-ConsCounter::addDefaultConstructorAlloc()
+OpCounter&
+OpCounter::addDefaultConstructorAlloc()
 {
     ++m_defaultalloc;
     return *this;
 }
 
 int
-ConsCounter::getCopyConstructorAlloc() const
+OpCounter::getCopyConstructorAlloc() const
 {
     return m_copyalloc;
 }
 
-ConsCounter&
-ConsCounter::addCopyConstructorAlloc()
+OpCounter&
+OpCounter::addCopyConstructorAlloc()
 {
     ++m_copyalloc;
     return *this;
 }
 
-ConsCounter&
-ConsCounter::addDestructor()
+OpCounter&
+OpCounter::addDestructor()
 {
     ++m_destructor;
     return *this;
 }
 
 int
-ConsCounter::getDestructor() const
+OpCounter::getDestructor() const
 {
     return m_destructor;
 }
 
-ConsCounter&
-ConsCounter::addAssignment()
+OpCounter&
+OpCounter::addAssignment()
 {
     ++m_assignment;
     return *this;
 }
 
 int
-ConsCounter::getAssignment() const
+OpCounter::getAssignment() const
 {
     return m_assignment;
 }
 
-ConsCounter&
-ConsCounter::addMoveAssignment()
+OpCounter&
+OpCounter::addMoveAssignment()
 {
     ++m_moveassignment;
     return *this;
 }
 
 int
-ConsCounter::getMoveAssignment() const
+OpCounter::getMoveAssignment() const
 {
     return m_moveassignment;
 }
 
-ConsCounter&
-ConsCounter::addPlusAssignment()
+OpCounter&
+OpCounter::addPlusAssignment()
 {
     ++m_plusassignment;
     return *this;
 }
 
 int
-ConsCounter::getPlusAssignment() const
+OpCounter::getPlusAssignment() const
 {
     return m_plusassignment;
 }
 
-ConsCounter&
-ConsCounter::addMinusAssignment()
+OpCounter&
+OpCounter::addMinusAssignment()
 {
     ++m_minusassignment;
     return *this;
 }
 
 int
-ConsCounter::getMinusAssignment() const
+OpCounter::getMinusAssignment() const
 {
     return m_minusassignment;
 }
 
-ConsCounter&
-ConsCounter::addIncrement()
+OpCounter&
+OpCounter::addIncrement()
 {
     ++m_increment;
     return *this;
 }
 
 int
-ConsCounter::getIncrement() const
+OpCounter::getIncrement() const
 {
     return m_increment;
 }
 
-ConsCounter&
-ConsCounter::addDecrement()
+OpCounter&
+OpCounter::addDecrement()
 {
     ++m_decrement;
     return *this;
 }
 
 int
-ConsCounter::getDecrement() const
+OpCounter::getDecrement() const
 {
     return m_decrement;
 }
 
-ConsCounter&
-ConsCounter::addPlus()
+OpCounter&
+OpCounter::addPlus()
 {
     ++m_plus;
     return *this;
 }
 
 int
-ConsCounter::getPlus() const
+OpCounter::getPlus() const
 {
     return m_plus;
 }
 
-ConsCounter&
-ConsCounter::addMinus()
+OpCounter&
+OpCounter::addMinus()
 {
     ++m_minus;
     return *this;
 }
 
 int
-ConsCounter::getMinus() const
+OpCounter::getMinus() const
 {
     return m_minus;
 }
 
-ConsCounter&
-ConsCounter::addEqual()
+OpCounter&
+OpCounter::addEqual()
 {
     ++m_equal;
     return *this;
 }
 
 int
-ConsCounter::getEqual() const
+OpCounter::getEqual() const
 {
     return m_equal;
 }
 
-ConsCounter&
-ConsCounter::addNotEqual()
+OpCounter&
+OpCounter::addNotEqual()
 {
     ++m_notEqual;
     return *this;
 }
 
 int
-ConsCounter::getNotEqual() const
+OpCounter::getNotEqual() const
 {
     return m_notEqual;
 }
 
-ConsCounter&
-ConsCounter::addLt()
+OpCounter&
+OpCounter::addLt()
 {
     ++m_lt;
     return *this;
 }
 
 int
-ConsCounter::getLt() const
+OpCounter::getLt() const
 {
     return m_lt;
 }
 
-ConsCounter&
-ConsCounter::operator-=(ConsCounter const& op2)
+OpCounter&
+OpCounter::operator-=(OpCounter const& op2)
 {
     m_default -= op2.m_default;
     m_copy -= op2.m_copy;
@@ -303,10 +303,10 @@ ConsCounter::operator-=(ConsCounter const& op2)
     return *this;
 }
 
-ConsCounter
-ConsCounter::operator-(ConsCounter const& op2) const
+OpCounter
+OpCounter::operator-(OpCounter const& op2) const
 {
-    ConsCounter c(*this);
+    OpCounter c(*this);
 
     c -= op2;
     return c;

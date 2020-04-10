@@ -1,8 +1,8 @@
 #include <pw/internal/storage.h>
 
 #include "catch2/catch.hpp"
-#include "conscounter.h"
 #include "copyconstructible.h"
+#include "opcounter.h"
 #include "permute.h"
 
 //using TestTypeList = std::tuple<int, double>;
@@ -126,8 +126,8 @@ SCENARIO("Storage construct counts", "[storage][count]")
 {
     using Storage = pw::internal::Storage<CopyConstructible>;
 
-    ConsCounter const init = CopyConstructible::getCounter();
-    ConsCounter       counter;
+    OpCounter const init = CopyConstructible::getCounter();
+    OpCounter       counter;
     GIVEN("An empty Storage")
     {
         Storage storage;

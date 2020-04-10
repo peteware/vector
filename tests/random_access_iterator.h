@@ -1,7 +1,7 @@
 #ifndef INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
 #define INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
 
-#include "conscounter.h"
+#include "opcounter.h"
 #include <pw/impl/iterator_tag.h>
 
 template<class Iterator>
@@ -13,42 +13,42 @@ struct random_access_iterator
     using pointer           = typename pw::iterator<Iterator>::pointer;
     using reference         = typename pw::iterator<Iterator>::reference;
 
-    static ConsCounter getCounter()
+    static OpCounter getCounter()
     {
-        return s_consCounter;
+        return s_opCounter;
     }
 
     random_access_iterator()
     {
-        s_consCounter.addDefaultConstructor();
+        s_opCounter.addDefaultConstructor();
     }
 
     explicit random_access_iterator(Iterator iterator)
         : m_iterator(iterator)
     {
-        s_consCounter.addDefaultConstructor();
+        s_opCounter.addDefaultConstructor();
     }
 
     random_access_iterator(const random_access_iterator& copy)
         : m_iterator(copy.m_iterator)
     {
-        s_consCounter.addCopyConstructor();
+        s_opCounter.addCopyConstructor();
     }
 
     random_access_iterator(random_access_iterator&& op2)
         : m_iterator(op2.m_iterator)
     {
-        s_consCounter.addMoveConstructor();
+        s_opCounter.addMoveConstructor();
     }
 
     ~random_access_iterator()
     {
-        s_consCounter.addDestructor();
+        s_opCounter.addDestructor();
     }
 
 private:
-    Iterator           m_iterator = {};
-    static ConsCounter s_consCounter;
+    Iterator         m_iterator = {};
+    static OpCounter s_opCounter;
 };
 
 #endif /* INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H */

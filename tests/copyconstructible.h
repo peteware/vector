@@ -1,11 +1,11 @@
 #ifndef INCLUDED_COPYCONSTRUCTIBLE_H
 #define INCLUDED_COPYCONSTRUCTIBLE_H
 
-#include "conscounter.h"
+#include "opcounter.h"
 
 struct CopyConstructible
 {
-    static ConsCounter getCounter();
+    static OpCounter getCounter();
 
     CopyConstructible(int value = 0);
     CopyConstructible(CopyConstructible const& copy);
@@ -22,8 +22,8 @@ struct CopyConstructible
     bool               operator<(CopyConstructible const& op2) const;
 
 private:
-    int                m_value;
-    static ConsCounter s_consCounter;
+    int              m_value;
+    static OpCounter s_opCounter;
 };
 
 bool permute(CopyConstructible& value, int depth);

@@ -15,8 +15,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    ConsCounter       counter;
-    ConsCounter const init(CopyConstructible::getCounter());
+    OpCounter       counter;
+    OpCounter const init(CopyConstructible::getCounter());
 
     GIVEN("An empty vector")
     {
@@ -108,7 +108,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         {
             size_t const      count = 5;
             CopyConstructible copyObject;
-            ConsCounter       startCount(CopyConstructible::getCounter());
+            OpCounter         startCount(CopyConstructible::getCounter());
             Vector            v(count);
 
             counter = CopyConstructible::getCounter();
@@ -186,8 +186,8 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    ConsCounter                       init(CopyConstructible::getCounter());
-    ConsCounter                       counter;
+    OpCounter                         init(CopyConstructible::getCounter());
+    OpCounter                         counter;
     std::initializer_list<value_type> initlist = { 1, 2, 5 };
 
     counter = CopyConstructible::getCounter() - init;
