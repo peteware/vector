@@ -1,61 +1,61 @@
 #include "copyconstructible.h"
 #include "permute.h"
 
-OpCounter CopyConstructible::s_opCounter;
+OpCounter OpTracker::s_opCounter;
 
 OpCounter
-CopyConstructible::getCounter()
+OpTracker::getCounter()
 {
     return s_opCounter;
 }
 
-CopyConstructible::CopyConstructible(int value)
+OpTracker::OpTracker(int value)
     : m_value(value)
 {
     s_opCounter.addDefaultConstructor();
 }
 
-CopyConstructible::CopyConstructible(CopyConstructible const& copy)
+OpTracker::OpTracker(OpTracker const& copy)
     : m_value(copy.m_value)
 {
     s_opCounter.addCopyConstructor();
 }
 
-CopyConstructible::CopyConstructible(CopyConstructible&& copy) noexcept
+OpTracker::OpTracker(OpTracker&& copy) noexcept
     : m_value(copy.m_value)
 {
     copy.m_value = -2;
     s_opCounter.addMoveConstructor();
 }
 
-CopyConstructible::~CopyConstructible()
+OpTracker::~OpTracker()
 {
     s_opCounter.addDestructor();
 }
 
 int
-CopyConstructible::value() const
+OpTracker::value() const
 {
     return m_value;
 }
 
-CopyConstructible&
-CopyConstructible::setValue(int value)
+OpTracker&
+OpTracker::setValue(int value)
 {
     m_value = value;
     return *this;
 }
 
-CopyConstructible&
-CopyConstructible::operator=(CopyConstructible const& copy)
+OpTracker&
+OpTracker::operator=(OpTracker const& copy)
 {
     m_value = copy.m_value;
     s_opCounter.addAssignment();
     return *this;
 }
 
-CopyConstructible&
-CopyConstructible::operator=(CopyConstructible&& copy)
+OpTracker&
+OpTracker::operator=(OpTracker&& copy)
 {
     copy.m_value = -1;
     m_value      = copy.m_value;
@@ -64,28 +64,28 @@ CopyConstructible::operator=(CopyConstructible&& copy)
 }
 
 bool
-CopyConstructible::operator==(CopyConstructible const& op2) const
+OpTracker::operator==(OpTracker const& op2) const
 {
     s_opCounter.addEqual();
     return m_value == op2.m_value;
 }
 
 bool
-CopyConstructible::operator!=(CopyConstructible const& op2) const
+OpTracker::operator!=(OpTracker const& op2) const
 {
     s_opCounter.addNotEqual();
     return m_value != op2.m_value;
 }
 
 bool
-CopyConstructible::operator<(CopyConstructible const& op2) const
+OpTracker::operator<(OpTracker const& op2) const
 {
     s_opCounter.addLt();
     return m_value < op2.m_value;
 }
 
 bool
-permute(CopyConstructible& value, int depth)
+permute(OpTracker& value, int depth)
 {
     int val = value.value();
     if (permute(val, depth))
