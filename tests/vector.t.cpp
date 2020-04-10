@@ -14,6 +14,12 @@
 using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 //using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>, std::vector<std::string>>;
 
+TEMPLATE_LIST_TEST_CASE("Test constructors", "[vector][constructor]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+}
+
 TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
 {
     using Vector     = TestType;

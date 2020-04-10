@@ -57,54 +57,52 @@ public:
     vector& operator=(std::initializer_list<value_type> ilist);
 
     template<class Iterator>
-    void              assign(Iterator begin, Iterator end);
-    void              assign(size_type count, value_type const& value);
-    void              assign(std::initializer_list<value_type> ilist);
-    allocator_type    get_allocator() const;
-    reference         at(size_type position);
-    const_reference   at(size_type position) const;
-    reference         operator[](size_type position);
-    const_reference   operator[](size_type position) const;
-    reference         front();
-    const_reference   front() const;
-    reference         back();
-    const_reference   back() const;
-    value_type*       data() noexcept;
-    value_type const* data() const noexcept;
-    iterator          begin() noexcept;
-    iterator          end() noexcept;
-    const_iterator    begin() const noexcept;
-    const_iterator    end() const noexcept;
-    const_iterator    cbegin() const noexcept;
-    const_iterator    cend() const noexcept;
-
+    void                   assign(Iterator begin, Iterator end);
+    void                   assign(size_type count, value_type const& value);
+    void                   assign(std::initializer_list<value_type> ilist);
+    allocator_type         get_allocator() const;
+    reference              at(size_type position);
+    const_reference        at(size_type position) const;
+    reference              operator[](size_type position);
+    const_reference        operator[](size_type position) const;
+    reference              front();
+    const_reference        front() const;
+    reference              back();
+    const_reference        back() const;
+    value_type*            data() noexcept;
+    value_type const*      data() const noexcept;
+    iterator               begin() noexcept;
+    iterator               end() noexcept;
+    const_iterator         begin() const noexcept;
+    const_iterator         end() const noexcept;
+    const_iterator         cbegin() const noexcept;
+    const_iterator         cend() const noexcept;
     reverse_iterator       rbegin() noexcept;
     reverse_iterator       rend() noexcept;
     const_reverse_iterator rbegin() const noexcept;
     const_reverse_iterator rend() const noexcept;
     const_reverse_iterator crbegin() const noexcept;
     const_reverse_iterator crend() const noexcept;
-
-    bool      empty() const;
-    size_type size() const;
-    size_type max_size() const;
-    size_type capacity() const;
-    void      shrink_to_fit();
-    void      reserve(size_type count);
-    void      clear() noexcept;
-    void      push_back(const_reference value);
-    void      push_back(value_type&& value);
-    void      resize(size_type count);
-    void      resize(size_type count, value_type const& value);
-    iterator  insert(const_iterator position, value_type const& value);
-    iterator  insert(const_iterator position, value_type&& value);
-    iterator  insert(const_iterator position, size_type count, value_type const& value);
-    iterator  insert(const_iterator position, std::initializer_list<value_type> ilist);
+    bool                   empty() const;
+    size_type              size() const;
+    size_type              max_size() const;
+    size_type              capacity() const;
+    void                   shrink_to_fit();
+    void                   reserve(size_type count);
+    void                   clear() noexcept;
+    void                   push_back(const_reference value);
+    void                   push_back(value_type&& value);
+    void                   resize(size_type count);
+    void                   resize(size_type count, const_reference value);
+    iterator               erase(const_iterator position);
+    iterator               erase(const_iterator begin, const_iterator end);
+    void                   pop_back();
+    iterator               insert(const_iterator position, const_reference value);
+    iterator               insert(const_iterator position, value_type&& value);
+    iterator               insert(const_iterator position, size_type count, const_reference value);
+    iterator               insert(const_iterator position, std::initializer_list<value_type> ilist);
     template<class Iterator>
     iterator insert(const_iterator position, Iterator first, Iterator last);
-    iterator erase(const_iterator position);
-    iterator erase(const_iterator begin, const_iterator end);
-    void     pop_back();
 
 private:
     using Storage = internal::Storage<Type, Allocator>;
@@ -247,26 +245,6 @@ vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
 }
 
 template<class Type, class Allocator>
-void
-vector<Type, Allocator>::assign(size_type count, value_type const& value)
-{
-    if (m_data.capacity() < count)
-    {
-        Storage s(count, get_allocator());
-
-        pw::uninitialized_fill(s.begin(), s.begin() + count, value);
-        s.set_size(count);
-        m_data = s;
-    }
-    else
-    {
-        pw::destroy(m_data.begin(), m_data.end());
-        m_data.set_size(count);
-        pw::uninitialized_fill(m_data.begin(), m_data.end(), value);
-    }
-}
-
-template<class Type, class Allocator>
 template<class Iterator>
 void
 vector<Type, Allocator>::assign(Iterator begin, Iterator end)
@@ -286,6 +264,26 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
         pw::copy(begin, begin + replace, m_data.begin());
         pw::uninitialized_copy(begin + replace, end, m_data.begin() + replace);
         m_data.set_size(count);
+    }
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::assign(size_type count, value_type const& value)
+{
+    if (m_data.capacity() < count)
+    {
+        Storage s(count, get_allocator());
+
+        pw::uninitialized_fill(s.begin(), s.begin() + count, value);
+        s.set_size(count);
+        m_data = s;
+    }
+    else
+    {
+        pw::destroy(m_data.begin(), m_data.end());
+        m_data.set_size(count);
+        pw::uninitialized_fill(m_data.begin(), m_data.end(), value);
     }
 }
 
@@ -468,7 +466,7 @@ template<class Type, class Allocator>
 bool
 vector<Type, Allocator>::empty() const
 {
-    return m_data.begin() == m_data.end();
+    return m_data.empty();
 }
 
 template<class Type, class Allocator>
@@ -494,16 +492,6 @@ vector<Type, Allocator>::capacity() const
 
 template<class Type, class Allocator>
 void
-vector<Type, Allocator>::reserve(size_type count)
-{
-    if (count > capacity())
-    {
-        m_data = Storage(pw::move(m_data), count);
-    }
-}
-
-template<class Type, class Allocator>
-void
 vector<Type, Allocator>::shrink_to_fit()
 {
     if (size() == capacity())
@@ -522,6 +510,16 @@ vector<Type, Allocator>::shrink_to_fit()
 
 template<class Type, class Allocator>
 void
+vector<Type, Allocator>::reserve(size_type count)
+{
+    if (count > capacity())
+    {
+        m_data = Storage(pw::move(m_data), count);
+    }
+}
+
+template<class Type, class Allocator>
+void
 vector<Type, Allocator>::clear() noexcept
 {
     m_data = Storage(get_allocator());
@@ -529,7 +527,7 @@ vector<Type, Allocator>::clear() noexcept
 
 template<class Type, class Allocator>
 void
-vector<Type, Allocator>::push_back(Type const& value)
+vector<Type, Allocator>::push_back(const_reference value)
 {
     if (m_data.capacity() == m_data.size())
     {
@@ -540,7 +538,7 @@ vector<Type, Allocator>::push_back(Type const& value)
 
 template<class Type, class Allocator>
 void
-vector<Type, Allocator>::push_back(Type&& value)
+vector<Type, Allocator>::push_back(value_type&& value)
 {
     if (!m_data.hascapacity())
     {
@@ -569,7 +567,7 @@ vector<Type, Allocator>::resize(size_type count)
 
 template<class Type, class Allocator>
 void
-vector<Type, Allocator>::resize(size_type count, value_type const& value)
+vector<Type, Allocator>::resize(size_type count, const_reference value)
 {
     if (m_data.size() > count)
     {
@@ -586,14 +584,47 @@ vector<Type, Allocator>::resize(size_type count, value_type const& value)
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(const_iterator position, value_type const& value)
+vector<Type, Allocator>::erase(const_iterator position)
+{
+    difference_type const count = 1;
+
+    move(position + count, m_data.end(), position);
+    destroy(m_data.end() - count, m_data.end());
+    m_data.set_size(m_data.size() - 1);
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
+{
+    difference_type offset = distance(m_data.begin(), begin);
+    difference_type count  = distance(begin, end);
+
+    iterator iter;
+    iter = move(m_data.begin() + offset + count, m_data.end(), m_data.begin() + offset);
+    destroy(iter, m_data.end());
+    m_data.set_size(m_data.size() - count);
+    return iter;
+}
+
+template<class Type, class Allocator>
+void
+vector<Type, Allocator>::pop_back()
+{
+    m_data.set_size(m_data.size() - 1);
+    allocator_traits<Allocator>::destroy(m_data.get_allocator(), pw::addressof(*m_data.end()));
+}
+
+template<class Type, class Allocator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, const_reference value)
 {
     return insert(position, static_cast<size_type>(1), value);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(const_iterator position, size_type count, value_type const& value)
+vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
     difference_type offset = position - m_data.begin();
 
@@ -609,11 +640,14 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, value_
 }
 
 template<class Type, class Allocator>
-void
-vector<Type, Allocator>::pop_back()
+template<class Iterator>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
-    m_data.set_size(m_data.size() - 1);
-    allocator_traits<Allocator>::destroy(m_data.get_allocator(), pw::addressof(*m_data.end()));
+    difference_type offset = distance(m_data.begin(), position);
+    difference_type count  = distance(first, last);
+
+    return m_data.begin();
 }
 
 template<class Type, class Allocator>
