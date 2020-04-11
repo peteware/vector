@@ -20,6 +20,68 @@ TEMPLATE_LIST_TEST_CASE("Test constructors", "[vector][constructor]", TestTypeLi
     using value_type = typename Vector::value_type;
 }
 
+TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    GIVEN("an empty vector")
+    {
+        Vector v;
+
+        WHEN("insert() is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            permute(value, 3);
+            iter = v.insert(v.begin(), value);
+            THEN("size() is increased")
+            {
+                REQUIRE(1 == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("at(0) returns same value")
+            {
+                REQUIRE(value == v.at(0));
+            }
+        }
+        WHEN("insert(count) at begin()")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            size_t                    count = 12;
+
+            permute(value, 3);
+            iter = v.insert(v.begin(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
+        WHEN("insert(12) at end()")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            size_t                    count = 12;
+
+            permute(value, 3);
+            iter = v.insert(v.end(), count, value);
+            THEN("there are count values")
+            {
+                REQUIRE(v.begin() == iter);
+                REQUIRE(count == v.size());
+                REQUIRE(value == v[0]);
+                REQUIRE(value == v[count - 1]);
+            }
+        }
+    }
+}
+
 TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
 {
     using Vector     = TestType;
@@ -262,57 +324,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             THEN("nothing goes wrong")
             {
                 REQUIRE(v.empty());
-            }
-        }
-        WHEN("insert() is called")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            permute(value, 3);
-            iter = v.insert(v.begin(), value);
-            THEN("size() is increased")
-            {
-                REQUIRE(1 == v.size());
-            }
-            THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-            }
-            THEN("at(0) returns same value")
-            {
-                REQUIRE(value == v.at(0));
-            }
-        }
-        WHEN("insert(count) at begin()")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            size_t                    count = 12;
-
-            permute(value, 3);
-            iter = v.insert(v.begin(), count, value);
-            THEN("there are count values")
-            {
-                REQUIRE(v.begin() == iter);
-                REQUIRE(count == v.size());
-                REQUIRE(value == v[0]);
-                REQUIRE(value == v[count - 1]);
-            }
-        }
-        WHEN("insert(12) at end()")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            size_t                    count = 12;
-
-            permute(value, 3);
-            iter = v.insert(v.end(), count, value);
-            THEN("there are count values")
-            {
-                REQUIRE(v.begin() == iter);
-                REQUIRE(count == v.size());
-                REQUIRE(value == v[0]);
-                REQUIRE(value == v[count - 1]);
             }
         }
         GIVEN("and it is const")
