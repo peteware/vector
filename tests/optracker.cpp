@@ -1,36 +1,31 @@
-#include "copyconstructible.h"
+#include "optracker.h"
 #include "permute.h"
 
-OpCounter OpTracker::s_opCounter;
-
-OpCounter
-OpTracker::getCounter()
+OpTracker::OpTracker(OpCounter& opCounter, int value)
+    : m_opCounter(opCounter)
+    , m_value(value)
 {
-    return s_opCounter;
-}
-
-OpTracker::OpTracker(int value)
-    : m_value(value)
-{
-    s_opCounter.addDefaultConstructor();
+    m_opCounter.addDefaultConstructor();
 }
 
 OpTracker::OpTracker(OpTracker const& copy)
     : m_value(copy.m_value)
+    , m_opCounter(copy.m_opCounter)
 {
-    s_opCounter.addCopyConstructor();
+    m_opCounter.addCopyConstructor();
 }
 
 OpTracker::OpTracker(OpTracker&& copy) noexcept
     : m_value(copy.m_value)
+    , m_opCounter(copy.m_opCounter)
 {
     copy.m_value = -2;
-    s_opCounter.addMoveConstructor();
+    m_opCounter.addMoveConstructor();
 }
 
 OpTracker::~OpTracker()
 {
-    s_opCounter.addDestructor();
+    m_opCounter.addDestructor();
 }
 
 int
@@ -50,7 +45,7 @@ OpTracker&
 OpTracker::operator=(OpTracker const& copy)
 {
     m_value = copy.m_value;
-    s_opCounter.addAssignment();
+    m_opCounter.addAssignment();
     return *this;
 }
 
@@ -59,28 +54,28 @@ OpTracker::operator=(OpTracker&& copy)
 {
     copy.m_value = -1;
     m_value      = copy.m_value;
-    s_opCounter.addMoveAssignment();
+    m_opCounter.addMoveAssignment();
     return *this;
 }
 
 bool
 OpTracker::operator==(OpTracker const& op2) const
 {
-    s_opCounter.addEqual();
+    m_opCounter.addEqual();
     return m_value == op2.m_value;
 }
 
 bool
 OpTracker::operator!=(OpTracker const& op2) const
 {
-    s_opCounter.addNotEqual();
+    m_opCounter.addNotEqual();
     return m_value != op2.m_value;
 }
 
 bool
 OpTracker::operator<(OpTracker const& op2) const
 {
-    s_opCounter.addLt();
+    m_opCounter.addLt();
     return m_value < op2.m_value;
 }
 
@@ -94,4 +89,28 @@ permute(OpTracker& value, int depth)
         return true;
     }
     return false;
+}
+
+OpCounter DefaultConstructible::s_opCounter;
+
+OpCounter
+DefaultConstructible::getCounter()
+{
+    return s_opCounter;
+}
+
+OpCounter CopyConstructible::s_opCounter;
+
+OpCounter
+CopyConstructible::getCounter()
+{
+    return s_opCounter;
+}
+
+OpCounter MoveConstructible::s_opCounter;
+
+OpCounter
+MoveConstructible::getCounter()
+{
+    return s_opCounter;
 }

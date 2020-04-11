@@ -1,6 +1,6 @@
 add_executable( unittest
-                opCounter.cpp
-                copyconstructible.cpp
+                opcounter.cpp
+                optracker.cpp
                 cstddef.t.cpp
                 memory.t.cpp
                 permute.cpp
