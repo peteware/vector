@@ -168,7 +168,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -176,16 +176,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     GIVEN("An empty vector of TestType")
     {
         Vector v;
-        REQUIRE(pw::is_same<value_type*, typename Vector::pointer>::value);
-        REQUIRE(pw::is_same<value_type, typename Vector::value_type>::value);
-        // WHEN("get_allocator() const is called")
-        // {
-        //     typename Vector::allocator_type a = v.get_allocator();
-        //     THEN("it returns same allocator")
-        //     {
-        //         REQUIRE(a == pw::allocator<value_type>());
-        //     }
-        // }
         WHEN("operator=(const_ref) both empty")
         {
             Vector op2;
@@ -259,6 +249,27 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(v.size() == 3);
             }
         }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    GIVEN("An empty vector of TestType")
+    {
+        Vector v;
+        REQUIRE(pw::is_same<value_type*, typename Vector::pointer>::value);
+        REQUIRE(pw::is_same<value_type, typename Vector::value_type>::value);
+        // WHEN("get_allocator() const is called")
+        // {
+        //     typename Vector::allocator_type a = v.get_allocator();
+        //     THEN("it returns same allocator")
+        //     {
+        //         REQUIRE(a == pw::allocator<value_type>());
+        //     }
+        // }
         WHEN("assign(count,value) and lhs is empty")
         {
             value_type value;
