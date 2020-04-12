@@ -13,6 +13,7 @@ add_executable( unittest
                 vector_assign.t.cpp
                 vector_assignment.t.cpp
                 vector_at.t.cpp
+                vector_push_back.t.cpp
                 vector_resize.t.cpp
                 vector_1.t.cpp
                 vector_constructor.t.cpp
