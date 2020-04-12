@@ -148,23 +148,10 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const count = 5;
-        value_type   first_value;
-        value_type   last_value;
-        value_type   value;
-        Vector       values;
-
-        for (size_t i = 0; i < count; ++i)
-        {
-            permute(value, 10);
-            if (i == 0)
-                first_value = value;
-            values.push_back(value);
-            last_value = value;
-        }
-        Vector v(values);
+        Vector         values;
+        Values<Vector> generate(values, 5);
+        Vector         v(values);
         REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
-        permute(value, 10);
 
         WHEN("empty() is called")
         {
@@ -179,7 +166,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             size_t s = v.size();
             THEN("it is the same as count")
             {
-                REQUIRE(count == s);
+                REQUIRE(generate.count == s);
             }
         }
         WHEN("capacity() is called")
@@ -187,7 +174,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             size_t c = v.capacity();
             THEN("capacity is same")
             {
-                REQUIRE(count == c);
+                REQUIRE(generate.count == c);
             }
         }
         WHEN("copy constructor is called")
@@ -235,20 +222,12 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(!e);
             }
         }
-        WHEN("size() is called")
-        {
-            size_t s = v.size();
-            THEN("size is count")
-            {
-                REQUIRE(s == count);
-            }
-        }
         WHEN("capacity() is called")
         {
             size_t c = v.capacity();
             THEN("it is at least 1)")
             {
-                REQUIRE(c >= count);
+                REQUIRE(c >= generate.count);
             }
         }
         WHEN("front() is called")
@@ -256,7 +235,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type& r = v.front();
             THEN("it works")
             {
-                REQUIRE(first_value == r);
+                REQUIRE(generate.first_value == r);
             }
         }
         WHEN("back() is called")
@@ -264,7 +243,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type& r = v.back();
             THEN("it works")
             {
-                REQUIRE(last_value == r);
+                REQUIRE(generate.last_value == r);
             }
         }
         WHEN("data() is called")
@@ -272,7 +251,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type* p = v.data();
             THEN("it works")
             {
-                REQUIRE(first_value == *p);
+                REQUIRE(generate.first_value == *p);
             }
         }
         WHEN("reserve() is called")
@@ -296,7 +275,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         }
         GIVEN("And extra capacity")
         {
-            size_t const total = count + 10;
+            size_t const total = generate.count + 10;
             v.reserve(total);
             REQUIRE(total == v.capacity());
             WHEN("shrink_to_fit() is called")
