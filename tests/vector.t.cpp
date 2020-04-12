@@ -303,17 +303,16 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A const vector of value_type with 1 item")
     {
-        Vector        v;
-        Vector const& c = v;
-
-        v.push_back(value_type());
+        Vector         v;
+        Values<Vector> generate(v, 1);
+        Vector const&  c = v;
 
         WHEN("front() const is called")
         {
             value_type const& r = v.front();
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(r == generate.first_value);
             }
         }
         WHEN("back() const is called")
@@ -321,7 +320,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type const& r = v.back();
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(r == generate.last_value);
             }
         }
         WHEN("data() const is called")
@@ -329,7 +328,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             value_type const* p = v.data();
             THEN("it works")
             {
-                REQUIRE(*p == value_type());
+                REQUIRE(*p == generate.first_value);
             }
         }
     }
