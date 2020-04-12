@@ -10,6 +10,8 @@ add_executable( unittest
                 unittest.m.cpp
                 vector.t.cpp
                 vector_insert.t.cpp
+                vector_assign.t.cpp
+                vector_assignment.t.cpp
                 vector_1.t.cpp
                 vector_constructor.t.cpp
                 )
