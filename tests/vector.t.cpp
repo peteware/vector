@@ -443,6 +443,101 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
     }
 }
 
+TEMPLATE_LIST_TEST_CASE("at", "[vector][]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    GIVEN("An empty vector of TestType")
+    {
+        Vector v;
+
+        WHEN("at() is called")
+        {
+            THEN("at(0) fails")
+            {
+                CHECK_THROWS_AS(v.at(0), std::out_of_range);
+            }
+            THEN("at(10) fails")
+            {
+                CHECK_THROWS_AS(v.at(10), std::out_of_range);
+            }
+        }
+    }
+    GIVEN("A const empty vector")
+    {
+        Vector const v;
+
+        WHEN("at() const is called")
+        {
+            THEN("at(0) const fails")
+            {
+                CHECK_THROWS_AS(v.at(0), std::out_of_range);
+            }
+            THEN("at(10) const fails")
+            {
+                CHECK_THROWS_AS(v.at(10), std::out_of_range);
+            }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        size_t const count = 5;
+        value_type   first_value;
+        value_type   last_value;
+        value_type   value;
+        Vector       values;
+
+        for (size_t i = 0; i < count; ++i)
+        {
+            permute(value, 10);
+            if (i == 0)
+                first_value = value;
+            values.push_back(value);
+            last_value = value;
+        }
+        Vector v(values);
+        REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
+        WHEN("at(0) is called")
+        {
+            value_type& r = v.at(0);
+            THEN("it works")
+            {
+                REQUIRE(first_value == r);
+            }
+        }
+        WHEN("at(count) is called")
+        {
+            THEN("it raises exception")
+            {
+                CHECK_THROWS_AS(v.at(count), std::out_of_range);
+            }
+        }
+    }
+    GIVEN("A const vector of value_type with 1 item")
+    {
+        Vector        v;
+        Vector const& c = v;
+
+        v.push_back(value_type());
+        WHEN("at(0) const is called")
+        {
+            value_type const& r = c.at(0);
+            THEN("it works")
+            {
+                REQUIRE(r == value_type());
+            }
+        }
+        WHEN("at(1) const is called")
+        {
+            THEN("it raises exception")
+            {
+                CHECK_THROWS_AS(c.at(1), std::out_of_range);
+            }
+        }
+    }
+}
+
 TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
 {
     using Vector     = TestType;
@@ -461,17 +556,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         //         REQUIRE(a == pw::allocator<value_type>());
         //     }
         // }
-        WHEN("at() is called")
-        {
-            THEN("at(0) fails")
-            {
-                CHECK_THROWS_AS(v.at(0), std::out_of_range);
-            }
-            THEN("at(10) fails")
-            {
-                CHECK_THROWS_AS(v.at(10), std::out_of_range);
-            }
-        }
         WHEN("data() is called")
         {
             THEN("it returns NULL")
@@ -561,17 +645,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             REQUIRE(c.size() == 0);
             REQUIRE(c.capacity() == 0);
 
-            WHEN("at() const is called")
-            {
-                THEN("at(0) const fails")
-                {
-                    CHECK_THROWS_AS(c.at(0), std::out_of_range);
-                }
-                THEN("at(10) const fails")
-                {
-                    CHECK_THROWS_AS(c.at(10), std::out_of_range);
-                }
-            }
             WHEN("begin() is called")
             {
                 typename Vector::const_iterator iter;
@@ -676,177 +749,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
                 REQUIRE(c == d);
             }
         }
-        WHEN("resize() increases size")
-        {
-            size_t const size = count + 3;
-
-            v.resize(size);
-            THEN("size is is changed")
-            {
-                REQUIRE(size == v.size());
-                REQUIRE(size <= v.capacity());
-            }
-        }
-        WHEN("resize() decreases size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count - 2;
-
-            v.resize(size);
-            THEN("size is smaller")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() does not change size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count;
-
-            v.resize(size);
-            THEN("size is unchanged")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() adds elements with value")
-        {
-            value_type   value;
-            size_t const size = count + 3;
-
-            permute(value, 3);
-            v.resize(size, value);
-            THEN("size() is increased")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("each value is same as permute")
-            {
-                REQUIRE(value == v[count]);
-            }
-        }
-        WHEN("resize() increases size")
-        {
-            size_t const size = count + 3;
-
-            v.resize(size);
-            THEN("size is is changed")
-            {
-                REQUIRE(size == v.size());
-                REQUIRE(size <= v.capacity());
-            }
-        }
-        WHEN("resize() decreases size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count - 2;
-
-            v.resize(size);
-            THEN("size is smaller")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() does not change size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count;
-
-            v.resize(size);
-            THEN("size is unchanged")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() adds elements with value")
-        {
-            value_type   value;
-            size_t const size = count + 3;
-
-            permute(value, 3);
-            v.resize(size, value);
-            THEN("size() is increased")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("each value is same as permute")
-            {
-                REQUIRE(value == v[count]);
-            }
-        }
-        WHEN("resize() increases size")
-        {
-            size_t const size = count + 3;
-
-            v.resize(size);
-            THEN("size is is changed")
-            {
-                REQUIRE(size == v.size());
-                REQUIRE(size <= v.capacity());
-            }
-        }
-        WHEN("resize() decreases size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count - 2;
-
-            v.resize(size);
-            THEN("size is smaller")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() does not change size")
-        {
-            size_t const capacity = v.capacity();
-            size_t const size     = count;
-
-            v.resize(size);
-            THEN("size is unchanged")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("capacity is unchanged")
-            {
-                REQUIRE(capacity == v.capacity());
-            }
-        }
-        WHEN("resize() adds elements with value")
-        {
-            value_type   value;
-            size_t const size = count + 3;
-
-            permute(value, 3);
-            v.resize(size, value);
-            THEN("size() is increased")
-            {
-                REQUIRE(size == v.size());
-            }
-            THEN("each value is same as permute")
-            {
-                REQUIRE(value == v[count]);
-            }
-        }
         WHEN("empty() is called")
         {
             bool e = v.empty();
@@ -869,21 +771,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
             THEN("it is at least 1)")
             {
                 REQUIRE(c >= count);
-            }
-        }
-        WHEN("at(0) is called")
-        {
-            value_type& r = v.at(0);
-            THEN("it works")
-            {
-                REQUIRE(first_value == r);
-            }
-        }
-        WHEN("at(count) is called")
-        {
-            THEN("it raises exception")
-            {
-                CHECK_THROWS_AS(v.at(count), std::out_of_range);
             }
         }
         WHEN("front() is called")
@@ -983,21 +870,6 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
 
         v.push_back(value_type());
 
-        WHEN("at(0) const is called")
-        {
-            value_type const& r = c.at(0);
-            THEN("it works")
-            {
-                REQUIRE(r == value_type());
-            }
-        }
-        WHEN("at(1) const is called")
-        {
-            THEN("it raises exception")
-            {
-                CHECK_THROWS_AS(c.at(1), std::out_of_range);
-            }
-        }
         WHEN("front() const is called")
         {
             value_type const& r = v.front();
