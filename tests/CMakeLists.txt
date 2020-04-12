@@ -9,6 +9,7 @@ add_executable( unittest
                 uninitialized_move.t.cpp
                 unittest.m.cpp
                 vector.t.cpp
+                vector_insert.t.cpp
                 vector_1.t.cpp
                 vector_constructor.t.cpp
                 )
