@@ -1,17 +1,13 @@
 #include "catch2/catch.hpp"
 #include "permute.h"
 #include "same.t.h"
+#include "testtype.h"
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
 
 #include <stdexcept>
-#include <string>
-#include <tuple>
-#include <vector>
-
-using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 //using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>, std::vector<std::string>>;
 
 TEMPLATE_LIST_TEST_CASE("Test constructors", "[vector][constructor]", TestTypeList)
