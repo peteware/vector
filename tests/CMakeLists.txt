@@ -12,6 +12,7 @@ add_executable( unittest
                 vector_insert.t.cpp
                 vector_assign.t.cpp
                 vector_assignment.t.cpp
+                vector_at.t.cpp
                 vector_resize.t.cpp
                 vector_1.t.cpp
                 vector_constructor.t.cpp
