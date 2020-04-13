@@ -46,35 +46,22 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const count = 5;
-        value_type   first_value;
-        value_type   last_value;
-        value_type   value;
-        Vector       values;
-
-        for (size_t i = 0; i < count; ++i)
-        {
-            permute(value, 10);
-            if (i == 0)
-                first_value = value;
-            values.push_back(value);
-            last_value = value;
-        }
-        Vector v(values);
-        REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
+        Values<Vector> generate(5);
+        Vector         v(generate.values);
+        REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
         WHEN("at(0) is called")
         {
             value_type& r = v.at(0);
             THEN("it works")
             {
-                REQUIRE(first_value == r);
+                REQUIRE(generate.first_value == r);
             }
         }
         WHEN("at(count) is called")
         {
             THEN("it raises exception")
             {
-                CHECK_THROWS_AS(v.at(count), std::out_of_range);
+                CHECK_THROWS_AS(v.at(generate.count), std::out_of_range);
             }
         }
     }

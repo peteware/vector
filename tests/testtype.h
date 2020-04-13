@@ -16,8 +16,9 @@ struct Values
     value_type   first_value;
     value_type   last_value;
     size_t const count;
+    Container    values;
 
-    Values(Container& values, size_t total)
+    Values(size_t total)
         : count(total)
     {
         value_type value;

@@ -69,24 +69,13 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const              count = 5;
-        value_type                first_value;
-        value_type                last_value;
-        value_type                value;
+        Values<Vector>            generate(5);
         size_t                    added;
         size_t                    offset;
+        value_type                value;
         typename Vector::iterator where;
-        Vector                    values;
 
-        for (size_t i = 0; i < count; ++i)
-        {
-            permute(value, 10);
-            if (i == 0)
-                first_value = value;
-            values.push_back(value);
-            last_value = value;
-        }
-        Vector v(values);
+        Vector v(generate.values);
         WHEN("insert(3) at begin")
         {
             added  = 3;
@@ -94,13 +83,15 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
-                REQUIRE(count + added == v.size());
+                REQUIRE(generate.count + added == v.size());
             }
             THEN("items are the same")
             {
                 REQUIRE(pw::internal::same(where, where + added, value));
-                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
-                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(3) at end")
@@ -110,13 +101,15 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
-                REQUIRE(count + added == v.size());
+                REQUIRE(generate.count + added == v.size());
             }
             THEN("items are the same")
             {
                 REQUIRE(pw::internal::same(where, where + added, value));
-                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
-                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(10) at begin")
@@ -126,30 +119,34 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
-                REQUIRE(count + added == v.size());
+                REQUIRE(generate.count + added == v.size());
             }
             THEN("items are the same")
             {
                 REQUIRE(pw::internal::same(where, where + added, value));
-                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
-                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(10) at near end")
         {
             added  = 10;
-            offset = count - 1;
+            offset = generate.count - 1;
             where  = v.begin() + offset;
             where  = v.insert(where, added, value);
             THEN("size is correct")
             {
-                REQUIRE(count + added == v.size());
+                REQUIRE(generate.count + added == v.size());
             }
             THEN("items are the same")
             {
                 REQUIRE(pw::internal::same(where, where + added, value));
-                REQUIRE(pw::equal(values.begin(), values.begin() + offset, v.begin(), where));
-                REQUIRE(pw::equal(values.begin() + offset, values.end(), where + added, v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
     }

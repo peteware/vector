@@ -148,10 +148,9 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A vector with 5 elements")
     {
-        Vector         values;
-        Values<Vector> generate(values, 5);
-        Vector         v(values);
-        REQUIRE(pw::equal(values.begin(), values.end(), v.begin(), v.end()));
+        Values<Vector> generate(5);
+        Vector         v(generate.values);
+        REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
 
         WHEN("empty() is called")
         {
@@ -303,13 +302,12 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A const vector of value_type with 1 item")
     {
-        Vector         v;
-        Values<Vector> generate(v, 1);
-        Vector const&  c = v;
+        Values<Vector> generate(1);
+        Vector const&  c = generate.values;
 
         WHEN("front() const is called")
         {
-            value_type const& r = v.front();
+            value_type const& r = c.front();
             THEN("it works")
             {
                 REQUIRE(r == generate.first_value);
@@ -317,7 +315,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         }
         WHEN("back() const is called")
         {
-            value_type const& r = v.back();
+            value_type const& r = c.back();
             THEN("it works")
             {
                 REQUIRE(r == generate.last_value);
@@ -325,7 +323,7 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
         }
         WHEN("data() const is called")
         {
-            value_type const* p = v.data();
+            value_type const* p = c.data();
             THEN("it works")
             {
                 REQUIRE(*p == generate.first_value);
