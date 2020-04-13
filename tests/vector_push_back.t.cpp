@@ -1,4 +1,5 @@
 #include "catch2/catch.hpp"
+#include "optracker.h"
 #include "permute.h"
 #include "same.t.h"
 #include "testtype.h"
@@ -7,7 +8,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][pushback]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -54,4 +55,10 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][pushback]", TestTypeList)
             REQUIRE(capacity < v.capacity());
         }
     }
+}
+
+SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
+{
+    using Vector     = pw::vector<CopyConstructible>;
+    using value_type = typename Vector::value_type;
 }
