@@ -64,17 +64,6 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
-        WHEN("insert(count) at begin")
-        {
-            CopyConstructible copyObject;
-            counter = CopyConstructible::getCounter();
-            v.insert(v.begin(), count, copyObject);
-            THEN("Copy constructor called count times")
-            {
-                counter = CopyConstructible::getCounter() - counter;
-                REQUIRE(count == counter.constructorCount());
-            }
-        }
     }
     GIVEN("and add count objects")
     {
@@ -93,45 +82,6 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             {
                 REQUIRE(count == counter.getDefaultConstructor());
                 REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
-            }
-        }
-        WHEN("insert() at begin")
-        {
-            v.insert(v.begin(), copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
-            {
-                REQUIRE(count == counter.getMoveConstructor());
-            }
-            THEN("Assigned item")
-            {
-                REQUIRE(1 == counter.getCopyConstructor());
-            }
-        }
-        WHEN("insert() at end")
-        {
-            v.insert(v.end(), copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
-            {
-                REQUIRE(count == counter.getMoveConstructor());
-            }
-            THEN("Copy constructed new item")
-            {
-                REQUIRE(1 == counter.getCopyConstructor());
-            }
-        }
-        WHEN("insert() in middle")
-        {
-            v.insert(v.begin() + count - 2, copyObject);
-            counter = CopyConstructible::getCounter() - init;
-            THEN("Move constructed existing items for more space")
-            {
-                REQUIRE(count == counter.getMoveConstructor());
-            }
-            THEN("Copy constructed new item")
-            {
-                REQUIRE(1 == counter.getCopyConstructor());
             }
         }
     }

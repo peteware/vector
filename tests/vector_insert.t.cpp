@@ -1,4 +1,5 @@
 #include "catch2/catch.hpp"
+#include "optracker.h"
 #include "permute.h"
 #include "same.t.h"
 #include "testtype.h"
@@ -150,4 +151,81 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             }
         }
     }
+}
+
+SCENARIO("insert() op counts", "[vector][insert][optracker]")
+{
+    using Vector     = pw::vector<CopyConstructible>;
+    using value_type = typename Vector::value_type;
+
+    OpCounter       counter;
+    OpCounter const init  = CopyConstructible::getCounter();
+    size_t          count = 5;
+
+    GIVEN("An empty vector")
+    {
+        Vector            v;
+        CopyConstructible copyObject;
+
+        WHEN("insert(count) at begin")
+        {
+            CopyConstructible copyObject;
+            counter = CopyConstructible::getCounter();
+            v.insert(v.begin(), count, copyObject);
+            THEN("Copy constructor called count times")
+            {
+                counter = CopyConstructible::getCounter() - counter;
+                REQUIRE(count == counter.constructorCount());
+            }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        Values<Vector>    generate(5);
+        CopyConstructible copyObject;
+
+        generate.values.shrink_to_fit();
+        counter = CopyConstructible::getCounter();
+        WHEN("insert() at begin")
+        {
+            generate.values.insert(generate.values.begin(), copyObject);
+            counter = CopyConstructible::getCounter() - counter;
+            THEN("Move constructed existing items for more space")
+            {
+                REQUIRE(generate.count == counter.getMoveConstructor());
+            }
+            THEN("Assigned item")
+            {
+                REQUIRE(1 == counter.getCopyConstructor());
+            }
+        }
+        WHEN("insert() at end")
+        {
+            generate.values.insert(generate.values.end(), copyObject);
+            counter = CopyConstructible::getCounter() - counter;
+            THEN("Move constructed existing items for more space")
+            {
+                REQUIRE(generate.count == counter.getMoveConstructor());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopyConstructor());
+            }
+        }
+        WHEN("insert() in middle")
+        {
+            generate.values.insert(generate.values.begin() + generate.count - 2, copyObject);
+            counter = CopyConstructible::getCounter() - counter;
+            THEN("Move constructed existing items for more space")
+            {
+                REQUIRE(generate.count == counter.getMoveConstructor());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopyConstructor());
+            }
+        }
+    }
+    counter = CopyConstructible::getCounter() - init;
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
