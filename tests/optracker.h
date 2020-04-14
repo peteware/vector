@@ -86,6 +86,8 @@ private:
     static OpCounter s_opCounter;
 };
 
+bool permute(CopyConstructible& value, int depth);
+
 struct MoveConstructible : OpTracker
 {
     static OpCounter getCounter();

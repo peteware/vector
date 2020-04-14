@@ -91,6 +91,18 @@ permute(OpTracker& value, int depth)
     return false;
 }
 
+bool
+permute(CopyConstructible& value, int depth)
+{
+    int val = value.value();
+    if (permute(val, depth))
+    {
+        value.setValue(val);
+        return true;
+    }
+    return false;
+}
+
 OpCounter DefaultConstructible::s_opCounter;
 
 OpCounter

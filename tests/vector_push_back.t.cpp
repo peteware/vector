@@ -61,4 +61,59 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
     using Vector     = pw::vector<CopyConstructible>;
     using value_type = typename Vector::value_type;
+    OpCounter       counter;
+    OpCounter const init = CopyConstructible::getCounter();
+
+    GIVEN("An empty vector")
+    {
+        Vector            v;
+        CopyConstructible copyObject;
+
+        WHEN("push_back() is called")
+        {
+            counter = CopyConstructible::getCounter();
+            v.push_back(copyObject);
+            THEN("Copy construct called once")
+            {
+                counter = CopyConstructible::getCounter() - counter;
+                REQUIRE(1 == counter.constructorCount());
+                REQUIRE(counter.constructorCount() == counter.allCount());
+            }
+        }
+        WHEN("push_back(move) is called")
+        {
+            counter = CopyConstructible::getCounter();
+            v.push_back(pw::move(copyObject));
+            THEN("Copy construct called once")
+            {
+                counter = CopyConstructible::getCounter() - counter;
+                REQUIRE(1 == counter.getMoveConstructor());
+                REQUIRE(counter.getMoveConstructor() == counter.allCount());
+            }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        Values<Vector>    generate(5);
+        CopyConstructible copyObject;
+        OpCounter         startCount(CopyConstructible::getCounter());
+
+        generate.values.shrink_to_fit();
+        counter = CopyConstructible::getCounter();
+        WHEN("push_back() is called")
+        {
+            generate.values.push_back(copyObject);
+            counter = CopyConstructible::getCounter() - counter;
+            THEN("Move constructed existing items")
+            {
+                REQUIRE(generate.count == counter.getMoveConstructor());
+            }
+            THEN("Copy constructed new item")
+            {
+                REQUIRE(1 == counter.getCopyConstructor());
+            }
+        }
+    }
+    counter = CopyConstructible::getCounter() - init;
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
