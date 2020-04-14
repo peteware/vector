@@ -10,6 +10,7 @@
 #include <pw/impl/fill.h>
 #include <pw/impl/for_each.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/move_alg.h>
 #include <pw/impl/move_backward.h>
 #include <pw/impl/reverse_iterator.h>
 #include <pw/impl/uninitialized_copy.h>
@@ -586,23 +587,26 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator position)
 {
-    difference_type const count = 1;
+    difference_type       offset = pw::distance(const_iterator(m_data.begin()), position);
+    difference_type const count  = 1;
+    iterator              start  = m_data.begin() + offset;
 
-    move(position + count, m_data.end(), position);
-    destroy(m_data.end() - count, m_data.end());
+    pw::move(start + count, m_data.end(), start);
+    pw::destroy(m_data.end() - count, m_data.end());
     m_data.set_size(m_data.size() - 1);
+    return m_data.begin() + offset;
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
-    difference_type offset = distance(m_data.begin(), begin);
-    difference_type count  = distance(begin, end);
+    difference_type offset = pw::distance(const_iterator(m_data.begin()), begin);
+    difference_type count  = pw::distance(begin, end);
 
     iterator iter;
-    iter = move(m_data.begin() + offset + count, m_data.end(), m_data.begin() + offset);
-    destroy(iter, m_data.end());
+    iter = pw::move(m_data.begin() + offset + count, m_data.end(), m_data.begin() + offset);
+    pw::destroy(iter, m_data.end());
     m_data.set_size(m_data.size() - count);
     return iter;
 }
