@@ -41,29 +41,6 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 REQUIRE(counter.zero());
             }
         }
-        WHEN("resize() is called")
-        {
-            counter = CopyConstructible::getCounter();
-            v.resize(count);
-            counter = CopyConstructible::getCounter() - counter;
-            THEN("default construted count times")
-            {
-                REQUIRE(count == counter.getDefaultConstructor());
-                REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
-                REQUIRE(counter.allCount() == count);
-            }
-        }
-        WHEN("resize(count) is called")
-        {
-            counter = CopyConstructible::getCounter();
-            v.resize(count);
-            THEN("Copy construct called same amount")
-            {
-                counter = CopyConstructible::getCounter() - counter;
-                REQUIRE(count == counter.constructorCount());
-                REQUIRE(counter.constructorCount() == counter.allCount());
-            }
-        }
     }
     GIVEN("and add count objects")
     {

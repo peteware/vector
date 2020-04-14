@@ -1,4 +1,5 @@
 #include "catch2/catch.hpp"
+#include "optracker.h"
 #include "permute.h"
 #include "same.t.h"
 #include "testtype.h"
@@ -125,4 +126,33 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
             }
         }
     }
+}
+SCENARIO("resize() op counts", "[vector][resize][optracker]")
+{
+    using Vector     = pw::vector<CopyConstructible>;
+    using value_type = typename Vector::value_type;
+
+    OpCounter       counter;
+    OpCounter const init  = CopyConstructible::getCounter();
+    size_t          count = 5;
+
+    GIVEN("An empty vector")
+    {
+        Vector v;
+
+        WHEN("resize() is called")
+        {
+            counter = CopyConstructible::getCounter();
+            v.resize(count);
+            counter = CopyConstructible::getCounter() - counter;
+            THEN("default constructed count times")
+            {
+                REQUIRE(count == counter.getDefaultConstructor());
+                REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
+                REQUIRE(counter.allCount() == count);
+            }
+        }
+    }
+    counter = CopyConstructible::getCounter() - init;
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
