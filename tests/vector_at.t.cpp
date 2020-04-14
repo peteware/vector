@@ -7,7 +7,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("at", "[vector][]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -64,13 +64,28 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][]", TestTypeList)
                 CHECK_THROWS_AS(v.at(generate.count), std::out_of_range);
             }
         }
+        WHEN("v[0]")
+        {
+            value_type& r = v[0];
+            THEN("it is first_value")
+            {
+                REQUIRE(r == generate.first_value);
+            }
+        }
+        WHEN("v[count - 1]")
+        {
+            value_type& r = v[generate.count - 1];
+            THEN("it is last_value")
+            {
+                REQUIRE(r == generate.last_value);
+            }
+        }
     }
     GIVEN("A const vector of value_type with 1 item")
     {
-        Vector        v;
-        Vector const& c = v;
+        Values<Vector> generate(1);
+        Vector const&  c = generate.values;
 
-        v.push_back(value_type());
         WHEN("at(0) const is called")
         {
             value_type const& r = c.at(0);
@@ -84,6 +99,22 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][]", TestTypeList)
             THEN("it raises exception")
             {
                 CHECK_THROWS_AS(c.at(1), std::out_of_range);
+            }
+        }
+        WHEN("v[0]")
+        {
+            value_type const& r = c[0];
+            THEN("it is first_value")
+            {
+                REQUIRE(r == generate.first_value);
+            }
+        }
+        WHEN("v[count - 1]")
+        {
+            value_type const& r = c[generate.count - 1];
+            THEN("it is last_value")
+            {
+                REQUIRE(r == generate.last_value);
             }
         }
     }
