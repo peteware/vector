@@ -91,7 +91,7 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", TestTypeList)
             value_type const& r = c.at(0);
             THEN("it works")
             {
-                REQUIRE(r == value_type());
+                REQUIRE(r == generate.first_value);
             }
         }
         WHEN("at(1) const is called")

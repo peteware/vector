@@ -17,27 +17,14 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
     {
         Vector v;
 
-        WHEN("erase() at begin()")
+        WHEN("erase(begin,end)")
         {
-            iter = v.erase(v.begin());
+            iter = v.erase(v.begin(), v.end());
             THEN("nothing is changed")
             {
                 REQUIRE(v.empty());
             }
             THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-                REQUIRE(v.begin() == v.end());
-            }
-        }
-        WHEN("erase() at end()")
-        {
-            iter = v.erase(v.end());
-            THEN("nothing changed")
-            {
-                REQUIRE(v.empty());
-            }
-            THEN("ends are the same")
             {
                 REQUIRE(v.begin() == iter);
                 REQUIRE(v.begin() == v.end());
@@ -68,7 +55,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
             iter = v.erase(v.begin(), v.end());
             THEN("empty")
             {
-                REQUIRE(v.begin() == iter);
+                REQUIRE(v.end() == iter);
                 REQUIRE(v.empty());
             }
         }
@@ -81,6 +68,17 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
                 REQUIRE(v.begin() == iter);
                 REQUIRE(2 == v.size());
                 REQUIRE(generate.last_value == v[1]);
+            }
+        }
+        WHEN("erase() at begin()+2 to end()")
+        {
+            typename Vector::iterator iter;
+            iter = v.erase(v.begin() + 2, v.end());
+            THEN("there are 3 fewer values")
+            {
+                REQUIRE(v.begin() + 2 == iter);
+                REQUIRE(generate.count - 3 == v.size());
+                REQUIRE(generate.first_value == v[0]);
             }
         }
     }
