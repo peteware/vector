@@ -48,6 +48,29 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
                 REQUIRE(generate.last_value == v[generate.count - 2]);
             }
         }
+        WHEN("erase() in middle")
+        {
+            typename Vector::iterator iter;
+
+            iter = v.erase(v.begin() + 1);
+            THEN("one less value")
+            {
+                REQUIRE(v.begin() + 1 == iter);
+                REQUIRE(generate.count - 1 == v.size());
+                REQUIRE(generate.last_value == v[generate.count - 2]);
+            }
+        }
+        WHEN("erase() last item")
+        {
+            typename Vector::iterator iter;
+
+            iter = v.erase(v.end() - 1);
+            THEN("one less value")
+            {
+                REQUIRE(v.end() == iter);
+                REQUIRE(generate.count - 1 == v.size());
+            }
+        }
         WHEN("erase(begin,end)")
         {
             typename Vector::iterator iter;

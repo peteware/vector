@@ -588,17 +588,6 @@ typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator position)
 {
     return erase(position, position + 1);
-#if 0
-    difference_type       offset = pw::distance(const_iterator(m_data.begin()), position);
-    difference_type const count  = 1;
-    iterator              start  = m_data.begin() + offset;
-
-    return m_data.begin() + offset;
-    pw::move(start + count, m_data.end(), start);
-    pw::destroy(m_data.end() - count, m_data.end());
-    m_data.set_size(m_data.size() - 1);
-    return m_data.begin() + offset;
-#endif
 }
 
 template<class Type, class Allocator>
