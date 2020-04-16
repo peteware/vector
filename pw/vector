@@ -104,6 +104,10 @@ public:
     iterator               insert(const_iterator position, std::initializer_list<value_type> ilist);
     template<class Iterator>
     iterator insert(const_iterator position, Iterator first, Iterator last);
+    template<class... Args>
+    reference emplace_back(Args&&... args);
+    template<class... Args>
+    iterator emplace(const_iterator position, Args&&... args);
 
 private:
     using Storage = internal::Storage<Type, Allocator>;
@@ -646,6 +650,22 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     difference_type count  = distance(first, last);
 
     return m_data.begin();
+}
+
+template<class Type, class Allocator>
+template<class... Args>
+typename vector<Type, Allocator>::reference
+vector<Type, Allocator>::emplace_back(Args&&... args)
+{
+    return front();
+}
+
+template<class Type, class Allocator>
+template<class... Args>
+typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
+{
+    return begin();
 }
 
 template<class Type, class Allocator>

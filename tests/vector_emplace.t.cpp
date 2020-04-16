@@ -8,7 +8,9 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
+using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
+
+TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][emplace_back]", TestIntList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -16,36 +18,26 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
     GIVEN("An empty vector of TestType")
     {
         Vector v;
+        v.emplace_back(3);
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const   count = 5;
-        Values<Vector> generate(count);
+        Values<Vector> generate(5);
         Vector&        v = generate.values;
 
-        WHEN("push_back() const_ref is called to exceed capacity")
+        WHEN("emplace_back()")
         {
             size_t capacity = v.capacity();
             for (size_t i = 0; i < capacity; ++i)
             {
-                value_type t;
-                v.push_back(t);
-            }
-            REQUIRE(capacity < v.capacity());
-        }
-        WHEN("push_back() move is called to exceed capacity")
-        {
-            size_t capacity = v.capacity();
-            for (size_t i = 0; i < capacity; ++i)
-            {
-                v.push_back(value_type());
+                v.emplace_back(i);
             }
             REQUIRE(capacity < v.capacity());
         }
     }
 }
 
-SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
+SCENARIO("emplace_back() op counts", "[vector][emplace_back][optracker]")
 {
     using Vector     = pw::vector<CopyConstructible>;
     using value_type = typename Vector::value_type;
@@ -57,10 +49,10 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         Vector            v;
         CopyConstructible copyObject;
 
-        WHEN("push_back() is called")
+        WHEN("emplace_back() is called")
         {
             counter = CopyConstructible::getCounter();
-            v.push_back(copyObject);
+            v.emplace_back(copyObject);
             THEN("Copy construct called once")
             {
                 counter = CopyConstructible::getCounter() - counter;
@@ -68,10 +60,10 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
-        WHEN("push_back(move) is called")
+        WHEN("emplace_back(move) is called")
         {
             counter = CopyConstructible::getCounter();
-            v.push_back(pw::move(copyObject));
+            v.emplace_back(pw::move(copyObject));
             THEN("Copy construct called once")
             {
                 counter = CopyConstructible::getCounter() - counter;
@@ -88,9 +80,9 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 
         generate.values.shrink_to_fit();
         counter = CopyConstructible::getCounter();
-        WHEN("push_back() is called")
+        WHEN("emplace_back() is called")
         {
-            generate.values.push_back(copyObject);
+            generate.values.emplace_back(copyObject);
             counter = CopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items")
             {
