@@ -23,6 +23,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     }
     allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
     //allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), 4, 5);
+    return *m_data.end();
 }
 
 template<class Type, class Allocator>
@@ -52,7 +53,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
 
         WHEN("emplace-back() an element")
         {
-            //v.emplace_back(3, 4);
+            v.emplace_back(3, 4);
         }
     }
 }

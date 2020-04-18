@@ -40,7 +40,14 @@ struct allocator_traits
     template<class Type, class... Args>
     static void construct(allocator_type& alloc, Type* p, Args&&... args)
     {
-        ::new (static_cast<void*>(p)) Type(pw::forward<Args>(args)...);
+        if constexpr (has_member<allocator_type>(construct))
+        {
+            alloc.construct(p, pw::forward < Args(args)...);
+        }
+        else
+        {
+            ::new (static_cast<void*>(p)) Type(pw::forward<Args>(args)...);
+        }
     }
 
     template<class Type>

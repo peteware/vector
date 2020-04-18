@@ -27,7 +27,7 @@ SCENARIO("Allocator traits", "[allocator_traits]")
         pw::allocator<EmplaceMoveConstructible> alloc;
         EmplaceMoveConstructible                x(4, 5);
 
-        WHEN("construct ")
+        WHEN("construct")
         {
             pw::allocator_traits<pw::allocator<EmplaceMoveConstructible>>::construct(alloc, &x, 6, 8);
             THEN("value is set")
