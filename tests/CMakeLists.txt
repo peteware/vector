@@ -1,4 +1,5 @@
 add_executable( unittest
+                allocator_traits.t.cpp
                 cstddef.t.cpp
                 memory.t.cpp
                 opcounter.cpp

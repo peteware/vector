@@ -653,22 +653,6 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
 }
 
 template<class Type, class Allocator>
-template<class... Args>
-typename vector<Type, Allocator>::reference
-vector<Type, Allocator>::emplace_back(Args&&... args)
-{
-    return front();
-}
-
-template<class Type, class Allocator>
-template<class... Args>
-typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
-{
-    return begin();
-}
-
-template<class Type, class Allocator>
 void
 swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept
 {

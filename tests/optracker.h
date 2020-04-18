@@ -88,7 +88,7 @@ private:
 
 bool permute(CopyConstructible& value, int depth);
 
-struct MoveConstructible : OpTracker
+struct MoveConstructible : public OpTracker
 {
     static OpCounter getCounter();
     MoveConstructible(int value = 0)
@@ -108,6 +108,36 @@ struct MoveConstructible : OpTracker
     }
 
 private:
+    static OpCounter s_opCounter;
+};
+
+struct EmplaceMoveConstructible : public OpTracker
+{
+    static OpCounter getCounter();
+
+    EmplaceMoveConstructible(int value, int value2)
+        : OpTracker(s_opCounter, value)
+        , m_value2(value2)
+    {
+    }
+
+    EmplaceMoveConstructible(EmplaceMoveConstructible&& move)
+        : OpTracker(pw::move(move))
+    {
+    }
+
+    int value2() const
+    {
+        return m_value2;
+    }
+    EmplaceMoveConstructible& setValue2(int value)
+    {
+        m_value2 = value;
+        return *this;
+    }
+
+private:
+    int              m_value2 = 1;
     static OpCounter s_opCounter;
 };
 
