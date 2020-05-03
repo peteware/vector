@@ -6,6 +6,7 @@
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
 #include <pw/impl/pointer_traits.h>
+#include <pw/internal/is_supported.h>
 
 //#include <utility>
 
@@ -40,14 +41,17 @@ struct allocator_traits
     template<class Type, class... Args>
     static void construct(allocator_type& alloc, Type* p, Args&&... args)
     {
-        if constexpr (has_member<allocator_type>(construct))
-        {
-            alloc.construct(p, pw::forward < Args(args)...);
-        }
-        else
-        {
-            ::new (static_cast<void*>(p)) Type(pw::forward<Args>(args)...);
-        }
+#if 0
+        template<class , class = void>
+            struct has_construct : false_type
+        { };
+
+        // specialized as has_member< T , void > or discarded (sfinae)
+        template< class T >
+            struct has_construct< T , void_t<decltype(&T::construct) > > : true_type
+        { };
+#endif
+        ::new (static_cast<void*>(p)) Type(pw::forward<Args>(args)...);
     }
 
     template<class Type>

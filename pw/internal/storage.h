@@ -76,22 +76,23 @@ public:
      * Allocate enough space for count records.  Then up to
      * count records are moved into new Storage.
      */
-    void           move(size_type offset, size_type count, Type const& value);
-    Storage        resize(size_type offset, size_type count, Type const& value);
-    iterator       begin();
-    iterator       end();
-    const_iterator begin() const;
-    const_iterator end() const;
-    Storage&       set_size(size_type count);
-    size_type      size() const;
-    size_type      capacity() const;
-    size_type      newsize() const;
-    bool           hascapacity(size_type count = 1) const;
-    bool           empty() const;
-    void           push_back(value_type const& value);
-    void           push_back(value_type&& value);
-    allocator_type get_allocator() const;
-    friend void    swap(Storage& op1, Storage& op2)
+    void                  move(size_type offset, size_type count, Type const& value);
+    Storage               resize(size_type offset, size_type count, Type const& value);
+    iterator              begin();
+    iterator              end();
+    const_iterator        begin() const;
+    const_iterator        end() const;
+    Storage&              set_size(size_type count);
+    size_type             size() const;
+    size_type             capacity() const;
+    size_type             newsize() const;
+    bool                  hascapacity(size_type count = 1) const;
+    bool                  empty() const;
+    void                  push_back(value_type const& value);
+    void                  push_back(value_type&& value);
+    allocator_type&       get_allocator();
+    allocator_type const& get_allocator() const;
+    friend void           swap(Storage& op1, Storage& op2)
     {
         pw::swap(op1.m_begin, op2.m_begin);
         pw::swap(op1.m_end, op2.m_end);
@@ -296,7 +297,14 @@ Storage<Type, Allocator>::push_back(value_type&& value)
 }
 
 template<class Type, class Allocator>
-Allocator
+Allocator&
+Storage<Type, Allocator>::get_allocator()
+{
+    return m_alloc;
+}
+
+template<class Type, class Allocator>
+Allocator const&
 Storage<Type, Allocator>::get_allocator() const
 {
     return m_alloc;

@@ -121,9 +121,26 @@ struct EmplaceMoveConstructible : public OpTracker
     {
     }
 
+    EmplaceMoveConstructible(EmplaceMoveConstructible const& copy)
+        : OpTracker(copy)
+        , m_value2(copy.m_value2)
+    {
+    }
+
     EmplaceMoveConstructible(EmplaceMoveConstructible&& move)
         : OpTracker(pw::move(move))
     {
+    }
+
+    ~EmplaceMoveConstructible()
+    {
+    }
+
+    EmplaceMoveConstructible& operator=(EmplaceMoveConstructible const& op2)
+    {
+        OpTracker::operator=(op2);
+        m_value2           = op2.m_value2;
+        return *this;
     }
 
     int value2() const

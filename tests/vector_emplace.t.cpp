@@ -22,8 +22,8 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
         m_data = Storage(pw::move(m_data), m_data.newsize());
     }
     allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
-    //allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), 4, 5);
-    return *m_data.end();
+    m_data.set_size(m_data.size() + 1);
+    return *(m_data.end() - 1);
 }
 
 template<class Type, class Allocator>
@@ -37,8 +37,9 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 } // namespace pw
 
 using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
-using TestEmplaceList =
-    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
+//using TestEmplaceList =
+//    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
+using TestEmplaceList = std::tuple<std::vector<EmplaceMoveConstructible>>;
 
 TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                         "[vector][emplace_back]",
@@ -54,6 +55,35 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
         WHEN("emplace-back() an element")
         {
             v.emplace_back(3, 4);
+            THEN("size() is 1")
+            {
+                REQUIRE(1 == v.size());
+            }
+            THEN("element has correct values")
+            {
+                REQUIRE(3 == v.front().value());
+                REQUIRE(4 == v.front().value2());
+            }
+        }
+    }
+    GIVEN("A vector with elements")
+    {
+        Vector v = { { 1, 2 }, { 3, 4 }, { 4, 5 } };
+        REQUIRE(3 == v.size());
+        WHEN("emplace-back() an element")
+        {
+            v.emplace_back(13, 14);
+            THEN("size() is 4")
+            {
+                REQUIRE(4 == v.size());
+            }
+            THEN("element has correct values")
+            {
+                REQUIRE(1 == v.front().value());
+                REQUIRE(2 == v.front().value2());
+                REQUIRE(13 == v.back().value());
+                REQUIRE(14 == v.back().value2());
+            }
         }
     }
 }

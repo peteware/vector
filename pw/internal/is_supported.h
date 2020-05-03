@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_INTERNAL_IS_SUPPORTED_H
 #define INCLUDED_PW_INTERNAL_IS_SUPPORTED_H
 
-#include <pw/impl/bool.h>
+#include <pw/impl/bool_type.h>
 #include <pw/impl/void.h>
 
 namespace pw { namespace internal {
@@ -19,12 +19,12 @@ namespace pw { namespace internal {
  * @endcode
  */
 template<template<typename> typename Predicate, typename Type, typename = pw::void_t<>>
-struct supports : std::false_type
+struct supports : pw::false_type
 {
 };
 
 template<template<typename> typename Predicate, typename Type>
-struct supports<Predicate, Type, std::void_t<Predicate<Type>>> : pw::true_type
+struct supports<Predicate, Type, pw::void_t<Predicate<Type>>> : pw::true_type
 {
 };
 
