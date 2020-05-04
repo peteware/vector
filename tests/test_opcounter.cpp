@@ -1,4 +1,4 @@
-#include "opcounter.h"
+#include "test_opcounter.h"
 
 namespace pw { namespace test {
 
@@ -326,4 +326,4 @@ OpCounter::operator-(OpCounter const& op2) const
     c -= op2;
     return c;
 }
-}} // namespace pw
+}} // namespace pw::test

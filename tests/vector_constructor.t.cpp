@@ -1,6 +1,6 @@
 #include <pw/vector>
 
-#include "optracker.h"
+#include "test_optracker.h"
 
 #include <stdexcept>
 #include <tuple>

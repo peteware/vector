@@ -1,5 +1,5 @@
 #include "catch2/catch.hpp"
-#include "permute.h"
+#include "test_permute.h"
 #include "same.t.h"
 #include "testtype.h"
 #include <pw/algorithm>

@@ -2,7 +2,7 @@
 
 #include <pw/impl/allocator.h>
 
-#include "optracker.h"
+#include "test_optracker.h"
 
 #include "catch2/catch.hpp"
 

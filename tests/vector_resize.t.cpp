@@ -1,7 +1,7 @@
 #include "catch2/catch.hpp"
-#include "optracker.h"
-#include "permute.h"
 #include "same.t.h"
+#include "test_optracker.h"
+#include "test_permute.h"
 #include "testtype.h"
 #include <pw/algorithm>
 //#include <pw/allocator>

@@ -1,7 +1,7 @@
 #ifndef INCLUDED_OPTRACKER_H
 #define INCLUDED_OPTRACKER_H
 
-#include "opcounter.h"
+#include "test_opcounter.h"
 #include <pw/impl/move.h>
 
 namespace pw { namespace test {
@@ -160,6 +160,6 @@ private:
     static OpCounter s_opCounter;
 };
 
-}} // namespace pw
+}} // namespace pw::test
 
 #endif /*  INCLUDED_OPTRACKER_H */

@@ -1,7 +1,7 @@
 #ifndef INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
 #define INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
 
-#include "opcounter.h"
+#include "test_opcounter.h"
 #include <pw/impl/iterator_tag.h>
 
 namespace pw { namespace test {

@@ -2,9 +2,9 @@ add_executable( unittest
                 allocator_traits.t.cpp
                 cstddef.t.cpp
                 memory.t.cpp
-                opcounter.cpp
-                optracker.cpp
-                permute.cpp
+                test_opcounter.cpp
+                test_optracker.cpp
+                test_permute.cpp
                 reverse_iterator.t.cpp
                 storage.t.cpp
                 uninitialized_move.t.cpp
