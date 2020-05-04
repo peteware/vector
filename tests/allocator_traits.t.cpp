@@ -24,12 +24,13 @@ SCENARIO("Allocator traits", "[allocator_traits]")
     }
     GIVEN("An allocator of EmplaceMoveConstructible")
     {
-        pw::allocator<EmplaceMoveConstructible> alloc;
-        EmplaceMoveConstructible                x(4, 5);
+        pw::allocator<pw::test::EmplaceMoveConstructible> alloc;
+        pw::test::EmplaceMoveConstructible                x(4, 5);
 
         WHEN("construct")
         {
-            pw::allocator_traits<pw::allocator<EmplaceMoveConstructible>>::construct(alloc, &x, 6, 8);
+            pw::allocator_traits<pw::allocator<pw::test::EmplaceMoveConstructible>>::construct(
+                alloc, &x, 6, 8);
             THEN("value is set")
             {
                 REQUIRE(6 == x.value());

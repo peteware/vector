@@ -4,6 +4,8 @@
 #include "opcounter.h"
 #include <pw/impl/iterator_tag.h>
 
+namespace pw { namespace test {
+
 template<class Iterator>
 struct random_access_iterator
 {
@@ -50,5 +52,7 @@ private:
     Iterator         m_iterator = {};
     static OpCounter s_opCounter;
 };
+
+}} // namespace pw::test
 
 #endif /* INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H */

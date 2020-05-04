@@ -1,5 +1,7 @@
 #include "permute.h"
 
+namespace pw { namespace test {
+
 bool
 permute(int& value, int depth)
 {
@@ -50,3 +52,5 @@ permute(double& value, int depth)
     ++value;
     return true;
 }
+
+}} // namespace pw

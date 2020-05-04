@@ -6,14 +6,14 @@
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")
 {
-    size_t const      count        = 3;
-    CopyConstructible array[count] = {
-        CopyConstructible(2),
-        CopyConstructible(1),
-        CopyConstructible(3),
+    size_t const                count        = 3;
+    pw::test::CopyConstructible array[count] = {
+        pw::test::CopyConstructible(2),
+        pw::test::CopyConstructible(1),
+        pw::test::CopyConstructible(3),
     };
-    CopyConstructible dest[count];
-    OpCounter         init = CopyConstructible::getCounter();
+    pw::test::CopyConstructible dest[count];
+    pw::test::OpCounter         init = pw::test::CopyConstructible::getCounter();
     GIVEN("A src and dst array")
     {
         WHEN("move")
@@ -21,7 +21,7 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             pw::uninitialized_move(&array[0], &array[count], &dest[0]);
             THEN("move constructor called; destructor not")
             {
-                OpCounter count = CopyConstructible::getCounter() - init;
+                pw::test::OpCounter count = pw::test::CopyConstructible::getCounter() - init;
                 REQUIRE(3 == count.getMoveConstructor());
                 REQUIRE(count.constructorCount() == count.getMoveConstructor());
             }

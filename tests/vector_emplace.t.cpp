@@ -31,6 +31,10 @@ template<class... Args>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
+    if (!m_data.hascapacity())
+    {
+        m_data = Storage(pw::move(m_data), m_data.newsize());
+    }
     return begin();
 }
 
@@ -39,7 +43,7 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
 //using TestEmplaceList =
 //    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
-using TestEmplaceList = std::tuple<std::vector<EmplaceMoveConstructible>>;
+using TestEmplaceList = std::tuple<std::vector<pw::test::EmplaceMoveConstructible>>;
 
 TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                         "[vector][emplace_back]",
@@ -50,11 +54,14 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
 
     GIVEN("An empty vector")
     {
-        Vector v;
+        Vector              v;
+        pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
+        pw::test::OpCounter counter;
 
         WHEN("emplace-back() an element")
         {
             v.emplace_back(3, 4);
+            counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
             THEN("size() is 1")
             {
                 REQUIRE(1 == v.size());
@@ -63,6 +70,10 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
             {
                 REQUIRE(3 == v.front().value());
                 REQUIRE(4 == v.front().value2());
+            }
+            THEN("not copy constructed")
+            {
+                REQUIRE(0 == counter.getCopyConstructor());
             }
         }
     }

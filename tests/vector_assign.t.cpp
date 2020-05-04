@@ -20,7 +20,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
             value_type value;
             size_t     count = 12;
 
-            permute(value, 3);
+            pw::test::permute(value, 3);
             v.assign(count, value);
             THEN("size() is count")
             {
@@ -37,7 +37,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
             size_t     count = 12;
             v.resize(count - 3);
 
-            permute(value, 3);
+            pw::test::permute(value, 3);
             v.assign(count, value);
             THEN("size() is count")
             {
@@ -52,9 +52,9 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
         {
             value_type   value;
             size_t const count         = 3;
-            value_type   values[count] = { permute_n(value, 4, 1),
-                                         permute_n(value, 4, 1),
-                                         permute_n(value, 4, 1) };
+            value_type   values[count] = { pw::test::permute_n(value, 4, 1),
+                                         pw::test::permute_n(value, 4, 1),
+                                         pw::test::permute_n(value, 4, 1) };
 
             v.assign(&values[0], &values[count]);
             THEN("size() is count")
@@ -69,7 +69,9 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
         WHEN("assign(init_list)")
         {
             value_type value;
-            v.assign({ permute_n(value, 4, 1), permute_n(value, 4, 1), permute_n(value, 4, 1) });
+            v.assign({ pw::test::permute_n(value, 4, 1),
+                       pw::test::permute_n(value, 4, 1),
+                       pw::test::permute_n(value, 4, 1) });
             THEN("size() is 3")
             {
                 REQUIRE(static_cast<size_t>(3) == v.size());

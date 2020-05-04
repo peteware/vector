@@ -20,7 +20,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
         {
             typename Vector::iterator iter;
             value_type                value;
-            permute(value, 3);
+            pw::test::permute(value, 3);
             iter = v.insert(v.begin(), value);
             THEN("size() is increased")
             {
@@ -41,7 +41,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             value_type                value;
             size_t                    count = 12;
 
-            permute(value, 3);
+            pw::test::permute(value, 3);
             iter = v.insert(v.begin(), count, value);
             THEN("there are count values")
             {
@@ -57,7 +57,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             value_type                value;
             size_t                    count = 12;
 
-            permute(value, 3);
+            pw::test::permute(value, 3);
             iter = v.insert(v.end(), count, value);
             THEN("there are count values")
             {
@@ -155,41 +155,41 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
 
 SCENARIO("insert() op counts", "[vector][insert][optracker]")
 {
-    using Vector     = pw::vector<CopyConstructible>;
+    using Vector     = pw::vector<pw::test::CopyConstructible>;
     using value_type = typename Vector::value_type;
 
-    OpCounter       counter;
-    OpCounter const init  = CopyConstructible::getCounter();
-    size_t          count = 5;
+    pw::test::OpCounter       counter;
+    pw::test::OpCounter const init  = pw::test::CopyConstructible::getCounter();
+    size_t                    count = 5;
 
     GIVEN("An empty vector")
     {
-        Vector            v;
-        CopyConstructible copyObject;
+        Vector                      v;
+        pw::test::CopyConstructible copyObject;
 
         WHEN("insert(count) at begin")
         {
-            CopyConstructible copyObject;
-            counter = CopyConstructible::getCounter();
+            pw::test::CopyConstructible copyObject;
+            counter = pw::test::CopyConstructible::getCounter();
             v.insert(v.begin(), count, copyObject);
             THEN("Copy constructor called count times")
             {
-                counter = CopyConstructible::getCounter() - counter;
+                counter = pw::test::CopyConstructible::getCounter() - counter;
                 REQUIRE(count == counter.constructorCount());
             }
         }
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector>    generate(5);
-        CopyConstructible copyObject;
+        Values<Vector>              generate(5);
+        pw::test::CopyConstructible copyObject;
 
         generate.values.shrink_to_fit();
-        counter = CopyConstructible::getCounter();
+        counter = pw::test::CopyConstructible::getCounter();
         WHEN("insert() at begin")
         {
             generate.values.insert(generate.values.begin(), copyObject);
-            counter = CopyConstructible::getCounter() - counter;
+            counter = pw::test::CopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -202,7 +202,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() at end")
         {
             generate.values.insert(generate.values.end(), copyObject);
-            counter = CopyConstructible::getCounter() - counter;
+            counter = pw::test::CopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -215,7 +215,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() in middle")
         {
             generate.values.insert(generate.values.begin() + generate.count - 2, copyObject);
-            counter = CopyConstructible::getCounter() - counter;
+            counter = pw::test::CopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -226,6 +226,6 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
             }
         }
     }
-    counter = CopyConstructible::getCounter() - init;
+    counter = pw::test::CopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

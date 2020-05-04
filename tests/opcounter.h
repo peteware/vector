@@ -1,6 +1,8 @@
 #ifndef INCLUDED_PW_OPCOUNTER_T_H
 #define INCLUDED_PW_OPCOUNTER_T_H
 
+namespace pw { namespace test {
+
 /**
  * Collect calls to constructors
  */
@@ -30,6 +32,8 @@ public:
     int        getDefaultConstructorAlloc() const;
     OpCounter& addCopyConstructorAlloc();
     int        getCopyConstructorAlloc() const;
+    OpCounter& addOtherConstructor();
+    int        getOtherConstructor() const;
     OpCounter& addDestructor();
     int        getDestructor() const;
     OpCounter& addAssignment();
@@ -61,6 +65,7 @@ private:
     int m_move            = 0; ///< Move constructor
     int m_defaultalloc    = 0; ///< Default constructor with allocator
     int m_copyalloc       = 0; ///< Copy constructor with allocator
+    int m_other           = 0; ///< Any other constructor
     int m_destructor      = 0; ///< destructors
     int m_assignment      = 0; ///< Calls to operator=()
     int m_moveassignment  = 0; ///< Calls to operator=()
@@ -74,5 +79,7 @@ private:
     int m_notEqual        = 0; ///< Calls to operator!=()
     int m_lt              = 0; ///< Calls to operator<()
 };
+
+}} // namespace pw::test
 
 #endif /*  INCLUDED_PW_OPCOUNTER_T_H */

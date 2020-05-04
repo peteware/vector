@@ -4,6 +4,8 @@
 #include "opcounter.h"
 #include <pw/impl/move.h>
 
+namespace pw { namespace test {
+
 struct OpTracker
 {
 protected:
@@ -157,5 +159,7 @@ private:
     int              m_value2 = 1;
     static OpCounter s_opCounter;
 };
+
+}} // namespace pw
 
 #endif /*  INCLUDED_OPTRACKER_H */

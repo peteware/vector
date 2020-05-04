@@ -60,7 +60,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
     {
         Storage  storage(10, allocator);
         TestType value;
-        permute(value, 3);
+        pw::test::permute(value, 3);
         WHEN("push_back(value)")
         {
             storage.push_back(value);
@@ -82,7 +82,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
     {
         Storage  storage(10, allocator);
         TestType value;
-        permute(value, 3);
+        pw::test::permute(value, 3);
         storage.push_back(value);
         REQUIRE(*storage.begin() == value);
         WHEN("Storage (move, 20)")
@@ -124,17 +124,17 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
 
 SCENARIO("Storage construct counts", "[storage][count]")
 {
-    using Storage = pw::internal::Storage<CopyConstructible>;
+    using Storage = pw::internal::Storage<pw::test::CopyConstructible>;
 
-    OpCounter const init = CopyConstructible::getCounter();
-    OpCounter       counter;
+    pw::test::OpCounter const init = pw::test::CopyConstructible::getCounter();
+    pw::test::OpCounter       counter;
     GIVEN("An empty Storage")
     {
         Storage storage;
         WHEN("Nothing happens")
         {
             REQUIRE(storage.empty());
-            counter = CopyConstructible::getCounter();
+            counter = pw::test::CopyConstructible::getCounter();
             REQUIRE(counter.zero());
         }
         WHEN("Allocate items")
@@ -167,6 +167,6 @@ SCENARIO("Storage construct counts", "[storage][count]")
         }
     }
 
-    counter = CopyConstructible::getCounter() - init;
+    counter = pw::test::CopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

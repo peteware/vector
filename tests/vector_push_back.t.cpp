@@ -47,34 +47,34 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
 
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
-    using Vector     = pw::vector<CopyConstructible>;
+    using Vector     = pw::vector<pw::test::CopyConstructible>;
     using value_type = typename Vector::value_type;
-    OpCounter       counter;
-    OpCounter const init = CopyConstructible::getCounter();
+    pw::test::OpCounter       counter;
+    pw::test::OpCounter const init = pw::test::CopyConstructible::getCounter();
 
     GIVEN("An empty vector")
     {
-        Vector            v;
-        CopyConstructible copyObject;
+        Vector                      v;
+        pw::test::CopyConstructible copyObject;
 
         WHEN("push_back() is called")
         {
-            counter = CopyConstructible::getCounter();
+            counter = pw::test::CopyConstructible::getCounter();
             v.push_back(copyObject);
             THEN("Copy construct called once")
             {
-                counter = CopyConstructible::getCounter() - counter;
+                counter = pw::test::CopyConstructible::getCounter() - counter;
                 REQUIRE(1 == counter.constructorCount());
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
         WHEN("push_back(move) is called")
         {
-            counter = CopyConstructible::getCounter();
+            counter = pw::test::CopyConstructible::getCounter();
             v.push_back(pw::move(copyObject));
             THEN("Copy construct called once")
             {
-                counter = CopyConstructible::getCounter() - counter;
+                counter = pw::test::CopyConstructible::getCounter() - counter;
                 REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(counter.getMoveConstructor() == counter.allCount());
             }
@@ -82,16 +82,16 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector>    generate(5);
-        CopyConstructible copyObject;
-        OpCounter         startCount(CopyConstructible::getCounter());
+        Values<Vector>              generate(5);
+        pw::test::CopyConstructible copyObject;
+        pw::test::OpCounter         startCount(pw::test::CopyConstructible::getCounter());
 
         generate.values.shrink_to_fit();
-        counter = CopyConstructible::getCounter();
+        counter = pw::test::CopyConstructible::getCounter();
         WHEN("push_back() is called")
         {
             generate.values.push_back(copyObject);
-            counter = CopyConstructible::getCounter() - counter;
+            counter = pw::test::CopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -102,6 +102,6 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             }
         }
     }
-    counter = CopyConstructible::getCounter() - init;
+    counter = pw::test::CopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

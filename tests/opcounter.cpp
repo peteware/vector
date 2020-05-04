@@ -1,5 +1,7 @@
 #include "opcounter.h"
 
+namespace pw { namespace test {
+
 OpCounter::OpCounter()
 {
 }
@@ -19,7 +21,7 @@ OpCounter::allCount() const
 int
 OpCounter::constructorCount() const
 {
-    return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc;
+    return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc + m_other;
 }
 
 int
@@ -120,6 +122,19 @@ OpCounter&
 OpCounter::addCopyConstructorAlloc()
 {
     ++m_copyalloc;
+    return *this;
+}
+
+int
+OpCounter::getOtherConstructor() const
+{
+    return m_other;
+}
+
+OpCounter&
+OpCounter::addOtherConstructor()
+{
+    ++m_other;
     return *this;
 }
 
@@ -311,3 +326,4 @@ OpCounter::operator-(OpCounter const& op2) const
     c -= op2;
     return c;
 }
+}} // namespace pw

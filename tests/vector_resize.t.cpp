@@ -49,7 +49,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
 
         for (size_t i = 0; i < count; ++i)
         {
-            permute(value, 10);
+            pw::test::permute(value, 10);
             if (i == 0)
                 first_value = value;
             values.push_back(value);
@@ -114,7 +114,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
             value_type   value;
             size_t const size = count + 3;
 
-            permute(value, 3);
+            pw::test::permute(value, 3);
             v.resize(size, value);
             THEN("size() is increased")
             {
@@ -129,12 +129,12 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
 }
 SCENARIO("resize() op counts", "[vector][resize][optracker]")
 {
-    using Vector     = pw::vector<CopyConstructible>;
+    using Vector     = pw::vector<pw::test::CopyConstructible>;
     using value_type = typename Vector::value_type;
 
-    OpCounter       counter;
-    OpCounter const init  = CopyConstructible::getCounter();
-    size_t          count = 5;
+    pw::test::OpCounter       counter;
+    pw::test::OpCounter const init  = pw::test::CopyConstructible::getCounter();
+    size_t                    count = 5;
 
     GIVEN("An empty vector")
     {
@@ -142,9 +142,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() is called")
         {
-            counter = CopyConstructible::getCounter();
+            counter = pw::test::CopyConstructible::getCounter();
             v.resize(count);
-            counter = CopyConstructible::getCounter() - counter;
+            counter = pw::test::CopyConstructible::getCounter() - counter;
             THEN("default constructed count times")
             {
                 REQUIRE(count == counter.getDefaultConstructor());
@@ -153,6 +153,6 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
             }
         }
     }
-    counter = CopyConstructible::getCounter() - init;
+    counter = pw::test::CopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

@@ -1,6 +1,8 @@
 #include "optracker.h"
 #include "permute.h"
 
+namespace pw { namespace test {
+
 OpTracker::OpTracker(OpCounter& opCounter, int value)
     : m_opCounter(opCounter)
     , m_value(value)
@@ -134,3 +136,5 @@ EmplaceMoveConstructible::getCounter()
 {
     return s_opCounter;
 }
+
+}} // namespace pw
