@@ -19,6 +19,4 @@ target_include_directories( ${PROJECT_NAME} INTERFACE
                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 #add_subdirectory(pw)
 add_subdirectory(tests)
-
-enable_testing ()
-add_test (NAME MyTest COMMAND Test)
+add_subdirectory(tests/catch2)

@@ -21,7 +21,19 @@ add_executable( unittest
                 vector_push_back.t.cpp
                 vector_resize.t.cpp
                 )
-target_link_libraries(unittest pw)
+target_sources ( unittest PUBLIC
+                 same.t.h
+                 test_opcounter.h
+                 test_optracker.h
+                 test_permute.h
+                 test_random_access_iterator.h
+                 testtype.h
+               )
+target_include_directories( unittest INTERFACE
+                            $<BUILD_INTERFACE:/tests
+                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+               
+target_link_libraries(unittest pw catch2)
 add_test( NAME unittest
           COMMAND unittest)
 
