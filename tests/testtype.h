@@ -5,7 +5,7 @@
 #include <tuple>
 #include <vector>
 
-#include "test_permute.h"
+#include <test_permute.h>
 
 using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 

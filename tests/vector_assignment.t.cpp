@@ -1,11 +1,12 @@
-#include "catch2/catch.hpp"
-#include "test_permute.h"
-#include "same.t.h"
-#include "testtype.h"
 #include <pw/algorithm>
-//#include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
+
+#include <same.t.h>
+#include <test_permute.h>
+#include <testtype.h>
+
+#include <catch2/catch.hpp>
 
 TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", TestTypeList)
 {

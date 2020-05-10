@@ -1,10 +1,8 @@
-#include <pw/impl/allocator_traits.h>
-
 #include <pw/impl/allocator.h>
+#include <pw/impl/allocator_traits.h>
+#include <test_optracker.h>
 
-#include "test_optracker.h"
-
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 SCENARIO("Allocator traits", "[allocator_traits]")
 {

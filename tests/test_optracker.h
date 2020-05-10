@@ -1,7 +1,7 @@
 #ifndef INCLUDED_OPTRACKER_H
 #define INCLUDED_OPTRACKER_H
 
-#include "test_opcounter.h"
+#include <test_opcounter.h>
 #include <pw/impl/move.h>
 
 namespace pw { namespace test {

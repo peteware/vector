@@ -1,9 +1,9 @@
 #include <pw/internal/storage.h>
 
-#include "catch2/catch.hpp"
-#include "test_opcounter.h"
-#include "test_optracker.h"
-#include "test_permute.h"
+#include <catch2/catch.hpp>
+#include <test_opcounter.h>
+#include <test_optracker.h>
+#include <test_permute.h>
 
 //using TestTypeList = std::tuple<int, double>;
 using TestTypeList = std::tuple<int>;

@@ -1,12 +1,12 @@
 #include <pw/vector>
 
-#include "test_optracker.h"
+#include <test_optracker.h>
 
 #include <stdexcept>
 #include <tuple>
 #include <vector>
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 using TestTypeList =
     std::tuple<pw::vector<pw::test::CopyConstructible>, std::vector<pw::test::CopyConstructible>>;

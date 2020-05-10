@@ -4,7 +4,7 @@
 #include <pw/impl/reverse_iterator.h>
 #include <pw/impl/size.h>
 
-#include "catch2/catch.hpp"
+#include <catch2/catch.hpp>
 
 SCENARIO("check reverse_iterator")
 {
