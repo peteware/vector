@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 # This defines some variables to support best practices for varous paths
 include(GNUInstallDirs)
+# There is testing
+enable_testing()
 
 # Add the library as an interface
 add_library(${PROJECT_NAME} INTERFACE)
