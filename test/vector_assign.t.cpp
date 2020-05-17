@@ -4,6 +4,10 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements:
+ * - No extra
+ */
 TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

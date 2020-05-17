@@ -2,6 +2,10 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type Requirments
+ * - erase(): MoveAssignable
+ */
 TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
 {
     using Vector = TestType;

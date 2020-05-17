@@ -2,6 +2,10 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements
+ * - clear(): No extra
+ */
 TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

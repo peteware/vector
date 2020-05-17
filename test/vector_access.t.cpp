@@ -4,6 +4,14 @@
 
 #include <stdexcept>
 
+/*
+ * Type requirements:
+ * - at(): no extra
+ * - operator[](): no extra
+ * - front(): no extra
+ * - back(): no extra
+ * - data(): no extra
+ */
 TEMPLATE_LIST_TEST_CASE("access methods", "[vector][access]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

@@ -3,6 +3,11 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements
+ * - push_back(const T& value): CopyInsertable
+ * - push_back(T&& value): MoveInsertable
+ */
 TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

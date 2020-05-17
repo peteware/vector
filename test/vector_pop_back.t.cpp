@@ -2,6 +2,10 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements
+ * - pop_back(): No extra
+ */
 TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

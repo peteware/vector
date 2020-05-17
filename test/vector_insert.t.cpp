@@ -5,6 +5,17 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements:
+ * - insert(const_iterator pos, const T& value): CopyAssignable and CopyInsertable
+ * - insert(const_iterator pos, T&& value):  MoveAssignable and MoveInsertable
+ * - insert(const_iterator pos, size_type count, const T& value):  CopyAssignable and CopyInsertable
+ * - insert const_iterator pos, InputIt first, InputIt last): EmplaceConstructible, Swappable, MoveAssignable, MoveConstructible and MoveInsertable
+ * - insert(const_iterator pos, std::initializer_list<T> ilist): EmplaceConstructible, Swappable, MoveAssignable, MoveConstructible and MoveInsertable 
+ *
+ * Exceptions:
+ * - yex
+ */
 TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

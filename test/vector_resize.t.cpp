@@ -4,6 +4,11 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements
+ * - resize(size_type count): MoveInsertable and DefaultInsertable
+ * - resize(size_type count, const value_type& value): CopyInsertable
+ */
 TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

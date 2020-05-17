@@ -2,6 +2,10 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements:
+ * - No extra
+ */
 TEMPLATE_LIST_TEST_CASE("iterator methods on empty vector", "[vector][iter][empty]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

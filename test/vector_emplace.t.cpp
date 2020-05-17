@@ -39,6 +39,11 @@ using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
 //    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
 using TestEmplaceList = std::tuple<std::vector<pw::test::EmplaceMoveConstructible>>;
 
+/*
+ * Type requirements:
+ * - emplace_back(): MoveInsertable and EmplaceConstructible
+ * - emplace(): MoveAssignable, MoveInsertable and EmplaceConstructible
+ */
 TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                         "[vector][emplace_back]",
                         TestEmplaceList)

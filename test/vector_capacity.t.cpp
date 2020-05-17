@@ -2,6 +2,18 @@
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type requirements:
+ * - empty(): no extra
+ * - size(): no extra
+ * - max_size(): no extra
+ * - reserve(): MoveInsertable
+ * - capacity(): no extra
+ * - shrink_to_fit(): MoveInsertable
+ *
+ * Exceptions:
+ * - reserve(): yes
+ */
 TEMPLATE_LIST_TEST_CASE("capacity methods", "[vector][capacity]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

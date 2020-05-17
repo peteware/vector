@@ -1,9 +1,11 @@
-#include <pw/vector>
-
 #include <test_testtype.h>
 
 #include <catch2/catch.hpp>
 
+/*
+ * Type Requirements:
+ * - No extra
+ */
 TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeList)
 {
     using Vector     = TestType;

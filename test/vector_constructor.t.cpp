@@ -9,6 +9,10 @@
 
 using TestTypeList =
     std::tuple<pw::vector<pw::test::CopyConstructible>, std::vector<pw::test::CopyConstructible>>;
+/*
+ * Type requirements:
+ * - No extra
+ */
 TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]", TestTypeList)
 {
     using Vector     = TestType;
