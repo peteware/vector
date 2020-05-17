@@ -1,6 +1,7 @@
 #include <pw/vector>
 
 #include <test_optracker.h>
+#include <test_testtype.h>
 
 #include <stdexcept>
 #include <tuple>
@@ -40,6 +41,50 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             THEN("copy constructor not called")
             {
                 REQUIRE(counter.zero());
+            }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
+        REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
+
+        WHEN("copy constructor is called")
+        {
+            Vector c(v);
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+                REQUIRE(c == d);
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+                REQUIRE(c == d);
             }
         }
     }
