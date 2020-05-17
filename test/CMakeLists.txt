@@ -22,12 +22,12 @@ add_executable( unittest
                 vector_resize.t.cpp
                 )
 target_sources ( unittest PUBLIC
-                 same.t.h
+                 test_same.h
                  test_opcounter.h
                  test_optracker.h
                  test_permute.h
                  test_random_access_iterator.h
-                 testtype.h
+                 test_testtype.h
                )
 target_include_directories( unittest PRIVATE ${CMAKE_SOURCE_DIR}/test)
                

@@ -2,9 +2,9 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-#include <same.t.h>
 #include <test_permute.h>
-#include <testtype.h>
+#include <test_same.h>
+#include <test_testtype.h>
 
 #include <catch2/catch.hpp>
 

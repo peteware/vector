@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
 #include <pw/algorithm>
-#include <same.t.h>
 #include <test_permute.h>
-#include <testtype.h>
+#include <test_same.h>
+#include <test_testtype.h>
 //#include <pw/allocator>
 #include <pw/type_traits>
 #include <pw/vector>
