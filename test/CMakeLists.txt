@@ -20,6 +20,7 @@ add_executable( unittest
                 vector_erase.t.cpp
                 vector_insert.t.cpp
                 vector_iter.t.cpp
+                vector_pop_back.t.cpp
                 vector_push_back.t.cpp
                 vector_resize.t.cpp
                 )

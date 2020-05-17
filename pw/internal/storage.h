@@ -61,7 +61,7 @@ private:
     pointer        m_end;
     size_type      m_allocated;
 
-    enum { INITIAL_SIZE = 10 };
+    enum { INITIAL_SIZE = 1 };
 
 public:
     Storage(allocator_type const& alloc = allocator_type());
@@ -265,7 +265,7 @@ template<class Type, class Allocator>
 typename Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::newsize() const
 {
-    return pw::max((size_type)8, m_allocated * 2);
+    return pw::max((size_type)INITIAL_SIZE, m_allocated * 2);
 }
 
 template<class Type, class Allocator>

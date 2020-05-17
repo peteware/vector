@@ -1,9 +1,7 @@
 #include <pw/vector>
-
 #include <test_optracker.h>
 #include <test_testtype.h>
 
-#include <stdexcept>
 #include <tuple>
 #include <vector>
 
@@ -11,7 +9,6 @@
 
 using TestTypeList =
     std::tuple<pw::vector<pw::test::CopyConstructible>, std::vector<pw::test::CopyConstructible>>;
-//using TestTypeList = std::tuple<std::vector<pw::test::CopyConstructible>>;
 TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]", TestTypeList)
 {
     using Vector     = TestType;

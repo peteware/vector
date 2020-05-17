@@ -1,14 +1,8 @@
-#include <catch2/catch.hpp>
-
-#include <pw/algorithm>
-#include <pw/type_traits>
-#include <pw/vector>
+//#include <pw/impl/forward.h>
 #include <test_optracker.h>
-#include <test_permute.h>
-#include <test_same.h>
 #include <test_testtype.h>
 
-#include <pw/impl/forward.h>
+#include <catch2/catch.hpp>
 
 namespace pw {
 

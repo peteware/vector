@@ -1,5 +1,3 @@
-#include <pw/type_traits>
-#include <pw/vector>
 #include <test_testtype.h>
 
 #include <catch2/catch.hpp>

@@ -1,6 +1,5 @@
 #include <pw/vector>
 
-#include <test_permute.h>
 #include <test_testtype.h>
 
 #include <catch2/catch.hpp>

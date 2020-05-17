@@ -1,12 +1,7 @@
-#include <catch2/catch.hpp>
-#include <pw/algorithm>
 #include <test_optracker.h>
-#include <test_permute.h>
-#include <test_same.h>
 #include <test_testtype.h>
-//#include <pw/allocator>
-#include <pw/type_traits>
-#include <pw/vector>
+
+#include <catch2/catch.hpp>
 
 TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestTypeList)
 {
@@ -15,7 +10,22 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 
     GIVEN("An empty vector of TestType")
     {
-        Vector v;
+        Vector     v;
+        value_type value;
+
+        WHEN("push_back() is called")
+        {
+            v.push_back(value);
+            THEN("capacity() is increased")
+            {
+                REQUIRE(v.capacity() >= 1);
+            }
+            THEN("value is there")
+            {
+                REQUIRE(value == v.front());
+                REQUIRE(value == v.back());
+            }
+        }
     }
     GIVEN("A vector with 5 elements")
     {

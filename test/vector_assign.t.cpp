@@ -1,11 +1,8 @@
-#include <catch2/catch.hpp>
-#include <pw/algorithm>
 #include <test_permute.h>
 #include <test_same.h>
 #include <test_testtype.h>
-//#include <pw/allocator>
-#include <pw/type_traits>
-#include <pw/vector>
+
+#include <catch2/catch.hpp>
 
 TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", pw::test::TestTypeList)
 {

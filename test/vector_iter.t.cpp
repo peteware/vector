@@ -1,13 +1,6 @@
-#include <catch2/catch.hpp>
-#include <pw/algorithm>
-#include <test_permute.h>
-//#include <test_same.h>
 #include <test_testtype.h>
-//#include <pw/allocator>
-#include <pw/type_traits>
-#include <pw/vector>
 
-#include <stdexcept>
+#include <catch2/catch.hpp>
 
 TEMPLATE_LIST_TEST_CASE("iterator methods on empty vector", "[vector][iter][empty]", pw::test::TestTypeList)
 {
