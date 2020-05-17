@@ -10,6 +10,7 @@ add_executable( unittest
                 uninitialized_move.t.cpp
                 unittest.m.cpp
                 vector_1.t.cpp
+                vector_access.t.cpp
                 vector_assign.t.cpp
                 vector_assignment.t.cpp
                 vector_at.t.cpp
