@@ -1,9 +1,6 @@
-#include <pw/algorithm>
-#include <pw/type_traits>
 #include <pw/vector>
 
 #include <test_permute.h>
-#include <test_same.h>
 #include <test_testtype.h>
 
 #include <catch2/catch.hpp>
