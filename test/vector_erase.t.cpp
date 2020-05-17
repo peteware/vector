@@ -8,7 +8,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
 {
     using Vector = TestType;
     typename Vector::iterator iter;
@@ -33,8 +33,8 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector> generate(5);
-        Vector&        v = generate.values;
+        pw::test::Values<Vector> generate(5);
+        Vector&                  v = generate.values;
 
         WHEN("erase() at begin()")
         {

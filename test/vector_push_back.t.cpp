@@ -8,7 +8,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -19,9 +19,9 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const   count = 5;
-        Values<Vector> generate(count);
-        Vector&        v = generate.values;
+        size_t const             count = 5;
+        pw::test::Values<Vector> generate(count);
+        Vector&                  v = generate.values;
 
         WHEN("push_back() const_ref is called to exceed capacity")
         {
@@ -82,7 +82,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector>              generate(5);
+        pw::test::Values<Vector>    generate(5);
         pw::test::CopyConstructible copyObject;
         pw::test::OpCounter         startCount(pw::test::CopyConstructible::getCounter());
 

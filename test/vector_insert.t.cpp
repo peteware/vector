@@ -8,7 +8,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -70,7 +70,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector>            generate(5);
+        pw::test::Values<Vector>  generate(5);
         size_t                    added;
         size_t                    offset;
         value_type                value;
@@ -181,7 +181,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector>              generate(5);
+        pw::test::Values<Vector>    generate(5);
         pw::test::CopyConstructible copyObject;
 
         generate.values.shrink_to_fit();

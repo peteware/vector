@@ -7,6 +7,7 @@
 
 #include <test_permute.h>
 
+namespace pw { namespace test {
 using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 
 template<class Container>
@@ -33,5 +34,6 @@ struct Values
         }
     }
 };
+}} // namespace pw
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

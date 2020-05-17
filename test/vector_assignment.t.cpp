@@ -8,7 +8,7 @@
 
 #include <catch2/catch.hpp>
 
-TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;

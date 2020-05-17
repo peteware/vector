@@ -8,7 +8,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;

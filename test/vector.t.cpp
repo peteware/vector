@@ -10,13 +10,13 @@
 #include <stdexcept>
 //using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>, std::vector<std::string>>;
 
-TEMPLATE_LIST_TEST_CASE("Test constructors", "[vector][constructor]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test constructors", "[vector][constructor]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 }
 
-TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -148,8 +148,8 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector> generate(5);
-        Vector         v(generate.values);
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
         REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
 
         WHEN("empty() is called")
@@ -302,8 +302,8 @@ TEMPLATE_LIST_TEST_CASE("const methods on empty vector", "[vector][empty]", Test
     }
     GIVEN("A const vector of value_type with 1 item")
     {
-        Values<Vector> generate(1);
-        Vector const&  c = generate.values;
+        pw::test::Values<Vector> generate(1);
+        Vector const&            c = generate.values;
 
         WHEN("front() const is called")
         {

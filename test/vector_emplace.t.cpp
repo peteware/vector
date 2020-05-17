@@ -120,7 +120,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][emplace_back]", TestIntList)
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector> generate(5);
+        pw::test::Values<Vector> generate(5);
         Vector&        v = generate.values;
 
         WHEN("emplace_back()")

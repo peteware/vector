@@ -7,7 +7,7 @@
 #include <pw/type_traits>
 #include <pw/vector>
 
-TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", TestTypeList)
+TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -46,8 +46,8 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", TestTypeList)
     }
     GIVEN("A vector with 5 elements")
     {
-        Values<Vector> generate(5);
-        Vector         v(generate.values);
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
         REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
         WHEN("at(0) is called")
         {
@@ -83,8 +83,8 @@ TEMPLATE_LIST_TEST_CASE("at", "[vector][at]", TestTypeList)
     }
     GIVEN("A const vector of value_type with 1 item")
     {
-        Values<Vector> generate(1);
-        Vector const&  c = generate.values;
+        pw::test::Values<Vector> generate(1);
+        Vector const&            c = generate.values;
 
         WHEN("at(0) const is called")
         {
