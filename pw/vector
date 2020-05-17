@@ -527,7 +527,9 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::clear() noexcept
 {
-    m_data = Storage(get_allocator());
+    //m_data = Storage(get_allocator());
+    pw::destroy(m_data.begin(), m_data.end());
+    m_data.set_size(0);
 }
 
 template<class Type, class Allocator>
