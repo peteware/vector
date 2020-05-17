@@ -13,7 +13,6 @@ add_executable( unittest
                 vector_access.t.cpp
                 vector_assign.t.cpp
                 vector_assignment.t.cpp
-                vector_at.t.cpp
                 vector_capacity.t.cpp
                 vector_clear.t.cpp
                 vector_constructor.t.cpp
