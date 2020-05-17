@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_TESTTYPE_H
-#define INCLUDED_TEST_TESTTYPE_H
+#ifndef INCLUDED_PW_TEST_TESTTYPE_H
+#define INCLUDED_PW_TEST_TESTTYPE_H
 #include <pw/vector>
 #include <string>
 #include <tuple>
@@ -34,4 +34,4 @@ struct Values
     }
 };
 
-#endif /*  INCLUDED_TEST_TESTTYPE_H */
+#endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

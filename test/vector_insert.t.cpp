@@ -88,7 +88,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, value));
+                REQUIRE(pw::test::same(where, where + added, value));
                 REQUIRE(
                     pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
@@ -106,7 +106,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, value));
+                REQUIRE(pw::test::same(where, where + added, value));
                 REQUIRE(
                     pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
@@ -124,7 +124,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, value));
+                REQUIRE(pw::test::same(where, where + added, value));
                 REQUIRE(
                     pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
@@ -143,7 +143,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", TestTypeList)
             }
             THEN("items are the same")
             {
-                REQUIRE(pw::internal::same(where, where + added, value));
+                REQUIRE(pw::test::same(where, where + added, value));
                 REQUIRE(
                     pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(

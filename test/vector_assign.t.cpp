@@ -28,7 +28,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
             }
             THEN("all elements are value")
             {
-                REQUIRE(pw::internal::same(v.begin(), v.end(), value));
+                REQUIRE(pw::test::same(v.begin(), v.end(), value));
             }
         }
         WHEN("assign(count,value) and lhs items")
@@ -45,7 +45,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", TestTypeList)
             }
             THEN("all elements are value")
             {
-                REQUIRE(pw::internal::same(v.begin(), v.end(), value));
+                REQUIRE(pw::test::same(v.begin(), v.end(), value));
             }
         }
         WHEN("assign(begin,end)")
