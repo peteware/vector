@@ -29,7 +29,7 @@ target_sources ( unittest PUBLIC
                  test_random_access_iterator.h
                  testtype.h
                )
-target_include_directories( unittest PRIVATE ${CMAKE_SOURCE_DIR}/tests)
+target_include_directories( unittest PRIVATE ${CMAKE_SOURCE_DIR}/test)
                
 target_link_libraries(unittest pw catch2)
 add_test( NAME unittest

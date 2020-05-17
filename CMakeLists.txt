@@ -20,5 +20,5 @@ target_include_directories( ${PROJECT_NAME} INTERFACE
                             $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}>
                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 #add_subdirectory(pw)
-add_subdirectory(tests)
-add_subdirectory(tests/catch2)
+add_subdirectory(test)
+add_subdirectory(test/catch2)
