@@ -32,6 +32,22 @@ private:
 
 bool permute(OpTracker& value, int depth);
 
+/*
+ * Needed type requirements
+ * - Erasable (everything)
+ *   - MoveInsertable (reserve(), shrink_to_fit())
+ *     - EmplaceConstructible (emplace_back())
+ *       - MoveAssignable (emplace())
+ *   - MoveAssignable (erase())
+ *     - MoveInsertable (insert())
+ *   - CopyInsertable
+ *     - CopyAssignable (insert())
+ *   - DefaultInsertable
+ *   - Swappable, MoveAssignable, MoveConstructible and MoveInsertable 
+ *   - EmplaceConstructible
+ *   - CopyAssignable and CopyInsertable
+ */
+
 struct DefaultConstructible : public OpTracker
 {
     static OpCounter getCounter();
