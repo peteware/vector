@@ -50,7 +50,7 @@ public:
     vector(vector&& other, const Allocator& alloc);
     explicit vector(size_type count);
     vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
-    vector(std::initializer_list<value_type> init, const Allocator& alloc = Allocator());
+    vector(std::initializer_list<value_type> init, const Allocator& alloc = allocator_type());
     ~vector();
 
     vector& operator=(const vector& other);

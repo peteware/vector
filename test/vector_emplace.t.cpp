@@ -5,6 +5,26 @@
 #include <catch2/catch.hpp>
 
 namespace pw {
+template<class Type, class Allocator>
+struct Rai
+{
+    Rai(internal::Storage<Type, Allocator>* orig, internal::Storage<Type, Allocator>* n = 0)
+        : m_orig(orig)
+        , m_new(n)
+    {
+    }
+
+    ~Rai()
+    {
+        if (m_new && m_orig)
+        {
+            pw::swap(*m_orig, *m_new);
+        }
+    }
+
+    internal::Storage<Type, Allocator>* m_orig;
+    internal::Storage<Type, Allocator>* m_new;
+};
 
 template<class Type, class Allocator>
 template<class... Args>
@@ -13,10 +33,20 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     if (!m_data.hascapacity())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize());
+        Storage              tmp(m_data.newsize(), m_data.get_allocator());
+        Rai<Type, Allocator> rai(&m_data, &tmp);
+
+        allocator_traits<Allocator>::construct(
+            tmp.get_allocator(), tmp.begin() + m_data.size(), std::forward<Args>(args)...);
+        pw::uninitialized_move(m_data.begin(), m_data.end(), tmp.begin());
+        tmp.set_size(m_data.size() + 1);
     }
-    allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
-    m_data.set_size(m_data.size() + 1);
+    else
+    {
+        allocator_traits<Allocator>::construct(
+            m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
+        m_data.set_size(m_data.size() + 1);
+    }
     return *(m_data.end() - 1);
 }
 
@@ -78,11 +108,15 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
     }
     GIVEN("A vector with elements")
     {
-        Vector v = { { 1, 2 }, { 3, 4 }, { 4, 5 } };
+        Vector              v    = { { 1, 2 }, { 3, 4 }, { 4, 5 } };
+        pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
+        pw::test::OpCounter counter;
+
         REQUIRE(3 == v.size());
         WHEN("emplace-back() an element")
         {
             v.emplace_back(13, 14);
+            counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
             THEN("size() is 4")
             {
                 REQUIRE(4 == v.size());
@@ -93,6 +127,10 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                 REQUIRE(2 == v.front().value2());
                 REQUIRE(13 == v.back().value());
                 REQUIRE(14 == v.back().value2());
+            }
+            THEN("not copy constructed")
+            {
+                REQUIRE(0 == counter.getCopyConstructor());
             }
         }
     }
