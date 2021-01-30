@@ -34,17 +34,19 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     if (!m_data.hascapacity())
     {
         Storage              tmp(m_data.newsize(), m_data.get_allocator());
-        Rai<Type, Allocator> rai(&m_data, &tmp);
 
         allocator_traits<Allocator>::construct(
             tmp.get_allocator(), tmp.begin() + m_data.size(), std::forward<Args>(args)...);
         pw::uninitialized_move(m_data.begin(), m_data.end(), tmp.begin());
         tmp.set_size(m_data.size() + 1);
+        swap(m_data, tmp);
+        tmp.set_size(0);
     }
     else
     {
         allocator_traits<Allocator>::construct(
             m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
+       
         m_data.set_size(m_data.size() + 1);
     }
     return *(m_data.end() - 1);
@@ -103,6 +105,11 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
             THEN("not copy constructed")
             {
                 REQUIRE(0 == counter.getCopyConstructor());
+            }
+            THEN("move constructed")
+            {
+                INFO("counter = " << counter);
+                REQUIRE(1 == counter.getMoveConstructor());
             }
         }
     }

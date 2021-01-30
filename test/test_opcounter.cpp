@@ -1,5 +1,7 @@
 #include <test_opcounter.h>
 
+#include <iostream>
+
 namespace pw { namespace test {
 
 OpCounter::OpCounter()
@@ -294,6 +296,45 @@ OpCounter::getLt() const
     return m_lt;
 }
 
+std::ostream &
+OpCounter::print(std::ostream &out) const
+{
+    if (m_default)
+        out << " default = " << m_default;
+    if (m_copy)
+        out << " copy = " << m_copy;
+    if (m_move)
+        out << " move = " << m_move;
+    if (m_copyalloc)
+        out << " copyalloc = " << m_copyalloc;
+    if (m_destructor)
+        out << " destructor = " << m_destructor;
+    if (m_assignment)
+        out << " assignment = " << m_assignment;
+    if (m_moveassignment)
+        out << " moveassignment = " << m_moveassignment;
+    if (m_plusassignment)
+        out << " plusassignment = " << m_plusassignment;
+    if (m_minusassignment)
+        out << " minusassignment = " << m_minusassignment;
+    if (m_increment)
+        out << " increment = " << m_increment;
+    if (m_decrement)
+        out << " decrement = " << m_decrement;
+    if (m_plus)
+        out << " plus = " << m_plus;
+    if (m_minus)
+        out << " mimnus = " << m_minus;
+    if (m_equal)
+        out << " equal = " << m_equal;
+    if (m_notEqual)
+        out << " notequal = " << m_notEqual;
+    if (m_lt)
+        out << " lt = " << m_lt;
+
+ return out;
+}
+
 OpCounter&
 OpCounter::operator-=(OpCounter const& op2)
 {
@@ -325,5 +366,11 @@ OpCounter::operator-(OpCounter const& op2) const
 
     c -= op2;
     return c;
+}
+
+std::ostream&
+operator<<(std::ostream& out, OpCounter const& opCounter)
+{
+    return opCounter.print(out);
 }
 }} // namespace pw::test
