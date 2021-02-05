@@ -1,5 +1,7 @@
 #include <test_copyconstructible.h>
 
+#include <test_permute.h>
+
 namespace pw { namespace test {
 
 OpCounter CopyConstructible::s_opCounter;

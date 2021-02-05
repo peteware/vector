@@ -1,8 +1,8 @@
-#ifndef INCLUDED_OPTRACKER_H
-#define INCLUDED_OPTRACKER_H
+#ifndef INCLUDED_TEST_OPTRACKER_H
+#define INCLUDED_TEST_OPTRACKER_H
 
-#include <test_opcounter.h>
 #include <pw/impl/move.h>
+#include <test_opcounter.h>
 
 namespace pw { namespace test {
 
@@ -34,4 +34,4 @@ bool permute(OpTracker& value, int depth);
 
 }} // namespace pw::test
 
-#endif /*  INCLUDED_OPTRACKER_H */
+#endif /*  INCLUDED_TEST_OPTRACKER_H */

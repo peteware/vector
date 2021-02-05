@@ -1,5 +1,5 @@
-#ifndef INCLUDED_OPTRACKER_H
-#define INCLUDED_OPTRACKER_H
+#ifndef INCLUDED_TEST_DEFAULTCONSTRUCTIBLE_H
+#define INCLUDED_TEST_DEFAULTCONSTRUCTIBLE_H
 
 #include <test_optracker.h>
 
@@ -36,4 +36,4 @@ private:
 
 }} // namespace pw::test
 
-#endif /*  INCLUDED_OPTRACKER_H */
+#endif /* INCLUDED_TEST_DEFAULTCONSTRUCTIBLE_H */

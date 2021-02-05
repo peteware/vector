@@ -34,6 +34,6 @@ struct Values
         }
     }
 };
-}} // namespace pw
+}} // namespace pw::test
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

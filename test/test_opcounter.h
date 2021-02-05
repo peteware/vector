@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_OPCOUNTER_T_H
-#define INCLUDED_PW_OPCOUNTER_T_H
+#ifndef INCLUDED_TEST_OPCOUNTER_H
+#define INCLUDED_TEST_OPCOUNTER_H
 
 #include <iostream>
 
@@ -61,7 +61,8 @@ public:
     OpCounter& addMinus();
     int        getMinus() const;
 
-    std::ostream &print(std::ostream &out) const;
+    std::ostream& print(std::ostream& out) const;
+
 private:
     int m_default         = 0; ///< Default constructor
     int m_copy            = 0; ///< Copy constructor
@@ -83,7 +84,7 @@ private:
     int m_lt              = 0; ///< Calls to operator<()
 };
 
-std::ostream &operator<<(std::ostream &out, OpCounter const &opCounter);
+std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);
 }} // namespace pw::test
 
-#endif /*  INCLUDED_PW_OPCOUNTER_T_H */
+#endif /*  INCLUDED_TEST_OPCOUNTER_H */

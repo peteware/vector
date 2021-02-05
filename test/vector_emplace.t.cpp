@@ -1,4 +1,5 @@
 //#include <pw/impl/forward.h>
+#include <test_emplacemoveconstructible.h>
 #include <test_optracker.h>
 #include <test_testtype.h>
 
@@ -33,7 +34,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     if (!m_data.hascapacity())
     {
-        Storage              tmp(m_data.newsize(), m_data.get_allocator());
+        Storage tmp(m_data.newsize(), m_data.get_allocator());
 
         allocator_traits<Allocator>::construct(
             tmp.get_allocator(), tmp.begin() + m_data.size(), std::forward<Args>(args)...);
@@ -46,7 +47,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     {
         allocator_traits<Allocator>::construct(
             m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
-       
+
         m_data.set_size(m_data.size() + 1);
     }
     return *(m_data.end() - 1);

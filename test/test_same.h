@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_TEST_SAME_H
-#define INCLUDED_PW_TEST_SAME_H
+#ifndef INCLUDED_TEST_SAME_H
+#define INCLUDED_TEST_SAME_H
 
 namespace pw { namespace test {
 template<class Iterator, class Type>
@@ -16,4 +16,4 @@ same(Iterator begin, Iterator end, Type const& value)
     return true;
 }
 }} // namespace pw::test
-#endif /* INCLUDED_PW_TEST_SAME_H */
+#endif /* INCLUDED_TEST_SAME_H */

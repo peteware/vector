@@ -1,5 +1,7 @@
 #include <catch2/catch.hpp>
 #include <pw/impl/uninitialized_move.h>
+
+#include <test_copyconstructible.h>
 #include <test_opcounter.h>
 #include <test_optracker.h>
 #include <test_permute.h>

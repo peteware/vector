@@ -1,6 +1,7 @@
 #include <pw/internal/storage.h>
 
 #include <catch2/catch.hpp>
+#include <test_copyconstructible.h>
 #include <test_opcounter.h>
 #include <test_optracker.h>
 #include <test_permute.h>

@@ -1,5 +1,7 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
+
+#include <test_emplacemoveconstructible.h>
 #include <test_optracker.h>
 
 #include <catch2/catch.hpp>
