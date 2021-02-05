@@ -1,7 +1,12 @@
 add_executable( unittest
                 allocator_traits.t.cpp
                 cstddef.t.cpp
+                distance.t.cpp
                 memory.t.cpp
+                test_copyconstructible.cpp
+                test_defaultconstructible.cpp
+                test_emplacemoveconstructible.cpp
+                test_moveconstructible.cpp
                 test_opcounter.cpp
                 test_optracker.cpp
                 test_permute.cpp
@@ -25,12 +30,16 @@ add_executable( unittest
                 vector_resize.t.cpp
                 )
 target_sources ( unittest PUBLIC
-                 test_same.h
-                 test_opcounter.h
-                 test_optracker.h
-                 test_permute.h
-                 test_random_access_iterator.h
-                 test_testtype.h
+                test_copyconstructible.h
+                test_defaultconstructible.h
+                test_emplacemoveconstructible.h
+                test_moveconstructible.h
+                test_opcounter.h
+                test_optracker.h
+                test_permute.h
+                test_random_access_iterator.h
+                test_same.h
+                test_testtype.h
                )
 target_include_directories( unittest PRIVATE ${CMAKE_SOURCE_DIR}/test)
                

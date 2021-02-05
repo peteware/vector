@@ -94,48 +94,4 @@ permute(OpTracker& value, int depth)
     return false;
 }
 
-bool
-permute(CopyConstructible& value, int depth)
-{
-    int val = value.value();
-    if (permute(val, depth))
-    {
-        value.setValue(val);
-        return true;
-    }
-    return false;
-}
-
-OpCounter DefaultConstructible::s_opCounter;
-
-OpCounter
-DefaultConstructible::getCounter()
-{
-    return s_opCounter;
-}
-
-OpCounter CopyConstructible::s_opCounter;
-
-OpCounter
-CopyConstructible::getCounter()
-{
-    return s_opCounter;
-}
-
-OpCounter MoveConstructible::s_opCounter;
-
-OpCounter
-MoveConstructible::getCounter()
-{
-    return s_opCounter;
-}
-
-OpCounter EmplaceMoveConstructible::s_opCounter;
-
-OpCounter
-EmplaceMoveConstructible::getCounter()
-{
-    return s_opCounter;
-}
-
 }} // namespace pw::test

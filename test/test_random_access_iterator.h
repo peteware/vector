@@ -11,9 +11,9 @@ struct random_access_iterator
 {
     using iterator_category = pw::random_access_iterator_tag;
     using value_type        = typename pw::iterator_traits<Iterator>::value_type;
-    using difference_type   = typename pw::iterator<Iterator>::difference_type;
-    using pointer           = typename pw::iterator<Iterator>::pointer;
-    using reference         = typename pw::iterator<Iterator>::reference;
+    using difference_type   = typename pw::iterator_traits<Iterator>::difference_type;
+    using pointer           = typename pw::iterator_traits<Iterator>::pointer;
+    using reference         = typename pw::iterator_traits<Iterator>::reference;
 
     static OpCounter getCounter()
     {
