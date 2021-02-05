@@ -5,6 +5,18 @@
 
 namespace pw { namespace test {
 
+/**
+ * Given
+ * - @c rv, and rvalue expression of type T
+ * - @c u, an abritray identifier
+ * Then
+ * @code
+ * T u = rv;
+ * T u(rv);
+ * @endcode
+ *
+ * Note: copy constructible also satisifies this
+ */
 struct MoveConstructible : public OpTracker
 {
     static OpCounter getCounter();

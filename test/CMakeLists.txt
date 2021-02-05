@@ -3,6 +3,7 @@ add_executable( unittest
                 cstddef.t.cpp
                 distance.t.cpp
                 memory.t.cpp
+                move.t.cpp
                 test_copyconstructible.cpp
                 test_defaultconstructible.cpp
                 test_emplacemoveconstructible.cpp

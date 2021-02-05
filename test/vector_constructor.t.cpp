@@ -92,7 +92,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     GIVEN("and add count objects")
     {
         size_t const                count = 5;
-        pw::test::CopyConstructible copyObject;
+        pw::test::CopyConstructible copyObject(-1);
         pw::test::OpCounter         startCount(pw::test::CopyConstructible::getCounter());
         Vector                      v(count);
 

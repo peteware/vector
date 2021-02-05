@@ -70,7 +70,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     GIVEN("An empty vector")
     {
         Vector                      v;
-        pw::test::CopyConstructible copyObject;
+        pw::test::CopyConstructible copyObject(11);
 
         WHEN("push_back() is called")
         {
@@ -98,7 +98,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector>    generate(5);
-        pw::test::CopyConstructible copyObject;
+        pw::test::CopyConstructible copyObject(12);
         pw::test::OpCounter         startCount(pw::test::CopyConstructible::getCounter());
 
         generate.values.shrink_to_fit();

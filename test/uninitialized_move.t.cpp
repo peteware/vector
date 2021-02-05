@@ -13,8 +13,8 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
         pw::test::CopyConstructible(1),
         pw::test::CopyConstructible(3),
     };
-    pw::test::CopyConstructible dest[count];
-    pw::test::OpCounter         init = pw::test::CopyConstructible::getCounter();
+    pw::test::CopyConstructible dest[count] = { 10, 11, 12 };
+    pw::test::OpCounter         init        = pw::test::CopyConstructible::getCounter();
     GIVEN("A src and dst array")
     {
         WHEN("move")

@@ -8,7 +8,7 @@ struct CopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
-    CopyConstructible(int value = 0)
+    CopyConstructible(int value)
         : OpTracker(s_opCounter, value)
     {
     }
