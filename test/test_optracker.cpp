@@ -4,11 +4,18 @@
 
 namespace pw { namespace test {
 
+OpTracker::OpTracker(OpCounter& opCounter)
+    : m_opCounter(opCounter)
+    , m_value(-1)
+{
+    m_opCounter.addDefaultConstructor();
+}
+
 OpTracker::OpTracker(OpCounter& opCounter, int value)
     : m_opCounter(opCounter)
     , m_value(value)
 {
-    m_opCounter.addDefaultConstructor();
+    m_opCounter.addOtherConstructor();
 }
 
 OpTracker::OpTracker(OpTracker const& copy)

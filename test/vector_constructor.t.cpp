@@ -123,8 +123,9 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
     std::initializer_list<value_type> initlist = { 1, 2, 5 };
 
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    INFO("counter = " << counter);
+    REQUIRE(3 == counter.getOtherConstructor());
     REQUIRE(3 == counter.constructorCount());
-    REQUIRE(3 == counter.getDefaultConstructor());
     GIVEN("A vector from an init list")
     {
         init = pw::test::DefaultCopyConstructible::getCounter();

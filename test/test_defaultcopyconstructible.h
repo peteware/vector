@@ -8,7 +8,12 @@ struct DefaultCopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
-    DefaultCopyConstructible(int value = 1)
+    DefaultCopyConstructible()
+        : OpTracker(s_opCounter)
+    {
+    }
+
+    DefaultCopyConstructible(int value)
         : OpTracker(s_opCounter, value)
     {
     }

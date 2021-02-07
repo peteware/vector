@@ -20,7 +20,13 @@ namespace pw { namespace test {
 struct MoveConstructible : public OpTracker
 {
     static OpCounter getCounter();
-    MoveConstructible(int value = 0)
+
+    MoveConstructible()
+        : OpTracker(s_opCounter)
+    {
+    }
+
+    MoveConstructible(int value)
         : OpTracker(s_opCounter, value)
     {
     }

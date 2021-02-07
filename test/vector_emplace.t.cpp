@@ -69,7 +69,7 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
 //using TestEmplaceList =
 //    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
-using TestEmplaceList = std::tuple<std::vector<pw::test::EmplaceMoveConstructible>>;
+using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>>;
 
 /*
  * Type requirements:

@@ -9,6 +9,8 @@ namespace pw { namespace test {
 struct OpTracker
 {
 protected:
+    OpTracker() = delete;
+    OpTracker(OpCounter& opCounter); // default constructor for derived classes
     OpTracker(OpCounter& opCounter, int value);
     OpTracker(OpTracker const& copy);
     OpTracker(OpTracker&& move) noexcept;

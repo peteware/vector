@@ -8,6 +8,7 @@ namespace pw { namespace test {
 struct EmplaceMoveConstructible : public OpTracker
 {
     static OpCounter getCounter();
+    EmplaceMoveConstructible() = delete;
 
     EmplaceMoveConstructible(int value, int value2)
         : OpTracker(s_opCounter, value)
@@ -23,6 +24,7 @@ struct EmplaceMoveConstructible : public OpTracker
 
     EmplaceMoveConstructible(EmplaceMoveConstructible&& move)
         : OpTracker(pw::move(move))
+        , m_value2(pw::move(move.m_value2))
     {
     }
 

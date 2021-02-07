@@ -20,6 +20,7 @@ SCENARIO("move", "[move]")
             pw::test::OpCounter         counter = m2.getCounter() - init;
             THEN("move construct is called")
             {
+                INFO("counter = " << counter);
                 REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(1 == counter.constructorCount());
             }
@@ -32,10 +33,11 @@ SCENARIO("move", "[move]")
 
         WHEN("It is copied")
         {
-            pw::test::CopyConstructible m2      = m;
+            pw::test::CopyConstructible m2(m);
             pw::test::OpCounter         counter = m2.getCounter() - init;
             THEN("copy constructor is called")
             {
+                INFO("counter = " << counter);
                 REQUIRE(1 == counter.getCopyConstructor());
                 REQUIRE(1 == counter.constructorCount());
             }
@@ -46,6 +48,7 @@ SCENARIO("move", "[move]")
             pw::test::OpCounter         counter = m2.getCounter() - init;
             THEN("move construct is called")
             {
+                INFO("counter = " << counter);
                 REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(1 == counter.constructorCount());
             }

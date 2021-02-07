@@ -296,8 +296,8 @@ OpCounter::getLt() const
     return m_lt;
 }
 
-std::ostream &
-OpCounter::print(std::ostream &out) const
+std::ostream&
+OpCounter::print(std::ostream& out) const
 {
     if (m_default)
         out << " default = " << m_default;
@@ -305,8 +305,12 @@ OpCounter::print(std::ostream &out) const
         out << " copy = " << m_copy;
     if (m_move)
         out << " move = " << m_move;
+    if (m_defaultalloc)
+        out << " defaultalloc = " << m_defaultalloc;
     if (m_copyalloc)
         out << " copyalloc = " << m_copyalloc;
+    if (m_other)
+        out << " other = " << m_other;
     if (m_destructor)
         out << " destructor = " << m_destructor;
     if (m_assignment)
@@ -332,7 +336,7 @@ OpCounter::print(std::ostream &out) const
     if (m_lt)
         out << " lt = " << m_lt;
 
- return out;
+    return out;
 }
 
 OpCounter&
@@ -343,6 +347,7 @@ OpCounter::operator-=(OpCounter const& op2)
     m_move -= op2.m_move;
     m_defaultalloc -= op2.m_defaultalloc;
     m_copyalloc -= op2.m_copyalloc;
+    m_other -= op2.m_other;
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
     m_moveassignment -= op2.m_moveassignment;
