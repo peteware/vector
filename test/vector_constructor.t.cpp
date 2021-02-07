@@ -1,5 +1,5 @@
 #include <pw/vector>
-#include <test_copyconstructible.h>
+#include <test_defaultcopyconstructible.h>
 #include <test_testtype.h>
 
 #include <tuple>
@@ -7,8 +7,8 @@
 
 #include <catch2/catch.hpp>
 
-using TestTypeList =
-    std::tuple<pw::vector<pw::test::CopyConstructible>, std::vector<pw::test::CopyConstructible>>;
+using TestTypeList = std::tuple<pw::vector<pw::test::DefaultCopyConstructible>,
+                                std::vector<pw::test::DefaultCopyConstructible>>;
 /*
  * Type requirements:
  * - No extra
@@ -19,7 +19,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     using value_type = typename Vector::value_type;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init(pw::test::CopyConstructible::getCounter());
+    pw::test::OpCounter const init(pw::test::DefaultCopyConstructible::getCounter());
 
     GIVEN("An empty vector")
     {
@@ -28,7 +28,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
 
         WHEN("Nothing was called")
         {
-            counter = pw::test::CopyConstructible::getCounter() - init;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - init;
             THEN("Nothing was constructed")
             {
                 REQUIRE(counter.zero());
@@ -36,9 +36,9 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         }
         WHEN("reserve() is increased")
         {
-            counter = pw::test::CopyConstructible::getCounter();
+            counter = pw::test::DefaultCopyConstructible::getCounter();
             v.reserve(5);
-            counter = pw::test::CopyConstructible::getCounter() - counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("copy constructor not called")
             {
                 REQUIRE(counter.zero());
@@ -91,17 +91,17 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     }
     GIVEN("and add count objects")
     {
-        size_t const                count = 5;
-        pw::test::CopyConstructible copyObject(-1);
-        pw::test::OpCounter         startCount(pw::test::CopyConstructible::getCounter());
-        Vector                      v(count);
+        size_t const                       count = 5;
+        pw::test::DefaultCopyConstructible copyObject(-1);
+        pw::test::OpCounter                startCount(pw::test::DefaultCopyConstructible::getCounter());
+        Vector                             v(count);
 
-        counter = pw::test::CopyConstructible::getCounter();
+        counter = pw::test::DefaultCopyConstructible::getCounter();
 
         REQUIRE(v.size() == v.capacity());
         WHEN("getCounter()")
         {
-            counter = pw::test::CopyConstructible::getCounter() - startCount;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - startCount;
             THEN("count items default constructed")
             {
                 REQUIRE(count == counter.getDefaultConstructor());
@@ -109,7 +109,7 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             }
         }
     }
-    counter = pw::test::CopyConstructible::getCounter() - init;
+    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 
@@ -118,16 +118,16 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
 
-    pw::test::OpCounter               init(pw::test::CopyConstructible::getCounter());
+    pw::test::OpCounter               init(pw::test::DefaultCopyConstructible::getCounter());
     pw::test::OpCounter               counter;
     std::initializer_list<value_type> initlist = { 1, 2, 5 };
 
-    counter = pw::test::CopyConstructible::getCounter() - init;
+    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(3 == counter.constructorCount());
     REQUIRE(3 == counter.getDefaultConstructor());
     GIVEN("A vector from an init list")
     {
-        init = pw::test::CopyConstructible::getCounter();
+        init = pw::test::DefaultCopyConstructible::getCounter();
         Vector v { initlist };
         WHEN("nothing is changed")
         {
@@ -141,7 +141,7 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
             }
             THEN("constructors called")
             {
-                counter = pw::test::CopyConstructible::getCounter() - init;
+                counter = pw::test::DefaultCopyConstructible::getCounter() - init;
                 REQUIRE(3 == counter.constructorCount());
                 REQUIRE(3 == counter.getCopyConstructor());
             }
@@ -149,7 +149,7 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
         WHEN("assign vector")
         {
             Vector v2;
-            v2.push_back(pw::test::CopyConstructible(1));
+            v2.push_back(pw::test::DefaultCopyConstructible(1));
             v2 = v;
             THEN("They are the same")
             {

@@ -1,4 +1,5 @@
 #include <test_copyconstructible.h>
+#include <test_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_testtype.h>
 
@@ -130,11 +131,11 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
 }
 SCENARIO("resize() op counts", "[vector][resize][optracker]")
 {
-    using Vector     = pw::vector<pw::test::CopyConstructible>;
+    using Vector     = pw::vector<pw::test::DefaultCopyConstructible>;
     using value_type = typename Vector::value_type;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init  = pw::test::CopyConstructible::getCounter();
+    pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
     size_t                    count = 5;
 
     GIVEN("An empty vector")
@@ -143,9 +144,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() is called")
         {
-            counter = pw::test::CopyConstructible::getCounter();
+            counter = pw::test::DefaultCopyConstructible::getCounter();
             v.resize(count);
-            counter = pw::test::CopyConstructible::getCounter() - counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("default constructed count times")
             {
                 REQUIRE(count == counter.getDefaultConstructor());
@@ -154,6 +155,6 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
             }
         }
     }
-    counter = pw::test::CopyConstructible::getCounter() - init;
+    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

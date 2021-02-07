@@ -6,6 +6,7 @@ add_executable( unittest
                 move.t.cpp
                 test_copyconstructible.cpp
                 test_defaultconstructible.cpp
+                test_defaultcopyconstructible.cpp
                 test_emplacemoveconstructible.cpp
                 test_moveconstructible.cpp
                 test_opcounter.cpp
@@ -33,6 +34,7 @@ add_executable( unittest
 target_sources ( unittest PUBLIC
                 test_copyconstructible.h
                 test_defaultconstructible.h
+                test_defaultcopyconstructible.h
                 test_emplacemoveconstructible.h
                 test_moveconstructible.h
                 test_opcounter.h

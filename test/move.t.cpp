@@ -1,6 +1,7 @@
 #include <pw/impl/move.h>
 
 #include <test_copyconstructible.h>
+#include <test_defaultcopyconstructible.h>
 #include <test_moveconstructible.h>
 #include <test_opcounter.h>
 
@@ -45,7 +46,7 @@ SCENARIO("move", "[move]")
             pw::test::OpCounter         counter = m2.getCounter() - init;
             THEN("move construct is called")
             {
-                REQUIRE(1 == counter.getCopyConstructor());
+                REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(1 == counter.constructorCount());
             }
         }

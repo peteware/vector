@@ -1,7 +1,7 @@
 #include <pw/internal/storage.h>
 
 #include <catch2/catch.hpp>
-#include <test_copyconstructible.h>
+#include <test_defaultcopyconstructible.h>
 #include <test_opcounter.h>
 #include <test_permute.h>
 
@@ -124,9 +124,9 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
 
 SCENARIO("Storage construct counts", "[storage][count]")
 {
-    using Storage = pw::internal::Storage<pw::test::CopyConstructible>;
+    using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    pw::test::OpCounter const init = pw::test::CopyConstructible::getCounter();
+    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
     pw::test::OpCounter       counter;
     GIVEN("An empty Storage")
     {
@@ -134,7 +134,7 @@ SCENARIO("Storage construct counts", "[storage][count]")
         WHEN("Nothing happens")
         {
             REQUIRE(storage.empty());
-            counter = pw::test::CopyConstructible::getCounter();
+            counter = pw::test::DefaultCopyConstructible::getCounter() - init;
             REQUIRE(counter.zero());
         }
         WHEN("Allocate items")
@@ -167,6 +167,6 @@ SCENARIO("Storage construct counts", "[storage][count]")
         }
     }
 
-    counter = pw::test::CopyConstructible::getCounter() - init;
+    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
