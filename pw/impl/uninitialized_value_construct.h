@@ -12,7 +12,8 @@ uninitialized_value_construct(Iterator begin, Iterator end)
     {
         while (current != end)
         {
-            ::new (static_cast<void*>(pw::addressof(*current))) Value();
+            pw::construct_at(pw::addressof(*current));
+            //::new (static_cast<void*>()) Value();
             ++current;
         }
     }

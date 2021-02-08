@@ -11,6 +11,7 @@ target_sources(pw INTERFACE
     impl/allocator.h
     impl/allocator_traits.h
     impl/bool_type.h
+    impl/construct_at.h
     impl/copy.h
     impl/fill.h
     impl/for_each.h

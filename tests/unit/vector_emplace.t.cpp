@@ -33,22 +33,10 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     if (!m_data.hascapacity())
     {
-        Storage tmp(m_data.newsize(), m_data.get_allocator());
-
-        allocator_traits<Allocator>::construct(
-            tmp.get_allocator(), tmp.begin() + m_data.size(), std::forward<Args>(args)...);
-        pw::uninitialized_move(m_data.begin(), m_data.end(), tmp.begin());
-        tmp.set_size(m_data.size() + 1);
-        swap(m_data, tmp);
-        tmp.set_size(0);
+        m_data = Storage(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
     }
-    else
-    {
-        allocator_traits<Allocator>::construct(
-            m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
-
-        m_data.set_size(m_data.size() + 1);
-    }
+    allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
+    m_data.set_size(m_data.size() + 1);
     return *(m_data.end() - 1);
 }
 
@@ -69,7 +57,7 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
 //using TestEmplaceList =
 //    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
-using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>>;
+using TestEmplaceList = std::tuple<std::vector<pw::test::EmplaceMoveConstructible>>;
 
 /*
  * Type requirements:
@@ -102,14 +90,10 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                 REQUIRE(3 == v.front().value());
                 REQUIRE(4 == v.front().value2());
             }
-            THEN("not copy constructed")
+            THEN("other constructed, not copy or moce")
             {
-                REQUIRE(0 == counter.getCopyConstructor());
-            }
-            THEN("move constructed")
-            {
-                INFO("counter = " << counter);
-                REQUIRE(1 == counter.getMoveConstructor());
+                REQUIRE(1 == counter.getOtherConstructor());
+                REQUIRE(1 == counter.constructorCount());
             }
         }
     }
@@ -135,9 +119,11 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
                 REQUIRE(13 == v.back().value());
                 REQUIRE(14 == v.back().value2());
             }
-            THEN("not copy constructed")
+            THEN("other constructed, not copy or move")
             {
-                REQUIRE(0 == counter.getCopyConstructor());
+                INFO("counter = " << counter);
+                REQUIRE(1 == counter.getOtherConstructor());
+                REQUIRE(1 == counter.constructorCount());
             }
         }
     }

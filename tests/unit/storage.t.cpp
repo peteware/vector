@@ -36,7 +36,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         Storage storage(10, allocator);
         WHEN("Storage(move, 20)")
         {
-            Storage s = Storage(pw::move(storage), 20);
+            Storage s = Storage(pw::move(storage), 20, typename Storage::allocator_type());
             THEN("size() is 0 but capacity increased")
             {
                 REQUIRE((pw::size_t)0 == s.size());
@@ -87,7 +87,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         REQUIRE(*storage.begin() == value);
         WHEN("Storage (move, 20)")
         {
-            Storage s = Storage(pw::move(storage), 20);
+            Storage s = Storage(pw::move(storage), 20, typename Storage::allocator_type());
             THEN("size() is 1")
             {
                 REQUIRE(1 == s.size());
@@ -158,7 +158,7 @@ SCENARIO("Storage construct counts", "[storage][count]")
         WHEN("Storage with 1 item is moved")
         {
             storage.push_back(1);
-            Storage s(pw::move(storage), 10);
+            Storage s(pw::move(storage), 10, Storage::allocator_type());
             THEN("item is moved")
             {
                 REQUIRE(1 == s.size());

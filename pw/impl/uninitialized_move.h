@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_UNINITIALIZED_MOVE_CONSTRUCT_H
 
 #include <pw/impl/addressof.h>
+#include <pw/impl/construct_at.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/iterator_traits.h>
 #include <pw/impl/move.h>
@@ -19,7 +20,7 @@ uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
     {
         while (begin != end)
         {
-            ::new (static_cast<void*>(pw::addressof(*current))) Value(pw::move(*begin));
+            construct_at(pw::addressof(*current), pw::move(*begin));
             ++current;
             ++begin;
         }

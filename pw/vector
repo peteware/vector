@@ -217,7 +217,7 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept
 {
     if (m_data.capacity() < other.size())
     {
-        m_data = Storage(pw::move(other.m_data), other.size());
+        m_data = Storage(pw::move(other.m_data), other.size(), get_allocator());
     }
     else
     {
@@ -509,7 +509,7 @@ vector<Type, Allocator>::shrink_to_fit()
     }
     else
     {
-        m_data = Storage(pw::move(m_data), size());
+        m_data = Storage(pw::move(m_data), size(), get_allocator());
     }
 }
 
@@ -519,7 +519,7 @@ vector<Type, Allocator>::reserve(size_type count)
 {
     if (count > capacity())
     {
-        m_data = Storage(pw::move(m_data), count);
+        m_data = Storage(pw::move(m_data), count, get_allocator());
     }
 }
 
@@ -538,7 +538,7 @@ vector<Type, Allocator>::push_back(const_reference value)
 {
     if (m_data.capacity() == m_data.size())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize());
+        m_data = Storage(pw::move(m_data), m_data.newsize(), get_allocator());
     }
     m_data.push_back(value);
 }
@@ -549,7 +549,7 @@ vector<Type, Allocator>::push_back(value_type&& value)
 {
     if (!m_data.hascapacity())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize());
+        m_data = Storage(pw::move(m_data), m_data.newsize(), get_allocator());
     }
     m_data.push_back(pw::move(value));
 }
@@ -566,7 +566,7 @@ vector<Type, Allocator>::resize(size_type count)
     }
     else if (m_data.size() < count)
     {
-        m_data = Storage(pw::move(m_data), count);
+        m_data = Storage(pw::move(m_data), count, get_allocator());
         pw::uninitialized_default_construct(m_data.end(), m_data.begin() + count);
         m_data.set_size(count);
     }
@@ -583,7 +583,7 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
     }
     else if (m_data.size() < count)
     {
-        m_data = Storage(pw::move(m_data), count);
+        m_data = Storage(pw::move(m_data), count, get_allocator());
         pw::uninitialized_fill(m_data.end(), m_data.begin() + count, value);
         m_data.set_size(count);
     }

@@ -69,7 +69,7 @@ public:
     Storage(Storage const& copy);
     Storage(Storage const& copy, allocator_type const& alloc);
     Storage(Storage&& copy);
-    Storage(Storage&& copy, size_type count);
+    Storage(Storage&& copy, size_type count, allocator_type const& alloc);
     ~Storage();
     Storage& operator=(Storage op2);
     /**
@@ -157,8 +157,8 @@ Storage<Type, Allocator>::Storage(Storage&& copy)
  * move/copy them
  */
 template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage&& copy, size_type count)
-    : m_alloc(copy.m_alloc)
+Storage<Type, Allocator>::Storage(Storage&& copy, size_type count, allocator_type const& alloc)
+    : m_alloc(alloc)
     , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
     , m_end(0)
     , m_allocated(count)
