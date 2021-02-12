@@ -8,6 +8,7 @@ add_executable( unittest
                 move.t.cpp
                 reverse_iterator.t.cpp
                 storage.t.cpp
+                swap.t.cpp
                 uninitialized_move.t.cpp
                 vector_1.t.cpp
                 vector_access.t.cpp

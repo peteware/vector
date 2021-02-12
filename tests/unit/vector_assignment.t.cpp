@@ -53,10 +53,11 @@ TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::
         WHEN("operator=(move) lhs has elements")
         {
             Vector op2(5);
+            REQUIRE(op2.size() == 5);
             op2 = pw::move(v);
             THEN("size() is same")
             {
-                REQUIRE(v.size() == op2.size());
+                REQUIRE(op2.size() == 0);
             }
         }
         WHEN("operator=(move) rhs has elements")

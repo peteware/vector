@@ -15,6 +15,7 @@
 #include <pw/impl/uninitialized_fill.h>
 #include <pw/impl/uninitialized_move.h>
 
+#include <iostream>
 #include <stdexcept>
 
 namespace pw { namespace internal {
@@ -66,8 +67,7 @@ private:
 public:
     Storage(allocator_type const& alloc = allocator_type());
     explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
-    Storage(Storage const& copy);
-    Storage(Storage const& copy, allocator_type const& alloc);
+    Storage(Storage const& copy, allocator_type const& alloc = allocator_type());
     Storage(Storage&& copy);
     Storage(Storage&& copy, size_type count, allocator_type const& alloc);
     ~Storage();
@@ -122,15 +122,15 @@ Storage<Type, Allocator>::Storage(size_type count, allocator_type const& alloc)
 {
 }
 
-template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage const& copy)
-    : m_alloc(copy.m_alloc)
-    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
-    , m_end(m_begin + copy.size())
-    , m_allocated(copy.size())
-{
-    pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
-}
+// template<class Type, class Allocator>
+// Storage<Type, Allocator>::Storage(Storage const& copy)
+//     : m_alloc(copy.m_alloc)
+//     , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
+//     , m_end(m_begin + copy.size())
+//     , m_allocated(copy.size())
+// {
+//     pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
+// }
 
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& alloc)

@@ -25,6 +25,7 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
                 pw::test::OpCounter count = pw::test::CopyConstructible::getCounter() - init;
                 REQUIRE(3 == count.getMoveConstructor());
                 REQUIRE(count.constructorCount() == count.getMoveConstructor());
+                REQUIRE(0 == count.destructorCount());
             }
         }
     }

@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/is_same.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 

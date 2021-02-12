@@ -111,6 +111,39 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
                 REQUIRE(s.capacity() == s.size());
             }
         }
+        WHEN("operator=(move) is called")
+        {
+            Storage s(0, allocator);
+            s = pw::move(storage);
+            THEN("s now has 1 element")
+            {
+                REQUIRE(s.size() == 1);
+            }
+        }
+        WHEN("swap() is called")
+        {
+            size_t  capacity = storage.capacity();
+            Storage s(0, allocator);
+            std::cerr << "########################################\n";
+            swap(storage, s);
+            std::cerr << "done ########################################\n";
+            THEN("s now has 1 element")
+            {
+                REQUIRE(s.size() == 1);
+            }
+            THEN("the element was copied")
+            {
+                REQUIRE(*s.begin() == value);
+            }
+            THEN("capacity was copied")
+            {
+                REQUIRE(s.capacity() == capacity);
+            }
+            THEN("storage now has 0 element")
+            {
+                REQUIRE(storage.size() == 0);
+            }
+        }
         WHEN("move() is called")
         {
             storage.move(0, 3, value);
@@ -169,4 +202,32 @@ SCENARIO("Storage construct counts", "[storage][count]")
 
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
+}
+
+SCENARIO("Storage move construct counts", "[storage][move]")
+{
+    using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
+
+    int const size = 1;
+    Storage   storage(size);
+    storage.push_back(pw::test::DefaultCopyConstructible(3));
+    pw::test::OpCounter counter;
+    GIVEN("A Storage with 1 element")
+    {
+        int const newsize = size + 10;
+        Storage   s(size);
+
+        pw::test::OpCounter init = pw::test::DefaultCopyConstructible::getCounter();
+        WHEN("It is moved")
+        {
+            Storage m(pw::move(storage), newsize, storage.get_allocator());
+            counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+            THEN("Only move constructor is called")
+            {
+                INFO("counter = " << counter);
+                REQUIRE(1 == counter.getMoveConstructor());
+                REQUIRE(1 == counter.constructorCount());
+            }
+        }
+    }
 }

@@ -18,7 +18,7 @@ struct Rai
     {
         if (m_new && m_orig)
         {
-            pw::swap(*m_orig, *m_new);
+            swap(*m_orig, *m_new);
         }
     }
 
