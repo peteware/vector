@@ -124,9 +124,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         {
             size_t  capacity = storage.capacity();
             Storage s(0, allocator);
-            std::cerr << "########################################\n";
             swap(storage, s);
-            std::cerr << "done ########################################\n";
             THEN("s now has 1 element")
             {
                 REQUIRE(s.size() == 1);

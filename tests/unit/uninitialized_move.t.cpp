@@ -24,8 +24,15 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             {
                 pw::test::OpCounter count = pw::test::CopyConstructible::getCounter() - init;
                 REQUIRE(3 == count.getMoveConstructor());
+                REQUIRE(0 == count.getCopyConstructor());
                 REQUIRE(count.constructorCount() == count.getMoveConstructor());
                 REQUIRE(0 == count.destructorCount());
+            }
+            THEN("values are moved, too")
+            {
+                REQUIRE(2 == dest[0].value());
+                REQUIRE(1 == dest[1].value());
+                REQUIRE(3 == dest[2].value());
             }
         }
     }

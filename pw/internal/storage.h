@@ -92,7 +92,13 @@ public:
     void                  push_back(value_type&& value);
     allocator_type&       get_allocator();
     allocator_type const& get_allocator() const;
-    friend void           swap(Storage& op1, Storage& op2)
+    void                  swap(Storage& op2)
+    {
+        pw::swap(m_begin, op2.m_begin);
+        pw::swap(m_end, op2.m_end);
+        pw::swap(m_allocated, op2.m_allocated);
+    }
+    friend void swap(Storage& op1, Storage& op2)
     {
         pw::swap(op1.m_begin, op2.m_begin);
         pw::swap(op1.m_end, op2.m_end);
@@ -149,7 +155,7 @@ Storage<Type, Allocator>::Storage(Storage&& copy)
     , m_end(0)
     , m_allocated(0)
 {
-    swap(*this, copy);
+    swap(copy);
 }
 
 /**
@@ -180,7 +186,7 @@ template<class Type, class Allocator>
 Storage<Type, Allocator>&
 Storage<Type, Allocator>::operator=(Storage op2)
 {
-    swap(*this, op2);
+    swap(op2);
     return *this;
 }
 

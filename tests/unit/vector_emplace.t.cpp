@@ -33,7 +33,11 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     if (!m_data.hascapacity())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
+        Storage s(m_data.newsize(), m_data.get_allocator());
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
+        m_data.swap(s);
+        //m_data = Storage(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
     }
     allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
     m_data.set_size(m_data.size() + 1);
@@ -55,9 +59,9 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 } // namespace pw
 
 using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
-//using TestEmplaceList =
-//    std::tuple<pw::vector<EmplaceMoveConstructible>, std::vector<EmplaceMoveConstructible>>;
-using TestEmplaceList = std::tuple<std::vector<pw::test::EmplaceMoveConstructible>>;
+// using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>,
+//                                    std::vector<pw::test::EmplaceMoveConstructible>>;
+using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>>;
 
 /*
  * Type requirements:
@@ -123,7 +127,8 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
             {
                 INFO("counter = " << counter);
                 REQUIRE(1 == counter.getOtherConstructor());
-                REQUIRE(1 == counter.constructorCount());
+                REQUIRE(3 == counter.getMoveConstructor());
+                REQUIRE(4 == counter.constructorCount());
             }
         }
     }
