@@ -33,11 +33,8 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     if (!m_data.hascapacity())
     {
-        Storage s(m_data.newsize(), m_data.get_allocator());
-        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
-        s.set_size(m_data.size());
+        Storage s(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
         m_data.swap(s);
-        //m_data = Storage(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
     }
     allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
     m_data.set_size(m_data.size() + 1);

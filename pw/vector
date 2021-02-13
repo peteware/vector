@@ -553,7 +553,8 @@ vector<Type, Allocator>::push_back(value_type&& value)
 {
     if (!m_data.hascapacity())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize(), get_allocator());
+        Storage s(pw::move(m_data), m_data.newsize(), get_allocator());
+        m_data.swap(s);
     }
     m_data.push_back(pw::move(value));
 }
