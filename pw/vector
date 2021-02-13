@@ -265,7 +265,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
 
         pw::uninitialized_copy(begin, end, s.begin());
         s.set_size(count);
-        m_data = s;
+        m_data.swap(s);
     }
     else
     {
@@ -286,7 +286,7 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
 
         pw::uninitialized_fill(s.begin(), s.begin() + count, value);
         s.set_size(count);
-        m_data = s;
+        m_data.swap(s);
     }
     else
     {
@@ -509,11 +509,13 @@ vector<Type, Allocator>::shrink_to_fit()
     }
     if (empty())
     {
-        m_data = Storage(get_allocator());
+        Storage s(get_allocator());
+        m_data.swap(s);
     }
     else
     {
-        m_data = Storage(pw::move(m_data), size(), get_allocator());
+        Storage s(pw::move(m_data), size(), get_allocator());
+        m_data.swap(s);
     }
 }
 
