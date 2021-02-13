@@ -217,7 +217,7 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept
     if (get_allocator() == other.get_allocator())
     {
         //pw::swap(m_data, other.m_data);
-        swap(m_data, other.m_data);
+        m_data.swap(other.m_data);
     }
     else if (m_data.capacity() < other.size())
     {
@@ -242,7 +242,7 @@ vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
 
         pw::uninitialized_copy(ilist.begin(), ilist.end(), s.begin());
         s.set_size(ilist.size());
-        m_data = s;
+        m_data.swap(s);
     }
     else
     {
@@ -571,9 +571,10 @@ vector<Type, Allocator>::resize(size_type count)
     }
     else if (m_data.size() < count)
     {
-        m_data = Storage(pw::move(m_data), count, get_allocator());
-        pw::uninitialized_default_construct(m_data.end(), m_data.begin() + count);
-        m_data.set_size(count);
+        Storage s(pw::move(m_data), count, get_allocator());
+        pw::uninitialized_default_construct(s.end(), s.end() + count - s.size());
+        s.set_size(count);
+        m_data.swap(s);
     }
 }
 
@@ -588,9 +589,10 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
     }
     else if (m_data.size() < count)
     {
-        m_data = Storage(pw::move(m_data), count, get_allocator());
-        pw::uninitialized_fill(m_data.end(), m_data.begin() + count, value);
-        m_data.set_size(count);
+        Storage s(pw::move(m_data), count, get_allocator());
+        pw::uninitialized_fill(s.end(), s.end() + count - s.size(), value);
+        s.set_size(count);
+        m_data.swap(s);
     }
 }
 
