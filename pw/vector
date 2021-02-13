@@ -221,7 +221,8 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept
     }
     else if (m_data.capacity() < other.size())
     {
-        m_data = Storage(pw::move(other.m_data), other.size(), get_allocator());
+        Storage s(pw::move(other.m_data), other.size(), get_allocator());
+        m_data.swap(s);
     }
     else
     {
@@ -525,7 +526,8 @@ vector<Type, Allocator>::reserve(size_type count)
 {
     if (count > capacity())
     {
-        m_data = Storage(pw::move(m_data), count, get_allocator());
+        Storage s(pw::move(m_data), count, get_allocator());
+        m_data.swap(s);
     }
 }
 
@@ -533,7 +535,6 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::clear() noexcept
 {
-    //m_data = Storage(get_allocator());
     pw::destroy(m_data.begin(), m_data.end());
     m_data.set_size(0);
 }
@@ -544,7 +545,8 @@ vector<Type, Allocator>::push_back(const_reference value)
 {
     if (m_data.capacity() == m_data.size())
     {
-        m_data = Storage(pw::move(m_data), m_data.newsize(), get_allocator());
+        Storage s(pw::move(m_data), m_data.newsize(), get_allocator());
+        m_data.swap(s);
     }
     m_data.push_back(value);
 }
