@@ -12,6 +12,8 @@
 #include <pw/impl/iterator_traits.h>
 #include <pw/impl/move_alg.h>
 #include <pw/impl/move_backward.h>
+#include <pw/impl/next.h>
+#include <pw/impl/prev.h>
 #include <pw/impl/reverse_iterator.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
@@ -271,8 +273,8 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
     else
     {
         size_type replace = pw::min(count, m_data.size());
-        pw::copy(begin, begin + replace, m_data.begin());
-        pw::uninitialized_copy(begin + replace, end, m_data.begin() + replace);
+        pw::copy(begin, pw::next(begin, replace), m_data.begin());
+        pw::uninitialized_copy(pw::next(begin, replace), end, pw::next(m_data.begin(), replace));
         m_data.set_size(count);
     }
 }
@@ -285,7 +287,7 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
     {
         Storage s(count, get_allocator());
 
-        pw::uninitialized_fill(s.begin(), s.begin() + count, value);
+        pw::uninitialized_fill(s.begin(), pw::next(s.begin(), count), value);
         s.set_size(count);
         m_data.swap(s);
     }
@@ -319,7 +321,7 @@ vector<Type, Allocator>::at(size_type position)
     {
         throw std::out_of_range("position out of range");
     }
-    return *(m_data.begin() + position);
+    return *(pw::next(m_data.begin(), position));
 }
 
 template<class Type, class Allocator>
@@ -330,20 +332,21 @@ vector<Type, Allocator>::at(size_type position) const
     {
         throw std::out_of_range("position out of range");
     }
-    return *(m_data.begin() + position);
+    return *(pw::next(m_data.begin(), position));
 }
 
 template<class Type, class Allocator>
-typename vector<Type, Allocator>::reference vector<Type, Allocator>::operator[](size_type position)
+typename vector<Type, Allocator>::reference
+vector<Type, Allocator>::operator[](size_type position)
 {
-    return *(m_data.begin() + position);
+    return *(pw::next(m_data.begin(), position));
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
-    vector<Type, Allocator>::operator[](size_type position) const
+vector<Type, Allocator>::operator[](size_type position) const
 {
-    return *(m_data.begin() + position);
+    return *(pw::next(m_data.begin(), position));
 }
 
 template<class Type, class Allocator>
@@ -364,14 +367,14 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    return *(m_data.end() - 1);
+    return *pw::prev(m_data.end(), 1);
 }
 
 template<class Type, class Allocator>
 typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    return *(m_data.end() - 1);
+    return *pw::prev(m_data.end(), 1);
 }
 
 template<class Type, class Allocator>
@@ -569,14 +572,13 @@ vector<Type, Allocator>::resize(size_type count)
 {
     if (m_data.size() > count)
     {
-        // TODO: need unit test for this bug: pw::destroy(m_data.begin(), m_data.begin() + count);
-        pw::destroy(m_data.begin() + count, m_data.end());
+        pw::destroy(pw::next(m_data.begin(), count), m_data.end());
         m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
         Storage s(pw::move(m_data), count, get_allocator());
-        pw::uninitialized_default_construct(s.end(), s.end() + count - s.size());
+        pw::uninitialized_default_construct(s.end(), pw::next(s.end(), count - s.size()));
         s.set_size(count);
         m_data.swap(s);
     }
@@ -588,13 +590,13 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
 {
     if (m_data.size() > count)
     {
-        pw::destroy(m_data.begin() + count, m_data.end());
+        pw::destroy(pw::next(m_data.begin(), count), m_data.end());
         m_data.set_size(count);
     }
     else if (m_data.size() < count)
     {
         Storage s(pw::move(m_data), count, get_allocator());
-        pw::uninitialized_fill(s.end(), s.end() + count - s.size(), value);
+        pw::uninitialized_fill(s.end(), pw::next(s.end(), count - s.size()), value);
         s.set_size(count);
         m_data.swap(s);
     }
@@ -613,13 +615,13 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
     difference_type offset = pw::distance(const_iterator(m_data.begin()), begin);
     difference_type count  = pw::distance(begin, end);
-    iterator        start  = m_data.begin() + offset;
+    iterator        start  = pw::next(m_data.begin(), offset);
     iterator        iter;
 
     iter = pw::move(pw::min(start + count, m_data.end()), m_data.end(), start);
     pw::destroy(iter, m_data.end());
     m_data.set_size(m_data.size() - count);
-    return m_data.begin() + offset;
+    return pw::next(m_data.begin(), offset);
 }
 
 template<class Type, class Allocator>
@@ -641,7 +643,7 @@ template<class Type, class Allocator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
-    difference_type offset = position - m_data.begin();
+    difference_type offset = pw::distance(const_iterator(m_data.begin()), position);
 
     if (!m_data.hascapacity(count))
     {
@@ -651,7 +653,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     {
         m_data.move(offset, count, value);
     }
-    return m_data.begin() + offset;
+    return pw::next(m_data.begin(), offset);
 }
 
 template<class Type, class Allocator>
@@ -659,7 +661,7 @@ template<class Iterator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
-    difference_type offset = distance(m_data.begin(), position);
+    difference_type offset = distance(const_iterator(m_data.begin()), position);
     difference_type count  = distance(first, last);
 
     return m_data.begin();
@@ -677,7 +679,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     }
     allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
     m_data.set_size(m_data.size() + 1);
-    return *(m_data.end() - 1);
+    return *pw::prev(m_data.end(), 1);
 }
 
 template<class Type, class Allocator>
@@ -685,14 +687,15 @@ template<class... Args>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
-    difference_type offset = position - m_data.begin();
+    difference_type offset = pw::distance(const_iterator(m_data.begin()), position);
     if (!m_data.hascapacity())
     {
         Storage s(m_data.newsize(), m_data.get_allocator());
-        pw::uninitialized_move(m_data.begin(), m_data.begin() + offset, s.begin());
-        pw::uninitialized_move(m_data.begin() + offset, m_data.end(), s.begin() + offset + 1);
+        pw::uninitialized_move(m_data.begin(), pw::next(m_data.begin(), offset), s.begin());
+        pw::uninitialized_move(
+            pw::next(m_data.begin(), offset), m_data.end(), pw::next(s.begin(), offset + 1));
         allocator_traits<Allocator>::construct(
-            s.get_allocator(), s.begin() + offset, std::forward<Args>(args)...);
+            s.get_allocator(), pw::next(s.begin(), offset), std::forward<Args>(args)...);
         s.set_size(size() + 1);
         m_data.swap(s);
     }
@@ -700,14 +703,14 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
     {
         if (position != m_data.end())
         {
-            pw::uninitialized_move(m_data.end() - 1, m_data.end(), m_data.end());
-            pw::move_backward(m_data.begin() + offset, m_data.end(), m_data.end() + 1);
+            pw::uninitialized_move(pw::prev(m_data.end(), 1), m_data.end(), m_data.end());
+            pw::move_backward(pw::next(m_data.begin(), offset), m_data.end(), m_data.end() + 1);
         }
         allocator_traits<Allocator>::construct(
-            m_data.get_allocator(), m_data.begin() + offset, std::forward<Args>(args)...);
+            m_data.get_allocator(), pw::next(m_data.begin(), offset), std::forward<Args>(args)...);
         m_data.set_size(size() + 1);
     }
-    return m_data.begin() + offset;
+    return pw::next(m_data.begin(), offset);
 }
 
 template<class Type, class Allocator>
