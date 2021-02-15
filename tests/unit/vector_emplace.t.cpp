@@ -1,163 +1,97 @@
-//#include <pw/impl/forward.h>
 #include <test_emplacemoveconstructible.h>
 #include <test_testtype.h>
 
 #include <catch2/catch.hpp>
 
-namespace pw {
-template<class Type, class Allocator>
-struct Rai
-{
-    Rai(internal::Storage<Type, Allocator>* orig, internal::Storage<Type, Allocator>* n = 0)
-        : m_orig(orig)
-        , m_new(n)
-    {
-    }
-
-    ~Rai()
-    {
-        if (m_new && m_orig)
-        {
-            swap(*m_orig, *m_new);
-        }
-    }
-
-    internal::Storage<Type, Allocator>* m_orig;
-    internal::Storage<Type, Allocator>* m_new;
-};
-
-template<class Type, class Allocator>
-template<class... Args>
-typename vector<Type, Allocator>::reference
-vector<Type, Allocator>::emplace_back(Args&&... args)
-{
-    if (!m_data.hascapacity())
-    {
-        Storage s(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
-        m_data.swap(s);
-    }
-    allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), std::forward<Args>(args)...);
-    m_data.set_size(m_data.size() + 1);
-    return *(m_data.end() - 1);
-}
-
-template<class Type, class Allocator>
-template<class... Args>
-typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
-{
-    if (!m_data.hascapacity())
-    {
-        m_data = Storage(pw::move(m_data), m_data.newsize());
-    }
-    return begin();
-}
-
-} // namespace pw
-
-using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
-// using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>,
-//                                    std::vector<pw::test::EmplaceMoveConstructible>>;
-using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>>;
-
-/*
- * Type requirements:
- * - emplace_back(): MoveInsertable and EmplaceConstructible
- * - emplace(): MoveAssignable, MoveInsertable and EmplaceConstructible
- */
-TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
-                        "[vector][emplace_back]",
-                        TestEmplaceList)
+TEMPLATE_LIST_TEST_CASE("emplace()", "[vector][func][emplace]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
+    using size_type  = typename Vector::size_type;
 
     GIVEN("An empty vector")
     {
-        Vector              v;
-        pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
-        pw::test::OpCounter counter;
-
-        WHEN("emplace-back() an element")
+        Vector     v;
+        value_type val;
+        pw::test::permute(val, 1);
+        WHEN("emplace() at begin()")
         {
-            v.emplace_back(3, 4);
-            counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
-            THEN("size() is 1")
+            v.emplace(v.begin(), val);
+            THEN("size() == 1")
             {
-                REQUIRE(1 == v.size());
+                REQUIRE(v.size() == 1);
             }
-            THEN("element has correct values")
+            THEN("front() == val")
             {
-                REQUIRE(3 == v.front().value());
-                REQUIRE(4 == v.front().value2());
+                REQUIRE(v.front() == val);
             }
-            THEN("other constructed, not copy or moce")
+        }
+    }
+    GIVEN("A vector with reserved space")
+    {
+        Vector          v;
+        value_type      val;
+        size_type const size = 5;
+
+        pw::test::permute(val, 1);
+        v.reserve(size);
+        WHEN("emplace() at begin()")
+        {
+            v.emplace(v.begin(), val);
+            THEN("size() == 1")
             {
-                REQUIRE(1 == counter.getOtherConstructor());
-                REQUIRE(1 == counter.constructorCount());
+                REQUIRE(v.size() == 1);
+            }
+            THEN("front() == val")
+            {
+                REQUIRE(v.front() == val);
             }
         }
     }
     GIVEN("A vector with elements")
     {
-        Vector              v    = { { 1, 2 }, { 3, 4 }, { 4, 5 } };
-        pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
-        pw::test::OpCounter counter;
+        Vector          v;
+        value_type      val;
+        size_type const size = 5;
 
-        REQUIRE(3 == v.size());
-        WHEN("emplace-back() an element")
+        pw::test::permute(val, 1);
+        v.resize(size);
+        WHEN("emplace() at begin()")
         {
-            v.emplace_back(13, 14);
-            counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
-            THEN("size() is 4")
+            v.emplace(v.begin(), val);
+            THEN("size() == size+1")
             {
-                REQUIRE(4 == v.size());
+                REQUIRE(v.size() == size + 1);
             }
-            THEN("element has correct values")
+            THEN("front() == val")
             {
-                REQUIRE(1 == v.front().value());
-                REQUIRE(2 == v.front().value2());
-                REQUIRE(13 == v.back().value());
-                REQUIRE(14 == v.back().value2());
+                REQUIRE(v.front() == val);
             }
-            THEN("other constructed, not copy or move")
+        }
+        WHEN("emplace() at end()")
+        {
+            v.emplace(v.end(), val);
+            THEN("size() == size+1")
             {
-                INFO("counter = " << counter);
-                REQUIRE(1 == counter.getOtherConstructor());
-                REQUIRE(3 == counter.getMoveConstructor());
-                REQUIRE(4 == counter.constructorCount());
+                REQUIRE(v.size() == size + 1);
+            }
+            THEN("back() == val")
+            {
+                REQUIRE(v.back() == val);
+            }
+        }
+        WHEN("emplace() in middle")
+        {
+            size_type where = size / 2;
+            v.emplace(v.begin() + where, val);
+            THEN("size() == size+1")
+            {
+                REQUIRE(v.size() == size + 1);
+            }
+            THEN("v[where] == val")
+            {
+                REQUIRE(v[where] == val);
             }
         }
     }
 }
-
-#if 0
-
-TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][emplace_back]", TestIntList)
-{
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-
-    GIVEN("An empty vector of TestType")
-    {
-        Vector v;
-        WHEN("emplace_back() and item")
-        {
-            v.emplace_back(3);
-            THEN("size() is 1")
-            {
-                REQUIRE(1 == v.size());
-            }
-        }
-    }
-    GIVEN("A vector with 5 elements")
-    {
-        pw::test::Values<Vector> generate(5);
-        Vector&        v = generate.values;
-
-        WHEN("emplace_back()")
-        {
-        }
-    }
-}
-#endif

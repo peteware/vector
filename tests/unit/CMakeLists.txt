@@ -18,6 +18,7 @@ add_executable( unittest
                 vector_clear.t.cpp
                 vector_constructor.t.cpp
                 vector_emplace.t.cpp
+                vector_emplace_back.t.cpp
                 vector_erase.t.cpp
                 vector_insert.t.cpp
                 vector_iter.t.cpp
