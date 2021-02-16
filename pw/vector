@@ -661,10 +661,26 @@ template<class Iterator>
 typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
-    difference_type offset = distance(const_iterator(m_data.begin()), position);
-    difference_type count  = distance(first, last);
+    difference_type offset = pw::distance(const_iterator(m_data.begin()), position);
+    difference_type count  = pw::distance(first, last);
 
-    return m_data.begin();
+    if (!m_data.hascapacity(count))
+    {
+        Storage s(m_data.split(offset, count));
+
+        pw::uninitialized_move(first, last, pw::next(s.begin(), offset));
+        s.set_size(m_data.size() + count);
+        m_data.swap(s);
+    }
+    else
+    {
+        m_data.moveto(pw::next(m_data.begin(), offset),
+                      pw::next(m_data.begin(), offset + count),
+                      pw::next(m_data.begin(), offset));
+        pw::copy(first, last, pw::next(m_data.begin(), offset));
+        m_data.set_size(m_data.size() + count);
+    }
+    return pw::next(m_data.begin(), offset);
 }
 
 template<class Type, class Allocator>

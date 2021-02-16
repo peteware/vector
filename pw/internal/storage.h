@@ -8,6 +8,7 @@
 #include <pw/impl/max.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
+#include <pw/impl/next.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 #include <pw/impl/swap.h>
@@ -78,6 +79,7 @@ public:
      */
     void                  move(size_type offset, size_type count, Type const& value);
     Storage               resize(size_type offset, size_type count, Type const& value);
+    Storage               split(size_type offset, size_type count);
     iterator              begin();
     iterator              end();
     const_iterator        begin() const;
@@ -104,10 +106,10 @@ public:
         pw::swap(op1.m_end, op2.m_end);
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
-
-private:
     void moveto(iterator begin, iterator end, iterator dest);
     void cons(iterator begin, iterator end, Type const& value);
+
+private:
 };
 
 template<class Type, class Allocator>
@@ -127,16 +129,6 @@ Storage<Type, Allocator>::Storage(size_type count, allocator_type const& alloc)
     , m_allocated(count)
 {
 }
-
-// template<class Type, class Allocator>
-// Storage<Type, Allocator>::Storage(Storage const& copy)
-//     : m_alloc(copy.m_alloc)
-//     , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
-//     , m_end(m_begin + copy.size())
-//     , m_allocated(copy.size())
-// {
-//     pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
-// }
 
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& alloc)
@@ -194,12 +186,21 @@ template<class Type, class Allocator>
 Storage<Type, Allocator>
 Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& value)
 {
-    Storage s(size() + count, m_alloc);
+    Storage s = split(offset, count);
 
-    pw::uninitialized_move(begin(), begin() + offset, s.begin());
-    pw::uninitialized_move(begin() + offset, end(), s.begin() + offset + count);
     pw::uninitialized_fill(s.begin() + offset, s.begin() + offset + count, value);
     s.set_size(size() + count);
+    return s;
+}
+
+template<class Type, class Allocator>
+Storage<Type, Allocator>
+Storage<Type, Allocator>::split(size_type offset, size_type count)
+{
+    Storage s(size() + count, m_alloc);
+
+    pw::uninitialized_move(begin(), pw::next(begin(), offset), s.begin());
+    pw::uninitialized_move(pw::next(begin(), offset), end(), pw::next(s.begin(), offset + count));
     return s;
 }
 

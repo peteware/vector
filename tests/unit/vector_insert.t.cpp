@@ -11,7 +11,7 @@
  * - insert(const_iterator pos, const T& value): CopyAssignable and CopyInsertable
  * - insert(const_iterator pos, T&& value):  MoveAssignable and MoveInsertable
  * - insert(const_iterator pos, size_type count, const T& value):  CopyAssignable and CopyInsertable
- * - insert const_iterator pos, InputIt first, InputIt last): EmplaceConstructible, Swappable, MoveAssignable, MoveConstructible and MoveInsertable
+ * - insert(const_iterator pos, InputIt first, InputIt last): EmplaceConstructible, Swappable, MoveAssignable, MoveConstructible and MoveInsertable
  * - insert(const_iterator pos, std::initializer_list<T> ilist): EmplaceConstructible, Swappable, MoveAssignable, MoveConstructible and MoveInsertable 
  *
  * Exceptions:
@@ -44,7 +44,28 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                 REQUIRE(value == v.at(0));
             }
         }
-        WHEN("insert(count) at begin()")
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        pw::test::Values<Vector>  generate(5);
+        size_t                    added;
+        size_t                    offset;
+        value_type                value;
+        typename Vector::iterator where;
+
+        Vector v(generate.values);
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw::test::TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    GIVEN("an empty vector")
+    {
+        Vector v;
+
+        WHEN("insert(begin(), count, value)")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -60,7 +81,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                 REQUIRE(value == v[count - 1]);
             }
         }
-        WHEN("insert(12) at end()")
+        WHEN("insert(end(), count, value)")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -86,7 +107,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
         typename Vector::iterator where;
 
         Vector v(generate.values);
-        WHEN("insert(3) at begin")
+        WHEN("insert(begin(), added, value)")
         {
             added  = 3;
             offset = 0;
@@ -104,11 +125,11 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
-        WHEN("insert(3) at end")
+        WHEN("insert(end(), added, value)")
         {
             added  = 3;
             offset = v.size();
-            where  = v.insert(v.begin() + offset, added, value);
+            where  = v.insert(v.end(), added, value);
             THEN("size is correct")
             {
                 REQUIRE(generate.count + added == v.size());
@@ -122,10 +143,10 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
-        WHEN("insert(10) at begin")
+        WHEN("insert(middle, added, value)")
         {
             added  = 10;
-            offset = 0;
+            offset = v.size() / 2;
             where  = v.insert(v.begin() + offset, added, value);
             THEN("size is correct")
             {
@@ -140,7 +161,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
-        WHEN("insert(10) at near end")
+        WHEN("insert(end -1, added, value)")
         {
             added  = 10;
             offset = generate.count - 1;
@@ -157,6 +178,75 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
                     pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert]", pw::test::TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    GIVEN("an empty vector")
+    {
+        Vector                   v;
+        pw::test::Values<Vector> generate(5);
+
+        WHEN("insert(begin, first, last) is called")
+        {
+            typename Vector::iterator iter;
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased")
+            {
+                REQUIRE(generate.values.size() == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("front() returns same value")
+            {
+                REQUIRE(generate.first_value == v.front());
+            }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
+
+        WHEN("insert(begin, first, last) is called")
+        {
+            typename Vector::iterator iter;
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased")
+            {
+                REQUIRE(2 * generate.values.size() == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("front() returns same value")
+            {
+                REQUIRE(generate.first_value == v.front());
+            }
+        }
+        WHEN("insert(end, first, last) is called")
+        {
+            typename Vector::iterator iter;
+            iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased")
+            {
+                REQUIRE(2 * generate.values.size() == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(pw::next(v.begin(), generate.values.size()) == iter);
+            }
+            THEN("front() returns same value")
+            {
+                REQUIRE(generate.last_value == v.back());
             }
         }
     }

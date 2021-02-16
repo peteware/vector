@@ -3,6 +3,8 @@
 
 #include <pw/impl/advance.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/next.h>
+#include <pw/impl/prev.h>
 
 namespace pw {
 
@@ -95,13 +97,15 @@ reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
 }
 
 template<class Iterator>
-constexpr typename reverse_iterator<Iterator>::reference reverse_iterator<Iterator>::operator*() const
+constexpr typename reverse_iterator<Iterator>::reference
+reverse_iterator<Iterator>::operator*() const
 {
     return *m_base;
 }
 
 template<class Iterator>
-constexpr typename reverse_iterator<Iterator>::reference reverse_iterator<Iterator>::operator->() const
+constexpr typename reverse_iterator<Iterator>::reference
+reverse_iterator<Iterator>::operator->() const
 {
     return *m_base;
 }
@@ -194,14 +198,14 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>
 operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& iterator)
 {
-    return iterator + n;
+    return pw::next(iterator, n);
 }
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>
 operator-(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& iterator)
 {
-    return iterator - n;
+    return pw::prev(iterator, n);
 }
 
 template<class Iterator1, class Iterator2>
