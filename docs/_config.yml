@@ -22,8 +22,8 @@ title: "Implementing stl::vector"
 email: ware@peteware.com
 description: >-
   A sample implementation of stl::vector
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: peteware.github.io
+baseurl: /vector
 twitter_username: peteware
 github_username:  peteware
 
