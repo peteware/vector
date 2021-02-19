@@ -9,7 +9,7 @@ equal(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 end2)
 {
     while (begin1 != end1 && begin2 != end2)
     {
-        if (!(*begin1 == *begin2))
+        if (*begin1 != *begin2)
         {
             return false;
         }
