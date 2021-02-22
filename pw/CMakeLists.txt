@@ -8,28 +8,52 @@ target_sources(pw INTERFACE
     utility
     vector
 
+    impl/add_const.h
+    impl/addressof.h
+    impl/advance.h
     impl/allocator.h
     impl/allocator_traits.h
+    impl/as_const.h
+    impl/back_insert_iterator.h
+    impl/back_inserter.h
     impl/bool_type.h
     impl/construct_at.h
     impl/copy.h
+    impl/destroy.h
+    impl/destroy_at.h
+    impl/distance.h
+    impl/equal.h
     impl/fill.h
     impl/for_each.h
+    impl/forward.h
     impl/integral_constant.h
     impl/is_class.h
+    impl/is_constructible.h
+    impl/is_convertible.h
     impl/is_empty.h
     impl/is_same.h
+    impl/iterator_tag.h
+    impl/iterator_traits.h
+    impl/lexicographical_compare.h
     impl/make_unsigned.h
     impl/max.h
+    impl/min.h
+    impl/move.h
+    impl/move_alg.h
+    impl/move_backward.h
+    impl/next.h
     impl/pmr_polymorphic_allocator.h
     impl/pointer_traits.h
+    impl/prev.h
     impl/ptrdiff.h
+    impl/remove_reference.h
+    impl/reverse_iterator.h
     impl/size.h
     impl/swap.h
+    impl/uninitialized_copy.h
+    impl/uninitialized_default_construct.h
+    impl/uninitialized_fill.h
+    impl/uninitialized_move.h
+    impl/uninitialized_value_construct.h
     impl/void.h
-    internal/check_empty.h
-    internal/destroy.h
-    internal/extract_or.h
-    internal/meta.h
-    
-)
+    )

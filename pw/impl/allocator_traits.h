@@ -49,6 +49,16 @@ struct allocator_traits
     {
         p->~Type();
     }
+    static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
+    {
+        if constexpr (Alloc::propagate_on_container_copy_assignment)
+        {
+            return alloc;
+        }
+        else
+        {
+        }
+    }
 };
 
 } // namespace pw
