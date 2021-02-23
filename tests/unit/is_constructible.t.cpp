@@ -1,5 +1,5 @@
 #include <pw/impl/is_constructible.h>
-//#include <type_traits>
+#include <type_traits>
 
 #include <catch2/catch.hpp>
 
@@ -15,14 +15,14 @@ SCENARIO("is_constructible", "[type_traits]")
         {
             THEN("it is not")
             {
-                REQUIRE(!pw::is_constructible<Example, int>::value);
+                REQUIRE(!std::is_constructible<Example, int>::value);
             }
         }
         WHEN("Call is_constructibe() with no args")
         {
             THEN("it is")
             {
-                REQUIRE(pw::is_constructible<Example>::value);
+                REQUIRE(std::is_constructible<Example>::value);
             }
         }
     }
@@ -40,21 +40,21 @@ SCENARIO("is_constructible", "[type_traits]")
         {
             THEN("it is not")
             {
-                REQUIRE(!pw::is_constructible<Example2>::value);
+                REQUIRE(!std::is_constructible<Example2>::value);
             }
         }
         WHEN("Call is_constructibe() with invalid args")
         {
             THEN("it is not")
             {
-                REQUIRE(!pw::is_constructible<Example2, char*>::value);
+                REQUIRE(!std::is_constructible<Example2, char*>::value);
             }
         }
         WHEN("Call is_constructibe() with correct args")
         {
             THEN("it is")
             {
-                REQUIRE(pw::is_constructible<Example2, float>::value);
+                REQUIRE(std::is_constructible<Example2, float>::value);
             }
         }
     }
