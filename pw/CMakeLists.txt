@@ -19,6 +19,7 @@ target_sources(pw INTERFACE
     impl/bool_type.h
     impl/construct_at.h
     impl/copy.h
+    impl/declval.h
     impl/destroy.h
     impl/destroy_at.h
     impl/distance.h

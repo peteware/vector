@@ -2,6 +2,9 @@
 #define INCLUDED_PW_IMPL_VOID_H
 
 namespace pw {
+/**
+ * Success if all the types are valid.
+ */
 template<class...>
 using void_t = void;
 
