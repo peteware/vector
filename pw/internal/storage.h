@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/exchange.h>
 #include <pw/impl/max.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
@@ -142,12 +143,11 @@ Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& all
 
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(Storage&& copy)
-    : m_alloc(copy.m_alloc)
-    , m_begin(0)
-    , m_end(0)
-    , m_allocated(0)
+    : m_alloc { copy.m_alloc }
+    , m_begin { pw::exchange(copy.m_begin, nullptr) }
+    , m_end { pw::exchange(copy.m_end, nullptr) }
+    , m_allocated { pw::exchange(copy.m_allocated, 0) }
 {
-    swap(copy);
 }
 
 /**
