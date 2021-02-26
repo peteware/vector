@@ -4,6 +4,7 @@ add_executable( unittest
                 allocator_traits.t.cpp
                 cstddef.t.cpp
                 distance.t.cpp
+                exchange.t.cpp
                 is_constructible.t.cpp
                 memory.t.cpp
                 move.t.cpp
