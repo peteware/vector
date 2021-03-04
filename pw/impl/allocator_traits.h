@@ -28,15 +28,9 @@ struct allocator_traits
     using propagate_on_container_swap            = false_type;
     using is_always_equal                        = typename is_empty<Alloc>::type;
 
-    static pointer allocate(allocator_type& alloc, size_type n)
-    {
-        return alloc.allocate(n);
-    }
+    static pointer allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }
 
-    static void deallocate(allocator_type& alloc, pointer p, size_type count)
-    {
-        alloc.deallocate(p, count);
-    }
+    static void deallocate(allocator_type& alloc, pointer p, size_type count) { alloc.deallocate(p, count); }
 
     template<class Type, class... Args>
     static constexpr void construct(allocator_type& alloc, Type* p, Args&&... args)
@@ -47,17 +41,34 @@ struct allocator_traits
     template<class Type>
     static void destroy(Alloc& a, Type* p)
     {
-        p->~Type();
+        destroy_impl(a, p);
     }
     static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
     {
-        if constexpr (Alloc::propagate_on_container_copy_assignment)
-        {
-            return alloc;
-        }
-        else
-        {
-        }
+        return select_on_container_copy_construction_impl(alloc);
+    }
+
+private:
+    template<class Type>
+    static auto select_on_container_copy_construction_impl(const Type& alloc)
+        -> decltype(alloc.select_on_container_copy_construction())
+    {
+        return alloc.select_on_container_copy_construction();
+    }
+
+    static Alloc select_on_container_copy_construction_impl(const Alloc& alloc) { return alloc; }
+
+    template<typename A, typename T>
+    static auto destroy_impl(A& a, // NOLINT(runtime/references)
+                             T* p) -> decltype(a.destroy(p))
+    {
+        a.destroy(p);
+    }
+
+    template<typename T>
+    static void destroy_impl(Alloc&, T* p)
+    {
+        p->~T();
     }
 };
 

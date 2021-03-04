@@ -5,7 +5,7 @@ BasedOnStyle: WebKit
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true
 AlignConsecutiveDeclarations: true
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: InlineOnly
 AlwaysBreakAfterReturnType: TopLevelDefinitions
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false
@@ -31,7 +31,7 @@ CompactNamespaces: true
 FixNamespaceComments: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None
-PenaltyReturnTypeOnItsOwnLine: 100
+PenaltyReturnTypeOnItsOwnLine: 0
 PenaltyBreakAssignment: 50
 ReflowComments:  false
 SortIncludes:    true

@@ -167,9 +167,10 @@ vector<Type, Allocator>::vector(size_type count, value_type const& value, alloca
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(vector const& copy)
-    : m_data(copy.m_data, allocator_type())
+    : m_data(
+          copy.m_data,
+          pw::allocator_traits<allocator_type>::select_on_container_copy_construction(copy.get_allocator()))
 {
-    // std::allocator_traits<allocator_type>::select_on_container_copy_construction(other.get_allocator())
 }
 
 template<class Type, class Allocator>
