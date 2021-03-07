@@ -21,4 +21,8 @@ target_sources ( pwtest PUBLIC
                 test_same.h
                 test_testtype.h
                )
-target_include_directories( pwtest PRIVATE . ../.. )
+target_link_libraries( pwtest pw )
+
+target_include_directories( pwtest
+                            PUBLIC
+                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

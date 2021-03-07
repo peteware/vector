@@ -3,6 +3,13 @@
 
 namespace pw {
 
+/**
+ * Copies value into range from begin up to end
+ *
+ * @param begin ForwardIterator to start
+ * @param end End of range
+ * @param value To be copied
+ */
 template<class ForwardIterator, class Type>
 void
 fill(ForwardIterator begin, ForwardIterator end, Type const& value)

@@ -2,6 +2,6 @@
 #define PW_MEMORY_RESOURCE_H
 
 #include <pw/impl/allocator_traits.h>
-#include <pw/impl/pmr_allocator.h>
+#include <pw/impl/pmr_polymorphic_allocator.h>
 
 #endif /*  PW_MEMORY_RESOURCE_H */

@@ -6,6 +6,7 @@ add_executable( unittest
                 distance.t.cpp
                 exchange.t.cpp
                 is_constructible.t.cpp
+                is_empty.t.cpp
                 memory.t.cpp
                 move.t.cpp
                 reverse_iterator.t.cpp
@@ -28,9 +29,9 @@ add_executable( unittest
                 vector_push_back.t.cpp
                 vector_resize.t.cpp
                 )
-target_include_directories( unittest PRIVATE .. ../test ../.. )
+#target_include_directories( unittest PRIVATE .. ../test ../.. )
                
-target_link_libraries(unittest pw pwtest catch2)
+target_link_libraries(unittest pw catch2 pwtest)
 add_test( NAME unittest
           COMMAND unittest)
 
