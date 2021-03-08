@@ -15,6 +15,8 @@ struct is_same<Type, Type> : true_type
 {
 };
 
+template<class Type, class U >
+inline constexpr bool is_same_v = is_same<Type, U>::value;
 } // namespace pw
 
 #endif /* INCLUDED_PW_IMPL_IS_SAME_H */

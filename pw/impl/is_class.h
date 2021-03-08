@@ -5,18 +5,14 @@
 
 namespace pw {
 
-namespace is_class_impl {
-template<class Type>
-char test(int Type::*);
-
-template<class Type>
-int test(...);
-} // namespace is_class_impl
-
-template<class Type>
-struct is_class : public integral_constant<bool, sizeof(is_class_impl::test<Type>(0)) == 1>
+/// is_class
+template<typename Type>
+struct is_class: public integral_constant<bool, __is_class(Type)>
 {
 };
+
+template<class Type>
+inline constexpr bool is_class_v = is_class<Type>::value;
 
 } // namespace pw
 
