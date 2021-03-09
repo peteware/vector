@@ -24,6 +24,7 @@ target_sources(pw-impl INTERFACE
     equal.h
     exchange.h
     fill.h
+    fill_n.h
     for_each.h
     forward.h
     integral_constant.h
