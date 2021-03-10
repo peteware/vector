@@ -36,3 +36,8 @@ Unit tests are in `tests/unit/<file.t.cpp>` and use the
 - `is_union` used builtin `__is_union(Type)`.  ditto.
 - `is_nothrow_constructible` used builtin `__is_nothrow_constructible(Type, Args...)`.  ditto
 
+## ToDo
+
+### Unit tests
+
+- [ ] `vector::shrink_to_fit()`

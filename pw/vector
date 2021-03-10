@@ -530,8 +530,8 @@ vector<Type, Allocator>::shrink_to_fit()
     else
     {
         Storage s(size(), get_allocator());
-        // Storage s(pw::move(m_data), size(), get_allocator());
-        // TODO: implement move
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
         m_data.swap(s);
     }
 }
@@ -605,30 +605,38 @@ template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(const_reference value)
 {
-    if (!m_data.hascapacity())
+    if (m_data.hascapacity())
+    {
+        m_data.push_back(value);
+    }
+    else
     {
         Storage s(m_data.newsize(), get_allocator());
 
         pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
         s.set_size(m_data.size());
+        s.push_back(value);
         m_data.swap(s);
     }
-    m_data.push_back(value);
 }
 
 template<class Type, class Allocator>
 void
 vector<Type, Allocator>::push_back(value_type&& value)
 {
-    if (!m_data.hascapacity())
+    if (m_data.hascapacity())
+    {
+        m_data.push_back(pw::move(value));
+    }
+    else
     {
         Storage s(m_data.newsize(), get_allocator());
 
         pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
         s.set_size(m_data.size());
+        s.push_back(pw::move(value));
         m_data.swap(s);
     }
-    m_data.push_back(pw::move(value));
 }
 
 template<class Type, class Allocator>
