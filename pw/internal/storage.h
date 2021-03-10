@@ -70,13 +70,15 @@ public:
     Storage(allocator_type const& alloc = allocator_type());
     explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
     ~Storage();
+    Storage& operator=(Storage& op2) = delete;
+
     /**
      * Allocate enough space for count records.  Then up to
      * count records are moved into new Storage.
      */
-    void                  move(size_type offset, size_type count, Type const& value);
-    Storage               resize(size_type offset, size_type count, Type const& value);
-    Storage               split(size_type offset, size_type count);
+    // void                  move(size_type offset, size_type count, Type const& value);
+    // Storage               resize(size_type offset, size_type count, Type const& value);
+    // Storage               split(size_type offset, size_type count);
     iterator              begin();
     iterator              end();
     const_iterator        begin() const;
@@ -103,8 +105,8 @@ public:
         pw::swap(op1.m_end, op2.m_end);
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
-    void moveto(iterator begin, iterator end, iterator dest);
-    void cons(iterator begin, iterator end, Type const& value);
+    // void moveto(iterator begin, iterator end, iterator dest);
+    // void cons(iterator begin, iterator end, Type const& value);
 
 private:
 };
@@ -134,41 +136,41 @@ Storage<Type, Allocator>::~Storage()
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
 }
 
-template<class Type, class Allocator>
-Storage<Type, Allocator>
-Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& value)
-{
-    Storage s = split(offset, count);
+// template<class Type, class Allocator>
+// Storage<Type, Allocator>
+// Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& value)
+// {
+//     Storage s = split(offset, count);
 
-    pw::uninitialized_fill(s.begin() + offset, s.begin() + offset + count, value);
-    s.set_size(size() + count);
-    return s;
-}
+//     pw::uninitialized_fill(s.begin() + offset, s.begin() + offset + count, value);
+//     s.set_size(size() + count);
+//     return s;
+// }
 
-template<class Type, class Allocator>
-Storage<Type, Allocator>
-Storage<Type, Allocator>::split(size_type offset, size_type count)
-{
-    Storage s(size() + count, m_alloc);
+// template<class Type, class Allocator>
+// Storage<Type, Allocator>
+// Storage<Type, Allocator>::split(size_type offset, size_type count)
+// {
+//     Storage s(size() + count, m_alloc);
 
-    pw::uninitialized_move(begin(), pw::next(begin(), offset), s.begin());
-    pw::uninitialized_move(pw::next(begin(), offset), end(), pw::next(s.begin(), offset + count));
-    return s;
-}
+//     pw::uninitialized_move(begin(), pw::next(begin(), offset), s.begin());
+//     pw::uninitialized_move(pw::next(begin(), offset), end(), pw::next(s.begin(), offset + count));
+//     return s;
+// }
 
-/**
- * Allocate enough space for count records.  Then up to
- * count records are moved into new Storage and others
- * are destroyed.
- */
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::move(size_type offset, size_type count, Type const& value)
-{
-    moveto(m_begin + offset, m_end, m_end + offset);
-    cons(m_begin + offset, m_begin + offset + count, value);
-    set_size(size() + count);
-}
+// /**
+//  * Allocate enough space for count records.  Then up to
+//  * count records are moved into new Storage and others
+//  * are destroyed.
+//  */
+// template<class Type, class Allocator>
+// void
+// Storage<Type, Allocator>::move(size_type offset, size_type count, Type const& value)
+// {
+//     moveto(m_begin + offset, m_end, m_end + offset);
+//     cons(m_begin + offset, m_begin + offset + count, value);
+//     set_size(size() + count);
+// }
 
 template<class Type, class Allocator>
 typename Storage<Type, Allocator>::iterator
@@ -269,42 +271,42 @@ Storage<Type, Allocator>::get_allocator() const
     return m_alloc;
 }
 
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
-{
-    while (end != begin)
-    {
-        --dest;
-        --end;
-        if (dest >= m_end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
-        }
-        else
-        {
-            *dest = pw::move(*end);
-        }
-    }
-}
+// template<class Type, class Allocator>
+// void
+// Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
+// {
+//     while (end != begin)
+//     {
+//         --dest;
+//         --end;
+//         if (dest >= m_end)
+//         {
+//             allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
+//         }
+//         else
+//         {
+//             *dest = pw::move(*end);
+//         }
+//     }
+// }
 
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
-{
-    while (begin != end)
-    {
-        if (begin < end)
-        {
-            *begin = value;
-        }
-        else
-        {
-            allocator_traits<Allocator>::construct(m_alloc, begin, value);
-        }
-        ++begin;
-    }
-}
+// template<class Type, class Allocator>
+// void
+// Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
+// {
+//     while (begin != end)
+//     {
+//         if (begin < end)
+//         {
+//             *begin = value;
+//         }
+//         else
+//         {
+//             allocator_traits<Allocator>::construct(m_alloc, begin, value);
+//         }
+//         ++begin;
+//     }
+// }
 
 }} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_STORAGE_H */

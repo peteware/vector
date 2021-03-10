@@ -70,36 +70,6 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         pw::test::permute(value, 3);
         storage.push_back(value);
         REQUIRE(*storage.begin() == value);
-        WHEN("Storage (move, 20)")
-        {
-            Storage s = Storage(20, typename Storage::allocator_type());
-            // TODO: implement move
-            THEN("size() is 1")
-            {
-                REQUIRE(1 == s.size());
-                REQUIRE(20 == s.capacity());
-                REQUIRE(1 == storage.size());
-                REQUIRE(10 == storage.capacity());
-            }
-            THEN("element is moved") { REQUIRE(*s.begin() == value); }
-        }
-        WHEN("operator=() is called")
-        {
-            Storage s(10, allocator);
-            s.push_back(value);
-            s = storage;
-            THEN("they are same and destruction works")
-            {
-                REQUIRE(s.size() == storage.size());
-                REQUIRE(s.capacity() == s.size());
-            }
-        }
-        WHEN("operator=(move) is called")
-        {
-            Storage s(0, allocator);
-            s = pw::move(storage);
-            THEN("s now has 1 element") { REQUIRE(s.size() == 1); }
-        }
         WHEN("swap() is called")
         {
             size_t  capacity = storage.capacity();
@@ -109,11 +79,6 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             THEN("the element was copied") { REQUIRE(*s.begin() == value); }
             THEN("capacity was copied") { REQUIRE(s.capacity() == capacity); }
             THEN("storage now has 0 element") { REQUIRE(storage.size() == 0); }
-        }
-        WHEN("move() is called")
-        {
-            storage.move(0, 3, value);
-            THEN("3 new elements") { REQUIRE(4 == storage.size()); }
         }
     }
 }

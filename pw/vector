@@ -711,7 +711,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     {
         //TODO: uninitialized_move(x, y, pw::back_inserter(m_data));
         //move_backward(
-        m_data.move(offset, count, value);
+        //m_data.move(offset, count, value);
     }
     return pw::next(m_data.begin(), offset);
 }
@@ -735,9 +735,10 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     }
     else
     {
-        m_data.moveto(pw::next(m_data.begin(), offset),
-                      pw::next(m_data.begin(), offset + count),
-                      pw::next(m_data.begin(), offset));
+        // TODO: imploement move
+        // m_data.moveto(pw::next(m_data.begin(), offset),
+        //               pw::next(m_data.begin(), offset + count),
+        //               pw::next(m_data.begin(), offset));
         pw::copy(first, last, pw::next(m_data.begin(), offset));
         m_data.set_size(m_data.size() + count);
     }
@@ -749,15 +750,20 @@ template<class... Args>
 typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
-    if (!m_data.hascapacity())
+    if (m_data.hascapacity())
     {
-        //Storage s(pw::move(m_data), m_data.newsize(), m_data.get_allocator());
+        allocator_traits<Allocator>::construct(
+            m_data.get_allocator(), m_data.end(), pw::forward<Args>(args)...);
+        m_data.set_size(m_data.size() + 1);
+    }
+    else
+    {
         Storage s(m_data.newsize(), m_data.get_allocator());
-        // Implement move
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size() + 1);
+        allocator_traits<Allocator>::construct(s.get_allocator(), s.end(), pw::forward<Args>(args)...);
         m_data.swap(s);
     }
-    allocator_traits<Allocator>::construct(m_data.get_allocator(), m_data.end(), pw::forward<Args>(args)...);
-    m_data.set_size(m_data.size() + 1);
     return *pw::prev(m_data.end(), 1);
 }
 
