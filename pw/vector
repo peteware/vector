@@ -155,16 +155,16 @@ template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count)
     : m_data(count, allocator_type())
 {
+    pw::uninitialized_default_construct(m_data.begin(), m_data.begin() + count);
     m_data.set_size(count);
-    pw::uninitialized_default_construct(m_data.begin(), m_data.end());
 }
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
     : m_data(count, alloc)
 {
+    pw::uninitialized_fill(m_data.begin(), m_data.begin() + count, value);
     m_data.set_size(count);
-    pw::uninitialized_fill(m_data.begin(), m_data.end(), value);
 }
 
 template<class Type, class Allocator>
@@ -173,14 +173,16 @@ vector<Type, Allocator>::vector(vector const& copy)
           copy.size(),
           pw::allocator_traits<allocator_type>::select_on_container_copy_construction(copy.get_allocator()))
 {
-    // TODO: Need to implement copy
+    pw::uninitialized_copy(copy.m_data.begin(), copy.m_data.end(), m_data.begin());
+    m_data.set_size(copy.m_data.size());
 }
 
 template<class Type, class Allocator>
 vector<Type, Allocator>::vector(vector&& other) noexcept
     : m_data(other.size(), allocator_type())
 {
-    // TODO: implement move
+    pw::uninitialized_move(other.m_data.begin(), other.m_data.end(), m_data.begin());
+    m_data.set_size(other.m_data.size());
 }
 
 template<class Type, class Allocator>
@@ -209,8 +211,10 @@ vector<Type, Allocator>::operator=(const vector& other)
 {
     if (m_data.capacity() < other.size())
     {
-        //m_data = Storage(other.m_data, get_allocator());
-        // TODO: implement assignment
+        Storage s(other.size(), get_allocator());
+        pw::uninitialized_copy(other.begin(), other.end(), s.begin());
+        s.set_size(other.size());
+        m_data.swap(s);
     }
     else
     {
@@ -556,33 +560,6 @@ vector<Type, Allocator>::clear() noexcept
     pw::destroy(m_data.begin(), m_data.end());
     m_data.set_size(0);
 }
-
-template<class Type, class Allocator>
-struct StorageMove
-{
-    using Storage = internal::Storage<Type, Allocator>;
-
-    Storage& m_src;
-    Storage& m_dst;
-    size_t   m_index;
-
-    StorageMove(Storage& src, Storage& dst)
-        : m_src(src)
-        , m_dst(dst)
-        , m_index(0)
-    {
-        try
-        {
-            uninitialized_move(src.begin(), src.end(), pw::back_inserter(m_dst));
-        }
-        catch (...)
-        {
-            throw;
-        }
-    }
-
-    ~StorageMove() { }
-};
 
 /**
  * Appends the given element value to the end of the container.

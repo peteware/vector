@@ -40,4 +40,9 @@ Unit tests are in `tests/unit/<file.t.cpp>` and use the
 
 ### Unit tests
 
+Need the following unit tests to be written:
+
+- [ ] `vector::vector((vector&& other, const Allocator& alloc)`
 - [ ] `vector::shrink_to_fit()`
+- [ ] `vector::reserve()` 
+- [ ] `vector::::operator=(vector&& other) noexcept` when different
