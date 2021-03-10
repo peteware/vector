@@ -31,6 +31,7 @@ protected:
 
 template<class Container>
 back_insert_iterator<Container>::back_insert_iterator(container_type& container)
+    : m_container(&container)
 {
 }
 

@@ -14,7 +14,7 @@ move(InputIterator begin, InputIterator end, OutputIterator dest)
     {
         *dest++ = pw::move(*begin++);
     }
-    return begin;
+    return dest;
 }
 } // namespace pw
 

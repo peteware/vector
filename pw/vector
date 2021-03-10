@@ -1,6 +1,7 @@
 #ifndef PW_VECTOR_H // -*- c++ -*-
 #define PW_VECTOR_H
 
+#include <pw/impl/advance.h>
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/back_inserter.h>
@@ -572,7 +573,7 @@ struct StorageMove
     {
         try
         {
-            uninitialized_move(src.begin(), src.end(), back_inserter(m_dst));
+            uninitialized_move(src.begin(), src.end(), pw::back_inserter(m_dst));
         }
         catch (...)
         {
@@ -607,7 +608,9 @@ vector<Type, Allocator>::push_back(const_reference value)
     if (!m_data.hascapacity())
     {
         Storage s(m_data.newsize(), get_allocator());
-        // TODO: implement move
+
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
         m_data.swap(s);
     }
     m_data.push_back(value);
@@ -620,7 +623,9 @@ vector<Type, Allocator>::push_back(value_type&& value)
     if (!m_data.hascapacity())
     {
         Storage s(m_data.newsize(), get_allocator());
-        uninitialized_move(m_data.begin(), m_data.end(), back_inserter(s));
+
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
         m_data.swap(s);
     }
     m_data.push_back(pw::move(value));
@@ -639,8 +644,8 @@ vector<Type, Allocator>::resize(size_type count)
     {
         Storage s(count, get_allocator());
 
-        uninitialized_move(m_data.begin(), m_data.end(), back_inserter(s));
-        fill_n(back_inserter(s), count - m_data.size(), value_type());
+        //        uninitialized_move(m_data.begin(), m_data.end(), pw::back_inserter(s));
+        pw::fill_n(pw::back_inserter(s), count - m_data.size(), value_type());
         m_data.swap(s);
     }
 }
@@ -658,8 +663,8 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
     {
         Storage s(count, get_allocator());
 
-        uninitialized_move(m_data.begin(), m_data.end(), back_inserter(s));
-        fill_n(back_inserter(s), count - m_data.size(), value);
+        //        uninitialized_move(m_data.begin(), m_data.end(), pw::back_inserter(s));
+        pw::fill_n(pw::back_inserter(s), count - m_data.size(), value);
         m_data.swap(s);
     }
 }
@@ -711,15 +716,15 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     {
         Storage s(m_data.size() + count, get_allocator());
 
-        uninitialized_move(m_data.begin(), position, back_inserter(s));
-        fill_n(back_inserter(s), advance(s.begin(), offset), count, value);
-        uninitialized_move(position, m_data.end(), back_inserter(s));
+        //        uninitialized_move(m_data.begin(), position, pw::back_inserter(s));
+        //        pw::fill_n(pw::back_inserter(s), advance(s.begin(), offset), count, value);
+        //        uninitialized_move(position, m_data.end(), pw::back_inserter(s));
 
         m_data.swap(s);
     }
     else
     {
-        //TODO: uninitialized_move(x, y, back_inserter(m_data));
+        //TODO: uninitialized_move(x, y, pw::back_inserter(m_data));
         //move_backward(
         m_data.move(offset, count, value);
     }
