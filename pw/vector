@@ -760,8 +760,9 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     {
         Storage s(m_data.newsize(), m_data.get_allocator());
         pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
-        s.set_size(m_data.size() + 1);
+        s.set_size(m_data.size());
         allocator_traits<Allocator>::construct(s.get_allocator(), s.end(), pw::forward<Args>(args)...);
+        s.set_size(m_data.size() + 1);
         m_data.swap(s);
     }
     return *pw::prev(m_data.end(), 1);
