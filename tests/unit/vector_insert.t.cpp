@@ -31,18 +31,9 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
             value_type                value;
             pw::test::permute(value, 3);
             iter = v.insert(v.begin(), value);
-            THEN("size() is increased")
-            {
-                REQUIRE(1 == v.size());
-            }
-            THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-            }
-            THEN("at(0) returns same value")
-            {
-                REQUIRE(value == v.at(0));
-            }
+            THEN("size() is increased") { REQUIRE(1 == v.size()); }
+            THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("at(0) returns same value") { REQUIRE(value == v.at(0)); }
         }
     }
     GIVEN("A vector with 5 elements")
@@ -53,7 +44,14 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
         value_type                value;
         typename Vector::iterator where;
 
-        Vector v(generate.values);
+        WHEN("insert() at begin")
+        {
+            generate.values.insert(generate.values.begin(), value);
+            THEN("size() is bigger") { REQUIRE(generate.values.size() == generate.count + 1); }
+            THEN("inserted value at front") { REQUIRE(value == generate.values.front()); }
+            THEN("moved to 1 position") { REQUIRE(generate.first_value == generate.values[1]); }
+            THEN("last is still last") { REQUIRE(generate.last_value == generate.values.back()); }
+        }
     }
 }
 

@@ -105,7 +105,7 @@ public:
         pw::swap(op1.m_end, op2.m_end);
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
-    // void moveto(iterator begin, iterator end, iterator dest);
+    void moveto(iterator begin, iterator end, iterator dest);
     // void cons(iterator begin, iterator end, Type const& value);
 
 private:
@@ -271,24 +271,24 @@ Storage<Type, Allocator>::get_allocator() const
     return m_alloc;
 }
 
-// template<class Type, class Allocator>
-// void
-// Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
-// {
-//     while (end != begin)
-//     {
-//         --dest;
-//         --end;
-//         if (dest >= m_end)
-//         {
-//             allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
-//         }
-//         else
-//         {
-//             *dest = pw::move(*end);
-//         }
-//     }
-// }
+template<class Type, class Allocator>
+void
+Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
+{
+    while (end != begin)
+    {
+        --dest;
+        --end;
+        if (dest >= m_end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
+        }
+        else
+        {
+            *dest = pw::move(*end);
+        }
+    }
+}
 
 // template<class Type, class Allocator>
 // void
