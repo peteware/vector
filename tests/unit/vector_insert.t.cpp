@@ -181,71 +181,64 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
-    GIVEN("an empty vector")
-    {
-        Vector                   v;
-        pw::test::Values<Vector> generate(5);
+    // GIVEN("an empty vector")
+    // {
+    //     Vector                   v;
+    //     pw::test::Values<Vector> generate(5);
 
-        WHEN("insert(begin, first, last) is called")
-        {
-            typename Vector::iterator iter;
-            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
-            THEN("size() is increased")
-            {
-                REQUIRE(generate.values.size() == v.size());
-            }
-            THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-            }
-            THEN("front() returns same value")
-            {
-                REQUIRE(generate.first_value == v.front());
-            }
-        }
-    }
+    //     WHEN("insert(begin, first, last) is called without capacity")
+    //     {
+    //         typename Vector::iterator iter;
+    //         iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+    //         THEN("size() is increased") { REQUIRE(generate.values.size() == v.size()); }
+    //         THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+    //         THEN("front() returns same value") { REQUIRE(generate.first_value == v.front()); }
+    //     }
+    // }
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector> generate(5);
         Vector                   v(generate.values);
-
-        WHEN("insert(begin, first, last) is called")
+        WHEN("insert(begin, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
             iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
-            THEN("size() is increased")
-            {
-                REQUIRE(2 * generate.values.size() == v.size());
-            }
-            THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-            }
-            THEN("front() returns same value")
-            {
-                REQUIRE(generate.first_value == v.front());
-            }
+            THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
+            THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("front() returns same value") { REQUIRE(generate.first_value == v.front()); }
         }
-        WHEN("insert(end, first, last) is called")
+        WHEN("insert(end, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
             iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
-            THEN("size() is increased")
-            {
-                REQUIRE(2 * generate.values.size() == v.size());
-            }
+            THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
             THEN("begin() is same as returned iterator")
             {
                 REQUIRE(pw::next(v.begin(), generate.values.size()) == iter);
             }
-            THEN("front() returns same value")
-            {
-                REQUIRE(generate.last_value == v.back());
-            }
+            THEN("front() returns same value") { REQUIRE(generate.last_value == v.back()); }
+        }
+        WHEN("insert(begin, first, last) is called with enough capacity")
+        {
+            typename Vector::iterator iter;
+            v.reserve(v.size() + generate.values.size());
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
+            THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("back() returns same value") { REQUIRE(generate.last_value == v.back()); }
+        }
+        WHEN("insert(end, first, last) is called with enough capacity")
+        {
+            typename Vector::iterator iter;
+            v.reserve(v.size() + generate.values.size());
+            iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
+            THEN("end() is same as returned iterator") { REQUIRE(v.end() == iter); }
+            THEN("back() returns same value") { REQUIRE(generate.last_value == v.back()); }
         }
     }
 }
