@@ -3,6 +3,7 @@
 #include <test_permute.h>
 #include <test_same.h>
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <catch2/catch.hpp>
 
@@ -237,7 +238,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
             v.reserve(v.size() + generate.values.size());
             iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
             THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
-            THEN("end() is same as returned iterator") { REQUIRE(v.end() == iter); }
+            THEN("iter is at start of insert") { REQUIRE(v.begin() + generate.values.size() == iter); }
             THEN("back() returns same value") { REQUIRE(generate.last_value == v.back()); }
         }
     }

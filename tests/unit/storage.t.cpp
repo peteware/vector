@@ -136,15 +136,11 @@ SCENARIO("Storage move construct counts", "[storage][move]")
 {
     using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    int const size = 1;
-    Storage   storage(size);
-    storage.push_back(pw::test::DefaultCopyConstructible(3));
+    int const           size = 5;
+    Storage             storage(size);
     pw::test::OpCounter counter;
     GIVEN("A Storage with 1 element")
     {
-        int const newsize = size + 10;
-        Storage   s(size);
-
         pw::test::OpCounter init = pw::test::DefaultCopyConstructible::getCounter();
         // WHEN("It is moved")
         // {

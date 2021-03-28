@@ -20,6 +20,7 @@ target_sources ( pwtest PUBLIC
                 test_random_access_iterator.h
                 test_same.h
                 test_testtype.h
+                test_values.h
                )
 target_link_libraries( pwtest pw )
 

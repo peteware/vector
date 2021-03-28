@@ -2,6 +2,7 @@
 #include <test_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <catch2/catch.hpp>
 

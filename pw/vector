@@ -630,8 +630,10 @@ vector<Type, Allocator>::resize(size_type count)
     {
         Storage s(count, get_allocator());
 
-        //        uninitialized_move(m_data.begin(), m_data.end(), pw::back_inserter(s));
-        pw::fill_n(pw::back_inserter(s), count - m_data.size(), value_type());
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
+        pw::uninitialized_default_construct(s.end(), s.end() + count - m_data.size());
+        s.set_size(count);
         m_data.swap(s);
     }
 }
@@ -649,7 +651,8 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
     {
         Storage s(count, get_allocator());
 
-        //        uninitialized_move(m_data.begin(), m_data.end(), pw::back_inserter(s));
+        pw::uninitialized_move(m_data.begin(), m_data.end(), s.begin());
+        s.set_size(m_data.size());
         pw::fill_n(pw::back_inserter(s), count - m_data.size(), value);
         m_data.swap(s);
     }
