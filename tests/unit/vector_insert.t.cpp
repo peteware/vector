@@ -230,6 +230,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
             iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
             THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
             THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("inserted values match") { REQUIRE(generate.first_value == v[0]); }
             THEN("back() returns same value") { REQUIRE(generate.last_value == v.back()); }
         }
         WHEN("insert(end, first, last) is called with enough capacity")

@@ -1,6 +1,7 @@
 #include <test_optracker.h>
 #include <test_permute.h>
 
+#include <iostream>
 
 namespace pw { namespace test {
 
@@ -29,7 +30,7 @@ OpTracker::OpTracker(OpTracker&& copy) noexcept
     : m_value(copy.m_value)
     , m_opCounter(copy.m_opCounter)
 {
-    copy.m_value = -2;
+    //copy.m_value *= -2;
     m_opCounter.addMoveConstructor();
 }
 
@@ -99,6 +100,13 @@ permute(OpTracker& value, int depth)
         return true;
     }
     return false;
+}
+
+std::ostream&
+operator<<(std::ostream& out, OpTracker const& op2)
+{
+    out << op2.value();
+    return out;
 }
 
 }} // namespace pw::test

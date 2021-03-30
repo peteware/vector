@@ -4,6 +4,8 @@
 #include <pw/impl/move.h>
 #include <test_opcounter.h>
 
+#include <iosfwd>
+
 namespace pw { namespace test {
 
 struct OpTracker
@@ -17,6 +19,7 @@ protected:
     ~OpTracker();
 
 public:
+    using value_type = int;
     int        value() const;
     OpTracker& setValue(int value);
 
@@ -33,7 +36,7 @@ private:
 };
 
 bool permute(OpTracker& value, int depth);
-
+std::ostream& operator<<(std::ostream& out, OpTracker const& op2);
 }} // namespace pw::test
 
 #endif /*  INCLUDED_TEST_OPTRACKER_H */

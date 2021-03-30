@@ -20,8 +20,10 @@ struct Values
     size_t const count;
     Container    values;
 
-    Values(size_t total)
+    template<class... Args>
+    Values(size_t total, Args&&... args)
         : count(total)
+        , values(pw::forward<Args>(args)...)
     {
         value_type value;
 

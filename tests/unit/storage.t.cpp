@@ -4,6 +4,7 @@
 #include <test_defaultcopyconstructible.h>
 #include <test_opcounter.h>
 #include <test_permute.h>
+#include <test_values.h>
 
 //using TestTypeList = std::tuple<int, double>;
 using TestTypeList = std::tuple<int>;
@@ -116,16 +117,6 @@ SCENARIO("Storage construct counts", "[storage][count]")
                 REQUIRE(1 == storage.begin()->value());
             }
         }
-        // WHEN("Storage with 1 item is moved")
-        // {
-        //     storage.push_back(1);
-        //     Storage s(pw::move(storage), 10, Storage::allocator_type());
-        //     THEN("item is moved")
-        //     {
-        //         REQUIRE(1 == s.size());
-        //         REQUIRE(10 == s.capacity());
-        //     }
-        // }
     }
 
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
@@ -136,22 +127,28 @@ SCENARIO("Storage move construct counts", "[storage][move]")
 {
     using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    int const           size = 5;
-    Storage             storage(size);
-    pw::test::OpCounter counter;
-    GIVEN("A Storage with 1 element")
+    int const                 size    = 5;
+    int const                 genSize = size - 2;
+    Storage                   storage(size);
+    pw::test::Values<Storage> gen(genSize, genSize);
+    pw::test::OpCounter       counter;
+
+    GIVEN("A Storage with size element")
     {
         pw::test::OpCounter init = pw::test::DefaultCopyConstructible::getCounter();
-        // WHEN("It is moved")
-        // {
-        //     Storage m(pw::move(storage), newsize, storage.get_allocator());
-        //     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
-        //     THEN("Only move constructor is called")
-        //     {
-        //         INFO("counter = " << counter);
-        //         REQUIRE(1 == counter.getMoveConstructor());
-        //         REQUIRE(1 == counter.constructorCount());
-        //     }
-        // }
+        WHEN("moveto()")
+        {
+            storage.moveto(gen.values.begin(), gen.values.begin() + 2, storage.begin() + 2);
+            counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+            THEN("Only move constructor is called")
+            {
+                INFO("counter: " << counter << " storage[1] = " << *(storage.begin() + 1));
+                REQUIRE(2 == counter.getMoveConstructor());
+                REQUIRE(2 == counter.constructorCount());
+                REQUIRE(gen.first_value == *storage.begin());
+                // OpTracker move constructor does: value *= -2
+                REQUIRE(*(gen.values.begin() + 1) == *(storage.begin() + 1));
+            }
+        }
     }
 }
