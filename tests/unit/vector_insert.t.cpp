@@ -7,6 +7,9 @@
 
 #include <catch2/catch.hpp>
 
+#include <iostream>
+#include <iterator>
+
 /*
  * Type requirements:
  * - insert(const_iterator pos, const T& value): CopyAssignable and CopyInsertable
@@ -18,7 +21,7 @@
  * Exceptions:
  * - yex
  */
-TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -26,12 +29,22 @@ TEMPLATE_LIST_TEST_CASE("Test insert", "[vector][insert]", pw::test::TestTypeLis
     {
         Vector v;
 
-        WHEN("insert() is called")
+        WHEN("insert(begin, value) is called")
         {
             typename Vector::iterator iter;
             value_type                value;
             pw::test::permute(value, 3);
             iter = v.insert(v.begin(), value);
+            THEN("size() is increased") { REQUIRE(1 == v.size()); }
+            THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("at(0) returns same value") { REQUIRE(value == v.at(0)); }
+        }
+        WHEN("insert(end, value) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 3);
+            iter = v.insert(v.end(), value);
             THEN("size() is increased") { REQUIRE(1 == v.size()); }
             THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
             THEN("at(0) returns same value") { REQUIRE(value == v.at(0)); }
@@ -186,20 +199,20 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
-    // GIVEN("an empty vector")
-    // {
-    //     Vector                   v;
-    //     pw::test::Values<Vector> generate(5);
+    GIVEN("an empty vector")
+    {
+        Vector                   v;
+        pw::test::Values<Vector> generate(5);
 
-    //     WHEN("insert(begin, first, last) is called without capacity")
-    //     {
-    //         typename Vector::iterator iter;
-    //         iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
-    //         THEN("size() is increased") { REQUIRE(generate.values.size() == v.size()); }
-    //         THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
-    //         THEN("front() returns same value") { REQUIRE(generate.first_value == v.front()); }
-    //     }
-    // }
+        WHEN("insert(begin, first, last) is called without capacity")
+        {
+            typename Vector::iterator iter;
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            THEN("size() is increased") { REQUIRE(generate.values.size() == v.size()); }
+            THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
+            THEN("front() returns same value") { REQUIRE(generate.first_value == v.front()); }
+        }
+    }
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector> generate(5);
@@ -225,9 +238,12 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
         }
         WHEN("insert(begin, first, last) is called with enough capacity")
         {
-            typename Vector::iterator iter;
+            typename Vector::size_type space;
+            typename Vector::iterator  iter;
             v.reserve(v.size() + generate.values.size());
-            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            space = v.capacity();
+            iter  = v.insert(v.begin(), generate.values.begin(), generate.values.end());
+            THEN("capacity() is unchanged") { REQUIRE(space == v.capacity()); }
             THEN("size() is increased") { REQUIRE(2 * generate.values.size() == v.size()); }
             THEN("begin() is same as returned iterator") { REQUIRE(v.begin() == iter); }
             THEN("inserted values match") { REQUIRE(generate.first_value == v[0]); }

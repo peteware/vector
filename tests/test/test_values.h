@@ -38,5 +38,18 @@ struct Values
     }
 };
 
+template<class Container>
+std::ostream&
+operator<<(std::ostream& out, Values<Container> const& values)
+{
+    out << "#### size = " << values.values.size() << " ###\n";
+    auto iter = values.values.begin();
+    for (size_t i = 0; i < values.count; ++i)
+    {
+        out << i << " = " << *iter++ << '\n';
+    }
+    return out;
+}
+
 }} // namespace pw::test
 #endif /* _INCLUDED_TEST_VALUES_H */

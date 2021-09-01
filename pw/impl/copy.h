@@ -9,7 +9,7 @@ copy(InputIterator begin, InputIterator end, OutputIterator dest)
 {
     while (begin != end)
     {
-        *dest = *begin++;
+        *dest++ = *begin++;
     }
     return dest;
 }

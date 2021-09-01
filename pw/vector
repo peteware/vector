@@ -731,8 +731,8 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
 
     if (m_data.hascapacity(count))
     {
-        m_data.moveto(pw::next(m_data.begin(), offset), m_data.end(), pw::next(m_data.end(), count));
-        pw::copy(first, last, pw::next(m_data.begin(), offset));
+        m_data.moveto(next(m_data.begin(), offset), m_data.end(), next(m_data.end(), count));
+        m_data.copyto(first, last, next(m_data.begin(), offset));
         m_data.set_size(m_data.size() + count);
     }
     else

@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/distance.h>
 #include <pw/impl/exchange.h>
 #include <pw/impl/max.h>
 #include <pw/impl/min.h>
@@ -106,6 +107,8 @@ public:
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
     void moveto(iterator begin, iterator end, iterator dest);
+    template<class Iterator>
+    void copyto(Iterator first, Iterator last, iterator dest);
     // void cons(iterator begin, iterator end, Type const& value);
 
 private:
@@ -290,23 +293,16 @@ Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
     }
 }
 
-// template<class Type, class Allocator>
-// void
-// Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
-// {
-//     while (begin != end)
-//     {
-//         if (begin < end)
-//         {
-//             *begin = value;
-//         }
-//         else
-//         {
-//             allocator_traits<Allocator>::construct(m_alloc, begin, value);
-//         }
-//         ++begin;
-//     }
-// }
+template<class Type, class Allocator>
+template<class Iterator>
+void
+Storage<Type, Allocator>::copyto(Iterator first, Iterator last, iterator dest)
+{
+    auto overlap            = pw::distance(dest, end());
+    auto uninitialized_dest = pw::copy(first, next(first, overlap), dest);
+
+    pw::uninitialized_copy(next(first, overlap), last, uninitialized_dest);
+}
 
 }} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_STORAGE_H */
