@@ -1,3 +1,4 @@
 *.o
 /tests/a.out
 /build
+/.DS_Store

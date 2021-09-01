@@ -1,6 +1,7 @@
 #include <pw/vector>
 #include <test_defaultcopyconstructible.h>
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <tuple>
 #include <vector>
@@ -29,20 +30,14 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         WHEN("Nothing was called")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter() - init;
-            THEN("Nothing was constructed")
-            {
-                REQUIRE(counter.zero());
-            }
+            THEN("Nothing was constructed") { REQUIRE(counter.zero()); }
         }
         WHEN("reserve() is increased")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter();
             v.reserve(5);
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
-            THEN("copy constructor not called")
-            {
-                REQUIRE(counter.zero());
-            }
+            THEN("copy constructor not called") { REQUIRE(counter.zero()); }
         }
     }
     GIVEN("A vector with 5 elements")
@@ -54,19 +49,13 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         WHEN("copy constructor is called")
         {
             Vector c(v);
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
-            }
+            THEN("two vectors are same") { REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end())); }
         }
         WHEN("move constructor is called")
         {
             Vector c(v);
             Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-            }
+            THEN("two vectors are same") { REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end())); }
         }
         WHEN("move constructor is called")
         {
@@ -123,7 +112,7 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
     std::initializer_list<value_type> initlist = { 1, 2, 5 };
 
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
-    INFO("counter = " << counter);
+    INFO("counter: " << counter);
     REQUIRE(3 == counter.getOtherConstructor());
     REQUIRE(3 == counter.constructorCount());
     GIVEN("A vector from an init list")
@@ -132,14 +121,8 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
         Vector v { initlist };
         WHEN("nothing is changed")
         {
-            THEN("size() is same")
-            {
-                REQUIRE(3 == v.size());
-            }
-            THEN("capacity() is same")
-            {
-                REQUIRE(v.size() == v.capacity());
-            }
+            THEN("size() is same") { REQUIRE(3 == v.size()); }
+            THEN("capacity() is same") { REQUIRE(v.size() == v.capacity()); }
             THEN("constructors called")
             {
                 counter = pw::test::DefaultCopyConstructible::getCounter() - init;
@@ -152,18 +135,12 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
             Vector v2;
             v2.push_back(pw::test::DefaultCopyConstructible(1));
             v2 = v;
-            THEN("They are the same")
-            {
-                REQUIRE(v == v2);
-            }
+            THEN("They are the same") { REQUIRE(v == v2); }
         }
         WHEN("copy construct")
         {
             Vector v2(v);
-            THEN("They are the same")
-            {
-                REQUIRE(v == v2);
-            }
+            THEN("They are the same") { REQUIRE(v == v2); }
         }
     }
 }

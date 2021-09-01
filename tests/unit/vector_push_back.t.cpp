@@ -1,6 +1,8 @@
 #include <test_copyconstructible.h>
 #include <test_defaultcopyconstructible.h>
+#include <test_permute.h>
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <catch2/catch.hpp>
 
@@ -18,18 +20,34 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
     {
         Vector     v;
         value_type value;
-
+        pw::test::permute(value, 1);
         WHEN("push_back() is called")
         {
             v.push_back(value);
-            THEN("capacity() is increased")
-            {
-                REQUIRE(v.capacity() >= 1);
-            }
+            THEN("capacity() is increased") { REQUIRE(v.capacity() == 1); }
             THEN("value is there")
             {
                 REQUIRE(value == v.front());
                 REQUIRE(value == v.back());
+            }
+        }
+        WHEN("push_back() is called N times")
+        {
+            value_type const orig  = value;
+            value_type       last  = value;
+            int const        total = 20;
+            for (int i = 0; i < total; ++i)
+            {
+                last = value;
+                v.push_back(value);
+                pw::test::permute(value, i);
+            }
+            THEN("size() is correct") { REQUIRE(v.size() == total); }
+            THEN("capacity() is increased") { REQUIRE(v.capacity() >= total); }
+            THEN("value is there")
+            {
+                REQUIRE(orig == v.front());
+                REQUIRE(last == v.back());
             }
         }
     }
@@ -100,7 +118,6 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     {
         pw::test::Values<Vector>           generate(5);
         pw::test::DefaultCopyConstructible copyObject(12);
-        pw::test::OpCounter                startCount(pw::test::CopyConstructible::getCounter());
 
         generate.values.shrink_to_fit();
         counter = pw::test::DefaultCopyConstructible::getCounter();
@@ -110,10 +127,12 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items")
             {
+                INFO("counter: " << counter);
                 REQUIRE(generate.count == counter.getMoveConstructor());
             }
             THEN("Copy constructed new item")
             {
+                INFO("counter: " << counter);
                 REQUIRE(1 == counter.getCopyConstructor());
             }
         }

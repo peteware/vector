@@ -1,4 +1,5 @@
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <catch2/catch.hpp>
 
@@ -17,10 +18,7 @@ TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeLi
         WHEN("clear() is called")
         {
             v.clear();
-            THEN("nothing goes wrong")
-            {
-                REQUIRE(v.empty());
-            }
+            THEN("nothing goes wrong") { REQUIRE(v.empty()); }
         }
     }
     GIVEN("A vector with 5 elements")
@@ -32,23 +30,14 @@ TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeLi
         WHEN("clear() is called")
         {
             v.clear();
-            THEN("it is empty")
-            {
-                REQUIRE(v.empty());
-            }
-            THEN("capacity() is same")
-            {
-                REQUIRE(generate.count == v.capacity());
-            }
+            THEN("it is empty") { REQUIRE(v.empty()); }
+            THEN("capacity() is same") { REQUIRE(generate.count == v.capacity()); }
         }
         WHEN("clear() is called then shrink_to_fit()")
         {
             v.clear();
             v.shrink_to_fit();
-            THEN("capacity() is 0")
-            {
-                REQUIRE(0 == v.capacity());
-            }
+            THEN("capacity() is 0") { REQUIRE(0 == v.capacity()); }
         }
     }
 }

@@ -13,9 +13,7 @@ a little bit of C++-20.  There's no attempt to be portable or backward
 compatible beyond following good practices.  There's no obfuscating
 names with `__` to avoid conflicts with other code.
 
-Ideally, no `std` code is used.  However, `<limits>` and
-`<stdexcept>` are used from `std` because it seems like a lot of work
-for not much gain.
+Ideally, no `std` code is used (see exceptions below).
 
 The namespace is `pw` and include files are `pw/<name>`.  Most of
 the actual implementations are in `pw/impl/<file.h>`.  In fact,
@@ -29,3 +27,22 @@ code.
 Unit tests are in `tests/unit/<file.t.cpp>` and use the
 [catch2](https://github.com/catchorg/Catch2) framework.
 
+## Things I didn't implement
+
+- `<limits>` and `<stdexcept>` are used from `std` because it seems like a lot of work
+  for not much gain.
+- `std::initializer_list` is inherently a compiler builtin struct
+- `is_class` used builtin `__is_class(Type)`.  Because I couldn't implement a working version.
+- `is_union` used builtin `__is_union(Type)`.  ditto.
+- `is_nothrow_constructible` used builtin `__is_nothrow_constructible(Type, Args...)`.  ditto
+
+## ToDo
+
+### Unit tests
+
+Need the following unit tests to be written:
+
+- [ ] `vector::vector((vector&& other, const Allocator& alloc)`
+- [ ] `vector::shrink_to_fit()`
+- [ ] `vector::reserve()` 
+- [ ] `vector::::operator=(vector&& other) noexcept` when different

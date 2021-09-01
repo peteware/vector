@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/distance.h>
 #include <pw/impl/exchange.h>
 #include <pw/impl/max.h>
 #include <pw/impl/min.h>
@@ -69,18 +70,9 @@ private:
 public:
     Storage(allocator_type const& alloc = allocator_type());
     explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
-    Storage(Storage const& copy, allocator_type const& alloc = allocator_type());
-    Storage(Storage&& copy);
-    Storage(Storage&& copy, size_type count, allocator_type const& alloc);
     ~Storage();
-    Storage& operator=(Storage op2);
-    /**
-     * Allocate enough space for count records.  Then up to
-     * count records are moved into new Storage.
-     */
-    void                  move(size_type offset, size_type count, Type const& value);
-    Storage               resize(size_type offset, size_type count, Type const& value);
-    Storage               split(size_type offset, size_type count);
+    Storage& operator=(Storage& op2) = delete;
+
     iterator              begin();
     iterator              end();
     const_iterator        begin() const;
@@ -108,7 +100,8 @@ public:
         pw::swap(op1.m_allocated, op2.m_allocated);
     }
     void moveto(iterator begin, iterator end, iterator dest);
-    void cons(iterator begin, iterator end, Type const& value);
+    template<class Iterator>
+    void copyto(Iterator first, Iterator last, iterator dest);
 
 private:
 };
@@ -132,90 +125,10 @@ Storage<Type, Allocator>::Storage(size_type count, allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage const& copy, allocator_type const& alloc)
-    : m_alloc(alloc)
-    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, copy.size()))
-    , m_end(m_begin + copy.size())
-    , m_allocated(copy.size())
-{
-    pw::uninitialized_copy(copy.m_begin, copy.m_end, m_begin);
-}
-
-template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage&& copy)
-    : m_alloc { copy.m_alloc }
-    , m_begin { pw::exchange(copy.m_begin, nullptr) }
-    , m_end { pw::exchange(copy.m_end, nullptr) }
-    , m_allocated { pw::exchange(copy.m_allocated, 0) }
-{
-}
-
-/**
- * Allocate enough space for count records and
- * move/copy them
- */
-template<class Type, class Allocator>
-Storage<Type, Allocator>::Storage(Storage&& copy, size_type count, allocator_type const& alloc)
-    : m_alloc(alloc)
-    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
-    , m_end(0)
-    , m_allocated(count)
-{
-    size_type final = min(count, copy.size());
-
-    pw::uninitialized_move(copy.begin(), copy.begin() + final, m_begin);
-    m_end = m_begin + final;
-}
-
-template<class Type, class Allocator>
 Storage<Type, Allocator>::~Storage()
 {
     pw::destroy(begin(), end());
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
-}
-
-template<class Type, class Allocator>
-Storage<Type, Allocator>&
-Storage<Type, Allocator>::operator=(Storage op2)
-{
-    swap(op2);
-    return *this;
-}
-
-template<class Type, class Allocator>
-Storage<Type, Allocator>
-Storage<Type, Allocator>::resize(size_type offset, size_type count, Type const& value)
-{
-    Storage s = split(offset, count);
-
-    pw::uninitialized_fill(s.begin() + offset, s.begin() + offset + count, value);
-    s.set_size(size() + count);
-    return s;
-}
-
-template<class Type, class Allocator>
-Storage<Type, Allocator>
-Storage<Type, Allocator>::split(size_type offset, size_type count)
-{
-    Storage s(size() + count, m_alloc);
-
-    pw::uninitialized_move(begin(), pw::next(begin(), offset), s.begin());
-    pw::uninitialized_move(pw::next(begin(), offset), end(), pw::next(s.begin(), offset + count));
-    return s;
-}
-
-/**
- * Allocate enough space for count records.  Then up to
- * count records are moved into new Storage and others
- * are destroyed.
- */
-template<class Type, class Allocator>
-void
-Storage<Type, Allocator>::move(size_type offset, size_type count, Type const& value)
-{
-    moveto(m_begin + offset, m_end, m_end + offset);
-    cons(m_begin + offset, m_begin + offset + count, value);
-    set_size(size() + count);
 }
 
 template<class Type, class Allocator>
@@ -337,21 +250,14 @@ Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
 }
 
 template<class Type, class Allocator>
+template<class Iterator>
 void
-Storage<Type, Allocator>::cons(iterator begin, iterator end, Type const& value)
+Storage<Type, Allocator>::copyto(Iterator first, Iterator last, iterator dest)
 {
-    while (begin != end)
-    {
-        if (begin < end)
-        {
-            *begin = value;
-        }
-        else
-        {
-            allocator_traits<Allocator>::construct(m_alloc, begin, value);
-        }
-        ++begin;
-    }
+    auto overlap            = pw::distance(dest, end());
+    auto uninitialized_dest = pw::copy(first, next(first, overlap), dest);
+
+    pw::uninitialized_copy(next(first, overlap), last, uninitialized_dest);
 }
 
 }} // namespace pw::internal

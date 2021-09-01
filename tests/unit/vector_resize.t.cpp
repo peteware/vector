@@ -149,6 +149,7 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("default constructed count times")
             {
+                INFO("counter: " << counter);
                 REQUIRE(count == counter.getDefaultConstructor());
                 REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
                 REQUIRE(counter.allCount() == count);

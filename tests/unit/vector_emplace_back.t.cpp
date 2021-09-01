@@ -54,10 +54,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
         {
             v.emplace_back(3, 4);
             counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
-            THEN("size() is 1")
-            {
-                REQUIRE(1 == v.size());
-            }
+            THEN("size() is 1") { REQUIRE(1 == v.size()); }
             THEN("element has correct values")
             {
                 REQUIRE(3 == v.front().value());
@@ -81,10 +78,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
         {
             v.emplace_back(13, 14);
             counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
-            THEN("size() is 4")
-            {
-                REQUIRE(4 == v.size());
-            }
+            THEN("size() is 4") { REQUIRE(4 == v.size()); }
             THEN("element has correct values")
             {
                 REQUIRE(1 == v.front().value());
@@ -94,7 +88,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
             }
             THEN("other constructed, not copy or move")
             {
-                INFO("counter = " << counter);
+                INFO("counter: " << counter);
                 REQUIRE(1 == counter.getOtherConstructor());
                 REQUIRE(3 == counter.getMoveConstructor());
                 REQUIRE(4 == counter.constructorCount());

@@ -2,6 +2,7 @@ add_executable( unittest
                 unittest.m.cpp
 
                 allocator_traits.t.cpp
+                copy.t.cpp
                 cstddef.t.cpp
                 distance.t.cpp
                 exchange.t.cpp

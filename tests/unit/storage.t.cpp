@@ -4,6 +4,7 @@
 #include <test_defaultcopyconstructible.h>
 #include <test_opcounter.h>
 #include <test_permute.h>
+#include <test_values.h>
 
 //using TestTypeList = std::tuple<int, double>;
 using TestTypeList = std::tuple<int>;
@@ -25,35 +26,29 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
                 REQUIRE((pw::size_t)0 == storage.capacity());
                 REQUIRE(storage.begin() == storage.end());
             }
-            THEN("newsize() is larger")
-            {
-                REQUIRE(storage.newsize() > 0);
-            }
+            THEN("newsize() is larger") { REQUIRE(storage.newsize() > 0); }
         }
     }
     GIVEN("An allocated Storage with 10")
     {
         Storage storage(10, allocator);
-        WHEN("Storage(move, 20)")
-        {
-            Storage s = Storage(pw::move(storage), 20, typename Storage::allocator_type());
-            THEN("size() is 0 but capacity increased")
-            {
-                REQUIRE((pw::size_t)0 == s.size());
-                REQUIRE((pw::size_t)20 == s.capacity());
-            }
-            THEN("storage is empty")
-            {
-                REQUIRE(0 == storage.size());
-                REQUIRE((pw::size_t)10 == storage.capacity());
-            }
-        }
+        // WHEN("Storage(move, 20)")
+        // {
+        //     Storage s = Storage(pw::move(storage), 20, typename Storage::allocator_type());
+        //     THEN("size() is 0 but capacity increased")
+        //     {
+        //         REQUIRE((pw::size_t)0 == s.size());
+        //         REQUIRE((pw::size_t)20 == s.capacity());
+        //     }
+        //     THEN("storage is empty")
+        //     {
+        //         REQUIRE(0 == storage.size());
+        //         REQUIRE((pw::size_t)10 == storage.capacity());
+        //     }
+        // }
         WHEN("newsize() is called")
         {
-            THEN("newsize() is larger")
-            {
-                REQUIRE(storage.newsize() > 10);
-            }
+            THEN("newsize() is larger") { REQUIRE(storage.newsize() > 10); }
         }
     }
     GIVEN("An allocated Storage with 10")
@@ -64,18 +59,9 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         WHEN("push_back(value)")
         {
             storage.push_back(value);
-            THEN("size() == 1")
-            {
-                REQUIRE(1 == storage.size());
-            }
-            THEN("capacity() == 10")
-            {
-                REQUIRE(10 == storage.capacity());
-            }
-            THEN("*begin() == value")
-            {
-                REQUIRE(value == *storage.begin());
-            }
+            THEN("size() == 1") { REQUIRE(1 == storage.size()); }
+            THEN("capacity() == 10") { REQUIRE(10 == storage.capacity()); }
+            THEN("*begin() == value") { REQUIRE(value == *storage.begin()); }
         }
     }
     GIVEN("An allocated Storage with 10 and one element")
@@ -85,70 +71,15 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
         pw::test::permute(value, 3);
         storage.push_back(value);
         REQUIRE(*storage.begin() == value);
-        WHEN("Storage (move, 20)")
-        {
-            Storage s = Storage(pw::move(storage), 20, typename Storage::allocator_type());
-            THEN("size() is 1")
-            {
-                REQUIRE(1 == s.size());
-                REQUIRE(20 == s.capacity());
-                REQUIRE(1 == storage.size());
-                REQUIRE(10 == storage.capacity());
-            }
-            THEN("element is moved")
-            {
-                REQUIRE(*s.begin() == value);
-            }
-        }
-        WHEN("operator=() is called")
-        {
-            Storage s(10, allocator);
-            s.push_back(value);
-            s = storage;
-            THEN("they are same and destruction works")
-            {
-                REQUIRE(s.size() == storage.size());
-                REQUIRE(s.capacity() == s.size());
-            }
-        }
-        WHEN("operator=(move) is called")
-        {
-            Storage s(0, allocator);
-            s = pw::move(storage);
-            THEN("s now has 1 element")
-            {
-                REQUIRE(s.size() == 1);
-            }
-        }
         WHEN("swap() is called")
         {
             size_t  capacity = storage.capacity();
             Storage s(0, allocator);
             swap(storage, s);
-            THEN("s now has 1 element")
-            {
-                REQUIRE(s.size() == 1);
-            }
-            THEN("the element was copied")
-            {
-                REQUIRE(*s.begin() == value);
-            }
-            THEN("capacity was copied")
-            {
-                REQUIRE(s.capacity() == capacity);
-            }
-            THEN("storage now has 0 element")
-            {
-                REQUIRE(storage.size() == 0);
-            }
-        }
-        WHEN("move() is called")
-        {
-            storage.move(0, 3, value);
-            THEN("3 new elements")
-            {
-                REQUIRE(4 == storage.size());
-            }
+            THEN("s now has 1 element") { REQUIRE(s.size() == 1); }
+            THEN("the element was copied") { REQUIRE(*s.begin() == value); }
+            THEN("capacity was copied") { REQUIRE(s.capacity() == capacity); }
+            THEN("storage now has 0 element") { REQUIRE(storage.size() == 0); }
         }
     }
 }
@@ -186,16 +117,6 @@ SCENARIO("Storage construct counts", "[storage][count]")
                 REQUIRE(1 == storage.begin()->value());
             }
         }
-        WHEN("Storage with 1 item is moved")
-        {
-            storage.push_back(1);
-            Storage s(pw::move(storage), 10, Storage::allocator_type());
-            THEN("item is moved")
-            {
-                REQUIRE(1 == s.size());
-                REQUIRE(10 == s.capacity());
-            }
-        }
     }
 
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
@@ -206,25 +127,27 @@ SCENARIO("Storage move construct counts", "[storage][move]")
 {
     using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    int const size = 1;
-    Storage   storage(size);
-    storage.push_back(pw::test::DefaultCopyConstructible(3));
-    pw::test::OpCounter counter;
-    GIVEN("A Storage with 1 element")
-    {
-        int const newsize = size + 10;
-        Storage   s(size);
+    int const                 size    = 5;
+    int const                 genSize = size - 2;
+    Storage                   storage(size);
+    pw::test::Values<Storage> gen(genSize, genSize);
+    pw::test::OpCounter       counter;
 
+    GIVEN("A Storage with size element")
+    {
         pw::test::OpCounter init = pw::test::DefaultCopyConstructible::getCounter();
-        WHEN("It is moved")
+        WHEN("moveto()")
         {
-            Storage m(pw::move(storage), newsize, storage.get_allocator());
+            storage.moveto(gen.values.begin(), gen.values.begin() + 2, storage.begin() + 2);
             counter = pw::test::DefaultCopyConstructible::getCounter() - init;
             THEN("Only move constructor is called")
             {
-                INFO("counter = " << counter);
-                REQUIRE(1 == counter.getMoveConstructor());
-                REQUIRE(1 == counter.constructorCount());
+                INFO("counter: " << counter << " storage[1] = " << *(storage.begin() + 1));
+                REQUIRE(2 == counter.getMoveConstructor());
+                REQUIRE(2 == counter.constructorCount());
+                REQUIRE(gen.first_value == *storage.begin());
+                // OpTracker move constructor does: value *= -2
+                REQUIRE(*(gen.values.begin() + 1) == *(storage.begin() + 1));
             }
         }
     }
