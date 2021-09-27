@@ -96,8 +96,8 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 
-using TestMoveTypeList = std::tuple< //pw::vector<pw::test::MoveConstructible>,
-    std::vector<pw::test::MoveConstructible>>;
+using TestMoveTypeList =
+    std::tuple<pw::vector<pw::test::MoveConstructible>, std::vector<pw::test::MoveConstructible>>;
 TEMPLATE_LIST_TEST_CASE("vector(vector&& other)", "[vector][constructor][moveconstructor]", TestMoveTypeList)
 {
     using Vector     = TestType;
