@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_UNINITIALIZED_COPY_CONSTRUCT_H
 
 #include <pw/impl/addressof.h>
+#include <pw/impl/construct_at.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/iterator_traits.h>
 
@@ -18,7 +19,8 @@ uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
     {
         while (begin != end)
         {
-            ::new (static_cast<void*>(pw::addressof(*current))) Value(*begin);
+            pw::construct_at(pw::addressof(*current), *begin);
+            //::new (static_cast<void*>(pw::addressof(*current))) Value(*begin);
             ++current;
             ++begin;
         }

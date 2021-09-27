@@ -4,42 +4,37 @@
 #include <test_optracker.h>
 
 namespace pw { namespace test {
+/**
+ * The type T satisfies @code CopyConstructible if
+ * The type T satisfies MoveConstructible, and
+ * Given:
+ * - @c v, an lvalue expression of type T or const T or an rvalue expression of type const T
+ * - @c u, an arbitrary identifier
+ *
+ * The following expressions must be valid and have their specified effects
+ * Expression	Post-conditions
+ * @code
+ * T u = v;	// The value of u is equivalent to the value of v.
+ * @endcode
+ * The value of v is unchanged
+ * @code
+ * T(v)	        // The value of T(v) is equivalent to the value of v.
+ * @endcode
+ * The value of v is unchanged.
+ * 
+ */
 struct CopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
-    CopyConstructible(int value)
-        : OpTracker(s_opCounter, value)
-    {
-    }
+    CopyConstructible(OpTracker::value_type const& value);
+    CopyConstructible(CopyConstructible const& copy);
+    CopyConstructible(CopyConstructible&& move) noexcept;
+    ~CopyConstructible();
 
-    CopyConstructible(CopyConstructible const& copy)
-        : OpTracker(copy)
-    {
-    }
-
-    CopyConstructible(CopyConstructible&& move) noexcept
-        : OpTracker(pw::move(move))
-    {
-    }
-
-    ~CopyConstructible()
-    {
-    }
-
-    CopyConstructible& operator=(CopyConstructible const& copy)
-    {
-        OpTracker::operator=(copy);
-        return *this;
-    }
-
-    CopyConstructible& operator=(CopyConstructible&& move)
-    {
-        OpTracker::operator=(pw::move(move));
-        return *this;
-    }
-
-    using OpTracker::operator==;
+    CopyConstructible& operator=(CopyConstructible const& copy);
+    CopyConstructible& operator=(CopyConstructible&& move);
+    using OpTracker::  operator==;
     // using OpTracker::operator!=;
     // using OpTracker::operator<;
 
