@@ -1,5 +1,6 @@
 #include <pw/vector>
 #include <test_defaultcopyconstructible.h>
+#include <test_moveconstructible.h>
 #include <test_testtype.h>
 #include <test_values.h>
 
@@ -10,6 +11,25 @@
 
 using TestTypeList = std::tuple<pw::vector<pw::test::DefaultCopyConstructible>,
                                 std::vector<pw::test::DefaultCopyConstructible>>;
+TEMPLATE_LIST_TEST_CASE("vector() constructor", "[vector][constructor]", TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    GIVEN("An empty vector")
+    {
+        pw::test::OpCounter       counter;
+        pw::test::OpCounter const init(pw::test::DefaultCopyConstructible::getCounter());
+        Vector                    v;
+
+        WHEN("nothing is done")
+        {
+            counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+            THEN("Nothing was constructed") { REQUIRE(counter.zero()); }
+        }
+    }
+}
+
 /*
  * Type requirements:
  * - No extra
@@ -51,32 +71,6 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
             Vector c(v);
             THEN("two vectors are same") { REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end())); }
         }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same") { REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end())); }
-        }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-                REQUIRE(c == d);
-            }
-        }
-        WHEN("move constructor is called")
-        {
-            Vector c(v);
-            Vector d(pw::move(v));
-            THEN("two vectors are same")
-            {
-                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
-                REQUIRE(c == d);
-            }
-        }
     }
     GIVEN("and add count objects")
     {
@@ -96,6 +90,42 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
                 REQUIRE(count == counter.getDefaultConstructor());
                 REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
             }
+        }
+    }
+    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    REQUIRE(counter.constructorCount() == counter.destructorCount());
+}
+
+using TestMoveTypeList =
+    std::tuple<pw::vector<pw::test::MoveConstructible>, std::vector<pw::test::MoveConstructible>>;
+TEMPLATE_LIST_TEST_CASE("vector(vector&& other)", "[vector][constructor][moveconstructor]", TestMoveTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    pw::test::OpCounter const init(pw::test::DefaultCopyConstructible::getCounter());
+    pw::test::OpCounter       counter;
+    GIVEN("A vector with 5 elements")
+    {
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
+
+        WHEN("move constructor is called")
+        {
+            Vector c(v);
+            Vector d(pw::move(v));
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(c.begin(), c.end(), d.begin(), d.end()));
+                REQUIRE(c == d);
+            }
+        }
+        WHEN("save OpCounter before move")
+        {
+            Vector c(v);
+            counter = pw::test::DefaultCopyConstructible::getCounter();
+            Vector d(pw::move(v));
+            THEN("move constructor was called") { }
         }
     }
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;

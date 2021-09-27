@@ -12,7 +12,7 @@ OpTracker::OpTracker(OpCounter& opCounter)
     m_opCounter.addDefaultConstructor();
 }
 
-OpTracker::OpTracker(OpCounter& opCounter, int value)
+OpTracker::OpTracker(OpCounter& opCounter, value_type const& value)
     : m_opCounter(opCounter)
     , m_value(value)
 {
@@ -39,14 +39,14 @@ OpTracker::~OpTracker()
     m_opCounter.addDestructor();
 }
 
-int
+OpTracker::value_type
 OpTracker::value() const
 {
     return m_value;
 }
 
 OpTracker&
-OpTracker::setValue(int value)
+OpTracker::setValue(value_type const& value)
 {
     m_value = value;
     return *this;
@@ -61,10 +61,10 @@ OpTracker::operator=(OpTracker const& copy)
 }
 
 OpTracker&
-OpTracker::operator=(OpTracker&& copy)
+OpTracker::operator=(OpTracker&& move)
 {
-    copy.m_value = -1;
-    m_value      = copy.m_value;
+    m_value      = move.m_value;
+    move.m_value = -1;
     m_opCounter.addMoveAssignment();
     return *this;
 }

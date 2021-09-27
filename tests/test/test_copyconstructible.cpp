@@ -12,6 +12,39 @@ CopyConstructible::getCounter()
     return s_opCounter;
 }
 
+CopyConstructible::CopyConstructible(OpTracker::value_type const& value)
+    : OpTracker(s_opCounter, value)
+{
+}
+
+CopyConstructible::CopyConstructible(CopyConstructible const& copy)
+    : OpTracker(copy)
+{
+}
+
+CopyConstructible::CopyConstructible(CopyConstructible&& move) noexcept
+    : OpTracker(pw::move(move))
+{
+}
+
+CopyConstructible::~CopyConstructible()
+{
+}
+
+CopyConstructible&
+CopyConstructible::operator=(CopyConstructible const& copy)
+{
+    OpTracker::operator=(copy);
+    return *this;
+}
+
+CopyConstructible&
+CopyConstructible::operator=(CopyConstructible&& move)
+{
+    OpTracker::operator=(pw::move(move));
+    return *this;
+}
+
 bool
 permute(CopyConstructible& value, int depth)
 {
