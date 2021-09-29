@@ -2,6 +2,8 @@
 
 #include <pw/impl/move.h>
 
+#include <pw/algorithm>
+
 #include <catch2/catch.hpp>
 
 /*

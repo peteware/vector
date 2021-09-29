@@ -1,6 +1,8 @@
 #include <test_testtype.h>
 #include <test_values.h>
 
+#include <pw/algorithm>
+
 #include <catch2/catch.hpp>
 
 /*
