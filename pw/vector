@@ -45,8 +45,10 @@ public:
     constexpr ~vector();
 
     constexpr vector& operator=(const vector& other);
-    constexpr vector& operator=(vector&& other) noexcept;
     constexpr vector& operator=(std::initializer_list<value_type> ilist);
+    constexpr vector& operator=(vector&& other) noexcept(
+        pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+        pw::allocator_traits<allocator_type>::is_always_equal::value);
 
     constexpr void
     swap(vector& other) noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
@@ -227,17 +229,19 @@ vector<Type, Allocator>::operator=(const vector& other)
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(vector&& other) noexcept
+vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
 {
-    (void)other;
+    (void)ilist;
     return *this;
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(std::initializer_list<value_type> ilist)
+vector<Type, Allocator>::operator=(vector&& other) noexcept(
+    pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+    pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
-    (void)ilist;
+    (void)other;
     return *this;
 }
 
