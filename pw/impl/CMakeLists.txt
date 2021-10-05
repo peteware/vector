@@ -27,6 +27,7 @@ target_sources(pw-impl INTERFACE
     fill_n.h
     for_each.h
     forward.h
+    initializer_list.h
     integral_constant.h
     is_class.h
     is_constructible.h
@@ -56,5 +57,7 @@ target_sources(pw-impl INTERFACE
     uninitialized_fill.h
     uninitialized_move.h
     uninitialized_value_construct.h
+    vector_decl.h
+    vector_defn.h
     void.h
     )
