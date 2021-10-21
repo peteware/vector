@@ -4,6 +4,15 @@
 #include <pw/impl/vector_decl.h>
 
 namespace pw {
+template<class Type>
+Type&
+makeReference()
+{
+    static Type s_value;
+
+    return s_value;
+}
+
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
 {
@@ -148,7 +157,7 @@ constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::at(size_type position)
 {
     (void)position;
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -156,7 +165,7 @@ constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::at(size_type position) const
 {
     (void)position;
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -164,7 +173,7 @@ constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::operator[](size_type position)
 {
     (void)position;
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -172,91 +181,91 @@ constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::operator[](size_type position) const
 {
     (void)position;
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
 {
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
 {
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr Type*
 vector<Type, Allocator>::data() noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr Type const*
 vector<Type, Allocator>::data() const noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::begin() noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::end() noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::end() const noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cbegin() const noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cend() const noexcept
 {
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -390,7 +399,7 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
     (void)begin;
     (void)end;
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -413,7 +422,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     (void)position;
     (void)count;
     (void)value;
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -424,7 +433,7 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)position;
     (void)first;
     (void)last;
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -432,7 +441,7 @@ template<class... Args>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
-    return s_value;
+    return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -441,7 +450,7 @@ constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
     (void)position;
-    return &s_value;
+    return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>

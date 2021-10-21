@@ -104,11 +104,7 @@ public:
     constexpr iterator emplace(const_iterator position, Args&&... args);
 
 private:
-    static value_type s_value;
 };
-
-template<class Type, class Allocator>
-typename vector<Type, Allocator>::value_type vector<Type, Allocator>::s_value;
 
 template<class Type, class Allocator>
 void constexpr swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexcept(op1.swap(op2)));
