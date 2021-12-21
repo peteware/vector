@@ -33,7 +33,8 @@ struct Storage2
     constexpr pointer begin();
     constexpr pointer end();
 
-    Storage2& set_size(size_type size);
+    constexpr Storage2& set_size(size_type size);
+    constexpr size_type size() const;
 
 private:
     allocator_type m_alloc;
@@ -96,11 +97,18 @@ Storage2<Type, Allocator>::end()
 }
 
 template<class Type, class Allocator>
-Storage2<Type, Allocator>&
+constexpr Storage2<Type, Allocator>&
 Storage2<Type, Allocator>::set_size(size_type size)
 {
     m_size = size;
     return *this;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::size_type
+Storage2<Type, Allocator>::size() const
+{
+    return m_size;
 }
 
 }} // namespace pw::internal

@@ -26,10 +26,11 @@ TEST_CASE("Constructors", "[vector][constructor]")
         value_type       value = 3;
         Vector           v(total, value);
 
-        WHEN("Check not empty")
+        WHEN("It is initialized with value")
         {
             bool empty = v.empty();
             THEN("not empty") { REQUIRE(!empty); }
+            THEN("size is total") { REQUIRE(total == v.size()); }
         }
     }
 }
