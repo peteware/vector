@@ -7,6 +7,8 @@
 #include <pw/impl/iterator_traits.h>
 #include <pw/impl/reverse_iterator.h>
 
+#include <pw/internal/storage2.h>
+
 namespace pw {
 
 template<class Type, class Allocator = allocator<Type>>
@@ -104,6 +106,7 @@ public:
     constexpr iterator emplace(const_iterator position, Args&&... args);
 
 private:
+    internal::Storage2<Type, Allocator> m_storage;
 };
 
 template<class Type, class Allocator>

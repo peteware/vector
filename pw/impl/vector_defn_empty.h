@@ -3,8 +3,6 @@
 
 #include <pw/impl/vector_decl.h>
 
-#include <pw/impl/uninitialized_fill.h>
-
 namespace pw {
 template<class Type>
 Type&
@@ -17,7 +15,6 @@ makeReference()
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
-    : m_storage(allocator_type())
 {
 }
 
@@ -29,11 +26,10 @@ constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
-    : m_storage(alloc)
 {
-    m_storage.reserve(count);
-    uninitialized_fill(m_storage.begin(), m_storage.end(), value);
-    m_storage.set_size(count);
+    (void)count;
+    (void)value;
+    (void)alloc;
 }
 
 template<class Type, class Allocator>
@@ -318,7 +314,7 @@ template<class Type, class Allocator>
 constexpr bool
 vector<Type, Allocator>::empty() const noexcept
 {
-    return m_storage.empty();
+    return true;
 }
 
 template<class Type, class Allocator>
