@@ -23,8 +23,8 @@ constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
+    : m_storage(alloc)
 {
-    (void)alloc;
 }
 
 template<class Type, class Allocator>
@@ -32,7 +32,7 @@ constexpr vector<Type, Allocator>::vector(size_type count, value_type const& val
     : m_storage(alloc)
 {
     m_storage.reserve(count);
-    uninitialized_fill(m_storage.begin(), m_storage.end(), value);
+    uninitialized_fill(m_storage.begin(), m_storage.begin() + count, value);
     m_storage.set_size(count);
 }
 
@@ -153,7 +153,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::allocator_type
 vector<Type, Allocator>::get_allocator() const
 {
-    return Allocator();
+    return m_storage.get_allocator();
 }
 
 template<class Type, class Allocator>
@@ -234,14 +234,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::begin() noexcept
 {
-    return &makeReference<value_type>();
-}
-
-template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::end() noexcept
-{
-    return &makeReference<value_type>();
+    return m_storage.begin();
 }
 
 template<class Type, class Allocator>
@@ -249,6 +242,14 @@ constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
 {
     return &makeReference<value_type>();
+    //return m_storage.begin();
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::end() noexcept
+{
+    return m_storage.end();
 }
 
 template<class Type, class Allocator>

@@ -27,14 +27,15 @@ struct Storage2
     Storage2(allocator_type const& alloc);
     ~Storage2();
 
-    constexpr void reserve(size_type count);
-    constexpr bool empty() const;
-
-    constexpr pointer begin();
-    constexpr pointer end();
-
-    constexpr Storage2& set_size(size_type size);
-    constexpr size_type size() const;
+    constexpr void           reserve(size_type count);
+    constexpr bool           empty() const noexcept;
+    constexpr pointer        begin() noexcept;
+    constexpr const_pointer  begin() const noexcept;
+    constexpr pointer        end() noexcept;
+    constexpr const_pointer  end() const noexcept;
+    constexpr Storage2&      set_size(size_type size) noexcept;
+    constexpr size_type      size() const noexcept;
+    constexpr allocator_type get_allocator() const;
 
 private:
     allocator_type m_alloc;
@@ -77,28 +78,42 @@ Storage2<Type, Allocator>::reserve(size_type count)
 
 template<class Type, class Allocator>
 constexpr bool
-Storage2<Type, Allocator>::empty() const
+Storage2<Type, Allocator>::empty() const noexcept
 {
     return m_size == 0;
 }
 
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::pointer
-Storage2<Type, Allocator>::begin()
+Storage2<Type, Allocator>::begin() noexcept
+{
+    return m_begin;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::const_pointer
+Storage2<Type, Allocator>::begin() const noexcept
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::pointer
-Storage2<Type, Allocator>::end()
+Storage2<Type, Allocator>::end() noexcept
+{
+    return m_begin + m_size;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::const_pointer
+Storage2<Type, Allocator>::end() const noexcept
 {
     return m_begin + m_size;
 }
 
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>&
-Storage2<Type, Allocator>::set_size(size_type size)
+Storage2<Type, Allocator>::set_size(size_type size) noexcept
 {
     m_size = size;
     return *this;
@@ -106,9 +121,16 @@ Storage2<Type, Allocator>::set_size(size_type size)
 
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::size() const
+Storage2<Type, Allocator>::size() const noexcept
 {
     return m_size;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::allocator_type
+Storage2<Type, Allocator>::get_allocator() const
+{
+    return m_alloc;
 }
 
 }} // namespace pw::internal
