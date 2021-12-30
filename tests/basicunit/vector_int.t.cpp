@@ -26,9 +26,9 @@ TEST_CASE("Constructors", "[vector][constructor]")
     }
     GIVEN("A vector of count values")
     {
-        pw::size_t const total = 10;
-        value_type const value = 3;
-        Vector           v(total, value);
+        typename Vector::size_type const total = 10;
+        value_type const                 value = 3;
+        Vector                           v(total, value);
 
         WHEN("Initialized with value")
         {
@@ -70,6 +70,28 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
         WHEN("Default allocator")
         {
             THEN("allocators are different") { REQUIRE(!(v1.get_allocator() == v2.get_allocator())); }
+        }
+    }
+    GIVEN("Vector with count, value, and allocator")
+    {
+        typename Vector::size_type const total = 10;
+        Allocator                        allocator;
+        value_type const                 value = 3;
+        Vector                           v(total, value, allocator);
+
+        WHEN("access elements")
+        {
+            THEN("begin() returns element")
+            {
+                REQUIRE(v.begin());
+                REQUIRE(*v.begin() == value);
+            }
+            THEN("end() returns element")
+            {
+                REQUIRE(v.end());
+                REQUIRE(*(v.end() - 1) == value);
+            }
+            THEN("the get_allocator() returns origal instance") { REQUIRE(allocator == v.get_allocator()); }
         }
     }
 }
