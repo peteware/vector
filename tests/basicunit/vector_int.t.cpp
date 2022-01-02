@@ -82,6 +82,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         Vector                  v(count, alloc);
 
         REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v.size() == count);
     }
     SECTION("Copy constructor with allocator")
     {
@@ -107,15 +108,19 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         Vector v({ 1, 2, 3, 4 }, alloc);
 
         REQUIRE(v.get_allocator() == alloc);
+        // REQUIRE(v.size() == 4);
+        // REQUIRE(v[0] == 1);
     }
     SECTION("Construct from iterator with allocator")
     {
         // template<class Iterator>
         // constexpr vector(Iterator first, Iterator last, allocator_type const& alloc = allocator_type());
-        value_type d[3] = {};
+        value_type d[3] = { 23, 2, 1 };
         Vector     v(&d[0], &d[3], alloc);
 
         REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v.size() == 3);
+        REQUIRE(v[0] == 23);
     }
 }
 

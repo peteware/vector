@@ -3,6 +3,8 @@
 
 #include <pw/impl/vector_decl.h>
 
+#include <pw/impl/distance.h>
+#include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
 
@@ -88,9 +90,11 @@ template<class Iterator>
 constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocator_type const& alloc)
     : m_storage(alloc)
 {
-    (void)first;
-    (void)last;
-    (void)alloc;
+    size_type count = distance(first, last);
+
+    m_storage.reserve(count);
+    uninitialized_copy(first, last, m_storage.begin());
+    m_storage.set_size(count);
 }
 
 template<class Type, class Allocator>
@@ -184,8 +188,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::operator[](size_type position)
 {
-    (void)position;
-    return makeReference<value_type>();
+    return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
