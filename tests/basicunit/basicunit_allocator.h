@@ -14,7 +14,9 @@ struct my_allocator
     using size_type                              = pw::size_t;
     using difference_type                        = pw::ptrdiff_t;
     using is_always_equal                        = pw::false_type;
+    using propagate_on_container_copy_assignment = pw::false_type;
     using propagate_on_container_move_assignment = pw::true_type;
+    using propagate_on_container_swap            = pw::false_type;
 
     my_allocator();
     Type* allocate(size_type n);

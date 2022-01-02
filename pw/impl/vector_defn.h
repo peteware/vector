@@ -3,6 +3,7 @@
 
 #include <pw/impl/vector_decl.h>
 
+#include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
 
 namespace pw {
@@ -38,19 +39,23 @@ constexpr vector<Type, Allocator>::vector(size_type count, value_type const& val
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(size_type count, allocator_type const& alloc)
+    : m_storage(alloc)
 {
-    (void)count;
-    (void)alloc;
+    m_storage.reserve(count);
+    uninitialized_default_construct(m_storage.begin(), m_storage.begin() + count);
+    m_storage.set_size(count);
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy)
+    : m_storage(allocator_type())
 {
     (void)copy;
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
+    : m_storage(alloc)
 {
     (void)copy;
     (void)alloc;
@@ -64,6 +69,7 @@ constexpr vector<Type, Allocator>::vector(vector&& other) noexcept
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc)
+    : m_storage(alloc)
 {
     (void)other;
     (void)alloc;
@@ -71,6 +77,7 @@ constexpr vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init, allocator_type const& alloc)
+    : m_storage(alloc)
 {
     (void)init;
     (void)alloc;
@@ -79,6 +86,7 @@ constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init,
 template<class Type, class Allocator>
 template<class Iterator>
 constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocator_type const& alloc)
+    : m_storage(alloc)
 {
     (void)first;
     (void)last;
