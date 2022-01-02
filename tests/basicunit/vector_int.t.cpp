@@ -50,6 +50,45 @@ TEST_CASE("Constructors", "[vector][constructor]")
     }
 }
 
+TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
+{
+    using Allocator  = basicunit::my_allocator<int>;
+    using Vector     = pw::vector<int, Allocator>;
+    using value_type = typename Vector::value_type;
+
+    Allocator alloc;
+
+    SECTION("Default constructor")
+    {
+        // constexpr vector() noexcept(noexcept(allocator_type()));
+        Vector v;
+
+        REQUIRE(v.empty());
+        REQUIRE(!(v.get_allocator() == alloc));
+    }
+    SECTION("Copy constructor")
+    {
+        // constexpr vector(vector const& other);
+        Vector v1 { 1, 2, 3, 10 };
+        Vector v2(v1);
+
+        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1[0] == v2[0]);
+        REQUIRE(v1[3] == v2[3]);
+    }
+    SECTION("Move constructor")
+    {
+        // constexpr vector(vector&& other) noexcept;
+        Vector v1 { 1, 2, 3, 10 };
+        Vector v2(move(v1));
+
+        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1.size() == v2.size());
+        REQUIRE(v2[0] == 1);
+        REQUIRE(v2[3] == 10);
+    }
+}
+
 TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 {
     using Allocator  = basicunit::my_allocator<int>;
@@ -64,7 +103,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
     }
-    SECTION("count and value with allocator")
+    SECTION("Copy constructor with count and value with allocator")
     {
         // constexpr vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
         Vector::size_type const count = 30;
@@ -75,7 +114,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         REQUIRE(v.size() == count);
         REQUIRE(v[0] == value);
     }
-    SECTION("count with allocator")
+    SECTION("Copy constructor with count with allocator")
     {
         // constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
         Vector::size_type const count = 30;
@@ -88,28 +127,33 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
     {
         // constexpr vector(vector const& other, allocator_type const& alloc);
         Allocator alloc2;
-        Vector    v1(alloc);
+        Vector    v1({ 1, 2, 3, 4 }, alloc);
         Vector    v2(v1, alloc2);
 
         REQUIRE(v2.get_allocator() == alloc2);
+        REQUIRE(v2.size() == v1.size());
+        REQUIRE(v2[0] == v1[0]);
     }
     SECTION("Move constructor with allocator")
     {
         // constexpr vector(vector&& other, allocator_type const& alloc);
         Allocator alloc2;
-        Vector    v1(alloc);
+        Vector    v1({ 1, 2, 3 }, alloc);
         Vector    v2(pw::move(v1), alloc2);
 
         REQUIRE(v2.get_allocator() == alloc2);
+        REQUIRE(v2.size() == v1.size());
+        REQUIRE(v2[0] == 1);
+        REQUIRE(v2[2] == 3);
     }
-    SECTION("Initializer list with allocator")
+    SECTION("Construct from initializer list with allocator")
     {
         // constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
         Vector v({ 1, 2, 3, 4 }, alloc);
 
         REQUIRE(v.get_allocator() == alloc);
-        // REQUIRE(v.size() == 4);
-        // REQUIRE(v[0] == 1);
+        REQUIRE(v.size() == 4);
+        REQUIRE(v[0] == 1);
     }
     SECTION("Construct from iterator with allocator")
     {

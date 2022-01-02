@@ -7,6 +7,7 @@
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
+#include <pw/impl/uninitialized_move.h>
 
 namespace pw {
 template<class Type>
@@ -52,37 +53,45 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy)
     : m_storage(allocator_type())
 {
-    (void)copy;
+    m_storage.reserve(copy.size());
+    uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
+    m_storage.set_size(copy.size());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
     : m_storage(alloc)
 {
-    (void)copy;
-    (void)alloc;
+    m_storage.reserve(copy.size());
+    uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
+    m_storage.set_size(copy.size());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& other) noexcept
+    : m_storage(allocator_type())
 {
-    (void)other;
+    m_storage.reserve(other.size());
+    uninitialized_move(other.begin(), other.end(), m_storage.begin());
+    m_storage.set_size(other.size());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc)
     : m_storage(alloc)
 {
-    (void)other;
-    (void)alloc;
+    m_storage.reserve(other.size());
+    uninitialized_move(other.begin(), other.end(), m_storage.begin());
+    m_storage.set_size(other.size());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init, allocator_type const& alloc)
     : m_storage(alloc)
 {
-    (void)init;
-    (void)alloc;
+    m_storage.reserve(init.size());
+    uninitialized_copy(init.begin(), init.end(), m_storage.begin());
+    m_storage.set_size(init.size());
 }
 
 template<class Type, class Allocator>
@@ -252,8 +261,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
 {
-    return &makeReference<value_type>();
-    //return m_storage.begin();
+    return m_storage.begin();
 }
 
 template<class Type, class Allocator>
@@ -267,7 +275,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::end() const noexcept
 {
-    return &makeReference<value_type>();
+    return m_storage.end();
 }
 
 template<class Type, class Allocator>
