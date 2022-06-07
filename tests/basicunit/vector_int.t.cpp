@@ -170,6 +170,19 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
 TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
 {
+    using Allocator  = basicunit::allocator_copy_assignment<int>;
+    using Vector     = pw::vector<int, Allocator>;
+    using value_type = typename Vector::value_type;
+
+    Allocator alloc;
+    Vector    v1({ 10, 20, 30 }, alloc);
+    SECTION("Assignment and copy allocator")
+    {
+        Vector v2;
+
+        v2 = v1;
+        REQUIRE(v2.get_allocator() == v1.get_allocator());
+    }
     // constexpr vector& operator=(const vector& other);
     //     using propagate_on_container_copy_assignment = false_type;
     //     using propagate_on_container_copy_assignment = true_type;
