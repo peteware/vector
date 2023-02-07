@@ -3,7 +3,9 @@
 
 #include <pw/impl/vector_decl.h>
 
+#include <pw/impl/copy.h>
 #include <pw/impl/distance.h>
+#include <pw/impl/min.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
@@ -124,6 +126,32 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(const vector& other)
 {
+    if constexpr (allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
+    {
+        // TODO: Check if same allocator
+        Storage storage { other.get_allocator() };
+
+        storage.reserve(other.size());
+        uninitialized_copy(other.begin(), other.end(), storage.begin());
+        storage.set_size(other.size());
+        m_storage = storage;
+    }
+    else if (m_storage.allocated() < other.size())
+    {
+        Storage storage { allocator_type() };
+
+        storage.reserve(other.size());
+        uninitialized_copy(other.begin(), other.end(), storage.begin());
+        storage.set_size(other.size());
+        m_storage = storage;
+    }
+    else
+    {
+        size_type initsize = min(m_storage.size(), other.size());
+        copy(other.begin(), other.begin() + initsize, m_storage.begin());
+        uninitialized_copy(other.begin() + initsize, other.end(), m_storage.begin() + initsize);
+    }
+
     (void)other;
     return *this;
 }

@@ -106,7 +106,9 @@ public:
     constexpr iterator emplace(const_iterator position, Args&&... args);
 
 private:
-    internal::Storage2<Type, Allocator> m_storage;
+    using Storage = internal::Storage2<Type, Allocator>;
+
+    Storage m_storage;
 };
 
 template<class Type, class Allocator>

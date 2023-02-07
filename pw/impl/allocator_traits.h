@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/conditional.h>
 #include <pw/impl/construct_at.h>
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
@@ -11,6 +12,12 @@
 //#include <utility>
 
 namespace pw {
+
+template<typename T, typename = void>
+constexpr bool is_defined = false;
+
+template<typename T>
+constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
 
 template<class Alloc>
 struct allocator_traits
@@ -23,10 +30,16 @@ struct allocator_traits
     using const_void_pointer = typename pointer_traits<pointer>::template rebind<const void>;
     using difference_type    = typename pointer_traits<pointer>::difference_type;
     using size_type          = typename make_unsigned<difference_type>::type;
-    using propagate_on_container_copy_assignment = false_type;
-    using propagate_on_container_move_assignment = false_type;
-    using propagate_on_container_swap            = false_type;
-    using is_always_equal                        = typename is_empty<Alloc>::type;
+    using propagate_on_container_copy_assignment =
+        conditional<is_defined<typename allocator_type::propagate_on_container_copy_assignment>,
+                    typename allocator_type::propagate_on_container_copy_assignment,
+                    false_type>;
+    using propagate_on_container_move_assignment = typename allocator_type::propagate_on_container_move_assignment;
+    using propagate_on_container_swap            = typename allocator_type::propagate_on_container_swap;
+    // using propagate_on_container_copy_assignment = false_type;
+    // using propagate_on_container_move_assignment = false_type;
+    // using propagate_on_container_swap            = false_type;
+    using is_always_equal = typename is_empty<Alloc>::type;
 
     static pointer allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }
 

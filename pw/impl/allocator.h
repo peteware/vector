@@ -17,19 +17,19 @@ struct allocator
     using is_always_equal                        = true_type;
     using propagate_on_container_move_assignment = true_type;
 
-    Type* allocate(size_type n);
-    void  deallocate(Type* ptr, size_type count);
+    [[nodiscard]] constexpr Type* allocate(size_type n);
+    constexpr void                deallocate(Type* ptr, size_type count);
 };
 
 template<class Type>
-Type*
+constexpr Type*
 allocator<Type>::allocate(size_type count)
 {
     return static_cast<Type*>(::operator new(count * sizeof(Type)));
 }
 
 template<class Type>
-void
+constexpr void
 allocator<Type>::deallocate(Type* ptr, size_type count)
 {
     return ::operator delete(static_cast<void*>(ptr));
@@ -40,6 +40,13 @@ bool
 operator==(allocator<Type1> const& op1, allocator<Type2> const& op2)
 {
     return true;
+}
+
+template<class Type1, class Type2>
+bool
+operator!=(allocator<Type1> const& op1, allocator<Type2> const& op2)
+{
+    return false;
 }
 
 } // namespace pw

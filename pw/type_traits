@@ -2,6 +2,7 @@
 #define PW_TYPE_TRAITS_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/conditional.h>
 #include <pw/impl/is_constructible.h>
 #include <pw/impl/is_same.h>
 #include <pw/impl/void.h>

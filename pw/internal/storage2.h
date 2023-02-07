@@ -15,8 +15,8 @@ struct Storage2
 {
     using value_type      = Type;
     using allocator_type  = Allocator;
-    using size_type       = size_t;
-    using difference_type = ptrdiff_t;
+    using size_type       = typename allocator_traits<Allocator>::size_type;
+    using difference_type = typename allocator_traits<Allocator>::difference_type;
     using reference       = value_type&;
     using const_reference = value_type const&;
     using pointer         = typename allocator_traits<Allocator>::pointer;
@@ -35,6 +35,7 @@ struct Storage2
     constexpr const_pointer  end() const noexcept;
     constexpr Storage2&      set_size(size_type size) noexcept;
     constexpr size_type      size() const noexcept;
+    constexpr size_type      allocated() const noexcept;
     constexpr allocator_type get_allocator() const;
 
 private:
@@ -124,6 +125,13 @@ constexpr typename Storage2<Type, Allocator>::size_type
 Storage2<Type, Allocator>::size() const noexcept
 {
     return m_size;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::size_type
+Storage2<Type, Allocator>::allocated() const noexcept
+{
+    return m_allocated;
 }
 
 template<class Type, class Allocator>
