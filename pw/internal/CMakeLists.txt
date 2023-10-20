@@ -8,6 +8,7 @@ target_include_directories(
 target_sources(pw-internal INTERFACE
     compare.h
     constructible.h
+    detect_prop.h
     extract_or.h
     is_supported.h
     meta.h

@@ -1,3 +1,4 @@
+#include <pw/algorithm>
 #include <test_testtype.h>
 #include <test_values.h>
 

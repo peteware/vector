@@ -2,30 +2,38 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/conditional.h>
 #include <pw/impl/construct_at.h>
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
 #include <pw/impl/pointer_traits.h>
+#include <pw/internal/detect_prop.h>
 
 //#include <utility>
 
 namespace pw {
 
+template<typename T, typename = void>
+constexpr bool is_defined = false;
+
+template<typename T>
+constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
+
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type     = Alloc;
-    using value_type         = typename Alloc::value_type;
-    using pointer            = typename pointer_traits<value_type*>::pointer;
-    using const_pointer      = typename pointer_traits<pointer>::template rebind<const value_type>;
-    using void_pointer       = typename pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer = typename pointer_traits<pointer>::template rebind<const void>;
-    using difference_type    = typename pointer_traits<pointer>::difference_type;
-    using size_type          = typename make_unsigned<difference_type>::type;
-    using propagate_on_container_copy_assignment = false_type;
-    using propagate_on_container_move_assignment = false_type;
-    using propagate_on_container_swap            = false_type;
+    using allocator_type                         = Alloc;
+    using value_type                             = typename Alloc::value_type;
+    using pointer                                = typename pointer_traits<value_type*>::pointer;
+    using const_pointer                          = typename pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer                           = typename pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer                     = typename pointer_traits<pointer>::template rebind<const void>;
+    using difference_type                        = typename pointer_traits<pointer>::difference_type;
+    using size_type                              = typename make_unsigned<difference_type>::type;
+    using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
+    using propagate_on_container_move_assignment = decltype(internal::detect_prop_on_move<Alloc>(0));
+    using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
     using is_always_equal                        = typename is_empty<Alloc>::type;
 
     static pointer allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }

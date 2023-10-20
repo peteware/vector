@@ -77,6 +77,7 @@ public:
     iterator              end();
     const_iterator        begin() const;
     const_iterator        end() const;
+    Storage&              uninitialized_fill(iterator first, iterator last, value_type const& val);
     Storage&              set_size(size_type count);
     size_type             size() const;
     size_type             capacity() const;

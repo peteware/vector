@@ -20,9 +20,9 @@ uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
     {
         while (begin != end)
         {
-            ::new (pw::addressof(*current)) Value(pw::move(*begin));
+            //::new (pw::addressof(*current)) Value(pw::move(*begin));
 
-            //construct_at(pw::addressof(*current), pw::move(*begin));
+            construct_at(addressof(*current), pw::move(*begin));
             ++current;
             ++begin;
         }

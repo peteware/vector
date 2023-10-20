@@ -1,6 +1,8 @@
 #ifndef _INCLUDED_TEST_VALUES_H
 #define _INCLUDED_TEST_VALUES_H
 
+#include <iostream>
+
 namespace pw { namespace test {
 
 /**
