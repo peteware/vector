@@ -5,6 +5,7 @@
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 
+#include <cstdlib>
 namespace basicunit {
 
 template<class Type>
@@ -39,14 +40,16 @@ template<class Type>
 Type*
 my_allocator<Type>::allocate(size_type count)
 {
-    return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    //return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    return static_cast<Type*>(malloc(count * sizeof(Type)));
 }
 
 template<class Type>
 void
 my_allocator<Type>::deallocate(Type* ptr, size_type count)
 {
-    return ::operator delete(static_cast<void*>(ptr));
+    // ::operator delete(static_cast<void*>(ptr));
+    free(ptr);
 }
 
 template<class Type1, class Type2>
@@ -88,14 +91,16 @@ template<class Type>
 Type*
 allocator_copy_assignment<Type>::allocate(size_type count)
 {
-    return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    //return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    return static_cast<Type*>(malloc(count * sizeof(Type)));
 }
 
 template<class Type>
 void
 allocator_copy_assignment<Type>::deallocate(Type* ptr, size_type count)
 {
-    return ::operator delete(static_cast<void*>(ptr));
+    // ::operator delete(static_cast<void*>(ptr));
+    free(ptr);
 }
 
 template<class Type1, class Type2>

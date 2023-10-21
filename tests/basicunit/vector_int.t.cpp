@@ -6,6 +6,8 @@
 
 #include <catch2/catch.hpp>
 
+#include <vector>
+
 /*
  * Type Requirements:
  * - No extra
@@ -20,10 +22,18 @@ TEST_CASE("Constructors", "[vector][constructor]")
         Vector v;
         WHEN("Nothing changes")
         {
-            THEN("empty() is true") { REQUIRE(v.empty()); }
-            THEN("size() is 0") { REQUIRE(0 == v.size()); }
-            THEN("begin() is null") { REQUIRE(!v.begin()); }
-            THEN("end() is null") { REQUIRE(!v.end()); }
+            THEN("empty() is true")
+            {
+                REQUIRE(v.empty());
+            }
+            THEN("size() is 0")
+            {
+                REQUIRE(0 == v.size());
+            }
+            THEN("begin() is null")
+            {
+                REQUIRE(v.begin() == v.end());
+            }
         }
     }
     GIVEN("A vector of count values")
@@ -34,16 +44,22 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
         WHEN("Initialized with value")
         {
-            THEN("empty() is false") { REQUIRE(!v.empty()); }
-            THEN("size() is total") { REQUIRE(total == v.size()); }
+            THEN("empty() is false")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("size() is total")
+            {
+                REQUIRE(total == v.size());
+            }
             THEN("begin() returns element")
             {
-                REQUIRE(v.begin());
+                REQUIRE(v.begin() != v.end());
                 REQUIRE(*v.begin() == value);
             }
             THEN("end() returns element")
             {
-                REQUIRE(v.end());
+                REQUIRE(v.end() != v.begin());
                 REQUIRE(*(v.end() - 1) == value);
             }
         }
@@ -168,7 +184,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
     }
 }
 
-TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
+TEST_CASE("Allocator Copy Assignment", "[assignment][allocator][copy]")
 {
     using Allocator  = basicunit::allocator_copy_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
@@ -179,12 +195,12 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
     REQUIRE(Allocator::propagate_on_container_copy_assignment::value);
     SECTION("Assignment and copy allocator")
     {
-        Vector v2;
+        Vector v2(alloc);
 
         v2 = v1;
-        INFO("alloc.m_version = " << alloc.m_instance
-                                  << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
-                                  << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
+        INFO("alloc.m_instance = " << alloc.m_instance
+                                   << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
+                                   << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
         REQUIRE(v2.get_allocator() == v1.get_allocator());
     }
     // constexpr vector& operator=(const vector& other);
