@@ -12,7 +12,7 @@ template<class InputIterator, class OutputIterator>
 void
 uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
 {
-    using Value            = typename pw::iterator_traits<OutputIterator>::value_type;
+    using Value = typename pw::iterator_traits<OutputIterator>::value_type;
     OutputIterator current = out;
 
     try
@@ -20,7 +20,6 @@ uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
         while (begin != end)
         {
             pw::construct_at(pw::addressof(*current), *begin);
-            //::new (static_cast<void*>(pw::addressof(*current))) Value(*begin);
             ++current;
             ++begin;
         }

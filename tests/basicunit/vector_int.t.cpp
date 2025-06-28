@@ -17,25 +17,43 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
     GIVEN("An empty vector")
     {
-        Vector v;
         WHEN("Nothing changes")
         {
-            THEN("empty() is true") { REQUIRE(v.empty()); }
-            THEN("size() is 0") { REQUIRE(0 == v.size()); }
-            THEN("begin() is null") { REQUIRE(!v.begin()); }
-            THEN("end() is null") { REQUIRE(!v.end()); }
+            Vector v;
+            THEN("empty() is true")
+            {
+                REQUIRE(v.empty());
+            }
+            THEN("size() is 0")
+            {
+                REQUIRE(!v.size());
+            }
+            THEN("begin() is null")
+            {
+                REQUIRE(!v.begin());
+            }
+            THEN("end() is null")
+            {
+                REQUIRE(!v.end());
+            }
         }
     }
     GIVEN("A vector of count values")
     {
-        typename Vector::size_type const total = 10;
-        value_type const                 value = 3;
-        Vector                           v(total, value);
-
         WHEN("Initialized with value")
         {
-            THEN("empty() is false") { REQUIRE(!v.empty()); }
-            THEN("size() is total") { REQUIRE(total == v.size()); }
+            typename Vector::size_type const total = 10;
+            value_type const                 value = 3;
+            Vector                           v(total, value);
+
+            THEN("empty() is false")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("size() is total")
+            {
+                REQUIRE(total == v.size());
+            }
             THEN("begin() returns element")
             {
                 REQUIRE(v.begin());
@@ -52,9 +70,8 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
 TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
 {
-    using Allocator  = basicunit::my_allocator<int>;
-    using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using Allocator = basicunit::my_allocator<int>;
+    using Vector    = pw::vector<int, Allocator>;
 
     Allocator alloc;
 
@@ -170,9 +187,8 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
 TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
 {
-    using Allocator  = basicunit::allocator_copy_assignment<int>;
-    using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using Allocator = basicunit::allocator_copy_assignment<int>;
+    using Vector    = pw::vector<int, Allocator>;
 
     Allocator alloc;
     Vector    v1({ 10, 20, 30 }, alloc);
@@ -183,8 +199,10 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
 
         v2 = v1;
         INFO("alloc.m_version = " << alloc.m_instance
-                                  << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
-                                  << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
+                                  << " v1.get_allocator().m_instance = "
+                                  << v1.get_allocator().m_instance
+                                  << " v2.get_allocator().m_instance = "
+                                  << v2.get_allocator().m_instance);
         REQUIRE(v2.get_allocator() == v1.get_allocator());
     }
     // constexpr vector& operator=(const vector& other);
@@ -223,7 +241,10 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
         Vector    v(allocator);
         WHEN("Check allocator")
         {
-            THEN("allocator is same") { REQUIRE(allocator == v.get_allocator()); }
+            THEN("allocator is same")
+            {
+                REQUIRE(allocator == v.get_allocator());
+            }
         }
     }
     GIVEN("Two empty vectors with allocator")
@@ -232,15 +253,18 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
         Vector v2;
         WHEN("Default allocator")
         {
-            THEN("allocators are different") { REQUIRE(!(v1.get_allocator() == v2.get_allocator())); }
+            THEN("allocators are different")
+            {
+                REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+            }
         }
     }
     GIVEN("Vector with count, value, and allocator")
     {
         typename Vector::size_type const total = 10;
         Allocator                        allocator;
-        value_type const                 value = 3;
-        Vector                           v(total, value, allocator);
+        value_type constexpr value = 3;
+        Vector v(total, value, allocator);
 
         WHEN("access elements")
         {
@@ -254,7 +278,10 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
                 REQUIRE(v.end());
                 REQUIRE(*(v.end() - 1) == value);
             }
-            THEN("the get_allocator() returns origal instance") { REQUIRE(allocator == v.get_allocator()); }
+            THEN("the get_allocator() returns original instance")
+            {
+                REQUIRE(allocator == v.get_allocator());
+            }
         }
     }
 }

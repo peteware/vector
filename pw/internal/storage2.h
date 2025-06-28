@@ -5,7 +5,6 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
-#include <pw/impl/size.h>
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_move.h>
 
@@ -13,10 +12,11 @@ namespace pw { namespace internal {
 template<class Type, class Allocator = pw::allocator<Type>>
 struct Storage2
 {
-    using value_type      = Type;
-    using allocator_type  = Allocator;
-    using size_type       = typename allocator_traits<Allocator>::size_type;
-    using difference_type = typename allocator_traits<Allocator>::difference_type;
+    using value_type     = Type;
+    using allocator_type = Allocator;
+    using size_type      = typename allocator_traits<Allocator>::size_type;
+    using difference_type =
+        typename allocator_traits<Allocator>::difference_type;
     using reference       = value_type&;
     using const_reference = value_type const&;
     using pointer         = typename allocator_traits<Allocator>::pointer;
