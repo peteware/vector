@@ -5,10 +5,11 @@
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 
+#include <iostream>
 namespace basicunit {
 
 template<class Type>
-struct my_allocator
+struct allocator_move_assignment
 {
     using value_type                             = Type;
     using size_type                              = pw::size_t;
@@ -18,7 +19,7 @@ struct my_allocator
     using propagate_on_container_move_assignment = pw::true_type;
     using propagate_on_container_swap            = pw::false_type;
 
-    my_allocator();
+    allocator_move_assignment();
     Type* allocate(size_type n);
     void  deallocate(Type* ptr, size_type count);
 
@@ -27,35 +28,46 @@ struct my_allocator
 };
 
 template<class Type>
-int my_allocator<Type>::s_nextInstance;
+std::ostream&
+operator<<(std::ostream& out, allocator_move_assignment<Type> const& alloc)
+{
+    out << "allocator_move_assignment<" << typeid(Type).name() << "> instance "
+        << alloc.m_instance;
+    return out;
+}
 
 template<class Type>
-my_allocator<Type>::my_allocator()
+int allocator_move_assignment<Type>::s_nextInstance;
+
+template<class Type>
+allocator_move_assignment<Type>::allocator_move_assignment()
     : m_instance(s_nextInstance++)
 {
 }
 
 template<class Type>
 Type*
-my_allocator<Type>::allocate(size_type count)
+allocator_move_assignment<Type>::allocate(size_type count)
 {
     return static_cast<Type*>(::operator new(count * sizeof(Type)));
 }
 
 template<class Type>
 void
-my_allocator<Type>::deallocate(Type* ptr, size_type count)
+allocator_move_assignment<Type>::deallocate(Type* ptr, size_type count)
 {
     return ::operator delete(static_cast<void*>(ptr));
 }
 
 template<class Type1, class Type2>
 bool
-operator==(my_allocator<Type1> const& op1, my_allocator<Type2> const& op2)
+operator==(allocator_move_assignment<Type1> const& op1,
+           allocator_move_assignment<Type2> const& op2)
 {
     return op1.m_instance == op2.m_instance;
 }
 
+} // namespace basicunit
 template<class Type>
 struct allocator_copy_assignment
 {
@@ -100,10 +112,19 @@ allocator_copy_assignment<Type>::deallocate(Type* ptr, size_type count)
 
 template<class Type1, class Type2>
 bool
-operator==(allocator_copy_assignment<Type1> const& op1, allocator_copy_assignment<Type2> const& op2)
+operator==(allocator_copy_assignment<Type1> const& op1,
+           allocator_copy_assignment<Type2> const& op2)
 {
     return op1.m_instance == op2.m_instance;
 }
 
-} // namespace basicunit
+template<class Type>
+std::ostream&
+operator<<(std::ostream& out, allocator_copy_assignment<Type> const& alloc)
+{
+    out << "allocator_copy_assignment<" << typeid(Type).name() << "> instance "
+        << alloc.m_instance;
+    return out;
+}
+
 #endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_H */

@@ -1,6 +1,8 @@
 #ifndef PW_IMPL_VECTOR_DEFN_H
 #define PW_IMPL_VECTOR_DEFN_H
 
+#include "pw/internal/unimplemented.h"
+
 #include <pw/impl/vector_decl.h>
 
 #include <pw/impl/copy.h>
@@ -129,6 +131,7 @@ vector<Type, Allocator>::swap(vector& other) noexcept(
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -168,10 +171,11 @@ vector<Type, Allocator>::operator=(const vector& other)
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(pw::initializer_list<value_type> ilist)
+vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 {
-    (void)ilist;
-    return *this;
+    (void)init_list;
+    throw internal::Unimplemented(__func__);
+    //return *this;
 }
 
 template<class Type, class Allocator>
@@ -182,7 +186,8 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept(
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
-    return *this;
+    throw internal::Unimplemented(__func__);
+    //return *this;
 }
 
 template<class Type, class Allocator>
@@ -192,6 +197,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
 {
     (void)begin;
     (void)end;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -200,13 +206,15 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
     (void)count;
     (void)value;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::assign(pw::initializer_list<value_type> ilist)
+vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
 {
-    (void)ilist;
+    (void)init_list;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -221,7 +229,8 @@ constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::at(size_type position)
 {
     (void)position;
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -229,7 +238,8 @@ constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::at(size_type position) const
 {
     (void)position;
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    //return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -244,49 +254,56 @@ constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::operator[](size_type position) const
 {
     (void)position;
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    //return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
 {
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    //return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
 {
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr Type*
 vector<Type, Allocator>::data() noexcept
 {
-    return &makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr Type const*
 vector<Type, Allocator>::data() const noexcept
 {
-    return &makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -321,14 +338,14 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cbegin() const noexcept
 {
-    return &makeReference<value_type>();
+    return m_storage.begin();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cend() const noexcept
 {
-    return &makeReference<value_type>();
+    return m_storage.end();
 }
 
 template<class Type, class Allocator>
@@ -398,13 +415,14 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const noexcept
 {
-    return 0;
+    return m_storage.capacity();
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::shrink_to_fit()
 {
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -412,12 +430,14 @@ constexpr void
 vector<Type, Allocator>::reserve(size_type count)
 {
     (void)count;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::clear() noexcept
 {
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -425,6 +445,7 @@ constexpr void
 vector<Type, Allocator>::push_back(const_reference value)
 {
     (void)value;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -432,6 +453,7 @@ constexpr void
 vector<Type, Allocator>::push_back(value_type&& value)
 {
     (void)value;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -439,6 +461,7 @@ constexpr void
 vector<Type, Allocator>::resize(size_type count)
 {
     (void)count;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -447,6 +470,7 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
 {
     (void)count;
     (void)value;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -462,13 +486,15 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
     (void)begin;
     (void)end;
-    return &makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::pop_back()
 {
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -487,7 +513,8 @@ vector<Type, Allocator>::insert(const_iterator  position,
     (void)position;
     (void)count;
     (void)value;
-    return &makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -500,6 +527,7 @@ vector<Type, Allocator>::insert(const_iterator position,
     (void)position;
     (void)first;
     (void)last;
+    throw internal::Unimplemented(__func__);
     return &makeReference<value_type>();
 }
 
@@ -508,7 +536,8 @@ template<class... Args>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
-    return makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -517,7 +546,8 @@ constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
     (void)position;
-    return &makeReference<value_type>();
+    throw internal::Unimplemented(__func__);
+    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -527,6 +557,7 @@ swap(vector<Type, Allocator>& op1,
 {
     (void)op1;
     (void)op2;
+    throw internal::Unimplemented(__func__);
 }
 
 template<class Type, class Allocator>
@@ -547,7 +578,8 @@ operator<=>(const pw::vector<Type, Allocator>& op1,
             const pw::vector<Type, Allocator>& op2) -> decltype(op1[0] <=>
                                                                 op2[0])
 {
-    return op1[0] <=> op2[0];
+    throw internal::Unimplemented(__func__);
+    // return op1[0] <=> op2[0];
 }
 } // namespace pw
 #endif /* PW_IMPL_VECTOR_DEFN_H */

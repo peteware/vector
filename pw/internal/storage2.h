@@ -8,7 +8,7 @@
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_move.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 template<class Type, class Allocator = pw::allocator<Type>>
 struct Storage2
 {
@@ -24,19 +24,19 @@ struct Storage2
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
-    Storage2(allocator_type const& alloc);
+    explicit Storage2(allocator_type const& alloc);
     ~Storage2();
 
-    constexpr void           reserve(size_type count);
-    constexpr bool           empty() const noexcept;
-    constexpr pointer        begin() noexcept;
-    constexpr const_pointer  begin() const noexcept;
-    constexpr pointer        end() noexcept;
-    constexpr const_pointer  end() const noexcept;
-    constexpr Storage2&      set_size(size_type size) noexcept;
-    constexpr size_type      size() const noexcept;
-    constexpr size_type      allocated() const noexcept;
-    constexpr allocator_type get_allocator() const;
+    constexpr void               reserve(size_type count);
+    [[nodiscard]] constexpr bool empty() const noexcept;
+    constexpr pointer            begin() noexcept;
+    constexpr const_pointer      begin() const noexcept;
+    constexpr pointer            end() noexcept;
+    constexpr const_pointer      end() const noexcept;
+    constexpr Storage2&          set_size(size_type size) noexcept;
+    constexpr size_type          size() const noexcept;
+    constexpr size_type          allocated() const noexcept;
+    constexpr allocator_type     get_allocator() const;
 
 private:
     allocator_type m_alloc;
@@ -141,4 +141,4 @@ Storage2<Type, Allocator>::get_allocator() const
     return m_alloc;
 }
 
-}} // namespace pw::internal
+} // namespace pw::internal
