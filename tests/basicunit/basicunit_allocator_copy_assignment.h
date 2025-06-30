@@ -1,39 +1,26 @@
 #ifndef INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H
 #define INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H
 
+#include "allocator.h"
 #include <iostream>
-#include <pw/impl/bool_type.h>
-#include <pw/impl/ptrdiff.h>
-#include <pw/impl/size.h>
 
 namespace basicunit {
 template<class Type>
-struct allocator_copy_assignment
+struct allocator_copy_assignment : allocator_base<Type>
 {
-    using value_type                             = Type;
-    using size_type                              = pw::size_t;
-    using difference_type                        = pw::ptrdiff_t;
-    using is_always_equal                        = pw::false_type;
+    using base            = allocator_base<Type>;
+    using value_type      = typename base::value_type;
+    using size_type       = typename base::size_type;
+    using difference_type = typename base::difference_type;
+    using is_always_equal = pw::false_type;
     using propagate_on_container_copy_assignment = pw::true_type;
     using propagate_on_container_move_assignment = pw::true_type;
     using propagate_on_container_swap            = pw::false_type;
 
-    allocator_copy_assignment();
+    allocator_copy_assignment() = default;
     Type* allocate(size_type n);
     void  deallocate(Type* ptr, size_type count);
-
-    static int s_nextInstance;
-    int        m_instance;
 };
-
-template<class Type>
-int allocator_copy_assignment<Type>::s_nextInstance;
-
-template<class Type>
-allocator_copy_assignment<Type>::allocator_copy_assignment()
-    : m_instance(s_nextInstance++)
-{
-}
 
 template<class Type>
 Type*

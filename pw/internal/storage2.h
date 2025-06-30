@@ -37,6 +37,9 @@ struct Storage2
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
     constexpr allocator_type     get_allocator() const;
+    constexpr void               swap(Storage2& other) noexcept(
+        allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+        allocator_traits<allocator_type>::is_always_equal::value);
 
 private:
     allocator_type m_alloc;
@@ -73,6 +76,7 @@ Storage2<Type, Allocator>::reserve(size_type count)
     pw::uninitialized_move(begin(), end(), tmp);
     pw::destroy(begin(), end());
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
+    using pw::swap;
     swap(tmp, m_begin);
     swap(count, m_allocated);
 }
@@ -140,5 +144,20 @@ Storage2<Type, Allocator>::get_allocator() const
 {
     return m_alloc;
 }
-
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::swap(Storage2& other) noexcept(
+    pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+    pw::allocator_traits<allocator_type>::is_always_equal::value)
+{
+    using pw::swap;
+    if constexpr (allocator_traits<
+                      allocator_type>::propagate_on_container_swap::value)
+    {
+        swap(m_alloc, other.m_alloc);
+    }
+    swap(m_begin, other.m_begin);
+    swap(m_size, other.m_size);
+    swap(m_allocated, other.m_allocated);
+}
 } // namespace pw::internal

@@ -147,7 +147,7 @@ vector<Type, Allocator>::operator=(const vector& other)
         storage.reserve(other.size());
         uninitialized_copy(other.begin(), other.end(), storage.begin());
         storage.set_size(other.size());
-        m_storage = storage;
+        m_storage.swap(storage);
     }
     else if (m_storage.allocated() < other.size())
     {

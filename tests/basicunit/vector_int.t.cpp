@@ -1,6 +1,8 @@
 #include "basicunit_allocator_copy_assignment.h"
 #include "basicunit_allocator_move_assignment.h"
+
 #include <pw/vector>
+#include <unistd.h>
 
 #include <pw/impl/move.h>
 
@@ -206,21 +208,18 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
     SECTION("Assignment with allocator that does copy on assignment creates "
             "new allocator")
     {
+        // constexpr vector& operator=(const vector& other);
+        //     using propagate_on_container_copy_assignment = true_type;
         Vector v2;
 
-        //v2 = v1;
+        v2 = v1;
         INFO("alloc.m_version = " << alloc.m_instance
                                   << " v1.get_allocator().m_instance = "
                                   << v1.get_allocator().m_instance
                                   << " v2.get_allocator().m_instance = "
                                   << v2.get_allocator().m_instance);
-        std::cout << "v1 = " << v1.get_allocator()
-                  << " v2 = " << v2.get_allocator();
-        //REQUIRE(v2.get_allocator() == v1.get_allocator());
+        REQUIRE(v2.get_allocator() == v1.get_allocator());
     }
-    // constexpr vector& operator=(const vector& other);
-    //     using propagate_on_container_copy_assignment = false_type;
-    //     using propagate_on_container_copy_assignment = true_type;
 }
 
 TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
