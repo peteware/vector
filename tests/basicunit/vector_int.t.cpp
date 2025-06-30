@@ -83,7 +83,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v;
 
         REQUIRE(v.empty());
-        REQUIRE(!(v.get_allocator() == alloc));
+        REQUIRE(v.get_allocator().m_instance == alloc.m_instance);
     }
     SECTION("Copy constructor")
     {
@@ -91,7 +91,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v1 { 1, 2, 3, 10 };
         Vector v2(v1);
 
-        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1.get_allocator() == v2.get_allocator());
         REQUIRE(v1[0] == v2[0]);
         REQUIRE(v1[3] == v2[3]);
     }
@@ -101,7 +101,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v1 { 1, 2, 3, 10 };
         Vector v2(move(v1));
 
-        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1.get_allocator() == v2.get_allocator());
         REQUIRE(v1.size() == v2.size());
         REQUIRE(v2[0] == 1);
         REQUIRE(v2[3] == 10);
@@ -249,7 +249,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 
     GIVEN("An empty vector with allocator")
     {
-        Allocator allocator;
+        Allocator allocator(5);
         Vector    v(allocator);
         WHEN("Check allocator")
         {
@@ -261,8 +261,8 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
     }
     GIVEN("Two empty vectors with allocator")
     {
-        Vector v1;
-        Vector v2;
+        Vector v1(Allocator(5));
+        Vector v2(Allocator(10));
         WHEN("Default allocator")
         {
             THEN("allocators are different")
@@ -274,7 +274,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
     GIVEN("Vector with count, value, and allocator")
     {
         typename Vector::size_type const total = 10;
-        Allocator                        allocator;
+        Allocator                        allocator(5);
         value_type constexpr value = 3;
         Vector v(total, value, allocator);
 
