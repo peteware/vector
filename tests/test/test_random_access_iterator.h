@@ -1,29 +1,24 @@
-#ifndef INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
-#define INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H
+#ifndef INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H
+#define INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H
 
-#include <test_opcounter.h>
 #include <pw/impl/iterator_tag.h>
+#include <test_opcounter.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 template<class Iterator>
 struct random_access_iterator
 {
     using iterator_category = pw::random_access_iterator_tag;
-    using value_type        = typename pw::iterator_traits<Iterator>::value_type;
-    using difference_type   = typename pw::iterator_traits<Iterator>::difference_type;
-    using pointer           = typename pw::iterator_traits<Iterator>::pointer;
-    using reference         = typename pw::iterator_traits<Iterator>::reference;
+    using value_type = typename pw::iterator_traits<Iterator>::value_type;
+    using difference_type =
+        typename pw::iterator_traits<Iterator>::difference_type;
+    using pointer   = typename pw::iterator_traits<Iterator>::pointer;
+    using reference = typename pw::iterator_traits<Iterator>::reference;
 
-    static OpCounter getCounter()
-    {
-        return s_opCounter;
-    }
+    static OpCounter getCounter() { return s_opCounter; }
 
-    random_access_iterator()
-    {
-        s_opCounter.addDefaultConstructor();
-    }
+    random_access_iterator() { s_opCounter.addDefaultConstructor(); }
 
     explicit random_access_iterator(Iterator iterator)
         : m_iterator(iterator)
@@ -43,16 +38,13 @@ struct random_access_iterator
         s_opCounter.addMoveConstructor();
     }
 
-    ~random_access_iterator()
-    {
-        s_opCounter.addDestructor();
-    }
+    ~random_access_iterator() { s_opCounter.addDestructor(); }
 
 private:
     Iterator         m_iterator = {};
     static OpCounter s_opCounter;
 };
 
-}} // namespace pw::test
+} // namespace pw::test
 
-#endif /* INCLUDED_TESTS_RANDOM_ACCESS_ITERATOR_H */
+#endif /* INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H */

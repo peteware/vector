@@ -1,8 +1,9 @@
 #include <test_moveconstructible.h>
-
 #include <test_permute.h>
 
-namespace pw { namespace test {
+#include <iostream>
+
+namespace pw::test {
 OpCounter MoveConstructible::s_opCounter;
 
 OpCounter
@@ -68,5 +69,4 @@ permute(MoveConstructible& value, int depth)
     }
     return false;
 }
-
-}} // namespace pw::test
+} // namespace pw::test

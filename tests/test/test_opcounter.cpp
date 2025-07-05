@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 OpCounter::OpCounter()
 {
@@ -378,4 +378,4 @@ operator<<(std::ostream& out, OpCounter const& opCounter)
 {
     return opCounter.print(out);
 }
-}} // namespace pw::test
+} // namespace pw::test

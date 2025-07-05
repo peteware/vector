@@ -1,9 +1,9 @@
 #ifndef INCLUDED_TEST_OPCOUNTER_H
 #define INCLUDED_TEST_OPCOUNTER_H
 
-#include <iostream>
+#include <iosfwd>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 /**
  * Collect calls to constructors
@@ -85,6 +85,6 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /*  INCLUDED_TEST_OPCOUNTER_H */

@@ -6,7 +6,7 @@
 
 #include <iosfwd>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 struct OpTracker
 {
@@ -34,8 +34,8 @@ private:
     value_type m_value = 0;
 };
 
-bool permute(OpTracker& value, int depth);
+bool          permute(OpTracker& value, int depth);
 std::ostream& operator<<(std::ostream& out, OpTracker const& op2);
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /*  INCLUDED_TEST_OPTRACKER_H */

@@ -1,9 +1,9 @@
-#ifndef _INCLUDED_TEST_VALUES_H
-#define _INCLUDED_TEST_VALUES_H
+#ifndef INCLUDED_TEST_VALUES_H
+#define INCLUDED_TEST_VALUES_H
 
 #include <iostream>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 /**
  * This provides a simple way to populate a container
@@ -53,5 +53,5 @@ operator<<(std::ostream& out, Values<Container> const& values)
     return out;
 }
 
-}} // namespace pw::test
-#endif /* _INCLUDED_TEST_VALUES_H */
+} // namespace pw::test
+#endif /* INCLUDED_TEST_VALUES_H */

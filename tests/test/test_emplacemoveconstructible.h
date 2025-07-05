@@ -1,9 +1,10 @@
 #ifndef INCLUDED_TEST_EMPLACEMOVECONSTRUCTIBLE_H
 #define INCLUDED_TEST_EMPLACEMOVECONSTRUCTIBLE_H
 
+#include <pw/impl/move.h>
 #include <test_optracker.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 struct EmplaceMoveConstructible : public OpTracker
 {
@@ -28,21 +29,16 @@ struct EmplaceMoveConstructible : public OpTracker
     {
     }
 
-    ~EmplaceMoveConstructible()
-    {
-    }
+    ~EmplaceMoveConstructible() { }
 
     EmplaceMoveConstructible& operator=(EmplaceMoveConstructible const& op2)
     {
         OpTracker::operator=(op2);
-        m_value2           = op2.m_value2;
+        m_value2 = op2.m_value2;
         return *this;
     }
 
-    int value2() const
-    {
-        return m_value2;
-    }
+    int value2() const { return m_value2; }
 
     EmplaceMoveConstructible& setValue2(int value)
     {
@@ -55,5 +51,5 @@ private:
     static OpCounter s_opCounter;
 };
 
-}} // namespace pw::test
+} // namespace pw::test
 #endif /*  INCLUDED_TEST_EMPLACEMOVECONSTRUCTIBLE_H */
