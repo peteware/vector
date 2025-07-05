@@ -19,7 +19,10 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
         WHEN("erase(begin,end)")
         {
             iter = v.erase(v.begin(), v.end());
-            THEN("nothing is changed") { REQUIRE(v.empty()); }
+            THEN("nothing is changed")
+            {
+                REQUIRE(v.empty());
+            }
             THEN("begin() is same as returned iterator")
             {
                 REQUIRE(v.begin() == iter);

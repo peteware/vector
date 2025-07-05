@@ -10,13 +10,15 @@ template<class Iterator, class Distance>
 constexpr void
 advance(Iterator& iterator, Distance n)
 {
-    using iterator_category = typename iterator_traits<Iterator>::iterator_category;
+    using iterator_category =
+        typename iterator_traits<Iterator>::iterator_category;
 
     if constexpr (is_same<iterator_category, random_access_iterator_tag>::value)
     {
         iterator += n;
     }
-    else if constexpr (is_same<iterator_category, bidirectional_iterator_tag>::value)
+    else if constexpr (is_same<iterator_category,
+                               bidirectional_iterator_tag>::value)
     {
         while (n > 0)
         {

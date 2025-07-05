@@ -6,7 +6,9 @@
  * Type requirements:
  * - No extra
  */
-TEMPLATE_LIST_TEST_CASE("iterator methods on empty vector", "[vector][iter][empty]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("iterator methods on empty vector",
+                        "[vector][iter][empty]",
+                        pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;

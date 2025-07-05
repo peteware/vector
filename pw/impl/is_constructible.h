@@ -10,7 +10,8 @@ template<class Type, class... Args>
 using is_constructible = internal::constructible<void_t<>, Type, Args...>;
 
 template<class Type, class... Args>
-inline constexpr bool is_constructible_v = is_constructible<Type, Args...>::value;
+inline constexpr bool is_constructible_v =
+    is_constructible<Type, Args...>::value;
 } // namespace pw
 
 #endif /* INCLUDED_PW_IMPL_IS_CONSTRUCTIBLE_H */

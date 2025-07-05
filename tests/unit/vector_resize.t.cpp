@@ -10,7 +10,9 @@
  * - resize(size_type count): MoveInsertable and DefaultInsertable
  * - resize(size_type count, const value_type& value): CopyInsertable
  */
-TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test resize()",
+                        "[vector][resize]",
+                        pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -135,8 +137,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
     using value_type = typename Vector::value_type;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
-    size_t                    count = 5;
+    pw::test::OpCounter const init =
+        pw::test::DefaultCopyConstructible::getCounter();
+    size_t count = 5;
 
     GIVEN("An empty vector")
     {
@@ -146,12 +149,14 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter();
             v.resize(count);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() -
+                counter;
             THEN("default constructed count times")
             {
                 INFO("counter: " << counter);
                 REQUIRE(count == counter.getDefaultConstructor());
-                REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
+                REQUIRE(counter.getDefaultConstructor() ==
+                        counter.constructorCount());
                 REQUIRE(counter.allCount() == count);
             }
         }

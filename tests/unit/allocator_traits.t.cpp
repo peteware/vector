@@ -28,8 +28,11 @@ SCENARIO("Allocator traits", "[allocator_traits]")
 
         WHEN("construct")
         {
-            pw::allocator_traits<pw::allocator<pw::test::EmplaceMoveConstructible>>::construct(
-                alloc, &x, 6, 8);
+            pw::allocator_traits<pw::allocator<
+                pw::test::EmplaceMoveConstructible>>::construct(alloc,
+                                                                &x,
+                                                                6,
+                                                                8);
             THEN("value is set")
             {
                 REQUIRE(6 == x.value());

@@ -8,7 +8,8 @@ namespace pw {
 
 template<class Iterator>
 constexpr Iterator
-prev(Iterator iterator, typename pw::iterator_traits<Iterator>::difference_type n = 1)
+prev(Iterator                                                iterator,
+     typename pw::iterator_traits<Iterator>::difference_type n = 1)
 {
     pw::advance(iterator, -n);
     return iterator;

@@ -11,7 +11,9 @@
  * - push_back(const T& value): CopyInsertable
  * - push_back(T&& value): MoveInsertable
  */
-TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("push_back()",
+                        "[vector][push_back]",
+                        pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -24,7 +26,10 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
         WHEN("push_back() is called")
         {
             v.push_back(value);
-            THEN("capacity() is increased") { REQUIRE(v.capacity() == 1); }
+            THEN("capacity() is increased")
+            {
+                REQUIRE(v.capacity() == 1);
+            }
             THEN("value is there")
             {
                 REQUIRE(value == v.front());
@@ -42,8 +47,14 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
                 v.push_back(value);
                 pw::test::permute(value, i);
             }
-            THEN("size() is correct") { REQUIRE(v.size() == total); }
-            THEN("capacity() is increased") { REQUIRE(v.capacity() >= total); }
+            THEN("size() is correct")
+            {
+                REQUIRE(v.size() == total);
+            }
+            THEN("capacity() is increased")
+            {
+                REQUIRE(v.capacity() >= total);
+            }
             THEN("value is there")
             {
                 REQUIRE(orig == v.front());
@@ -81,10 +92,11 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
-    using Vector                   = pw::vector<pw::test::DefaultCopyConstructible>;
-    using value_type               = typename Vector::value_type;
-    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
-    pw::test::OpCounter       counter;
+    using Vector     = pw::vector<pw::test::DefaultCopyConstructible>;
+    using value_type = typename Vector::value_type;
+    pw::test::OpCounter const init =
+        pw::test::DefaultCopyConstructible::getCounter();
+    pw::test::OpCounter counter;
 
     GIVEN("An empty vector")
     {
@@ -97,7 +109,8 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             v.push_back(copyObject);
             THEN("Copy construct called once")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+                counter = pw::test::DefaultCopyConstructible::getCounter() -
+                    counter;
                 REQUIRE(1 == counter.constructorCount());
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
@@ -108,7 +121,8 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             v.push_back(pw::move(copyObject));
             THEN("Copy construct called once")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+                counter = pw::test::DefaultCopyConstructible::getCounter() -
+                    counter;
                 REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(counter.getMoveConstructor() == counter.allCount());
             }
@@ -124,7 +138,8 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         WHEN("push_back() is called")
         {
             generate.values.push_back(copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() -
+                counter;
             THEN("Move constructed existing items")
             {
                 INFO("counter: " << counter);

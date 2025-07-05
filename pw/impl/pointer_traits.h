@@ -22,10 +22,7 @@ struct pointer_traits
     template<typename U>
     using rebind = typename internal::rebind_ptr<Ptr, U>::type;
 
-    static pointer pointer_to(element_type& r)
-    {
-        return Ptr::pointer_to(r);
-    }
+    static pointer pointer_to(element_type& r) { return Ptr::pointer_to(r); }
 };
 
 /**

@@ -69,15 +69,17 @@ private:
 
 public:
     Storage(allocator_type const& alloc = allocator_type());
-    explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
+    explicit Storage(size_type             count,
+                     allocator_type const& alloc = allocator_type());
     ~Storage();
-    Storage& operator=(Storage& op2) = delete;
+    Storage&       operator=(Storage& op2) = delete;
 
-    iterator              begin();
-    iterator              end();
-    const_iterator        begin() const;
-    const_iterator        end() const;
-    Storage&              uninitialized_fill(iterator first, iterator last, value_type const& val);
+    iterator       begin();
+    iterator       end();
+    const_iterator begin() const;
+    const_iterator end() const;
+    Storage&
+    uninitialized_fill(iterator first, iterator last, value_type const& val);
     Storage&              set_size(size_type count);
     size_type             size() const;
     size_type             capacity() const;
@@ -241,7 +243,8 @@ Storage<Type, Allocator>::moveto(iterator begin, iterator end, iterator dest)
         --end;
         if (dest >= m_end)
         {
-            allocator_traits<Allocator>::construct(m_alloc, dest, pw::move(*end));
+            allocator_traits<Allocator>::construct(
+                m_alloc, dest, pw::move(*end));
         }
         else
         {

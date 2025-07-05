@@ -575,8 +575,8 @@ operator==(const pw::vector<Type, Allocator>& op1,
 template<class Type, class Allocator>
 constexpr auto
 operator<=>(const pw::vector<Type, Allocator>& op1,
-            const pw::vector<Type, Allocator>& op2) -> decltype(op1[0] <=>
-                                                                op2[0])
+            const pw::vector<Type, Allocator>& op2)
+    -> decltype(op1[0] <=> op2[0])
 {
     throw internal::Unimplemented(__func__);
     // return op1[0] <=> op2[0];

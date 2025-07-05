@@ -3,7 +3,9 @@
 
 #include <catch2/catch.hpp>
 
-TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("emplace_back()",
+                        "[vector][func][emplace_back]",
+                        pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;

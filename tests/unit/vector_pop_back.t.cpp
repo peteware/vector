@@ -7,7 +7,9 @@
  * Type requirements
  * - pop_back(): No extra
  */
-TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("pop_back()",
+                        "[vector][pop_back]",
+                        pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -22,8 +24,14 @@ TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeLi
         WHEN("pop_back() is called")
         {
             v.pop_back();
-            THEN("size is 1 smaller") { REQUIRE(generate.count == v.size() + 1); }
-            THEN("capacity is unchanged") { REQUIRE(capacity == v.capacity()); }
+            THEN("size is 1 smaller")
+            {
+                REQUIRE(generate.count == v.size() + 1);
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
         }
     }
     GIVEN("A vector with 1 element")
@@ -36,9 +44,18 @@ TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeLi
         WHEN("pop_back() is called")
         {
             v.pop_back();
-            THEN("size is 1 smaller") { REQUIRE(generate.count == v.size() + 1); }
-            THEN("it is empty") { REQUIRE(v.empty()); }
-            THEN("capacity is unchanged") { REQUIRE(capacity == v.capacity()); }
+            THEN("size is 1 smaller")
+            {
+                REQUIRE(generate.count == v.size() + 1);
+            }
+            THEN("it is empty")
+            {
+                REQUIRE(v.empty());
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(capacity == v.capacity());
+            }
         }
     }
 }

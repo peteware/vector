@@ -13,7 +13,7 @@ template<class InputIterator, class OutputIterator>
 void
 uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
 {
-    using Value            = typename pw::iterator_traits<OutputIterator>::value_type;
+    using Value = typename pw::iterator_traits<OutputIterator>::value_type;
     OutputIterator current = out;
 
     try

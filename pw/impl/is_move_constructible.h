@@ -6,12 +6,14 @@
 namespace pw {
 
 template<class Type, class... Args>
-struct is_nothrow_constructible : public integral_constant<bool, __is_nothrow_constructible(Type, Args...)>
+struct is_nothrow_constructible
+    : public integral_constant<bool, __is_nothrow_constructible(Type, Args...)>
 {
 };
 
 template<class Type, class... Args>
-inline constexpr bool is_nothrow_constructible_v = is_nothrow_constructible<Type, Args...>::value;
+inline constexpr bool is_nothrow_constructible_v =
+    is_nothrow_constructible<Type, Args...>::value;
 
 } // namespace pw
 

@@ -5,7 +5,10 @@
 
 namespace pw { namespace internal {
 
-template<template<typename> class Extract, typename Obj, typename Default, typename>
+template<template<typename> class Extract,
+         typename Obj,
+         typename Default,
+         typename>
 struct extract_or
 {
     using type = Default;

@@ -10,14 +10,8 @@ struct integral_constant
     using type                        = integral_constant;
     static constexpr value_type value = v;
 
-    constexpr operator value_type() const noexcept
-    {
-        return value;
-    }
-    constexpr value_type operator()() const noexcept
-    {
-        return value;
-    }
+    constexpr            operator value_type() const noexcept { return value; }
+    constexpr value_type operator()() const noexcept { return value; }
 };
 
 } // namespace pw

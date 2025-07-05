@@ -28,9 +28,7 @@ struct DefaultCopyConstructible : public OpTracker
     {
     }
 
-    ~DefaultCopyConstructible()
-    {
-    }
+    ~DefaultCopyConstructible() { }
 
     DefaultCopyConstructible& operator=(DefaultCopyConstructible const& copy)
     {

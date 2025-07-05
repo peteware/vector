@@ -23,25 +23,38 @@ constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type                         = Alloc;
-    using value_type                             = typename Alloc::value_type;
-    using pointer                                = typename pointer_traits<value_type*>::pointer;
-    using const_pointer                          = typename pointer_traits<pointer>::template rebind<const value_type>;
-    using void_pointer                           = typename pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer                     = typename pointer_traits<pointer>::template rebind<const void>;
-    using difference_type                        = typename pointer_traits<pointer>::difference_type;
-    using size_type                              = typename make_unsigned<difference_type>::type;
-    using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
-    using propagate_on_container_move_assignment = decltype(internal::detect_prop_on_move<Alloc>(0));
-    using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
-    using is_always_equal                        = typename is_empty<Alloc>::type;
+    using allocator_type = Alloc;
+    using value_type     = typename Alloc::value_type;
+    using pointer        = typename pointer_traits<value_type*>::pointer;
+    using const_pointer =
+        typename pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer =
+        typename pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer =
+        typename pointer_traits<pointer>::template rebind<const void>;
+    using difference_type = typename pointer_traits<pointer>::difference_type;
+    using size_type       = typename make_unsigned<difference_type>::type;
+    using propagate_on_container_copy_assignment =
+        decltype(internal::detect_prop_on_copy<Alloc>(0));
+    using propagate_on_container_move_assignment =
+        decltype(internal::detect_prop_on_move<Alloc>(0));
+    using propagate_on_container_swap =
+        decltype(internal::detect_prop_on_swap<Alloc>(0));
+    using is_always_equal = typename is_empty<Alloc>::type;
 
-    static pointer allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }
+    static pointer allocate(allocator_type& alloc, size_type n)
+    {
+        return alloc.allocate(n);
+    }
 
-    static void deallocate(allocator_type& alloc, pointer p, size_type count) { alloc.deallocate(p, count); }
+    static void deallocate(allocator_type& alloc, pointer p, size_type count)
+    {
+        alloc.deallocate(p, count);
+    }
 
     template<class Type, class... Args>
-    static constexpr void construct(allocator_type& alloc, Type* p, Args&&... args)
+    static constexpr void
+    construct(allocator_type& alloc, Type* p, Args&&... args)
     {
         construct_at(p, pw::forward<Args>(args)...);
     }
@@ -51,7 +64,8 @@ struct allocator_traits
     {
         destroy_impl(a, p);
     }
-    static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
+    static constexpr Alloc
+    select_on_container_copy_construction(const Alloc& alloc)
     {
         return select_on_container_copy_construction_impl(alloc);
     }
@@ -64,7 +78,10 @@ private:
         return alloc.select_on_container_copy_construction();
     }
 
-    static Alloc select_on_container_copy_construction_impl(const Alloc& alloc) { return alloc; }
+    static Alloc select_on_container_copy_construction_impl(const Alloc& alloc)
+    {
+        return alloc;
+    }
 
     template<typename A, typename T>
     static auto destroy_impl(A& a, // NOLINT(runtime/references)

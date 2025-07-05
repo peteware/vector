@@ -46,7 +46,10 @@ struct element_type<Type, void_t<typename Type::element_type>>
 template<typename Type, typename U>
 struct rebind_first_arg;
 
-template<template<typename...> class Class, typename Type, typename... Args, typename U>
+template<template<typename...> class Class,
+         typename Type,
+         typename... Args,
+         typename U>
 struct rebind_first_arg<Class<Type, Args...>, U>
 {
     using type = Class<U, Args...>;

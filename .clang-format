@@ -3,9 +3,15 @@ Language: Cpp
 #Standard:     Latest
 BasedOnStyle: WebKit
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AlignFunctionDeclarations: true
+  AcrossEmptyLines: true
 AllowShortFunctionsOnASingleLine: InlineOnly
+AlignTrailingComments: true
 AlwaysBreakAfterReturnType: TopLevelDefinitions
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false

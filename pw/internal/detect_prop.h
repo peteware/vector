@@ -3,12 +3,14 @@
 
 namespace pw { namespace internal {
 template<class Alloc>
-auto detect_prop_on_copy(int) -> typename Alloc::propagate_on_container_copy_assignment;
+auto detect_prop_on_copy(int) ->
+    typename Alloc::propagate_on_container_copy_assignment;
 template<class Alloc>
 auto detect_prop_on_copy(long) -> false_type;
 
 template<class Alloc>
-auto detect_prop_on_move(int) -> typename Alloc::propagate_on_container_move_assignment;
+auto detect_prop_on_move(int) ->
+    typename Alloc::propagate_on_container_move_assignment;
 template<class Alloc>
 auto detect_prop_on_move(long) -> false_type;
 

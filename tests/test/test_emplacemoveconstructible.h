@@ -38,7 +38,7 @@ struct EmplaceMoveConstructible : public OpTracker
         return *this;
     }
 
-    int value2() const { return m_value2; }
+    int                       value2() const { return m_value2; }
 
     EmplaceMoveConstructible& setValue2(int value)
     {

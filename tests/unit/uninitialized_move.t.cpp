@@ -18,13 +18,14 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             pw::test::CopyConstructible(3),
         };
         pw::test::CopyConstructible dest[count] = { 10, 11, 12 };
-        pw::test::OpCounter         init        = pw::test::CopyConstructible::getCounter();
+        pw::test::OpCounter init = pw::test::CopyConstructible::getCounter();
         WHEN("move")
         {
             pw::uninitialized_move(&array[0], &array[count], &dest[0]);
             THEN("move constructor called; destructor not")
             {
-                pw::test::OpCounter count = pw::test::CopyConstructible::getCounter() - init;
+                pw::test::OpCounter count =
+                    pw::test::CopyConstructible::getCounter() - init;
                 REQUIRE(3 == count.getMoveConstructor());
                 REQUIRE(0 == count.getCopyConstructor());
                 REQUIRE(count.constructorCount() == count.getMoveConstructor());
@@ -46,9 +47,15 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
         WHEN("move the int from src to dst")
         {
             pw::uninitialized_move(&src[0], &src[3], &dst[0]);
-            THEN("src is unchanged") { REQUIRE(src[0] == 1); }
+            THEN("src is unchanged")
+            {
+                REQUIRE(src[0] == 1);
+            }
 
-            THEN("src and dst same") { REQUIRE(pw::equal(&dst[0], &dst[3], &src[0], &src[3])); }
+            THEN("src and dst same")
+            {
+                REQUIRE(pw::equal(&dst[0], &dst[3], &src[0], &src[3]));
+            }
         }
     }
 }

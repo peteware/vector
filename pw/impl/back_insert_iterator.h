@@ -19,8 +19,10 @@ public:
 
     explicit back_insert_iterator(container_type& container);
 
-    back_insert_iterator<Container>& operator=(const typename Container::value_type& value);
-    back_insert_iterator<Container>& operator=(typename Container::value_type&& value);
+    back_insert_iterator<Container>&
+    operator=(const typename Container::value_type& value);
+    back_insert_iterator<Container>&
+    operator=(typename Container::value_type&& value);
     back_insert_iterator<Container>& operator*();
     back_insert_iterator<Container>& operator++();
     back_insert_iterator<Container>& operator++(int);
@@ -37,7 +39,8 @@ back_insert_iterator<Container>::back_insert_iterator(container_type& container)
 
 template<class Container>
 back_insert_iterator<Container>&
-back_insert_iterator<Container>::operator=(const typename Container::value_type& value)
+back_insert_iterator<Container>::operator=(
+    const typename Container::value_type& value)
 {
     m_container->push_back(value);
     return *this;
@@ -45,14 +48,16 @@ back_insert_iterator<Container>::operator=(const typename Container::value_type&
 
 template<class Container>
 back_insert_iterator<Container>&
-back_insert_iterator<Container>::operator=(typename Container::value_type&& value)
+back_insert_iterator<Container>::operator=(
+    typename Container::value_type&& value)
 {
     m_container->push_back(pw::move(value));
     return *this;
 }
 
 template<class Container>
-back_insert_iterator<Container>& back_insert_iterator<Container>::operator*()
+back_insert_iterator<Container>&
+back_insert_iterator<Container>::operator*()
 {
     return *this;
 }
