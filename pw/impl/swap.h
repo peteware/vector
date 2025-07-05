@@ -5,6 +5,17 @@
 
 namespace pw {
 
+/**
+ * Exchanges the values of two objects using move semantics.
+ *
+ * Swaps the values of op1 and op2 by moving their contents. This function
+ * uses pw::move() to efficiently exchange the values, minimizing copies.
+ *
+ * @tparam Type The type of the objects to swap. Must be MoveConstructible and MoveAssignable.
+ * @param op1 First object to swap.
+ * @param op2 Second object to swap.
+ *
+ */
 template<class Type>
 void
 swap(Type& op1, Type& op2)
