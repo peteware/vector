@@ -42,9 +42,10 @@ constexpr vector<Type, Allocator>::vector(size_type             count,
                                           allocator_type const& alloc)
     : m_storage(alloc)
 {
-    m_storage.reserve(count);
-    uninitialized_fill(m_storage.begin(), m_storage.begin() + count, value);
-    m_storage.set_size(count);
+    auto lambda = [count = count, value = value](pointer dest) -> void {
+        uninitialized_fill(dest, dest + count, value);
+    };
+    m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>
@@ -52,19 +53,21 @@ constexpr vector<Type, Allocator>::vector(size_type             count,
                                           allocator_type const& alloc)
     : m_storage(alloc)
 {
-    m_storage.reserve(count);
-    uninitialized_default_construct(m_storage.begin(),
-                                    m_storage.begin() + count);
-    m_storage.set_size(count);
+    auto lambda = [count = count](pointer dest) -> void {
+        uninitialized_default_construct(dest, dest + count);
+    };
+    m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy)
     : m_storage(allocator_type())
 {
-    m_storage.reserve(copy.size());
-    uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    auto lambda = [begin = copy.begin(),
+                   end   = copy.end()](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(copy.size(), lambda);
 }
 
 template<class Type, class Allocator>
@@ -72,18 +75,22 @@ constexpr vector<Type, Allocator>::vector(vector const&         copy,
                                           allocator_type const& alloc)
     : m_storage(alloc)
 {
-    m_storage.reserve(copy.size());
-    uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    auto lambda = [begin = copy.begin(),
+                   end   = copy.end()](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(copy.size(), lambda);
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& other) noexcept
     : m_storage(allocator_type())
 {
-    m_storage.reserve(other.size());
-    uninitialized_move(other.begin(), other.end(), m_storage.begin());
-    m_storage.set_size(other.size());
+    auto lambda = [begin = other.begin(),
+                   end   = other.end()](pointer dest) -> void {
+        uninitialized_move(begin, end, dest);
+    };
+    m_storage.reserve(other.size(), lambda);
 }
 
 template<class Type, class Allocator>
