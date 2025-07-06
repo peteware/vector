@@ -142,8 +142,7 @@ vector<Type, Allocator>::swap(vector& other) noexcept(
     pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
-    (void)other;
-    throw internal::Unimplemented(__func__);
+    m_storage.swap(other.m_storage);
 }
 
 template<class Type, class Allocator>
@@ -569,9 +568,7 @@ constexpr void
 swap(vector<Type, Allocator>& op1,
      vector<Type, Allocator>& op2) noexcept(noexcept(op1.swap(op2)))
 {
-    (void)op1;
-    (void)op2;
-    throw internal::Unimplemented(__func__);
+    op1.swap(op2);
 }
 
 template<class Type, class Allocator>

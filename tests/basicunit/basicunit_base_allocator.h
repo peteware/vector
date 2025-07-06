@@ -62,6 +62,7 @@ operator<<(std::ostream& out, allocator_base<Type> const& alloc)
         << alloc.m_instance;
     return out;
 }
+
 } // namespace basicunit
 
 #endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_BASE_H */
