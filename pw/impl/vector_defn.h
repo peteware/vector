@@ -8,7 +8,6 @@
 #include <pw/impl/copy.h>
 #include <pw/impl/distance.h>
 #include <pw/impl/min.h>
-#include <pw/impl/size.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
@@ -98,9 +97,11 @@ constexpr vector<Type, Allocator>::vector(vector&&         other,
                                           const Allocator& alloc)
     : m_storage(alloc)
 {
-    m_storage.reserve(other.size());
-    uninitialized_move(other.begin(), other.end(), m_storage.begin());
-    m_storage.set_size(other.size());
+    auto lambda = [begin = other.begin(),
+                   end   = other.end()](pointer dest) -> void {
+        uninitialized_move(begin, end, dest);
+    };
+    m_storage.reserve(other.size(), lambda);
 }
 
 template<class Type, class Allocator>
@@ -108,9 +109,11 @@ constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init,
                                           allocator_type const& alloc)
     : m_storage(alloc)
 {
-    m_storage.reserve(init.size());
-    uninitialized_copy(init.begin(), init.end(), m_storage.begin());
-    m_storage.set_size(init.size());
+    auto lambda = [begin = init.begin(),
+                   end   = init.end()](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(init.size(), lambda);
 }
 
 template<class Type, class Allocator>
@@ -120,11 +123,12 @@ constexpr vector<Type, Allocator>::vector(Iterator              first,
                                           allocator_type const& alloc)
     : m_storage(alloc)
 {
-    size_type count = distance(first, last);
+    size_type count  = distance(first, last);
 
-    m_storage.reserve(count);
-    uninitialized_copy(first, last, m_storage.begin());
-    m_storage.set_size(count);
+    auto      lambda = [begin = first, end = last](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>
