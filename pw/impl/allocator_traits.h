@@ -1,16 +1,13 @@
 #ifndef INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
-#include <pw/impl/bool_type.h>
-#include <pw/impl/conditional.h>
 #include <pw/impl/construct_at.h>
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
+#include <pw/impl/numeric_limits.h>
 #include <pw/impl/pointer_traits.h>
 #include <pw/internal/detect_prop.h>
-
-//#include <utility>
 
 namespace pw {
 
@@ -70,7 +67,23 @@ struct allocator_traits
         return select_on_container_copy_construction_impl(alloc);
     }
 
+    static constexpr size_type max_size(const Alloc& alloc)
+    {
+        return max_size_impl(alloc);
+    }
+
 private:
+    template<class Type>
+    static auto max_size_impl(const Type& alloc) -> decltype(alloc.max_size())
+    {
+        return alloc.max_size();
+    }
+
+    static constexpr size_t max_size_impl(const Alloc& alloc)
+    {
+        return std::numeric_limits<size_type>::max() / sizeof(value_type);
+    }
+
     template<class Type>
     static auto select_on_container_copy_construction_impl(const Type& alloc)
         -> decltype(alloc.select_on_container_copy_construction())

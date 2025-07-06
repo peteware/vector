@@ -8,6 +8,7 @@
 #include <pw/impl/copy.h>
 #include <pw/impl/distance.h>
 #include <pw/impl/min.h>
+#include <pw/impl/size.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
@@ -141,7 +142,9 @@ vector<Type, Allocator>::operator=(const vector& other)
     if constexpr (allocator_traits<allocator_type>::
                       propagate_on_container_copy_assignment::value)
     {
-        // TODO: Check if same allocator
+        // TODO: Check if same allocator.  If so, we should still
+        //       copy the allocator however we do not need to reallocate
+        //       the storage if there is enough space.
         Storage storage { other.get_allocator() };
 
         storage.reserve(other.size());

@@ -17,7 +17,7 @@ struct allocator
     using is_always_equal                        = true_type;
     using propagate_on_container_move_assignment = true_type;
 
-    [[nodiscard]] constexpr Type* allocate(size_type n);
+    [[nodiscard]] constexpr Type* allocate(size_type count);
     constexpr void                deallocate(Type* ptr, size_type count);
 };
 

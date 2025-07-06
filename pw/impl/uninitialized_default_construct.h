@@ -10,7 +10,7 @@ namespace pw {
 /**
  * @brief Default-constructs objects in uninitialized storage in the given range.
  *
- * This function constructs objects of type `Value` in the uninitialized memory
+ * This function constructs objects of the type `Value` in the uninitialized memory
  * pointed to by the range [begin, end). Construction is performed using the
  * default constructor. If an exception is thrown during construction, all
  * objects that were already constructed are destroyed using `pw::destroy`.

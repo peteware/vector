@@ -27,7 +27,9 @@ struct Storage2
     explicit Storage2(allocator_type const& alloc);
     ~Storage2();
 
-    constexpr void               reserve(size_type count);
+    template<typename Func, typename... Args>
+    constexpr void reserve(size_type count, Func&& f, Args&&... args);
+    constexpr void reserve(size_type count);
     [[nodiscard]] constexpr bool empty() const noexcept;
     constexpr pointer            begin() noexcept;
     constexpr const_pointer      begin() const noexcept;
@@ -67,6 +69,16 @@ Storage2<Type, Allocator>::~Storage2()
 }
 
 template<class Type, class Allocator>
+template<typename Func, typename... Args>
+constexpr void
+Storage2<Type, Allocator>::reserve(size_type count, Func&& f, Args&&... args)
+{
+    reserve(count);
+    pw::forward<Func>(f)(pw::forward<Args>(args)...);
+    setSize(count);
+}
+
+template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count)
 {
@@ -74,7 +86,20 @@ Storage2<Type, Allocator>::reserve(size_type count)
     size_type old;
 
     pw::uninitialized_move(begin(), end(), tmp);
-    pw::destroy(begin(), end());
+    /*
+     * If a destructor throws (which is strongly discouraged) then
+     * this is left in a valid but unspecified state.  The memory
+     * is deallocated
+     */
+    try
+    {
+        pw::destroy(begin(), end());
+    }
+    catch (...)
+    {
+        allocator_traits<Allocator>::deallocate(m_alloc, tmp, count);
+        throw;
+    }
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
     using pw::swap;
     swap(tmp, m_begin);

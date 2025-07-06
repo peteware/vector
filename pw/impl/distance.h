@@ -7,6 +7,23 @@
 
 namespace pw {
 
+/**
+ * @brief Calculates the number of elements between two iterators
+ *
+ * For random access iterators, this function performs end - begin in constant time.
+ * For other iterator categories, it advances from begin to end and counts the steps,
+ * resulting in linear time complexity.
+ *
+ * @tparam Iterator The iterator type
+ *
+ * @param begin Iterator to the first element
+ * @param end Iterator to one past the last element
+ *
+ * @return The number of elements between begin and end
+ *
+ * @note For input iterators, this operation is destructive as it needs to increment
+ *       the iterator to count the elements.
+ */
 template<class Iterator>
 constexpr typename pw::iterator_traits<Iterator>::difference_type
 distance(Iterator begin, Iterator end)
