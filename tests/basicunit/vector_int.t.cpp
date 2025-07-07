@@ -240,28 +240,46 @@ TEST_CASE("Swap uses allocator", "[swap][allocator]")
     //             pw::allocator_traits<allocator_type>::is_always_equal::value);
     //     using propagate_on_container_swap            = false_type;
     //     using propagate_on_container_swap            = true_type;
-    using Allocator  = basicunit::allocator_swapable<int>;
-    using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
-
-    Allocator alloc1(5);
-    Vector    v1(alloc1);
-
-    REQUIRE(Allocator::propagate_on_container_swap::value);
-    REQUIRE(v1.get_allocator() == alloc1);
-    GIVEN("A vector with propogate_on_container_swap = true")
+    GIVEN("A vector with propagate_on_container_swap = true")
     {
+        using Allocator = basicunit::allocator_swapable<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
         Allocator alloc2 { 10 };
+        Vector    v1 { alloc1 };
         Vector    v2 { alloc2 };
 
+        REQUIRE(Allocator::propagate_on_container_swap::value);
+        REQUIRE(v1.get_allocator() == alloc1);
         WHEN("swap")
         {
-            INFO("starting swap");
             pw::swap(v1, v2);
             THEN("allocators are swapped")
             {
                 REQUIRE(v1.get_allocator() == alloc2);
                 REQUIRE(v2.get_allocator() == alloc1);
+            }
+        }
+    }
+    GIVEN("A vector with propagate_on_container_swap = false")
+    {
+        using Allocator = basicunit::allocator_base<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 1 };
+        Allocator alloc2 { 2 };
+        Vector    v1 { alloc1 };
+        Vector    v2 { alloc2 };
+
+        REQUIRE(!Allocator::propagate_on_container_swap::value);
+        WHEN("swap")
+        {
+            pw::swap(v1, v2);
+            THEN("allocators are not swapped")
+            {
+                REQUIRE(v1.get_allocator() == alloc1);
+                REQUIRE(v2.get_allocator() == alloc2);
             }
         }
     }
