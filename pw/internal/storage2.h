@@ -166,6 +166,7 @@ Storage2<Type, Allocator>::get_allocator() const
 {
     return m_alloc;
 }
+
 template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::swap(Storage2& other) noexcept(

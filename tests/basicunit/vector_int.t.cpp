@@ -115,7 +115,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
     using Vector     = pw::vector<int, Allocator>;
     using value_type = typename Vector::value_type;
 
-    Allocator alloc;
+    Allocator alloc(3);
     SECTION("Default constructor with allocator")
     {
         // constexpr explicit vector(allocator_type const& alloc) noexcept;
@@ -152,7 +152,8 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v2.get_allocator() == alloc2);
         REQUIRE(v2.size() == v1.size());
-        REQUIRE(v2[0] == v1[0]);
+        REQUIRE(v2[0] == v1[0]); // do without operator==()
+        REQUIRE(v2[3] == v1[3]);
     }
     SECTION("Move constructor with allocator")
     {
@@ -226,6 +227,20 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     // constexpr vector& operator=(vector&& other) noexcept(
     //     using propagate_on_container_move_assignment = false_type;
     //     using propagate_on_container_move_assignment = true_type;
+    GIVEN("A vector with propagate_on_move_assignment = true")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
+        Allocator alloc2 { 10 };
+        Vector    v1 { { 1, 2, 3 }, alloc1 };
+        Vector    v2 { { 4, 5, 6 }, alloc2 };
+        WHEN("Use move() assignmet")
+        {
+            v1 = pw::move(v2);
+        }
+    }
 }
 
 TEST_CASE("Swap uses allocator", "[swap][allocator]")
