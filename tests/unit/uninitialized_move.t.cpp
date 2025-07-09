@@ -46,9 +46,15 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
         WHEN("move the int from src to dst")
         {
             pw::uninitialized_move(&src[0], &src[3], &dst[0]);
-            THEN("src is unchanged") { REQUIRE(src[0] == 1); }
+            THEN("src is unchanged")
+            {
+                REQUIRE(src[0] == 1);
+            }
 
-            THEN("src and dst same") { REQUIRE(pw::equal(&dst[0], &dst[3], &src[0], &src[3])); }
+            THEN("src and dst same")
+            {
+                REQUIRE(pw::equal(&dst[0], &dst[3], &src[0], &src[3]));
+            }
         }
     }
 }

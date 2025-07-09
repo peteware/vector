@@ -25,7 +25,9 @@ constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(size_type count, value_type const& value, allocator_type const& alloc)
+constexpr vector<Type, Allocator>::vector(size_type             count,
+                                          value_type const&     value,
+                                          allocator_type const& alloc)
 {
     (void)count;
     (void)value;

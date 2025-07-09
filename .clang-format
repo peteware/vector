@@ -1,39 +1,45 @@
 # base-110width
-Language:        Cpp
-#Standard:     Latest
+Language: Cpp
+Standard: Latest
 BasedOnStyle: WebKit
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: true
-AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AlignFunctionDeclarations: true
+  AcrossEmptyLines: true
 AllowShortFunctionsOnASingleLine: InlineOnly
+AlignTrailingComments: true
 AlwaysBreakAfterReturnType: TopLevelDefinitions
 AlwaysBreakTemplateDeclarations: true
 BinPackArguments: false
 BinPackParameters: false
-BraceWrapping:   
-  AfterClass:      true
+BraceWrapping:
+  AfterClass: true
   AfterControlStatement: true
-  AfterEnum:       false
-  AfterFunction:   true
-  AfterNamespace:  false
-  AfterStruct:     true
-  AfterUnion:      true
-  BeforeCatch:     true
-  BeforeElse:      true
-  IndentBraces:    false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
-ColumnLimit:     120
+ColumnLimit: 110
 CompactNamespaces: true
 FixNamespaceComments: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None
 PenaltyReturnTypeOnItsOwnLine: 0
 PenaltyBreakAssignment: 50
-ReflowComments:  false
-SortIncludes:    true
+ReflowComments: false
+SortIncludes: true
 SpaceAfterTemplateKeyword: false
 ...

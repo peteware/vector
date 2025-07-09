@@ -24,7 +24,10 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
         WHEN("push_back() is called")
         {
             v.push_back(value);
-            THEN("capacity() is increased") { REQUIRE(v.capacity() == 1); }
+            THEN("capacity() is increased")
+            {
+                REQUIRE(v.capacity() == 1);
+            }
             THEN("value is there")
             {
                 REQUIRE(value == v.front());
@@ -42,8 +45,14 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
                 v.push_back(value);
                 pw::test::permute(value, i);
             }
-            THEN("size() is correct") { REQUIRE(v.size() == total); }
-            THEN("capacity() is increased") { REQUIRE(v.capacity() >= total); }
+            THEN("size() is correct")
+            {
+                REQUIRE(v.size() == total);
+            }
+            THEN("capacity() is increased")
+            {
+                REQUIRE(v.capacity() >= total);
+            }
             THEN("value is there")
             {
                 REQUIRE(orig == v.front());

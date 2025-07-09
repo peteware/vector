@@ -2,3 +2,5 @@
 /tests/a.out
 /build
 /.DS_Store
+/.cache/
+

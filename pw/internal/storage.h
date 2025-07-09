@@ -71,7 +71,7 @@ public:
     Storage(allocator_type const& alloc = allocator_type());
     explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
     ~Storage();
-    Storage& operator=(Storage& op2) = delete;
+    Storage&              operator=(Storage& op2) = delete;
 
     iterator              begin();
     iterator              end();

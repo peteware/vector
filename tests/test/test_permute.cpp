@@ -1,6 +1,6 @@
 #include <test_permute.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 bool
 permute(int& value, int depth)
@@ -53,4 +53,4 @@ permute(double& value, int depth)
     return true;
 }
 
-}} // namespace pw
+} // namespace pw::test

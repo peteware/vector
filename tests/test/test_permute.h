@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 bool permute(int& value, int depth);
 bool permute(std::string& value, int depth);
@@ -43,6 +43,6 @@ permute_n(Type& value, int depth, int count)
     return value;
 }
 
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /* INCLUDED_TEST_PERMUTE_H */

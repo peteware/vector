@@ -3,7 +3,7 @@
 
 #include <test_optracker.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 /*
  * Needed type requirements
@@ -34,6 +34,6 @@ private:
     static OpCounter s_opCounter;
 };
 
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /* INCLUDED_TEST_DEFAULTCONSTRUCTIBLE_H */

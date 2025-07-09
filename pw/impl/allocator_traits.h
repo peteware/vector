@@ -1,16 +1,13 @@
 #ifndef INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
-#include <pw/impl/bool_type.h>
-#include <pw/impl/conditional.h>
 #include <pw/impl/construct_at.h>
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
+#include <pw/impl/numeric_limits.h>
 #include <pw/impl/pointer_traits.h>
 #include <pw/internal/detect_prop.h>
-
-//#include <utility>
 
 namespace pw {
 
@@ -23,14 +20,14 @@ constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type                         = Alloc;
-    using value_type                             = typename Alloc::value_type;
-    using pointer                                = typename pointer_traits<value_type*>::pointer;
-    using const_pointer                          = typename pointer_traits<pointer>::template rebind<const value_type>;
-    using void_pointer                           = typename pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer                     = typename pointer_traits<pointer>::template rebind<const void>;
-    using difference_type                        = typename pointer_traits<pointer>::difference_type;
-    using size_type                              = typename make_unsigned<difference_type>::type;
+    using allocator_type     = Alloc;
+    using value_type         = typename Alloc::value_type;
+    using pointer            = typename pointer_traits<value_type*>::pointer;
+    using const_pointer      = typename pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer       = typename pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer = typename pointer_traits<pointer>::template rebind<const void>;
+    using difference_type    = typename pointer_traits<pointer>::difference_type;
+    using size_type          = typename make_unsigned<difference_type>::type;
     using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
     using propagate_on_container_move_assignment = decltype(internal::detect_prop_on_move<Alloc>(0));
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
@@ -56,7 +53,20 @@ struct allocator_traits
         return select_on_container_copy_construction_impl(alloc);
     }
 
+    static constexpr size_type max_size(const Alloc& alloc) { return max_size_impl(alloc); }
+
 private:
+    template<class Type>
+    static auto max_size_impl(const Type& alloc) -> decltype(alloc.max_size())
+    {
+        return alloc.max_size();
+    }
+
+    static constexpr size_t max_size_impl(const Alloc& alloc)
+    {
+        return std::numeric_limits<size_type>::max() / sizeof(value_type);
+    }
+
     template<class Type>
     static auto select_on_container_copy_construction_impl(const Type& alloc)
         -> decltype(alloc.select_on_container_copy_construction())

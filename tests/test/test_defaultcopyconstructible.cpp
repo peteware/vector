@@ -1,8 +1,9 @@
 #include <test_defaultcopyconstructible.h>
-
 #include <test_permute.h>
 
-namespace pw { namespace test {
+#include <iostream>
+
+namespace pw::test {
 
 OpCounter DefaultCopyConstructible::s_opCounter;
 
@@ -24,4 +25,4 @@ permute(DefaultCopyConstructible& value, int depth)
     return false;
 }
 
-}} // namespace pw::test
+} // namespace pw::test

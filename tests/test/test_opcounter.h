@@ -1,9 +1,9 @@
 #ifndef INCLUDED_TEST_OPCOUNTER_H
 #define INCLUDED_TEST_OPCOUNTER_H
 
-#include <iostream>
+#include <iosfwd>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 /**
  * Collect calls to constructors
@@ -13,53 +13,53 @@ class OpCounter
 public:
     OpCounter();
 
-    OpCounter& operator-=(OpCounter const& op2);
-    OpCounter  operator-(OpCounter const& op2) const;
-    bool       zero() const;
-    int        allCount() const;
-    int        constructorCount() const;
-    int        destructorCount() const;
-    int        assignmentCount() const;
-    int        additionCount() const;
-    int        subtractionCount() const;
-    int        arithmeticCount() const;
-    int        comparisonCount() const;
-    OpCounter& addDefaultConstructor();
-    int        getDefaultConstructor() const;
-    OpCounter& addCopyConstructor();
-    int        getCopyConstructor() const;
-    OpCounter& addMoveConstructor();
-    int        getMoveConstructor() const;
-    OpCounter& addDefaultConstructorAlloc();
-    int        getDefaultConstructorAlloc() const;
-    OpCounter& addCopyConstructorAlloc();
-    int        getCopyConstructorAlloc() const;
-    OpCounter& addOtherConstructor();
-    int        getOtherConstructor() const;
-    OpCounter& addDestructor();
-    int        getDestructor() const;
-    OpCounter& addAssignment();
-    int        getAssignment() const;
-    OpCounter& addMoveAssignment();
-    int        getMoveAssignment() const;
-    OpCounter& addPlusAssignment();
-    int        getPlusAssignment() const;
-    OpCounter& addMinusAssignment();
-    int        getMinusAssignment() const;
-    OpCounter& addEqual();
-    int        getEqual() const;
-    OpCounter& addNotEqual();
-    int        getNotEqual() const;
-    OpCounter& addLt();
-    int        getLt() const;
-    OpCounter& addIncrement();
-    int        getIncrement() const;
-    OpCounter& addDecrement();
-    int        getDecrement() const;
-    OpCounter& addPlus();
-    int        getPlus() const;
-    OpCounter& addMinus();
-    int        getMinus() const;
+    OpCounter&    operator-=(OpCounter const& op2);
+    OpCounter     operator-(OpCounter const& op2) const;
+    bool          zero() const;
+    int           allCount() const;
+    int           constructorCount() const;
+    int           destructorCount() const;
+    int           assignmentCount() const;
+    int           additionCount() const;
+    int           subtractionCount() const;
+    int           arithmeticCount() const;
+    int           comparisonCount() const;
+    OpCounter&    addDefaultConstructor();
+    int           getDefaultConstructor() const;
+    OpCounter&    addCopyConstructor();
+    int           getCopyConstructor() const;
+    OpCounter&    addMoveConstructor();
+    int           getMoveConstructor() const;
+    OpCounter&    addDefaultConstructorAlloc();
+    int           getDefaultConstructorAlloc() const;
+    OpCounter&    addCopyConstructorAlloc();
+    int           getCopyConstructorAlloc() const;
+    OpCounter&    addOtherConstructor();
+    int           getOtherConstructor() const;
+    OpCounter&    addDestructor();
+    int           getDestructor() const;
+    OpCounter&    addAssignment();
+    int           getAssignment() const;
+    OpCounter&    addMoveAssignment();
+    int           getMoveAssignment() const;
+    OpCounter&    addPlusAssignment();
+    int           getPlusAssignment() const;
+    OpCounter&    addMinusAssignment();
+    int           getMinusAssignment() const;
+    OpCounter&    addEqual();
+    int           getEqual() const;
+    OpCounter&    addNotEqual();
+    int           getNotEqual() const;
+    OpCounter&    addLt();
+    int           getLt() const;
+    OpCounter&    addIncrement();
+    int           getIncrement() const;
+    OpCounter&    addDecrement();
+    int           getDecrement() const;
+    OpCounter&    addPlus();
+    int           getPlus() const;
+    OpCounter&    addMinus();
+    int           getMinus() const;
 
     std::ostream& print(std::ostream& out) const;
 
@@ -85,6 +85,6 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /*  INCLUDED_TEST_OPCOUNTER_H */

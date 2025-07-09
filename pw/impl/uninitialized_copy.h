@@ -8,11 +8,30 @@
 
 namespace pw {
 
+/**
+ * @brief Copies a range of objects to uninitialized memory
+ *
+ * Constructs objects in the uninitialized storage starting at 'out' by copying elements
+ * from the range [begin, end). For each iterator i in [out, out + (end - begin)),
+ * constructs an object at that location using the value *j, where j is the corresponding
+ * input iterator.
+ *
+ * @tparam InputIterator Type of the input iterators
+ * @tparam OutputIterator Type of the output iterator
+ *
+ * @param begin Iterator to the first element in the source range
+ * @param end Iterator to one past the last element in the source range
+ * @param out Iterator to the start of the uninitialized destination range
+ *
+ * @throws Any exception thrown by the element type's copy constructor.
+ *         Strong exception guarantee: if an exception is thrown during the
+ *         initialization of any element, all previously constructed elements
+ *         are destroyed and the function has no effect.
+ */
 template<class InputIterator, class OutputIterator>
 void
 uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
 {
-    using Value            = typename pw::iterator_traits<OutputIterator>::value_type;
     OutputIterator current = out;
 
     try
@@ -20,7 +39,6 @@ uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
         while (begin != end)
         {
             pw::construct_at(pw::addressof(*current), *begin);
-            //::new (static_cast<void*>(pw::addressof(*current))) Value(*begin);
             ++current;
             ++begin;
         }

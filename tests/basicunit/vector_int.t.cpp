@@ -1,6 +1,9 @@
-#include "basicunit_allocator.h"
+#include "basicunit_allocator_copy_assignment.h"
+#include "basicunit_allocator_move_assignment.h"
+#include "basicunit_allocator_swapable.h"
 
 #include <pw/vector>
+#include <unistd.h>
 
 #include <pw/impl/move.h>
 
@@ -19,31 +22,35 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
     GIVEN("An empty vector")
     {
-        Vector v;
         WHEN("Nothing changes")
         {
+            Vector v;
             THEN("empty() is true")
             {
                 REQUIRE(v.empty());
             }
             THEN("size() is 0")
             {
-                REQUIRE(0 == v.size());
+                REQUIRE(!v.size());
             }
             THEN("begin() is null")
             {
-                REQUIRE(v.begin() == v.end());
+                REQUIRE(!v.begin());
+            }
+            THEN("end() is null")
+            {
+                REQUIRE(!v.end());
             }
         }
     }
     GIVEN("A vector of count values")
     {
-        typename Vector::size_type const total = 10;
-        value_type const                 value = 3;
-        Vector                           v(total, value);
-
         WHEN("Initialized with value")
         {
+            typename Vector::size_type const total = 10;
+            value_type const                 value = 3;
+            Vector                           v(total, value);
+
             THEN("empty() is false")
             {
                 REQUIRE(!v.empty());
@@ -68,9 +75,8 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
 TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
 {
-    using Allocator  = basicunit::my_allocator<int>;
-    using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using Allocator = basicunit::allocator_move_assignment<int>;
+    using Vector    = pw::vector<int, Allocator>;
 
     Allocator alloc;
 
@@ -80,7 +86,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v;
 
         REQUIRE(v.empty());
-        REQUIRE(!(v.get_allocator() == alloc));
+        REQUIRE(v.get_allocator().m_instance == alloc.m_instance);
     }
     SECTION("Copy constructor")
     {
@@ -88,7 +94,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v1 { 1, 2, 3, 10 };
         Vector v2(v1);
 
-        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1.get_allocator() == v2.get_allocator());
         REQUIRE(v1[0] == v2[0]);
         REQUIRE(v1[3] == v2[3]);
     }
@@ -98,7 +104,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v1 { 1, 2, 3, 10 };
         Vector v2(move(v1));
 
-        REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+        REQUIRE(v1.get_allocator() == v2.get_allocator());
         REQUIRE(v1.size() == v2.size());
         REQUIRE(v2[0] == 1);
         REQUIRE(v2[3] == 10);
@@ -107,11 +113,11 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
 
 TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 {
-    using Allocator  = basicunit::my_allocator<int>;
+    using Allocator  = basicunit::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
     using value_type = typename Vector::value_type;
 
-    Allocator alloc;
+    Allocator alloc(3);
     SECTION("Default constructor with allocator")
     {
         // constexpr explicit vector(allocator_type const& alloc) noexcept;
@@ -119,7 +125,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
     }
-    SECTION("Copy constructor with count and value with allocator")
+    SECTION("Constructor with count, value, and allocator")
     {
         // constexpr vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
         Vector::size_type const count = 30;
@@ -130,7 +136,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         REQUIRE(v.size() == count);
         REQUIRE(v[0] == value);
     }
-    SECTION("Copy constructor with count with allocator")
+    SECTION("Constructor with count, no value, and allocator")
     {
         // constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
         Vector::size_type const count = 30;
@@ -148,7 +154,8 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v2.get_allocator() == alloc2);
         REQUIRE(v2.size() == v1.size());
-        REQUIRE(v2[0] == v1[0]);
+        REQUIRE(v2[0] == v1[0]); // do without operator==()
+        REQUIRE(v2[3] == v1[3]);
     }
     SECTION("Move constructor with allocator")
     {
@@ -186,29 +193,30 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
 TEST_CASE("Allocator Copy Assignment", "[assignment][allocator][copy]")
 {
-    using Allocator  = basicunit::allocator_copy_assignment<int>;
-    using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using Allocator = basicunit::allocator_copy_assignment<int>;
+    using Vector    = pw::vector<int, Allocator>;
 
     Allocator alloc;
     Vector    v1({ 10, 20, 30 }, alloc);
     REQUIRE(Allocator::propagate_on_container_copy_assignment::value);
-    SECTION("Assignment and copy allocator")
+    REQUIRE(v1.get_allocator() == alloc);
+    SECTION("Check that allocator_copy_assignment behaves")
     {
-        Vector v2(alloc);
+        // constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
+        Vector v({ 1, 2, 3, 4 }, alloc);
 
-        v2 = v1;
-        INFO("alloc.m_instance = " << alloc.m_instance
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v.size() == 4);
                                    << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
                                    << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
-        REQUIRE(v2.get_allocator() == v1.get_allocator());
+        REQUIRE(v[0] == 1);
     }
     // constexpr vector& operator=(const vector& other);
     //     using propagate_on_container_copy_assignment = false_type;
     //     using propagate_on_container_copy_assignment = true_type;
 }
 
-TEST_CASE("Allocator not copied on assignment", "[assignment][allocator][copy]")
+    SECTION("Assignment with allocator that does copy on assignment creates "
 {
     using Allocator  = basicunit::my_allocator<int>;
     using Vector     = pw::vector<int, Allocator>;
@@ -217,8 +225,10 @@ TEST_CASE("Allocator not copied on assignment", "[assignment][allocator][copy]")
     Allocator alloc;
     Vector    v1({ 10, 20, 30 }, alloc);
     REQUIRE(!Allocator::propagate_on_container_copy_assignment::value);
-    SECTION("Assignment and copy allocator")
+            "new allocator")
     {
+        // constexpr vector& operator=(const vector& other);
+        //     using propagate_on_container_copy_assignment = true_type;
         Vector v2(alloc);
 
         v2 = v1;
@@ -227,9 +237,6 @@ TEST_CASE("Allocator not copied on assignment", "[assignment][allocator][copy]")
                                    << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
         REQUIRE(v2.get_allocator() != v1.get_allocator());
     }
-    // constexpr vector& operator=(const vector& other);
-    //     using propagate_on_container_copy_assignment = false_type;
-    //     using propagate_on_container_copy_assignment = true_type;
 }
 
 TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
@@ -237,6 +244,20 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     // constexpr vector& operator=(vector&& other) noexcept(
     //     using propagate_on_container_move_assignment = false_type;
     //     using propagate_on_container_move_assignment = true_type;
+    GIVEN("A vector with propagate_on_move_assignment = true")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
+        Allocator alloc2 { 10 };
+        Vector    v1 { { 1, 2, 3 }, alloc1 };
+        Vector    v2 { { 4, 5, 6 }, alloc2 };
+        WHEN("Use move() assignmet")
+        {
+            v1 = pw::move(v2);
+        }
+    }
 }
 
 TEST_CASE("Swap uses allocator", "[swap][allocator]")
@@ -249,38 +270,87 @@ TEST_CASE("Swap uses allocator", "[swap][allocator]")
     //             pw::allocator_traits<allocator_type>::is_always_equal::value);
     //     using propagate_on_container_swap            = false_type;
     //     using propagate_on_container_swap            = true_type;
+    GIVEN("A vector with propagate_on_container_swap = true")
+    {
+        using Allocator = basicunit::allocator_swapable<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
+        Allocator alloc2 { 10 };
+        Vector    v1 { alloc1 };
+        Vector    v2 { alloc2 };
+
+        REQUIRE(Allocator::propagate_on_container_swap::value);
+        REQUIRE(v1.get_allocator() == alloc1);
+        WHEN("swap")
+        {
+            pw::swap(v1, v2);
+            THEN("allocators are swapped")
+            {
+                REQUIRE(v1.get_allocator() == alloc2);
+                REQUIRE(v2.get_allocator() == alloc1);
+            }
+        }
+    }
+    GIVEN("A vector with propagate_on_container_swap = false")
+    {
+        using Allocator = basicunit::allocator_base<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 1 };
+        Allocator alloc2 { 2 };
+        Vector    v1 { alloc1 };
+        Vector    v2 { alloc2 };
+
+        REQUIRE(!Allocator::propagate_on_container_swap::value);
+        WHEN("swap")
+        {
+            pw::swap(v1, v2);
+            THEN("allocators are not swapped")
+            {
+                REQUIRE(v1.get_allocator() == alloc1);
+                REQUIRE(v2.get_allocator() == alloc2);
+            }
+        }
+    }
 }
 
 TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 {
-    using Allocator  = basicunit::my_allocator<int>;
+    using Allocator  = basicunit::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
     using value_type = typename Vector::value_type;
 
     GIVEN("An empty vector with allocator")
     {
-        Allocator allocator;
+        Allocator allocator(5);
         Vector    v(allocator);
         WHEN("Check allocator")
         {
-            THEN("allocator is same") { REQUIRE(allocator == v.get_allocator()); }
+            THEN("allocator is same")
+            {
+                REQUIRE(allocator == v.get_allocator());
+            }
         }
     }
     GIVEN("Two empty vectors with allocator")
     {
-        Vector v1;
-        Vector v2;
+        Vector v1(Allocator(5));
+        Vector v2(Allocator(10));
         WHEN("Default allocator")
         {
-            THEN("allocators are different") { REQUIRE(!(v1.get_allocator() == v2.get_allocator())); }
+            THEN("allocators are different")
+            {
+                REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+            }
         }
     }
     GIVEN("Vector with count, value, and allocator")
     {
         typename Vector::size_type const total = 10;
-        Allocator                        allocator;
-        value_type const                 value = 3;
-        Vector                           v(total, value, allocator);
+        Allocator                        allocator(5);
+        value_type constexpr value = 3;
+        Vector v(total, value, allocator);
 
         WHEN("access elements")
         {
@@ -294,7 +364,10 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
                 REQUIRE(v.end());
                 REQUIRE(*(v.end() - 1) == value);
             }
-            THEN("the get_allocator() returns origal instance") { REQUIRE(allocator == v.get_allocator()); }
+            THEN("the get_allocator() returns original instance")
+            {
+                REQUIRE(allocator == v.get_allocator());
+            }
         }
     }
 }

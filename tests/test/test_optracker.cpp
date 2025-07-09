@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 OpTracker::OpTracker(OpCounter& opCounter)
     : m_opCounter(opCounter)
@@ -109,4 +109,4 @@ operator<<(std::ostream& out, OpTracker const& op2)
     return out;
 }
 
-}} // namespace pw::test
+} // namespace pw::test

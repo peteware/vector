@@ -27,8 +27,8 @@ public:
     template<class Other>
     constexpr reverse_iterator& operator=(const reverse_iterator<Other>& other);
 
-    constexpr reference operator*() const;
-    constexpr reference operator->() const;
+    constexpr reference         operator*() const;
+    constexpr reference         operator->() const;
 
     constexpr reverse_iterator& operator++();
     constexpr reverse_iterator  operator++(int);
@@ -45,29 +45,29 @@ protected:
 };
 
 template<class Iterator>
-constexpr reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::difference_type n,
-                                               const reverse_iterator<Iterator>&                    iterator);
+constexpr reverse_iterator<Iterator>
+operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& iterator);
 template<class Iterator>
-constexpr reverse_iterator<Iterator> operator-(typename reverse_iterator<Iterator>::difference_type n,
-                                               const reverse_iterator<Iterator>&                    iterator);
+constexpr reverse_iterator<Iterator>
+operator-(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& iterator);
 template<class Iterator1, class Iterator2>
-constexpr bool operator==(const pw::reverse_iterator<Iterator1>& op1,
-                          const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator==(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
-constexpr bool operator!=(const pw::reverse_iterator<Iterator1>& op1,
-                          const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator!=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
-constexpr bool operator<(const pw::reverse_iterator<Iterator1>& op1,
-                         const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator<(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
-constexpr bool operator<=(const pw::reverse_iterator<Iterator1>& op1,
-                          const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator<=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
-constexpr bool operator>(const pw::reverse_iterator<Iterator1>& op1,
-                         const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator>(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
-constexpr bool operator>=(const pw::reverse_iterator<Iterator1>& op1,
-                          const pw::reverse_iterator<Iterator2>& op2);
+constexpr bool
+operator>=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>::reverse_iterator()

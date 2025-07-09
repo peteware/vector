@@ -27,7 +27,10 @@ TEMPLATE_LIST_TEST_CASE("vector() constructor", "[vector][constructor]", TestTyp
         WHEN("nothing is done")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter() - init;
-            THEN("Nothing was constructed") { REQUIRE(counter.zero()); }
+            THEN("Nothing was constructed")
+            {
+                REQUIRE(counter.zero());
+            }
         }
     }
 }
@@ -52,14 +55,20 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         WHEN("Nothing was called")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter() - init;
-            THEN("Nothing was constructed") { REQUIRE(counter.zero()); }
+            THEN("Nothing was constructed")
+            {
+                REQUIRE(counter.zero());
+            }
         }
         WHEN("reserve() is increased")
         {
             counter = pw::test::DefaultCopyConstructible::getCounter();
             v.reserve(5);
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
-            THEN("copy constructor not called") { REQUIRE(counter.zero()); }
+            THEN("copy constructor not called")
+            {
+                REQUIRE(counter.zero());
+            }
         }
     }
     GIVEN("A vector with 5 elements")
@@ -71,7 +80,10 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
         WHEN("copy constructor is called")
         {
             Vector c(v);
-            THEN("two vectors are same") { REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end())); }
+            THEN("two vectors are same")
+            {
+                REQUIRE(pw::equal(v.begin(), v.end(), c.begin(), c.end()));
+            }
         }
     }
     GIVEN("and add count objects")
@@ -127,7 +139,9 @@ TEMPLATE_LIST_TEST_CASE("vector(vector&& other)", "[vector][constructor][movecon
             Vector c(v);
             counter = pw::test::DefaultCopyConstructible::getCounter();
             Vector d(pw::move(v));
-            THEN("move constructor was called") { }
+            THEN("move constructor was called")
+            {
+            }
         }
     }
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
@@ -143,7 +157,7 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
     pw::test::OpCounter               counter;
     std::initializer_list<value_type> initlist = { 1, 2, 5 };
 
-    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    counter                                    = pw::test::DefaultCopyConstructible::getCounter() - init;
     INFO("counter: " << counter);
     REQUIRE(3 == counter.getOtherConstructor());
     REQUIRE(3 == counter.constructorCount());
@@ -153,8 +167,14 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
         Vector v { initlist };
         WHEN("nothing is changed")
         {
-            THEN("size() is same") { REQUIRE(3 == v.size()); }
-            THEN("capacity() is same") { REQUIRE(v.size() == v.capacity()); }
+            THEN("size() is same")
+            {
+                REQUIRE(3 == v.size());
+            }
+            THEN("capacity() is same")
+            {
+                REQUIRE(v.size() == v.capacity());
+            }
             THEN("constructors called")
             {
                 counter = pw::test::DefaultCopyConstructible::getCounter() - init;
@@ -167,12 +187,18 @@ TEMPLATE_LIST_TEST_CASE("init-list", "[vector][constructor][init-list]", TestTyp
             Vector v2;
             v2.push_back(pw::test::DefaultCopyConstructible(1));
             v2 = v;
-            THEN("They are the same") { REQUIRE(v == v2); }
+            THEN("They are the same")
+            {
+                REQUIRE(v == v2);
+            }
         }
         WHEN("copy construct")
         {
             Vector v2(v);
-            THEN("They are the same") { REQUIRE(v == v2); }
+            THEN("They are the same")
+            {
+                REQUIRE(v == v2);
+            }
         }
     }
 }

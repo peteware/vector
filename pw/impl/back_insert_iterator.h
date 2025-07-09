@@ -52,7 +52,8 @@ back_insert_iterator<Container>::operator=(typename Container::value_type&& valu
 }
 
 template<class Container>
-back_insert_iterator<Container>& back_insert_iterator<Container>::operator*()
+back_insert_iterator<Container>&
+back_insert_iterator<Container>::operator*()
 {
     return *this;
 }
