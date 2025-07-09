@@ -58,8 +58,7 @@ template<class Type>
 std::ostream&
 operator<<(std::ostream& out, allocator_base<Type> const& alloc)
 {
-    out << "allocator_base<" << typeid(Type).name() << "> instance "
-        << alloc.m_instance;
+    out << "allocator_base<" << typeid(Type).name() << "> instance " << alloc.m_instance;
     return out;
 }
 } // namespace basicunit

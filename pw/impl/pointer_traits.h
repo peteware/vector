@@ -38,10 +38,7 @@ struct pointer_traits<Type*>
     template<typename U>
     using rebind = U*;
 
-    static pointer pointer_to(element_type& r) noexcept
-    {
-        return addressof(r);
-    };
+    static pointer pointer_to(element_type& r) noexcept { return addressof(r); };
 };
 
 } // namespace pw

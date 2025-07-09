@@ -17,8 +17,7 @@ SCENARIO("validate pointer_traits works as expected", "[memory]")
         {
             THEN("it's the same type")
             {
-                REQUIRE(pw::is_same<pw::pointer_traits<int*>::pointer,
-                                    int*>::value);
+                REQUIRE(pw::is_same<pw::pointer_traits<int*>::pointer, int*>::value);
             }
         }
     }
@@ -28,8 +27,7 @@ SCENARIO("validate pointer_traits works as expected", "[memory]")
         {
             THEN("it's the same type")
             {
-                REQUIRE(pw::is_same<pw::pointer_traits<FakeAllocator>::pointer,
-                                    FakeAllocator>::value);
+                REQUIRE(pw::is_same<pw::pointer_traits<FakeAllocator>::pointer, FakeAllocator>::value);
             }
         }
     }

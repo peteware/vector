@@ -1,6 +1,6 @@
 # base-110width
 Language: Cpp
-#Standard:     Latest
+Standard: Latest
 BasedOnStyle: WebKit
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments:
@@ -32,7 +32,7 @@ BraceWrapping:
   SplitEmptyNamespace: true
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
-ColumnLimit: 80
+ColumnLimit: 110
 CompactNamespaces: true
 FixNamespaceComments: true
 KeepEmptyLinesAtTheStartOfBlocks: false

@@ -42,14 +42,8 @@ struct DefaultCopyConstructible : public OpTracker
         return *this;
     }
 
-    bool operator==(DefaultCopyConstructible const& op2) const
-    {
-        return OpTracker::operator==(op2);
-    }
-    bool operator!=(DefaultCopyConstructible const& op2) const
-    {
-        return OpTracker::operator!=(op2);
-    }
+    bool operator==(DefaultCopyConstructible const& op2) const { return OpTracker::operator==(op2); }
+    bool operator!=(DefaultCopyConstructible const& op2) const { return OpTracker::operator!=(op2); }
     // using OpTracker::operator<;
 
 private:

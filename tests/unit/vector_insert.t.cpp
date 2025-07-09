@@ -23,9 +23,7 @@
  * Exceptions:
  * - yex
  */
-TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)",
-                        "[vector][insert]",
-                        pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -103,9 +101,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)",
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)",
-                        "[vector][insert]",
-                        pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -167,14 +163,10 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)",
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(generate.values.begin(),
-                                  generate.values.begin() + offset,
-                                  v.begin(),
-                                  where));
-                REQUIRE(pw::equal(generate.values.begin() + offset,
-                                  generate.values.end(),
-                                  where + added,
-                                  v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(end(), added, value)")
@@ -189,14 +181,10 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)",
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(generate.values.begin(),
-                                  generate.values.begin() + offset,
-                                  v.begin(),
-                                  where));
-                REQUIRE(pw::equal(generate.values.begin() + offset,
-                                  generate.values.end(),
-                                  where + added,
-                                  v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(middle, added, value)")
@@ -211,14 +199,10 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)",
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(generate.values.begin(),
-                                  generate.values.begin() + offset,
-                                  v.begin(),
-                                  where));
-                REQUIRE(pw::equal(generate.values.begin() + offset,
-                                  generate.values.end(),
-                                  where + added,
-                                  v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
         WHEN("insert(end -1, added, value)")
@@ -234,22 +218,16 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)",
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(generate.values.begin(),
-                                  generate.values.begin() + offset,
-                                  v.begin(),
-                                  where));
-                REQUIRE(pw::equal(generate.values.begin() + offset,
-                                  generate.values.end(),
-                                  where + added,
-                                  v.end()));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(pw::equal(
+                    generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
         }
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
-                        "[vector][insert][test]",
-                        pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -261,8 +239,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
         WHEN("insert(begin, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
-            iter = v.insert(
-                v.begin(), generate.values.begin(), generate.values.end());
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
             THEN("size() is increased")
             {
                 REQUIRE(generate.values.size() == v.size());
@@ -284,8 +261,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
         WHEN("insert(begin, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
-            iter = v.insert(
-                v.begin(), generate.values.begin(), generate.values.end());
+            iter = v.insert(v.begin(), generate.values.begin(), generate.values.end());
             THEN("size() is increased")
             {
                 REQUIRE(2 * generate.values.size() == v.size());
@@ -302,8 +278,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
         WHEN("insert(end, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
-            iter = v.insert(
-                v.end(), generate.values.begin(), generate.values.end());
+            iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
             THEN("size() is increased")
             {
                 REQUIRE(2 * generate.values.size() == v.size());
@@ -323,8 +298,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
             typename Vector::iterator  iter;
             v.reserve(v.size() + generate.values.size());
             space = v.capacity();
-            iter  = v.insert(
-                v.begin(), generate.values.begin(), generate.values.end());
+            iter  = v.insert(v.begin(), generate.values.begin(), generate.values.end());
             THEN("capacity() is unchanged")
             {
                 REQUIRE(space == v.capacity());
@@ -350,8 +324,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)",
         {
             typename Vector::iterator iter;
             v.reserve(v.size() + generate.values.size());
-            iter = v.insert(
-                v.end(), generate.values.begin(), generate.values.end());
+            iter = v.insert(v.end(), generate.values.begin(), generate.values.end());
             THEN("size() is increased")
             {
                 REQUIRE(2 * generate.values.size() == v.size());
@@ -374,9 +347,8 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
     using value_type = typename Vector::value_type;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init =
-        pw::test::DefaultCopyConstructible::getCounter();
-    size_t count = 5;
+    pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
+    size_t                    count = 5;
 
     GIVEN("An empty vector")
     {
@@ -390,8 +362,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
             v.insert(v.begin(), count, copyObject);
             THEN("Copy constructor called count times")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() -
-                    counter;
+                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
                 REQUIRE(count == counter.constructorCount());
             }
         }
@@ -406,8 +377,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() at begin")
         {
             generate.values.insert(generate.values.begin(), copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() -
-                counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -420,8 +390,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() at end")
         {
             generate.values.insert(generate.values.end(), copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() -
-                counter;
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -433,10 +402,8 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         }
         WHEN("insert() in middle")
         {
-            generate.values.insert(generate.values.begin() + generate.count - 2,
-                                   copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() -
-                counter;
+            generate.values.insert(generate.values.begin() + generate.count - 2, copyObject);
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());

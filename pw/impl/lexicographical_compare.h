@@ -5,10 +5,7 @@ namespace pw {
 
 template<class Iterator1, class Iterator2>
 bool
-lexicographical_compare(Iterator1 begin1,
-                        Iterator1 end1,
-                        Iterator2 begin2,
-                        Iterator2 end2)
+lexicographical_compare(Iterator1 begin1, Iterator1 end1, Iterator2 begin2, Iterator2 end2)
 {
     while (begin1 != end1 && begin2 != end2)
     {

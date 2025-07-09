@@ -18,14 +18,13 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             pw::test::CopyConstructible(3),
         };
         pw::test::CopyConstructible dest[count] = { 10, 11, 12 };
-        pw::test::OpCounter init = pw::test::CopyConstructible::getCounter();
+        pw::test::OpCounter         init        = pw::test::CopyConstructible::getCounter();
         WHEN("move")
         {
             pw::uninitialized_move(&array[0], &array[count], &dest[0]);
             THEN("move constructor called; destructor not")
             {
-                pw::test::OpCounter count =
-                    pw::test::CopyConstructible::getCounter() - init;
+                pw::test::OpCounter count = pw::test::CopyConstructible::getCounter() - init;
                 REQUIRE(3 == count.getMoveConstructor());
                 REQUIRE(0 == count.getCopyConstructor());
                 REQUIRE(count.constructorCount() == count.getMoveConstructor());

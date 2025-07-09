@@ -18,9 +18,7 @@ namespace pw { namespace internal {
 
  * @endcode
  */
-template<template<typename> typename Predicate,
-         typename Type,
-         typename = pw::void_t<>>
+template<template<typename> typename Predicate, typename Type, typename = pw::void_t<>>
 struct supports : pw::false_type
 {
 };

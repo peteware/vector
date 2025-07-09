@@ -113,11 +113,10 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
 
 SCENARIO("Storage construct counts", "[storage][count]")
 {
-    using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
+    using Storage                  = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    pw::test::OpCounter const init =
-        pw::test::DefaultCopyConstructible::getCounter();
-    pw::test::OpCounter counter;
+    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
+    pw::test::OpCounter       counter;
     GIVEN("An empty Storage")
     {
         Storage storage;
@@ -153,7 +152,7 @@ SCENARIO("Storage construct counts", "[storage][count]")
 
 SCENARIO("Storage move construct counts", "[storage][move]")
 {
-    using Storage = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
+    using Storage                     = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
     int const                 size    = 5;
     int const                 genSize = size - 2;
@@ -163,18 +162,14 @@ SCENARIO("Storage move construct counts", "[storage][move]")
 
     GIVEN("A Storage with size element")
     {
-        pw::test::OpCounter init =
-            pw::test::DefaultCopyConstructible::getCounter();
+        pw::test::OpCounter init = pw::test::DefaultCopyConstructible::getCounter();
         WHEN("moveto()")
         {
-            storage.moveto(gen.values.begin(),
-                           gen.values.begin() + 2,
-                           storage.begin() + 2);
+            storage.moveto(gen.values.begin(), gen.values.begin() + 2, storage.begin() + 2);
             counter = pw::test::DefaultCopyConstructible::getCounter() - init;
             THEN("Only move constructor is called")
             {
-                INFO("counter: " << counter
-                                 << " storage[1] = " << *(storage.begin() + 1));
+                INFO("counter: " << counter << " storage[1] = " << *(storage.begin() + 1));
                 REQUIRE(2 == counter.getMoveConstructor());
                 REQUIRE(2 == counter.constructorCount());
                 REQUIRE(gen.first_value == *storage.begin());

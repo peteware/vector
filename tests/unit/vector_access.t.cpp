@@ -15,9 +15,7 @@
  * - back(): no extra
  * - data(): no extra
  */
-TEMPLATE_LIST_TEST_CASE("access methods",
-                        "[vector][access]",
-                        pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("access methods", "[vector][access]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -66,10 +64,7 @@ TEMPLATE_LIST_TEST_CASE("access methods",
     {
         pw::test::Values<Vector> generate(5);
         Vector                   v(generate.values);
-        REQUIRE(pw::equal(generate.values.begin(),
-                          generate.values.end(),
-                          v.begin(),
-                          v.end()));
+        REQUIRE(pw::equal(generate.values.begin(), generate.values.end(), v.begin(), v.end()));
 
         WHEN("at(0) is called")
         {

@@ -215,10 +215,8 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
 
         v2 = v1;
         INFO("alloc.m_version = " << alloc.m_instance
-                                  << " v1.get_allocator().m_instance = "
-                                  << v1.get_allocator().m_instance
-                                  << " v2.get_allocator().m_instance = "
-                                  << v2.get_allocator().m_instance);
+                                  << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
+                                  << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
         REQUIRE(v2.get_allocator() == v1.get_allocator());
     }
 }

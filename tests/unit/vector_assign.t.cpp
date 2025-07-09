@@ -10,9 +10,7 @@
  * Type requirements:
  * - No extra
  */
-TEMPLATE_LIST_TEST_CASE("Test assign()",
-                        "[vector][assign]",
-                        pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -68,8 +66,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()",
             }
             THEN("all elements are same")
             {
-                REQUIRE(
-                    pw::equal(&values[0], &values[count], v.begin(), v.end()));
+                REQUIRE(pw::equal(&values[0], &values[count], v.begin(), v.end()));
             }
         }
         WHEN("assign(init_list)")

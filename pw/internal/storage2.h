@@ -12,11 +12,10 @@ namespace pw::internal {
 template<class Type, class Allocator = pw::allocator<Type>>
 struct Storage2
 {
-    using value_type     = Type;
-    using allocator_type = Allocator;
-    using size_type      = typename allocator_traits<Allocator>::size_type;
-    using difference_type =
-        typename allocator_traits<Allocator>::difference_type;
+    using value_type      = Type;
+    using allocator_type  = Allocator;
+    using size_type       = typename allocator_traits<Allocator>::size_type;
+    using difference_type = typename allocator_traits<Allocator>::difference_type;
     using reference       = value_type&;
     using const_reference = value_type const&;
     using pointer         = typename allocator_traits<Allocator>::pointer;
@@ -27,8 +26,7 @@ struct Storage2
     explicit Storage2(allocator_type const& alloc);
     ~Storage2();
 
-    constexpr void
-    reserve(size_type count, std::function<void(pointer begin)> func);
+    constexpr void               reserve(size_type count, std::function<void(pointer begin)> func);
     constexpr void               reserve(size_type count);
     [[nodiscard]] constexpr bool empty() const noexcept;
     constexpr pointer            begin() noexcept;
@@ -39,9 +37,9 @@ struct Storage2
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
     constexpr allocator_type     get_allocator() const;
-    constexpr void               swap(Storage2& other) noexcept(
-        allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-        allocator_traits<allocator_type>::is_always_equal::value);
+    constexpr void
+    swap(Storage2& other) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+                                   allocator_traits<allocator_type>::is_always_equal::value);
 
 private:
     allocator_type m_alloc;
@@ -70,8 +68,7 @@ Storage2<Type, Allocator>::~Storage2()
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::reserve(size_type                          count,
-                                   std::function<void(pointer begin)> func)
+Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> func)
 {
     reserve(count);
     func(begin());
@@ -176,8 +173,7 @@ Storage2<Type, Allocator>::swap(Storage2& other) noexcept(
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     using pw::swap;
-    if constexpr (allocator_traits<
-                      allocator_type>::propagate_on_container_swap::value)
+    if constexpr (allocator_traits<allocator_type>::propagate_on_container_swap::value)
     {
         swap(m_alloc, other.m_alloc);
     }
