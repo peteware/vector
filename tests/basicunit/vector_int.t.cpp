@@ -6,7 +6,7 @@
 
 #include <catch2/catch.hpp>
 
-#include <vector>
+//#include <vector>
 
 /*
  * Type Requirements:
@@ -202,6 +202,30 @@ TEST_CASE("Allocator Copy Assignment", "[assignment][allocator][copy]")
                                    << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
                                    << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
         REQUIRE(v2.get_allocator() == v1.get_allocator());
+    }
+    // constexpr vector& operator=(const vector& other);
+    //     using propagate_on_container_copy_assignment = false_type;
+    //     using propagate_on_container_copy_assignment = true_type;
+}
+
+TEST_CASE("Allocator not copied on assignment", "[assignment][allocator][copy]")
+{
+    using Allocator  = basicunit::my_allocator<int>;
+    using Vector     = pw::vector<int, Allocator>;
+    using value_type = typename Vector::value_type;
+
+    Allocator alloc;
+    Vector    v1({ 10, 20, 30 }, alloc);
+    REQUIRE(!Allocator::propagate_on_container_copy_assignment::value);
+    SECTION("Assignment and copy allocator")
+    {
+        Vector v2(alloc);
+
+        v2 = v1;
+        INFO("alloc.m_instance = " << alloc.m_instance
+                                   << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
+                                   << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
+        REQUIRE(v2.get_allocator() != v1.get_allocator());
     }
     // constexpr vector& operator=(const vector& other);
     //     using propagate_on_container_copy_assignment = false_type;
