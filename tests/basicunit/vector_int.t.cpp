@@ -239,6 +239,8 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
         WHEN("Use move() assignmet")
         {
             v1 = pw::move(v2);
+            REQUIRE(v1.get_allocator() == alloc2);
+            REQUIRE(v1[0] == v2[0]);
         }
     }
 }

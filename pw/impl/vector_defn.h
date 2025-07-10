@@ -143,14 +143,26 @@ vector<Type, Allocator>::operator=(const vector& other)
         //       the storage if there is enough space.
         Storage storage { other.get_allocator() };
 
-        storage.reserve(other.size());
-        uninitialized_copy(other.begin(), other.end(), storage.begin());
-        storage.set_size(other.size());
+        auto    lambda = [begin = other.begin(), end = other.end()](pointer dest) -> void {
+            uninitialized_copy(begin, end, dest);
+        };
+        storage.reserve(other.size(), lambda);
         m_storage.swap(storage);
     }
     else if (m_storage.allocated() < other.size())
     {
         // Not enough space in m_storage, so we need to reallocate
+        /*
+         *     m_storage:                 other:
+         *    ┌────┬────┬────┐           ┌────┬────┬────┬────┬────┬────┬────┐
+         * ┌─▶│ 1  │ 2  │ 3  │        ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │
+         * │  └────┴────┴────┘        │  └────┴────┴────┴────┴────┴────┴────┘
+         * │                 ▲        │                      ▲
+         * │ m_allocated = 3 │        │    m_allocated = 7   │
+         * │                 │        │                      │
+         * └─── m_begin   m_end       └─── m_begin        m_end
+
+         */
         Storage storage { allocator_type() };
         auto    lambda = [begin = other.begin(), end = other.end()](pointer dest) -> void {
             uninitialized_copy(begin, end, dest);
@@ -158,11 +170,26 @@ vector<Type, Allocator>::operator=(const vector& other)
         storage.reserve(other.size(), lambda);
         m_storage = storage;
     }
+    else if (m_storage.size() == other.size())
+    {
+        copy(other.begin(), other.end(), m_storage.begin());
+    }
     else
     {
+        // Enough space just copy.  If too much space then not all is initialized
+        //    ┌────┬────┬────┬────┬────┬────┬────┐        ┌────┬────┬────┐
+        // ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │     ┌─▶│ 1  │ 2  │ 3  │
+        // │  └────┴────┴────┴────┴────┴────┴────┘     │  └────┴────┴────┘
+        // │                      ▲                    │                 ▲
+        // │    m_allocated = 7   │                    │ m_allocated = 3 │
+        // │                      │                    │                 │
+        // └─── m_begin        m_end                   └─── m_begin   m_end
+
+
         size_type initsize = min(m_storage.size(), other.size());
         copy(other.begin(), other.begin() + initsize, m_storage.begin());
         uninitialized_copy(other.begin() + initsize, other.end(), m_storage.begin() + initsize);
+        destruct(m_storage.begin() + initsize, m_storage.end());
     }
     return *this;
 }
@@ -182,6 +209,14 @@ vector<Type, Allocator>::operator=(vector&& other) noexcept(
     pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
+    if constexpr (allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
+    {
+
+    }
+    else
+    {
+
+    }
     (void)other;
     throw internal::Unimplemented(__func__);
     //return *this;
