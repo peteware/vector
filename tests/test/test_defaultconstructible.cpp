@@ -1,6 +1,6 @@
 #include <test_defaultconstructible.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 OpCounter DefaultConstructible::s_opCounter;
 
@@ -10,4 +10,4 @@ DefaultConstructible::getCounter()
     return s_opCounter;
 }
 
-}} // namespace pw::test
+} // namespace pw::test

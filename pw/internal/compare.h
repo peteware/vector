@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_INTERNAL_COMPARE_H
 #define INCLUDED_PW_INTERNAL_COMPARE_H
 
-namespace pw { namespace internal {
+namespace pw::internal {
 template<class Iter1, class Iter2>
 int
 compare(Iter1 begin1, Iter1 end1, Iter2 begin2, Iter2 end2)
@@ -33,5 +33,5 @@ compare(Iter1 begin1, Iter1 end1, Iter2 begin2, Iter2 end2)
     }
 }
 
-}} // namespace pw::internal
+} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_COMPARE_H */

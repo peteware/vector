@@ -3,7 +3,7 @@
 
 #include <test_optracker.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 struct DefaultCopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
@@ -51,6 +51,6 @@ private:
 };
 
 bool permute(DefaultCopyConstructible& value, int depth);
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif /*  INCLUDED_TEST_DEFAULTCOPYCONSTRUCTIBLE_H */

@@ -2,7 +2,7 @@
 
 #include <test_permute.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 OpCounter CopyConstructible::s_opCounter;
 
@@ -57,4 +57,4 @@ permute(CopyConstructible& value, int depth)
     return false;
 }
 
-}} // namespace pw::test
+} // namespace pw::test

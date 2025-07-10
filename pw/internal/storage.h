@@ -21,7 +21,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 
 /**
  * Storage managed contiguous memory of Type objects.
@@ -261,5 +261,5 @@ Storage<Type, Allocator>::copyto(Iterator first, Iterator last, iterator dest)
     pw::uninitialized_copy(next(first, overlap), last, uninitialized_dest);
 }
 
-}} // namespace pw::internal
+} // namespace pw::internal
 #endif /*  INCLUDED_PW_INTERNAL_STORAGE_H */

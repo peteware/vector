@@ -3,7 +3,7 @@
 
 #include <pw/impl/void.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 
 template<template<typename> class Extract, typename Obj, typename Default, typename>
 struct extract_or
@@ -20,6 +20,6 @@ struct extract_or<Extract, Obj, Default, void_t<Extract<Obj>>>
 template<template<typename> class Extract, typename Obj, typename Default>
 using extract_or_type = typename extract_or<Extract, Obj, Default, void>::type;
 
-}} // namespace pw::internal
+} // namespace pw::internal
 
 #endif /*  INCLUDED_PW_INTERNAL_EXTRACT_OR_H */

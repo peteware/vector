@@ -8,7 +8,7 @@
 #include <pw/impl/void.h>
 #include <pw/internal/extract_or.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 
 template<typename Type>
 using get_const_void_pointer = typename Type::const_void_pointer;
@@ -64,6 +64,6 @@ struct rebind_ptr<Type, U, void_t<typename Type::template rebind<U>>>
     using type = typename Type::template rebind<U>;
 };
 
-}} // End of namespace pw::internal
+} // End of namespace pw::internal
 
 #endif /* INCLUDED_PW_INTERNAL_META_H */

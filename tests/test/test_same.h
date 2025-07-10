@@ -1,7 +1,7 @@
 #ifndef INCLUDED_TEST_SAME_H
 #define INCLUDED_TEST_SAME_H
 
-namespace pw { namespace test {
+namespace pw::test {
 template<class Iterator, class Type>
 bool
 same(Iterator begin, Iterator end, Type const& value)
@@ -15,5 +15,5 @@ same(Iterator begin, Iterator end, Type const& value)
     }
     return true;
 }
-}} // namespace pw::test
+} // namespace pw::test
 #endif /* INCLUDED_TEST_SAME_H */

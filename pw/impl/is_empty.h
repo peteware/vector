@@ -5,7 +5,7 @@
 #include <pw/impl/integral_constant.h>
 #include <pw/impl/is_class.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 
 template<class Type>
 struct check_empty1 : public Type
@@ -17,7 +17,7 @@ struct check_empty2
 {
     double m_dummy;
 };
-}} // namespace pw::internal
+} // namespace pw::internal
 
 namespace pw {
 

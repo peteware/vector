@@ -5,7 +5,7 @@
 #include <pw/impl/declval.h>
 #include <pw/impl/void.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 template<class, class Type, class... Args>
 struct constructible : pw::false_type
 {
@@ -15,6 +15,6 @@ template<class Type, class... Args>
 struct constructible<void_t<decltype(Type(pw::declval<Args>()...))>, Type, Args...> : pw::true_type
 {
 };
-}} // namespace pw::internal
+} // namespace pw::internal
 
 #endif /* INCLUDED_PW_INTERNAL_CONSTRUCTIBLE_H */

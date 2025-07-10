@@ -4,7 +4,7 @@
 #include <pw/impl/bool_type.h>
 #include <pw/impl/void.h>
 
-namespace pw { namespace internal {
+namespace pw::internal {
 
 /*
  * This is based on code from the article:
@@ -34,5 +34,5 @@ using is_supported = supports<Predicate, Type>;
 template<template<typename> typename Predicate, typename Type>
 static constexpr auto is_supported_v = is_supported<Predicate, Type>::value;
 
-}} // namespace pw::internal
+} // namespace pw::internal
 #endif /* INCLUDED_PW_INTERNAL_IS_SUPPORTED_H */
