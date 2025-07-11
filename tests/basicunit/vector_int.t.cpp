@@ -236,6 +236,7 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
         Allocator alloc2 { 10 };
         Vector    v1 { { 1, 2, 3 }, alloc1 };
         Vector    v2 { { 4, 5, 6 }, alloc2 };
+        REQUIRE(Allocator::propagate_on_container_move_assignment::value);
         WHEN("Use move() assignmet")
         {
             v1 = pw::move(v2);
@@ -243,6 +244,24 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
             REQUIRE(v1[0] == v2[0]);
         }
     }
+    GIVEN("A vector with propagate_on_move_assignment = false")
+    {
+        using Allocator = basicunit::allocator_base<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
+        Allocator alloc2 { 10 };
+        Vector    v1 { { 1, 2, 3 }, alloc1 };
+        Vector    v2 { { 4, 5, 6 }, alloc2 };
+        REQUIRE(!Allocator::propagate_on_container_move_assignment::value);
+        WHEN("Use move() assignmet")
+        {
+            v1 = pw::move(v2);
+            REQUIRE(v1.get_allocator() == alloc1);
+            REQUIRE(v1[0] == v2[0]);
+        }
+    }
+
 }
 
 TEST_CASE("Swap uses allocator", "[swap][allocator]")

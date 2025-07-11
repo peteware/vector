@@ -37,8 +37,8 @@ struct Storage2
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
     constexpr allocator_type     get_allocator() const;
-    constexpr void
-    swap(Storage2& other) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+    constexpr void               swap(Storage2& other,
+        bool swap_allocator) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                                    allocator_traits<allocator_type>::is_always_equal::value);
 
 private:
@@ -169,12 +169,12 @@ Storage2<Type, Allocator>::get_allocator() const
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::swap(Storage2& other) noexcept(
+Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator) noexcept(
     pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
     pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     using pw::swap;
-    if constexpr (allocator_traits<allocator_type>::propagate_on_container_swap::value)
+    if (swap_allocator)
     {
         swap(m_alloc, other.m_alloc);
     }
