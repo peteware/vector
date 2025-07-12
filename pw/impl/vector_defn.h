@@ -170,7 +170,7 @@ vector<Type, Allocator>::operator=(const vector& other)
             uninitialized_copy(begin, end, dest);
         };
         storage.reserve(other.size(), lambda);
-        m_storage = storage;
+        m_storage.swap(storage, false);
     }
     else if (m_storage.size() == other.size())
     {
@@ -206,9 +206,14 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 {
-    (void)init_list;
-    throw internal::Unimplemented(__func__);
-    //return *this;
+    Storage storage { allocator_type() };
+
+    auto lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    storage.reserve(init_list.size(), lambda);
+    m_storage.swap(storage, false);
+    return *this;
 }
 
 template<class Type, class Allocator>

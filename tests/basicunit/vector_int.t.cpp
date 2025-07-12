@@ -227,6 +227,11 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     // constexpr vector& operator=(vector&& other) noexcept(
     //     using propagate_on_container_move_assignment = false_type;
     //     using propagate_on_container_move_assignment = true_type;
+    //
+    // - op1.size() < op2.size()
+    // - op1.size() == op2.size()
+    // - op1.size() > op2.size()
+    // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
     GIVEN("A vector with propagate_on_move_assignment = true")
     {
         using Allocator = basicunit::allocator_move_assignment<int>;
@@ -262,6 +267,32 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
         }
     }
 
+}
+
+TEST_CASE("Assignment with initializer_List use allocator", "[assignment][allocator][init_list]")
+{
+    // constexpr vector& operator=(vector&& other) noexcept(
+    //     using propagate_on_container_move_assignment = false_type;
+    //     using propagate_on_container_move_assignment = true_type;
+    //
+    // - op1.size() < op2.size()
+    // - op1.size() == op2.size()
+    // - op1.size() > op2.size()
+    // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
+    GIVEN("A vector with propagate_on_move_assignment = true")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc1 { 5 };
+        Vector    v1 { { 1, 2, 3 }, alloc1 };
+        WHEN("Use initializer_list assignment")
+        {
+            v1 = {4, 5, 6};
+            REQUIRE(v1.get_allocator() == alloc1);
+            REQUIRE(v1[0] == 4);
+        }
+    }
 }
 
 TEST_CASE("Swap uses allocator", "[swap][allocator]")
