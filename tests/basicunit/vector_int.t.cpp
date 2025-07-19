@@ -57,6 +57,10 @@ TEST_CASE("Constructors", "[vector][constructor]")
             {
                 REQUIRE(total == v.size());
             }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
             THEN("begin() returns element")
             {
                 REQUIRE(v.begin());
@@ -66,6 +70,17 @@ TEST_CASE("Constructors", "[vector][constructor]")
             {
                 REQUIRE(v.end());
                 REQUIRE(*(v.end() - 1) == value);
+            }
+            THEN("all elements have correct value")
+            {
+                for (typename Vector::size_type i = 0; i < total; ++i) {
+                    REQUIRE(v[i] == value);
+                }
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v.begin() < v.end());
+                REQUIRE(v.end() - v.begin() == static_cast<typename Vector::difference_type>(total));
             }
         }
     }
@@ -93,19 +108,31 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
         Vector v2(v1);
 
         REQUIRE(v1.get_allocator() == v2.get_allocator());
+        REQUIRE(v1.size() == v2.size());
+        REQUIRE(v2.capacity() >= v2.size());
+        REQUIRE(!v2.empty());
         REQUIRE(v1[0] == v2[0]);
+        REQUIRE(v1[1] == v2[1]);
+        REQUIRE(v1[2] == v2[2]);
         REQUIRE(v1[3] == v2[3]);
+        REQUIRE(v2.begin() != v2.end());
     }
     SECTION("Move constructor")
     {
         // constexpr vector(vector&& other) noexcept;
         Vector v1 { 1, 2, 3, 10 };
+        auto original_size = v1.size();
         Vector v2(move(v1));
 
         REQUIRE(v1.get_allocator() == v2.get_allocator());
-        REQUIRE(v1.size() == v2.size());
+        REQUIRE(v2.size() == original_size);
+        REQUIRE(v2.capacity() >= v2.size());
+        REQUIRE(!v2.empty());
         REQUIRE(v2[0] == 1);
+        REQUIRE(v2[1] == 2);
+        REQUIRE(v2[2] == 3);
         REQUIRE(v2[3] == 10);
+        REQUIRE(v2.begin() != v2.end());
     }
 }
 
@@ -132,7 +159,13 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
         REQUIRE(v.size() == count);
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(!v.empty());
         REQUIRE(v[0] == value);
+        REQUIRE(v[count-1] == value);
+        for (Vector::size_type i = 0; i < count; ++i) {
+            REQUIRE(v[i] == value);
+        }
     }
     SECTION("Constructor with count, no value, and allocator")
     {
@@ -142,6 +175,10 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
         REQUIRE(v.size() == count);
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(!v.empty());
+        REQUIRE(v.begin() != v.end());
+        REQUIRE(v.end() - v.begin() == static_cast<Vector::difference_type>(count));
     }
     SECTION("Copy constructor with allocator")
     {
@@ -174,7 +211,13 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
         REQUIRE(v.size() == 4);
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(!v.empty());
         REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 4);
+        REQUIRE(v.begin() != v.end());
     }
     SECTION("Construct from iterator with allocator")
     {
@@ -185,7 +228,77 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         REQUIRE(v.get_allocator() == alloc);
         REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() >= v.size());
         REQUIRE(v[0] == 23);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 1);
+        REQUIRE(!v.empty());
+    }
+    SECTION("Zero count constructors")
+    {
+        // Test zero count with value
+        value_type const value = 42;
+        Vector v1(0, value, alloc);
+        
+        REQUIRE(v1.get_allocator() == alloc);
+        REQUIRE(v1.empty());
+        REQUIRE(v1.size() == 0);
+        REQUIRE(v1.begin() == v1.end());
+        
+        // Test zero count without value
+        Vector v2(0, alloc);
+        
+        REQUIRE(v2.get_allocator() == alloc);
+        REQUIRE(v2.empty());
+        REQUIRE(v2.size() == 0);
+        REQUIRE(v2.begin() == v2.end());
+    }
+    SECTION("Iterator range edge cases")
+    {
+        // Empty range
+        value_type d[] = { 1, 2, 3 };
+        Vector v1(&d[0], &d[0], alloc);  // first == last
+        
+        REQUIRE(v1.get_allocator() == alloc);
+        REQUIRE(v1.empty());
+        REQUIRE(v1.size() == 0);
+        REQUIRE(v1.begin() == v1.end());
+        
+        // Single element range
+        Vector v2(&d[0], &d[1], alloc);
+        
+        REQUIRE(v2.get_allocator() == alloc);
+        REQUIRE(v2.size() == 1);
+        REQUIRE(v2.capacity() >= v2.size());
+        REQUIRE(v2[0] == 1);
+        REQUIRE(!v2.empty());
+        REQUIRE(v2.begin() != v2.end());
+    }
+}
+
+TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
+{
+    using Vector = pw::vector<int>;
+    
+    SECTION("Constexpr default constructor")
+    {
+        constexpr auto test_constexpr = []() constexpr {
+            Vector v;
+            return v.empty() && v.size() == 0;
+        };
+        
+        static_assert(test_constexpr());
+        REQUIRE(test_constexpr());
+    }
+    SECTION("Constexpr initializer list constructor")
+    {
+        constexpr auto test_constexpr = []() constexpr {
+            Vector v{1, 2, 3};
+            return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
+        };
+        
+        static_assert(test_constexpr());
+        REQUIRE(test_constexpr());
     }
 }
 

@@ -466,7 +466,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::max_size() const noexcept
 {
-    return 1;
+    return (1 << 60) / sizeof (Type);
 }
 
 template<class Type, class Allocator>
