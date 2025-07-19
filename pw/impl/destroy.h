@@ -20,7 +20,7 @@ namespace pw {
  * @note Similar to std::destroy (C++17 and later).
  */
 template<typename Iterator>
-void
+constexpr void
 destroy(Iterator first, Iterator end)
 {
     while (first != end)

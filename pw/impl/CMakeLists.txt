@@ -1,6 +1,7 @@
 add_library(pw-impl INTERFACE
         numeric_limits.h
-        is_base_of.h)
+        is_base_of.h
+        is_constant_evaluated.h)
 
 target_include_directories(
         pw-impl

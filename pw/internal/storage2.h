@@ -1,12 +1,12 @@
 #ifndef INCLUDED_PW_INTERNAL_STORAGE2_H
 #define INCLUDED_PW_INTERNAL_STORAGE2_H
-#endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */
 
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_move.h>
+#include <functional>
 
 namespace pw::internal {
 template<class Type, class Allocator = pw::allocator<Type>>
@@ -23,8 +23,8 @@ struct Storage2
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
-    explicit Storage2(allocator_type const& alloc);
-    ~Storage2();
+    constexpr explicit Storage2(allocator_type const& alloc);
+    constexpr ~Storage2();
 
     constexpr void               reserve(size_type count, std::function<void(pointer begin)> func);
     constexpr void               reserve(size_type count);
@@ -51,6 +51,7 @@ private:
 };
 
 template<class Type, class Allocator>
+constexpr
 Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
     : m_alloc(alloc)
     , m_begin(0)
@@ -60,6 +61,7 @@ Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
+constexpr
 Storage2<Type, Allocator>::~Storage2()
 {
     pw::destroy(m_begin, m_begin + m_size);
@@ -183,3 +185,4 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator) noexcept(
     swap(m_allocated, other.m_allocated);
 }
 } // namespace pw::internal
+#endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */

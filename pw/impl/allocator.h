@@ -3,6 +3,7 @@
 
 #include <pw/impl/bool_type.h>
 #include <pw/impl/is_same.h>
+#include <pw/impl/is_constant_evaluated.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 
@@ -32,7 +33,13 @@ template<class Type>
 constexpr void
 allocator<Type>::deallocate(Type* ptr, size_type count)
 {
-    return ::operator delete(static_cast<void*>(ptr));
+    if (pw::is_constant_evaluated())
+    {
+        // In constant evaluation, we cannot use `::operator delete` as it may not be available.
+        // This is a workaround to avoid issues in constant expressions.
+        return;
+    }
+    ::operator delete(static_cast<void*>(ptr));
 }
 
 template<class Type1, class Type2>

@@ -13,7 +13,7 @@ namespace pw {
  * @param ptr Pointer to the object to destroy. Must not be null.
  */
 template<class Type>
-void
+constexpr void
 destroy_at(Type* ptr)
 {
     ptr->~Type();

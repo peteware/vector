@@ -35,7 +35,7 @@ struct allocator_traits
 
     static pointer allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }
 
-    static void deallocate(allocator_type& alloc, pointer p, size_type count) { alloc.deallocate(p, count); }
+    static constexpr void deallocate(allocator_type& alloc, pointer p, size_type count) { alloc.deallocate(p, count); }
 
     template<class Type, class... Args>
     static constexpr void construct(allocator_type& alloc, Type* p, Args&&... args)

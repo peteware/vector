@@ -473,7 +473,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const noexcept
 {
-    return m_storage.capacity();
+    return m_storage.allocated();
 }
 
 template<class Type, class Allocator>
