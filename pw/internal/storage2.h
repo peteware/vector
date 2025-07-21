@@ -72,9 +72,12 @@ template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> func)
 {
-    reserve(count);
-    func(begin());
-    set_size(count);
+    if (count > 0)
+    {
+        reserve(count);
+        func(begin());
+        set_size(count);
+    }
 }
 
 template<class Type, class Allocator>
