@@ -487,8 +487,14 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::reserve(size_type count)
 {
-    (void)count;
-    throw internal::Unimplemented(__func__);
+    if (count <= m_storage.allocated())
+        return;
+    Storage tmp(m_storage.get_allocator());
+    auto lambda = [begin = begin(), end = end()](pointer dest) -> void {
+        uninitialized_move(begin, end, dest);
+    };
+    tmp.reserve(count, lambda);
+    tmp.swap(m_storage, false);
 }
 
 template<class Type, class Allocator>

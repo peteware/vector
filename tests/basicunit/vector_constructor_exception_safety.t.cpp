@@ -14,22 +14,26 @@ namespace {
         
         int value;
         
-        explicit ThrowingType(int v = 0) : value(v) {
+        explicit ThrowingType(int v = 0) : value(v)
+        {
             if (++construction_count > throw_after_n && throw_after_n >= 0) {
                 --construction_count;
                 throw std::runtime_error("Construction limit reached");
             }
         }
         
-        ThrowingType(const ThrowingType& other) : value(other.value) {
-            if (should_throw_on_copy || (++construction_count > throw_after_n && throw_after_n >= 0)) {
+        ThrowingType(const ThrowingType& other) : value(other.value)
+        {
+            if (should_throw_on_copy || (++construction_count > throw_after_n && throw_after_n >= 0))
+            {
                 --construction_count;
                 throw std::runtime_error("Copy construction failed");
             }
         }
         
         ThrowingType(ThrowingType&& other) noexcept(false) : value(other.value) {
-            if (should_throw_on_move || (++construction_count > throw_after_n && throw_after_n >= 0)) {
+            if (should_throw_on_move || (++construction_count > throw_after_n && throw_after_n >= 0))
+            {
                 --construction_count;
                 throw std::runtime_error("Move construction failed");
             }
