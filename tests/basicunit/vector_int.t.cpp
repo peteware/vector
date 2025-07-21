@@ -31,13 +31,9 @@ TEST_CASE("Constructors", "[vector][constructor]")
             {
                 REQUIRE(!v.size());
             }
-            THEN("begin() is null")
+            THEN("begin() is end()")
             {
-                REQUIRE(!v.begin());
-            }
-            THEN("end() is null")
-            {
-                REQUIRE(!v.end());
+                REQUIRE(v.begin() == v.end());
             }
         }
     }
@@ -63,12 +59,12 @@ TEST_CASE("Constructors", "[vector][constructor]")
             }
             THEN("begin() returns element")
             {
-                REQUIRE(v.begin());
+                REQUIRE(v.begin() != v.end());
                 REQUIRE(*v.begin() == value);
             }
             THEN("end() returns element")
             {
-                REQUIRE(v.end());
+                REQUIRE(v.begin() != v.end());
                 REQUIRE(*(v.end() - 1) == value);
             }
             THEN("all elements have correct value")
@@ -355,6 +351,7 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
         Vector    v1 { { 1, 2, 3 }, alloc1 };
         Vector    v2 { { 4, 5, 6 }, alloc2 };
         REQUIRE(Allocator::propagate_on_container_move_assignment::value);
+
         WHEN("Use move() assignmet")
         {
             v1 = pw::move(v2);
