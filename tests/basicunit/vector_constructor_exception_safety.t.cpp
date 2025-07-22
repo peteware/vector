@@ -56,7 +56,8 @@ namespace {
     
     // Allocator that can throw on allocation
     template<typename T>
-    class ThrowingAllocator {
+    class ThrowingAllocator
+{
     public:
         using value_type = T;
         static bool should_throw_on_allocate;

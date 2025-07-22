@@ -253,9 +253,16 @@ template<class Iterator>
 constexpr void
 vector<Type, Allocator>::assign(Iterator begin, Iterator end)
 {
-    (void)begin;
-    (void)end;
-    throw internal::Unimplemented(__func__);
+    m_storage.reset();
+    size_type count = distance(begin, end);
+    if (count == 0)
+    {
+        return;
+    }
+    auto lambda = [begin = begin, end = end](pointer dest) -> void {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>

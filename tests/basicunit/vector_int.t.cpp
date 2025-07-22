@@ -516,3 +516,51 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
         }
     }
 }
+
+TEST_CASE("Assign methods", "[vector][assign]")
+{
+    using Vector = pw::vector<int>;
+    using value_type = typename Vector::value_type;
+
+    SECTION("assign(count, value)")
+    {
+        Vector v;
+        v.assign(5, 42);
+        REQUIRE(v.size() == 5);
+        for (auto x : v) REQUIRE(x == 42);
+
+        v.assign(0, 99);
+        REQUIRE(v.empty());
+    }
+    SECTION("assign(iterator, iterator)")
+    {
+        int arr[] = {1, 2, 3, 4};
+        Vector v;
+        v.assign(arr, arr + 4);
+        REQUIRE(v.size() == 4);
+        for (int i = 0; i < 4; ++i) REQUIRE(v[i] == arr[i]);
+
+        v.assign(arr, arr); // empty range
+        REQUIRE(v.empty());
+    }
+    SECTION("assign(initializer_list)")
+    {
+        Vector v;
+        v.assign({7, 8, 9});
+        REQUIRE(v.size() == 3);
+        REQUIRE(v[0] == 7);
+        REQUIRE(v[1] == 8);
+        REQUIRE(v[2] == 9);
+
+        v.assign({});
+        REQUIRE(v.empty());
+    }
+    SECTION("assign replaces old contents")
+    {
+        Vector v = {1, 2, 3};
+        v.assign(2, 5);
+        REQUIRE(v.size() == 2);
+        REQUIRE(v[0] == 5);
+        REQUIRE(v[1] == 5);
+    }
+}

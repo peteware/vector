@@ -28,6 +28,7 @@ struct Storage2
 
     constexpr void               reserve(size_type count, std::function<void(pointer begin)> func);
     constexpr void               reserve(size_type count);
+    constexpr void               reset();
     [[nodiscard]] constexpr bool empty() const noexcept;
     constexpr pointer            begin() noexcept;
     constexpr const_pointer      begin() const noexcept;
@@ -108,6 +109,19 @@ Storage2<Type, Allocator>::reserve(size_type count)
     swap(count, m_allocated);
 }
 
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::reset()
+{
+    if (m_begin)
+    {
+        pw::destroy(m_begin, m_begin + m_size);
+        allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
+    }
+    m_begin     = nullptr;
+    m_size      = 0;
+    m_allocated = 0;
+}
 template<class Type, class Allocator>
 constexpr bool
 Storage2<Type, Allocator>::empty() const noexcept
