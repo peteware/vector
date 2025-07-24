@@ -525,11 +525,11 @@ TEST_CASE("Assign methods", "[vector][assign]")
     SECTION("assign(count, value)")
     {
         Vector v;
-        v.assign(5, 42);
+        v.assign(static_cast<Vector::size_type>(5), 42);
         REQUIRE(v.size() == 5);
         for (auto x : v) REQUIRE(x == 42);
 
-        v.assign(0, 99);
+        v.assign(static_cast<Vector::size_type>(0), 99);
         REQUIRE(v.empty());
     }
     SECTION("assign(iterator, iterator)")
@@ -558,7 +558,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
     SECTION("assign replaces old contents")
     {
         Vector v = {1, 2, 3};
-        v.assign(2, 5);
+        v.assign(static_cast<Vector::size_type>(2), 5);
         REQUIRE(v.size() == 2);
         REQUIRE(v[0] == 5);
         REQUIRE(v[1] == 5);

@@ -269,17 +269,35 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
-    (void)count;
-    (void)value;
-    throw internal::Unimplemented(__func__);
+    m_storage.reset();
+    if (count == 0)
+    {
+        return;
+    }
+    auto lambda = [count, value](pointer dest) mutable -> void
+    {
+        while (count--)
+        {
+            construct_at(dest++, value);
+        }
+    };
+    m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
 {
-    (void)init_list;
-    throw internal::Unimplemented(__func__);
+    m_storage.reset();
+    if (init_list.size() == 0)
+    {
+        return;
+    }
+    auto lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void
+    {
+        uninitialized_copy(begin, end, dest);
+    };
+    m_storage.reserve(init_list.size(), lambda);
 }
 
 template<class Type, class Allocator>
