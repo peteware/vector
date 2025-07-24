@@ -563,4 +563,63 @@ TEST_CASE("Assign methods", "[vector][assign]")
         REQUIRE(v[0] == 5);
         REQUIRE(v[1] == 5);
     }
+    SECTION("assign with 0 items")
+    {
+        SECTION("assign(0, value) on empty vector")
+        {
+            Vector v;
+            v.assign(static_cast<Vector::size_type>(0), 42);
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+        }
+        SECTION("assign(0, value) on non-empty vector")
+        {
+            Vector v = {1, 2, 3, 4, 5};
+            auto original_capacity = v.capacity();
+            v.assign(static_cast<Vector::size_type>(0), 99);
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+            REQUIRE(v.capacity() >= original_capacity);
+        }
+        SECTION("assign(empty_range) on empty vector")
+        {
+            Vector v;
+            int arr[] = {1, 2, 3};
+            v.assign(arr, arr);
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+        }
+        SECTION("assign(empty_range) on non-empty vector")
+        {
+            Vector v = {10, 20, 30};
+            auto original_capacity = v.capacity();
+            int arr[] = {1, 2, 3};
+            v.assign(arr, arr);
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+            REQUIRE(v.capacity() >= original_capacity);
+        }
+        SECTION("assign(empty_initializer_list) on empty vector")
+        {
+            Vector v;
+            v.assign({});
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+        }
+        SECTION("assign(empty_initializer_list) on non-empty vector")
+        {
+            Vector v = {7, 8, 9, 10};
+            auto original_capacity = v.capacity();
+            v.assign({});
+            REQUIRE(v.empty());
+            REQUIRE(v.size() == 0);
+            REQUIRE(v.begin() == v.end());
+            REQUIRE(v.capacity() >= original_capacity);
+        }
+    }
 }
