@@ -728,3 +728,87 @@ TEST_CASE("at() methods", "[vector][at][access]")
         REQUIRE(cref == 200);
     }
 }
+
+TEST_CASE("operator[] methods", "[vector][operator][access]")
+{
+    using Vector = pw::vector<int>;
+    
+    SECTION("operator[] on single element vector")
+    {
+        Vector v = {42};
+        
+        REQUIRE(v[0] == 42);
+        
+        v[0] = 99;
+        REQUIRE(v[0] == 99);
+        REQUIRE(v.at(0) == 99);
+    }
+    SECTION("const operator[] on single element vector")
+    {
+        const Vector v = {42};
+        
+        REQUIRE(v[0] == 42);
+    }
+    SECTION("operator[] on multi-element vector")
+    {
+        Vector v = {10, 20, 30, 40, 50};
+        
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(v[3] == 40);
+        REQUIRE(v[4] == 50);
+        
+        v[2] = 333;
+        REQUIRE(v[2] == 333);
+        REQUIRE(v.at(2) == 333);
+    }
+    SECTION("const operator[] on multi-element vector")
+    {
+        const Vector v = {10, 20, 30, 40, 50};
+        
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(v[3] == 40);
+        REQUIRE(v[4] == 50);
+    }
+    SECTION("operator[] boundary conditions")
+    {
+        Vector v(static_cast<Vector::size_type>(1000), 7);
+        
+        REQUIRE(v[0] == 7);
+        REQUIRE(v[999] == 7);
+        
+        v[0] = 1;
+        v[999] = 2;
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[999] == 2);
+        REQUIRE(v[500] == 7);
+    }
+    SECTION("operator[] return type and reference semantics")
+    {
+        Vector v = {100};
+        
+        int& ref = v[0];
+        ref = 200;
+        REQUIRE(v[0] == 200);
+        REQUIRE(v.at(0) == 200);
+        
+        const Vector& cv = v;
+        const int& cref = cv[0];
+        REQUIRE(cref == 200);
+    }
+    SECTION("operator[] vs at() comparison")
+    {
+        Vector v = {1, 2, 3};
+        
+        for (Vector::size_type i = 0; i < v.size(); ++i) {
+            REQUIRE(v[i] == v.at(i));
+        }
+        
+        v[1] = 999;
+        REQUIRE(v[1] == v.at(1));
+        REQUIRE(v[1] == 999);
+    }
+}

@@ -340,9 +340,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::operator[](size_type position) const
 {
-    (void)position;
-    throw internal::Unimplemented(__func__);
-    //return makeReference<value_type>();
+    return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
