@@ -311,18 +311,22 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::at(size_type position)
 {
-    (void)position;
-    throw internal::Unimplemented(__func__);
-    // return makeReference<value_type>();
+    if (position >= size())
+    {
+        throw std::out_of_range("vector::at");
+    }
+    return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::at(size_type position) const
 {
-    (void)position;
-    throw internal::Unimplemented(__func__);
-    //return makeReference<value_type>();
+    if (position >= size())
+    {
+        throw std::out_of_range("vector::at");
+    }
+    return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
