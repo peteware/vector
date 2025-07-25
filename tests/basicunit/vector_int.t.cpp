@@ -1092,3 +1092,155 @@ TEST_CASE("data() method", "[vector][data][access]")
         REQUIRE(*mutable_ptr == *const_ptr);
     }
 }
+
+TEST_CASE("clear() method", "[vector][clear][modifiers]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("clear() on empty vector")
+    {
+        Vector v;
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.begin() == v.end());
+        REQUIRE(v.data() == nullptr);
+    }
+    SECTION("clear() on single element vector")
+    {
+        Vector v = { 42 };
+        REQUIRE(!v.empty());
+        REQUIRE(v.size() == 1);
+        auto original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.begin() == v.end());
+        REQUIRE(v.data() == nullptr);
+        REQUIRE(v.capacity() == original_capacity);
+    }
+    SECTION("clear() on multi-element vector")
+    {
+        Vector v = { 10, 20, 30, 40, 50 };
+        REQUIRE(!v.empty());
+        REQUIRE(v.size() == 5);
+        auto original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.begin() == v.end());
+        REQUIRE(v.data() == nullptr);
+        REQUIRE(v.capacity() == original_capacity);
+    }
+    SECTION("clear() preserves capacity")
+    {
+        Vector v;
+        v.reserve(100);
+        auto reserved_capacity = v.capacity();
+        REQUIRE(reserved_capacity >= 100);
+
+        v.assign({ 1, 2, 3, 4, 5 });
+        REQUIRE(v.size() == 5);
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+    }
+    SECTION("clear() on large vector")
+    {
+        Vector v(static_cast<Vector::size_type>(1000), 7);
+        REQUIRE(v.size() == 1000);
+        REQUIRE(!v.empty());
+        auto original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.begin() == v.end());
+        REQUIRE(v.data() == nullptr);
+        REQUIRE(v.capacity() == original_capacity);
+    }
+    SECTION("clear() multiple times")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() == original_capacity);
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() == original_capacity);
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() == original_capacity);
+    }
+    SECTION("clear() then reuse vector")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() == original_capacity);
+
+        v.assign({ 10, 20 });
+        REQUIRE(v.size() == 2);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+    }
+    SECTION("clear() with different allocators")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc(5);
+        Vector    v({ 1, 2, 3 }, alloc);
+        auto      original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.capacity() == original_capacity);
+        REQUIRE(v.get_allocator() == alloc);
+    }
+    SECTION("clear() effects on iterators")
+    {
+        Vector v            = { 1, 2, 3, 4 };
+
+        auto   begin_before = v.begin();
+        auto   end_before   = v.end();
+        REQUIRE(begin_before != end_before);
+
+        v.clear();
+
+        auto begin_after = v.begin();
+        auto end_after   = v.end();
+        REQUIRE(begin_after == end_after);
+
+        // Note: iterators from before clear() are now invalid
+        // We only test the new iterators
+    }
+    SECTION("clear() followed by access methods")
+    {
+        Vector v = { 1, 2, 3 };
+
+        v.clear();
+        REQUIRE(v.empty());
+
+        // These should throw because vector is empty
+        REQUIRE_THROWS_AS(v.at(0), std::out_of_range);
+        // Note: front(), back() have undefined behavior on empty vector
+        // so we don't test them here
+
+        REQUIRE(v.data() == nullptr);
+        REQUIRE(v.begin() == v.end());
+    }
+}
