@@ -208,7 +208,7 @@ vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 {
     Storage storage { allocator_type() };
 
-    auto lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void {
+    auto    lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void {
         uninitialized_copy(begin, end, dest);
     };
     storage.reserve(init_list.size(), lambda);
@@ -259,9 +259,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
     {
         return;
     }
-    auto lambda = [begin = begin, end = end](pointer dest) -> void {
-        uninitialized_copy(begin, end, dest);
-    };
+    auto lambda = [begin = begin, end = end](pointer dest) -> void { uninitialized_copy(begin, end, dest); };
     m_storage.reserve(count, lambda);
 }
 
@@ -274,8 +272,7 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
     {
         return;
     }
-    auto lambda = [count, value](pointer dest) mutable -> void
-    {
+    auto lambda = [count, value](pointer dest) mutable -> void {
         while (count--)
         {
             construct_at(dest++, value);
@@ -293,8 +290,7 @@ vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
     {
         return;
     }
-    auto lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void
-    {
+    auto lambda = [begin = init_list.begin(), end = init_list.end()](pointer dest) -> void {
         uninitialized_copy(begin, end, dest);
     };
     m_storage.reserve(init_list.size(), lambda);
@@ -347,48 +343,46 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
 {
-    throw internal::Unimplemented(__func__);
-    //return makeReference<value_type>();
+    return *m_storage.begin();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
 {
-    throw internal::Unimplemented(__func__);
-    // return makeReference<value_type>();
+    return *m_storage.begin();
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
-    throw internal::Unimplemented(__func__);
-    // return makeReference<value_type>();
+    return *(m_storage.end() - 1);
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
-    throw internal::Unimplemented(__func__);
-    // return makeReference<value_type>();
+    return *(m_storage.end() - 1);
 }
 
 template<class Type, class Allocator>
 constexpr Type*
 vector<Type, Allocator>::data() noexcept
 {
-    throw internal::Unimplemented(__func__);
-    // return &makeReference<value_type>();
+    if (empty())
+        return nullptr;
+    return m_storage.begin();
 }
 
 template<class Type, class Allocator>
 constexpr Type const*
 vector<Type, Allocator>::data() const noexcept
 {
-    throw internal::Unimplemented(__func__);
-    // return &makeReference<value_type>();
+    if (empty())
+        return nullptr;
+    return m_storage.begin();
 }
 
 template<class Type, class Allocator>
@@ -493,7 +487,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::max_size() const noexcept
 {
-    return (1 << 60) / sizeof (Type);
+    return (1 << 60) / sizeof(Type);
 }
 
 template<class Type, class Allocator>
@@ -517,7 +511,7 @@ vector<Type, Allocator>::reserve(size_type count)
     if (count <= m_storage.allocated())
         return;
     Storage tmp(m_storage.get_allocator());
-    auto lambda = [begin = begin(), end = end()](pointer dest) -> void {
+    auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
         uninitialized_move(begin, end, dest);
     };
     tmp.reserve(count, lambda);
@@ -528,7 +522,9 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::clear() noexcept
 {
-    throw internal::Unimplemented(__func__);
+    // Calling clear() does not affect the result of capacity().
+    destroy(m_storage.begin(), m_storage.end());
+    m_storage.set_size(0);
 }
 
 template<class Type, class Allocator>

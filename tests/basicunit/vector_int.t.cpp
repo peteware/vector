@@ -69,7 +69,8 @@ TEST_CASE("Constructors", "[vector][constructor]")
             }
             THEN("all elements have correct value")
             {
-                for (typename Vector::size_type i = 0; i < total; ++i) {
+                for (typename Vector::size_type i = 0; i < total; ++i)
+                {
                     REQUIRE(v[i] == value);
                 }
             }
@@ -117,7 +118,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
     {
         // constexpr vector(vector&& other) noexcept;
         Vector v1 { 1, 2, 3, 10 };
-        auto original_size = v1.size();
+        auto   original_size = v1.size();
         Vector v2(move(v1));
 
         REQUIRE(v1.get_allocator() == v2.get_allocator());
@@ -158,8 +159,9 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         REQUIRE(v.capacity() >= v.size());
         REQUIRE(!v.empty());
         REQUIRE(v[0] == value);
-        REQUIRE(v[count-1] == value);
-        for (Vector::size_type i = 0; i < count; ++i) {
+        REQUIRE(v[count - 1] == value);
+        for (Vector::size_type i = 0; i < count; ++i)
+        {
             REQUIRE(v[i] == value);
         }
     }
@@ -234,16 +236,16 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
     {
         // Test zero count with value
         value_type const value = 42;
-        Vector v1(static_cast<Vector::size_type>(0), value, alloc);
-        
+        Vector           v1(static_cast<Vector::size_type>(0), value, alloc);
+
         REQUIRE(v1.get_allocator() == alloc);
         REQUIRE(v1.empty());
         REQUIRE(v1.size() == 0);
         REQUIRE(v1.begin() == v1.end());
-        
+
         // Test zero count without value
         Vector v2(static_cast<Vector::size_type>(0), alloc);
-        
+
         REQUIRE(v2.get_allocator() == alloc);
         REQUIRE(v2.empty());
         REQUIRE(v2.size() == 0);
@@ -253,16 +255,16 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
     {
         // Empty range
         value_type d[] = { 1, 2, 3 };
-        Vector v1(&d[0], &d[0], alloc);  // first == last
-        
+        Vector     v1(&d[0], &d[0], alloc); // first == last
+
         REQUIRE(v1.get_allocator() == alloc);
         REQUIRE(v1.empty());
         REQUIRE(v1.size() == 0);
         REQUIRE(v1.begin() == v1.end());
-        
+
         // Single element range
         Vector v2(&d[0], &d[1], alloc);
-        
+
         REQUIRE(v2.get_allocator() == alloc);
         REQUIRE(v2.size() == 1);
         REQUIRE(v2.capacity() >= v2.size());
@@ -275,24 +277,24 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
 {
     using Vector = pw::vector<int>;
-    
+
     SECTION("Constexpr default constructor")
     {
         constexpr auto test_constexpr = []() constexpr {
             Vector v;
             return v.empty() && v.size() == 0;
         };
-        
+
         static_assert(test_constexpr());
         REQUIRE(test_constexpr());
     }
     SECTION("Constexpr initializer list constructor")
     {
         constexpr auto test_constexpr = []() constexpr {
-            Vector v{1, 2, 3};
+            Vector v { 1, 2, 3 };
             return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
         };
-        
+
         //static_assert(test_constexpr());
         REQUIRE(test_constexpr());
     }
@@ -376,7 +378,6 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
             REQUIRE(v1[0] == v2[0]);
         }
     }
-
 }
 
 TEST_CASE("Assignment with initializer_List use allocator", "[assignment][allocator][init_list]")
@@ -398,7 +399,7 @@ TEST_CASE("Assignment with initializer_List use allocator", "[assignment][alloca
         Vector    v1 { { 1, 2, 3 }, alloc1 };
         WHEN("Use initializer_list assignment")
         {
-            v1 = {4, 5, 6};
+            v1 = { 4, 5, 6 };
             REQUIRE(v1.get_allocator() == alloc1);
             REQUIRE(v1[0] == 4);
         }
@@ -519,7 +520,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 
 TEST_CASE("Assign methods", "[vector][assign]")
 {
-    using Vector = pw::vector<int>;
+    using Vector     = pw::vector<int>;
     using value_type = typename Vector::value_type;
 
     SECTION("assign(count, value)")
@@ -527,18 +528,20 @@ TEST_CASE("Assign methods", "[vector][assign]")
         Vector v;
         v.assign(static_cast<Vector::size_type>(5), 42);
         REQUIRE(v.size() == 5);
-        for (auto x : v) REQUIRE(x == 42);
+        for (auto x : v)
+            REQUIRE(x == 42);
 
         v.assign(static_cast<Vector::size_type>(0), 99);
         REQUIRE(v.empty());
     }
     SECTION("assign(iterator, iterator)")
     {
-        int arr[] = {1, 2, 3, 4};
+        int    arr[] = { 1, 2, 3, 4 };
         Vector v;
         v.assign(arr, arr + 4);
         REQUIRE(v.size() == 4);
-        for (int i = 0; i < 4; ++i) REQUIRE(v[i] == arr[i]);
+        for (int i = 0; i < 4; ++i)
+            REQUIRE(v[i] == arr[i]);
 
         v.assign(arr, arr); // empty range
         REQUIRE(v.empty());
@@ -546,7 +549,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
     SECTION("assign(initializer_list)")
     {
         Vector v;
-        v.assign({7, 8, 9});
+        v.assign({ 7, 8, 9 });
         REQUIRE(v.size() == 3);
         REQUIRE(v[0] == 7);
         REQUIRE(v[1] == 8);
@@ -557,7 +560,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
     }
     SECTION("assign replaces old contents")
     {
-        Vector v = {1, 2, 3};
+        Vector v = { 1, 2, 3 };
         v.assign(static_cast<Vector::size_type>(2), 5);
         REQUIRE(v.size() == 2);
         REQUIRE(v[0] == 5);
@@ -575,8 +578,8 @@ TEST_CASE("Assign methods", "[vector][assign]")
         }
         SECTION("assign(0, value) on non-empty vector")
         {
-            Vector v = {1, 2, 3, 4, 5};
-            auto original_capacity = v.capacity();
+            Vector v                 = { 1, 2, 3, 4, 5 };
+            auto   original_capacity = v.capacity();
             v.assign(static_cast<Vector::size_type>(0), 99);
             REQUIRE(v.empty());
             REQUIRE(v.size() == 0);
@@ -588,7 +591,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
         SECTION("assign(empty_range) on empty vector")
         {
             Vector v;
-            int arr[] = {1, 2, 3};
+            int    arr[] = { 1, 2, 3 };
             v.assign(arr, arr);
             REQUIRE(v.empty());
             REQUIRE(v.size() == 0);
@@ -596,9 +599,9 @@ TEST_CASE("Assign methods", "[vector][assign]")
         }
         SECTION("assign(empty_range) on non-empty vector")
         {
-            Vector v = {10, 20, 30};
-            auto original_capacity = v.capacity();
-            int arr[] = {1, 2, 3};
+            Vector v                 = { 10, 20, 30 };
+            auto   original_capacity = v.capacity();
+            int    arr[]             = { 1, 2, 3 };
             v.assign(arr, arr);
             REQUIRE(v.empty());
             REQUIRE(v.size() == 0);
@@ -617,8 +620,8 @@ TEST_CASE("Assign methods", "[vector][assign]")
         }
         SECTION("assign(empty_initializer_list) on non-empty vector")
         {
-            Vector v = {7, 8, 9, 10};
-            auto original_capacity = v.capacity();
+            Vector v                 = { 7, 8, 9, 10 };
+            auto   original_capacity = v.capacity();
             v.assign({});
             REQUIRE(v.empty());
             REQUIRE(v.size() == 0);
@@ -633,7 +636,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
 TEST_CASE("at() methods", "[vector][at][access]")
 {
     using Vector = pw::vector<int>;
-    
+
     SECTION("at() on empty vector")
     {
         Vector v;
@@ -650,52 +653,52 @@ TEST_CASE("at() methods", "[vector][at][access]")
     }
     SECTION("at() on single element vector")
     {
-        Vector v = {42};
-        
+        Vector v = { 42 };
+
         REQUIRE(v.at(0) == 42);
         REQUIRE_THROWS_AS(v.at(1), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(100), std::out_of_range);
-        
+
         v.at(0) = 99;
         REQUIRE(v.at(0) == 99);
         REQUIRE(v[0] == 99);
     }
     SECTION("const at() on single element vector")
     {
-        const Vector v = {42};
-        
+        const Vector v = { 42 };
+
         REQUIRE(v.at(0) == 42);
         REQUIRE_THROWS_AS(v.at(1), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(100), std::out_of_range);
     }
     SECTION("at() on multi-element vector")
     {
-        Vector v = {10, 20, 30, 40, 50};
-        
+        Vector v = { 10, 20, 30, 40, 50 };
+
         REQUIRE(v.at(0) == 10);
         REQUIRE(v.at(1) == 20);
         REQUIRE(v.at(2) == 30);
         REQUIRE(v.at(3) == 40);
         REQUIRE(v.at(4) == 50);
-        
+
         REQUIRE_THROWS_AS(v.at(5), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(10), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(100), std::out_of_range);
-        
+
         v.at(2) = 333;
         REQUIRE(v.at(2) == 333);
         REQUIRE(v[2] == 333);
     }
     SECTION("const at() on multi-element vector")
     {
-        const Vector v = {10, 20, 30, 40, 50};
-        
+        const Vector v = { 10, 20, 30, 40, 50 };
+
         REQUIRE(v.at(0) == 10);
         REQUIRE(v.at(1) == 20);
         REQUIRE(v.at(2) == 30);
         REQUIRE(v.at(3) == 40);
         REQUIRE(v.at(4) == 50);
-        
+
         REQUIRE_THROWS_AS(v.at(5), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(10), std::out_of_range);
         REQUIRE_THROWS_AS(v.at(100), std::out_of_range);
@@ -703,12 +706,12 @@ TEST_CASE("at() methods", "[vector][at][access]")
     SECTION("at() boundary conditions")
     {
         Vector v(static_cast<Vector::size_type>(1000), 7);
-        
+
         REQUIRE(v.at(0) == 7);
         REQUIRE(v.at(999) == 7);
         REQUIRE_THROWS_AS(v.at(1000), std::out_of_range);
-        
-        v.at(0) = 1;
+
+        v.at(0)   = 1;
         v.at(999) = 2;
         REQUIRE(v.at(0) == 1);
         REQUIRE(v.at(999) == 2);
@@ -716,15 +719,15 @@ TEST_CASE("at() methods", "[vector][at][access]")
     }
     SECTION("at() return type and reference semantics")
     {
-        Vector v = {100};
-        
-        int& ref = v.at(0);
-        ref = 200;
+        Vector v   = { 100 };
+
+        int&   ref = v.at(0);
+        ref        = 200;
         REQUIRE(v.at(0) == 200);
         REQUIRE(v[0] == 200);
-        
-        const Vector& cv = v;
-        const int& cref = cv.at(0);
+
+        const Vector& cv   = v;
+        const int&    cref = cv.at(0);
         REQUIRE(cref == 200);
     }
 }
@@ -732,41 +735,41 @@ TEST_CASE("at() methods", "[vector][at][access]")
 TEST_CASE("operator[] methods", "[vector][operator][access]")
 {
     using Vector = pw::vector<int>;
-    
+
     SECTION("operator[] on single element vector")
     {
-        Vector v = {42};
-        
+        Vector v = { 42 };
+
         REQUIRE(v[0] == 42);
-        
+
         v[0] = 99;
         REQUIRE(v[0] == 99);
         REQUIRE(v.at(0) == 99);
     }
     SECTION("const operator[] on single element vector")
     {
-        const Vector v = {42};
-        
+        const Vector v = { 42 };
+
         REQUIRE(v[0] == 42);
     }
     SECTION("operator[] on multi-element vector")
     {
-        Vector v = {10, 20, 30, 40, 50};
-        
+        Vector v = { 10, 20, 30, 40, 50 };
+
         REQUIRE(v[0] == 10);
         REQUIRE(v[1] == 20);
         REQUIRE(v[2] == 30);
         REQUIRE(v[3] == 40);
         REQUIRE(v[4] == 50);
-        
+
         v[2] = 333;
         REQUIRE(v[2] == 333);
         REQUIRE(v.at(2) == 333);
     }
     SECTION("const operator[] on multi-element vector")
     {
-        const Vector v = {10, 20, 30, 40, 50};
-        
+        const Vector v = { 10, 20, 30, 40, 50 };
+
         REQUIRE(v[0] == 10);
         REQUIRE(v[1] == 20);
         REQUIRE(v[2] == 30);
@@ -776,11 +779,11 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
     SECTION("operator[] boundary conditions")
     {
         Vector v(static_cast<Vector::size_type>(1000), 7);
-        
+
         REQUIRE(v[0] == 7);
         REQUIRE(v[999] == 7);
-        
-        v[0] = 1;
+
+        v[0]   = 1;
         v[999] = 2;
         REQUIRE(v[0] == 1);
         REQUIRE(v[999] == 2);
@@ -788,27 +791,304 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
     }
     SECTION("operator[] return type and reference semantics")
     {
-        Vector v = {100};
-        
-        int& ref = v[0];
-        ref = 200;
+        Vector v   = { 100 };
+
+        int&   ref = v[0];
+        ref        = 200;
         REQUIRE(v[0] == 200);
         REQUIRE(v.at(0) == 200);
-        
-        const Vector& cv = v;
-        const int& cref = cv[0];
+
+        const Vector& cv   = v;
+        const int&    cref = cv[0];
         REQUIRE(cref == 200);
     }
     SECTION("operator[] vs at() comparison")
     {
-        Vector v = {1, 2, 3};
-        
-        for (Vector::size_type i = 0; i < v.size(); ++i) {
+        Vector v = { 1, 2, 3 };
+
+        for (Vector::size_type i = 0; i < v.size(); ++i)
+        {
             REQUIRE(v[i] == v.at(i));
         }
-        
+
         v[1] = 999;
         REQUIRE(v[1] == v.at(1));
         REQUIRE(v[1] == 999);
+    }
+}
+
+TEST_CASE("front() and back() methods", "[vector][front][back][access]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("front() and back() on single element vector")
+    {
+        Vector v = { 42 };
+
+        REQUIRE(v.front() == 42);
+        REQUIRE(v.back() == 42);
+        REQUIRE(v.front() == v.back());
+
+        v.front() = 99;
+        REQUIRE(v.front() == 99);
+        REQUIRE(v.back() == 99);
+        REQUIRE(v[0] == 99);
+
+        v.back() = 77;
+        REQUIRE(v.front() == 77);
+        REQUIRE(v.back() == 77);
+        REQUIRE(v[0] == 77);
+    }
+    SECTION("const front() and back() on single element vector")
+    {
+        const Vector v = { 42 };
+
+        REQUIRE(v.front() == 42);
+        REQUIRE(v.back() == 42);
+        REQUIRE(v.front() == v.back());
+    }
+    SECTION("front() and back() on multi-element vector")
+    {
+        Vector v = { 10, 20, 30, 40, 50 };
+
+        REQUIRE(v.front() == 10);
+        REQUIRE(v.back() == 50);
+        REQUIRE(v.front() == v[0]);
+        REQUIRE(v.back() == v[4]);
+        REQUIRE(v.back() == v[v.size() - 1]);
+
+        v.front() = 100;
+        REQUIRE(v.front() == 100);
+        REQUIRE(v[0] == 100);
+        REQUIRE(v.back() == 50);
+
+        v.back() = 500;
+        REQUIRE(v.back() == 500);
+        REQUIRE(v[4] == 500);
+        REQUIRE(v.front() == 100);
+    }
+    SECTION("const front() and back() on multi-element vector")
+    {
+        const Vector v = { 10, 20, 30, 40, 50 };
+
+        REQUIRE(v.front() == 10);
+        REQUIRE(v.back() == 50);
+        REQUIRE(v.front() == v[0]);
+        REQUIRE(v.back() == v[4]);
+        REQUIRE(v.back() == v[v.size() - 1]);
+    }
+    SECTION("front() and back() return type and reference semantics")
+    {
+        Vector v         = { 100, 200 };
+
+        int&   front_ref = v.front();
+        int&   back_ref  = v.back();
+
+        front_ref        = 1000;
+        back_ref         = 2000;
+
+        REQUIRE(v.front() == 1000);
+        REQUIRE(v.back() == 2000);
+        REQUIRE(v[0] == 1000);
+        REQUIRE(v[1] == 2000);
+
+        const Vector& cv              = v;
+        const int&    const_front_ref = cv.front();
+        const int&    const_back_ref  = cv.back();
+
+        REQUIRE(const_front_ref == 1000);
+        REQUIRE(const_back_ref == 2000);
+    }
+    SECTION("front() and back() consistency with other access methods")
+    {
+        Vector v = { 7, 8, 9, 10, 11 };
+
+        REQUIRE(v.front() == v[0]);
+        REQUIRE(v.front() == v.at(0));
+        REQUIRE(v.front() == *v.begin());
+
+        REQUIRE(v.back() == v[v.size() - 1]);
+        REQUIRE(v.back() == v.at(v.size() - 1));
+        REQUIRE(v.back() == *(v.end() - 1));
+
+        v.front() = 77;
+        v.back()  = 111;
+
+        REQUIRE(v[0] == 77);
+        REQUIRE(v.at(0) == 77);
+        REQUIRE(*v.begin() == 77);
+
+        REQUIRE(v[v.size() - 1] == 111);
+        REQUIRE(v.at(v.size() - 1) == 111);
+        REQUIRE(*(v.end() - 1) == 111);
+    }
+    SECTION("front() and back() on large vector")
+    {
+        Vector v(static_cast<Vector::size_type>(1000), 5);
+
+        REQUIRE(v.front() == 5);
+        REQUIRE(v.back() == 5);
+
+        v.front() = 1;
+        v.back()  = 1000;
+
+        REQUIRE(v.front() == 1);
+        REQUIRE(v.back() == 1000);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[999] == 1000);
+        REQUIRE(v[500] == 5);
+    }
+}
+
+TEST_CASE("data() method", "[vector][data][access]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("data() on empty vector")
+    {
+        Vector v;
+        REQUIRE(v.data() == nullptr);
+
+        const Vector& cv = v;
+        REQUIRE(cv.data() == nullptr);
+    }
+    SECTION("data() on single element vector")
+    {
+        Vector v   = { 42 };
+
+        int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(*ptr == 42);
+        REQUIRE(ptr == &v[0]);
+        REQUIRE(ptr == &v.front());
+        REQUIRE(ptr == &v.back());
+
+        *ptr = 99;
+        REQUIRE(v[0] == 99);
+        REQUIRE(v.front() == 99);
+    }
+    SECTION("const data() on single element vector")
+    {
+        const Vector v   = { 42 };
+
+        const int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(*ptr == 42);
+        REQUIRE(ptr == &v[0]);
+        REQUIRE(ptr == &v.front());
+        REQUIRE(ptr == &v.back());
+    }
+    SECTION("data() on multi-element vector")
+    {
+        Vector v   = { 10, 20, 30, 40, 50 };
+
+        int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(ptr == &v[0]);
+        REQUIRE(ptr == &v.front());
+
+        for (Vector::size_type i = 0; i < v.size(); ++i)
+        {
+            REQUIRE(ptr[i] == v[i]);
+            REQUIRE(&ptr[i] == &v[i]);
+        }
+
+        ptr[2] = 333;
+        REQUIRE(v[2] == 333);
+        REQUIRE(v.at(2) == 333);
+    }
+    SECTION("const data() on multi-element vector")
+    {
+        const Vector v   = { 10, 20, 30, 40, 50 };
+
+        const int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(ptr == &v[0]);
+        REQUIRE(ptr == &v.front());
+
+        for (Vector::size_type i = 0; i < v.size(); ++i)
+        {
+            REQUIRE(ptr[i] == v[i]);
+            REQUIRE(&ptr[i] == &v[i]);
+        }
+    }
+    SECTION("data() pointer arithmetic")
+    {
+        Vector v   = { 1, 2, 3, 4, 5 };
+
+        int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+
+        REQUIRE(ptr == &v.front());
+        REQUIRE(ptr + v.size() - 1 == &v.back());
+        REQUIRE(*(ptr + 2) == v[2]);
+        REQUIRE(*(ptr + 4) == v[4]);
+
+        for (Vector::size_type i = 0; i < v.size(); ++i)
+        {
+            REQUIRE(*(ptr + i) == v[i]);
+        }
+    }
+    SECTION("data() consistency with iterators")
+    {
+        Vector v   = { 7, 8, 9, 10, 11 };
+
+        int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(ptr == &(*v.begin()));
+
+        auto it = v.begin();
+        for (Vector::size_type i = 0; i < v.size(); ++i, ++it)
+        {
+            REQUIRE(ptr + i == &(*it));
+            REQUIRE(*(ptr + i) == *it);
+        }
+    }
+    SECTION("data() on large vector")
+    {
+        Vector v(static_cast<Vector::size_type>(1000), 7);
+
+        int*   ptr = v.data();
+        REQUIRE(ptr != nullptr);
+        REQUIRE(ptr == &v[0]);
+        REQUIRE(ptr == &v.front());
+        REQUIRE(ptr + 999 == &v.back());
+
+        REQUIRE(*ptr == 7);
+        REQUIRE(*(ptr + 999) == 7);
+        REQUIRE(*(ptr + 500) == 7);
+
+        *(ptr + 500) = 555;
+        REQUIRE(v[500] == 555);
+        REQUIRE(v.at(500) == 555);
+    }
+    SECTION("data() after vector operations")
+    {
+        Vector v = { 1, 2, 3 };
+
+        v.clear();
+        // After clear, data() should return nullptr for empty vector
+        REQUIRE(v.data() == nullptr);
+
+        v.assign({ 10, 20 });
+        int* after_assign_ptr = v.data();
+        REQUIRE(after_assign_ptr != nullptr);
+        REQUIRE(*after_assign_ptr == 10);
+        REQUIRE(*(after_assign_ptr + 1) == 20);
+    }
+    SECTION("data() return type verification")
+    {
+        Vector v = { 100, 200 };
+
+        static_assert(std::is_same_v<decltype(v.data()), int*>);
+
+        const Vector& cv = v;
+        static_assert(std::is_same_v<decltype(cv.data()), const int*>);
+
+        int*       mutable_ptr = v.data();
+        const int* const_ptr   = cv.data();
+
+        REQUIRE(mutable_ptr == const_ptr);
+        REQUIRE(*mutable_ptr == *const_ptr);
     }
 }
