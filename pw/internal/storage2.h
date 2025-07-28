@@ -1,12 +1,13 @@
 #ifndef INCLUDED_PW_INTERNAL_STORAGE2_H
 #define INCLUDED_PW_INTERNAL_STORAGE2_H
 
+#include <functional>
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
+#include <pw/impl/max.h>
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_move.h>
-#include <functional>
 
 namespace pw::internal {
 template<class Type, class Allocator = pw::allocator<Type>>
@@ -37,10 +38,11 @@ struct Storage2
     constexpr Storage2&          set_size(size_type size) noexcept;
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
+    constexpr size_type          calc_size() const noexcept;
     constexpr allocator_type     get_allocator() const;
-    constexpr void               swap(Storage2& other,
-        bool swap_allocator) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-                                   allocator_traits<allocator_type>::is_always_equal::value);
+    constexpr void               swap(Storage2& other, bool swap_allocator)
+        noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+                 allocator_traits<allocator_type>::is_always_equal::value);
 
 private:
     allocator_type m_alloc;
@@ -52,8 +54,7 @@ private:
 };
 
 template<class Type, class Allocator>
-constexpr
-Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
+constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
     : m_alloc(alloc)
     , m_begin(0)
     , m_size(0)
@@ -62,8 +63,7 @@ Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
-constexpr
-Storage2<Type, Allocator>::~Storage2()
+constexpr Storage2<Type, Allocator>::~Storage2()
 {
     pw::destroy(m_begin, m_begin + m_size);
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
@@ -85,8 +85,7 @@ template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count)
 {
-    pointer   tmp = allocator_traits<Allocator>::allocate(m_alloc, count);
-    size_type old;
+    pointer tmp = allocator_traits<Allocator>::allocate(m_alloc, count);
 
     pw::uninitialized_move(begin(), end(), tmp);
     /*
@@ -103,7 +102,6 @@ Storage2<Type, Allocator>::reserve(size_type count)
         allocator_traits<Allocator>::deallocate(m_alloc, tmp, count);
         throw;
     }
-    allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
     using pw::swap;
     swap(tmp, m_begin);
     swap(count, m_allocated);
@@ -179,6 +177,16 @@ Storage2<Type, Allocator>::allocated() const noexcept
     return m_allocated;
 }
 
+/**
+ * @return The next size to allocate.
+ */
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::size_type
+Storage2<Type, Allocator>::calc_size() const noexcept
+{
+    return max(static_cast<size_type>(1), 2 * m_allocated);
+}
+
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::allocator_type
 Storage2<Type, Allocator>::get_allocator() const
@@ -188,9 +196,9 @@ Storage2<Type, Allocator>::get_allocator() const
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator) noexcept(
-    pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-    pw::allocator_traits<allocator_type>::is_always_equal::value)
+Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
+    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     using pw::swap;
     if (swap_allocator)

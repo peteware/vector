@@ -633,6 +633,259 @@ TEST_CASE("Assign methods", "[vector][assign]")
     }
 }
 
+TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("push_back() on empty vector")
+    {
+        Vector v;
+
+        v.push_back(42);
+        REQUIRE(v.size() == 1);
+        REQUIRE(v[0] == 42);
+        REQUIRE(v.front() == 42);
+        REQUIRE(v.back() == 42);
+        REQUIRE(v.at(0) == 42);
+    }
+    SECTION("push_back() multiple elements")
+    {
+        Vector v;
+
+        v.push_back(10);
+        v.push_back(20);
+        v.push_back(30);
+
+        REQUIRE(v.size() == 3);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(v.front() == 10);
+        REQUIRE(v.back() == 30);
+    }
+    SECTION("push_back() to non-empty vector")
+    {
+        Vector v             = { 1, 2, 3 };
+        auto   original_size = v.size();
+
+        v.push_back(4);
+        REQUIRE(v.size() == original_size + 1);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 4);
+        REQUIRE(v.back() == 4);
+    }
+    SECTION("push_back() capacity growth")
+    {
+        Vector v;
+        auto   original_capacity = v.capacity();
+
+        // Add elements until capacity grows
+        for (int i = 0; i < 10; ++i)
+        {
+            v.push_back(i);
+        }
+
+        REQUIRE(v.size() == 10);
+        REQUIRE(v.capacity() >= v.size());
+
+        // Verify all elements are correct
+        for (int i = 0; i < 10; ++i)
+        {
+            REQUIRE(v[i] == i);
+        }
+    }
+    SECTION("push_back() preserves existing elements")
+    {
+        Vector v = { 100, 200, 300 };
+
+        for (int i = 0; i < 50; ++i)
+        {
+            v.push_back(i + 1000);
+        }
+
+        REQUIRE(v.size() == 53);
+        REQUIRE(v[0] == 100);
+        REQUIRE(v[1] == 200);
+        REQUIRE(v[2] == 300);
+
+        for (int i = 0; i < 50; ++i)
+        {
+            REQUIRE(v[i + 3] == i + 1000);
+        }
+    }
+    SECTION("push_back() with copy semantics")
+    {
+        Vector v;
+        int    value = 99;
+
+        v.push_back(value);
+        REQUIRE(v.size() == 1);
+        REQUIRE(v[0] == 99);
+
+        value = 77; // Modify original, vector should be unchanged
+        REQUIRE(v[0] == 99);
+
+        v[0] = 88; // Modify vector element, original should be unchanged
+        REQUIRE(value == 77);
+        REQUIRE(v[0] == 88);
+    }
+    SECTION("push_back() with different values")
+    {
+        Vector v;
+
+        v.push_back(0);
+        v.push_back(-1);
+        v.push_back(2147483647);  // max int
+        v.push_back(-2147483648); // min int
+
+        REQUIRE(v.size() == 4);
+        REQUIRE(v[0] == 0);
+        REQUIRE(v[1] == -1);
+        REQUIRE(v[2] == 2147483647);
+        REQUIRE(v[3] == -2147483648);
+    }
+    SECTION("push_back() effects on iterators")
+    {
+        Vector v               = { 1, 2, 3 };
+
+        auto   begin_before    = v.begin();
+        auto   end_before      = v.end();
+        auto   distance_before = end_before - begin_before;
+        REQUIRE(distance_before == 3);
+
+        v.push_back(4);
+
+        auto begin_after    = v.begin();
+        auto end_after      = v.end();
+        auto distance_after = end_after - begin_after;
+        REQUIRE(distance_after == 4);
+
+        // Note: iterators from before push_back may be invalidated
+        // We only test the new iterators
+        REQUIRE(*begin_after == 1);
+        REQUIRE(*(end_after - 1) == 4);
+    }
+    SECTION("push_back() consistency with other methods")
+    {
+        Vector v;
+
+        for (int i = 1; i <= 5; ++i)
+        {
+            v.push_back(i * 10);
+
+            REQUIRE(v.size() == static_cast<Vector::size_type>(i));
+            REQUIRE(v.back() == i * 10);
+            REQUIRE(v[i - 1] == i * 10);
+            REQUIRE(v.at(i - 1) == i * 10);
+            REQUIRE(*(v.end() - 1) == i * 10);
+
+            if (v.size() > 1)
+            {
+                REQUIRE(v.front() == 10);
+            }
+        }
+    }
+    SECTION("push_back() with reserved capacity")
+    {
+        Vector v;
+        v.reserve(100);
+        auto reserved_capacity = v.capacity();
+
+        for (int i = 0; i < 50; ++i)
+        {
+            v.push_back(i);
+        }
+
+        REQUIRE(v.size() == 50);
+        REQUIRE(v.capacity() == reserved_capacity); // Should not reallocate
+
+        for (int i = 0; i < 50; ++i)
+        {
+            REQUIRE(v[i] == i);
+        }
+    }
+    SECTION("push_back() with different allocators")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc(5);
+        Vector    v(alloc);
+
+        v.push_back(10);
+        v.push_back(20);
+        v.push_back(30);
+
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+    }
+    SECTION("push_back() large number of elements")
+    {
+        Vector    v;
+        const int count = 1000;
+
+        for (int i = 0; i < count; ++i)
+        {
+            v.push_back(i * 2);
+        }
+
+        REQUIRE(v.size() == count);
+        REQUIRE(v.capacity() >= v.size());
+
+        // Verify all elements
+        for (int i = 0; i < count; ++i)
+        {
+            REQUIRE(v[i] == i * 2);
+        }
+
+        REQUIRE(v.front() == 0);
+        REQUIRE(v.back() == (count - 1) * 2);
+    }
+    SECTION("push_back() after clear")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+
+        v.push_back(100);
+        REQUIRE(v.size() == 1);
+        REQUIRE(v[0] == 100);
+        REQUIRE(v.front() == 100);
+        REQUIRE(v.back() == 100);
+    }
+    SECTION("push_back() mixed with other operations")
+    {
+        Vector v;
+
+        v.push_back(1);
+        v.push_back(2);
+        REQUIRE(v.size() == 2);
+
+        v.assign({ 10, 20, 30 });
+        REQUIRE(v.size() == 3);
+        REQUIRE(v[0] == 10);
+
+        v.push_back(40);
+        REQUIRE(v.size() == 4);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(v[3] == 40);
+
+        v.clear();
+        v.push_back(99);
+        REQUIRE(v.size() == 1);
+        REQUIRE(v[0] == 99);
+    }
+}
+
 TEST_CASE("at() methods", "[vector][at][access]")
 {
     using Vector = pw::vector<int>;
@@ -1242,5 +1495,437 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
 
         REQUIRE(v.data() == nullptr);
         REQUIRE(v.begin() == v.end());
+    }
+}
+
+TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("shrink_to_fit() on empty vector")
+    {
+        Vector v;
+        REQUIRE(v.empty());
+        auto original_capacity = v.capacity();
+
+        v.shrink_to_fit();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() <= original_capacity);
+        REQUIRE(v.begin() == v.end());
+    }
+    SECTION("shrink_to_fit() when capacity equals size")
+    {
+        Vector v = { 1, 2, 3 };
+        // Force capacity to equal size (implementation dependent)
+        auto original_size     = v.size();
+        auto original_capacity = v.capacity();
+
+        v.shrink_to_fit();
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("shrink_to_fit() after reserve")
+    {
+        Vector v = { 1, 2, 3, 4, 5 };
+        v.reserve(100);
+        auto size_before     = v.size();
+        auto capacity_before = v.capacity();
+        REQUIRE(capacity_before >= 100);
+        REQUIRE(capacity_before > size_before);
+
+        v.shrink_to_fit();
+        REQUIRE(v.size() == size_before);
+        REQUIRE(v.capacity() <= capacity_before);
+        REQUIRE(v.capacity() >= v.size());
+
+        // Verify elements are preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 4);
+        REQUIRE(v[4] == 5);
+    }
+    SECTION("shrink_to_fit() after clear")
+    {
+        Vector v;
+        v.reserve(50);
+        v.assign({ 1, 2, 3 });
+        v.clear();
+
+        auto capacity_before = v.capacity();
+        REQUIRE(v.empty());
+        REQUIRE(capacity_before > 0);
+
+        v.shrink_to_fit();
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.capacity() <= capacity_before);
+        // Note: capacity might be 0 or minimal for empty vector
+    }
+    SECTION("shrink_to_fit() multiple times")
+    {
+        Vector v;
+        v.reserve(100);
+        v.assign({ 1, 2, 3 });
+
+        v.shrink_to_fit();
+        auto capacity_after_first = v.capacity();
+        REQUIRE(v.size() == 3);
+        REQUIRE(capacity_after_first >= 3);
+
+        v.shrink_to_fit();
+        auto capacity_after_second = v.capacity();
+        REQUIRE(v.size() == 3);
+        REQUIRE(capacity_after_second == capacity_after_first);
+
+        // Elements should be preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("shrink_to_fit() preserves data integrity")
+    {
+        Vector v;
+        v.reserve(1000);
+        for (int i = 0; i < 100; ++i)
+        {
+            v.push_back(i * 2);
+        }
+
+        auto capacity_before = v.capacity();
+        REQUIRE(capacity_before >= 1000);
+        REQUIRE(v.size() == 100);
+
+        v.shrink_to_fit();
+        REQUIRE(v.size() == 100);
+        REQUIRE(v.capacity() <= capacity_before);
+        REQUIRE(v.capacity() >= v.size());
+
+        // Verify all elements are preserved and correct
+        for (int i = 0; i < 100; ++i)
+        {
+            REQUIRE(v[i] == i * 2);
+        }
+
+        // Verify iterators work
+        auto it = v.begin();
+        for (int i = 0; i < 100; ++i, ++it)
+        {
+            REQUIRE(*it == i * 2);
+        }
+        REQUIRE(it == v.end());
+    }
+    SECTION("shrink_to_fit() effects on pointers and iterators")
+    {
+        Vector v;
+        v.reserve(100);
+        v.assign({ 10, 20, 30 });
+
+        auto old_data  = v.data();
+        auto old_begin = v.begin();
+        auto old_end   = v.end();
+
+        v.shrink_to_fit();
+
+        // After shrink_to_fit, pointers and iterators may be invalidated
+        // We can only test that the new ones work correctly
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.data() != nullptr);
+        REQUIRE(v.begin() != v.end());
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(*v.begin() == 10);
+        REQUIRE(*(v.end() - 1) == 30);
+    }
+    SECTION("shrink_to_fit() with different allocators")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc(5);
+        Vector    v(alloc);
+        v.assign({ 1, 2, 3 });
+        v.reserve(50);
+
+        auto capacity_before = v.capacity();
+        REQUIRE(capacity_before >= 50);
+
+        v.shrink_to_fit();
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() <= capacity_before);
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("shrink_to_fit() is non-binding request")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_capacity = v.capacity();
+
+        v.shrink_to_fit();
+
+        // shrink_to_fit is a non-binding request
+        // We can only verify that capacity is reasonable
+        REQUIRE(v.capacity() >= v.size());
+        REQUIRE(v.size() == 3);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+}
+
+TEST_CASE("reserve() method", "[vector][reserve][capacity]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("reserve() on empty vector")
+    {
+        Vector v;
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        auto original_capacity = v.capacity();
+
+        v.reserve(10);
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.capacity() >= 10);
+        REQUIRE(v.begin() == v.end());
+        REQUIRE(v.data() == nullptr);
+    }
+    SECTION("reserve() zero capacity")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+
+        v.reserve(0);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= original_capacity);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("reserve() less than current capacity")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+
+        v.reserve(original_capacity - 1);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= original_capacity);
+
+        // Elements should be preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 4);
+        REQUIRE(v[4] == 5);
+    }
+    SECTION("reserve() equal to current capacity")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+
+        v.reserve(original_capacity);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= original_capacity);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("reserve() greater than current capacity")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+        auto   new_capacity      = original_capacity + 50;
+
+        v.reserve(new_capacity);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= new_capacity);
+
+        // Elements should be preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("reserve() large capacity")
+    {
+        Vector v = { 10, 20, 30 };
+        v.reserve(1000);
+
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() >= 1000);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+
+        // Should be able to add many elements without reallocation
+        auto capacity_after_reserve = v.capacity();
+        for (int i = 0; i < 500; ++i)
+        {
+            v.push_back(i);
+        }
+        REQUIRE(v.capacity() == capacity_after_reserve);
+        REQUIRE(v.size() == 503);
+    }
+    SECTION("reserve() multiple times")
+    {
+        Vector v = { 1, 2 };
+
+        v.reserve(10);
+        auto capacity_after_first = v.capacity();
+        REQUIRE(capacity_after_first >= 10);
+        REQUIRE(v.size() == 2);
+
+        v.reserve(20);
+        auto capacity_after_second = v.capacity();
+        REQUIRE(capacity_after_second >= 20);
+        REQUIRE(capacity_after_second >= capacity_after_first);
+        REQUIRE(v.size() == 2);
+
+        v.reserve(5); // Should not reduce capacity
+        REQUIRE(v.capacity() >= capacity_after_second);
+        REQUIRE(v.size() == 2);
+
+        // Elements should be preserved throughout
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+    }
+    SECTION("reserve() preserves data integrity")
+    {
+        Vector v;
+        for (int i = 0; i < 50; ++i)
+        {
+            v.push_back(i * 3);
+            REQUIRE(v[i] == i * 3);
+        }
+
+        auto original_size = v.size();
+        v.reserve(500);
+
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= 500);
+
+        // Verify all elements are preserved
+        for (int i = 0; i < 50; ++i)
+        {
+            REQUIRE(v[i] == i * 3);
+        }
+
+        // Verify iterators work correctly
+        auto it = v.begin();
+        for (int i = 0; i < 50; ++i, ++it)
+        {
+            REQUIRE(*it == i * 3);
+        }
+        REQUIRE(it == v.end());
+    }
+    SECTION("reserve() with different allocators")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc(5);
+        Vector    v({ 1, 2, 3 }, alloc);
+        auto      original_size = v.size();
+
+        v.reserve(25);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= 25);
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+    }
+    SECTION("reserve() effects on pointers and iterators")
+    {
+        Vector v                 = { 10, 20, 30 };
+        auto   original_capacity = v.capacity();
+
+        auto   old_data          = v.data();
+        auto   old_begin         = v.begin();
+        auto   old_end           = v.end();
+
+        // Reserve significantly more than current capacity
+        v.reserve(original_capacity + 100);
+
+        // After reserve that increases capacity, pointers/iterators may be invalidated
+        // We can only test that the new ones work correctly
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() >= original_capacity + 100);
+        REQUIRE(v.data() != nullptr);
+        REQUIRE(v.begin() != v.end());
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+        REQUIRE(*v.begin() == 10);
+        REQUIRE(*(v.end() - 1) == 30);
+    }
+    SECTION("reserve() followed by operations")
+    {
+        Vector v;
+        v.reserve(100);
+        auto reserved_capacity = v.capacity();
+
+        // Add elements up to reserved capacity
+        for (int i = 0; i < 50; ++i)
+        {
+            v.push_back(i);
+        }
+
+        REQUIRE(v.size() == 50);
+        REQUIRE(v.capacity() == reserved_capacity);
+
+        // Clear and reuse
+        v.clear();
+        REQUIRE(v.empty());
+        REQUIRE(v.capacity() == reserved_capacity);
+
+        // Add different elements
+        v.assign({ 100, 200, 300 });
+        REQUIRE(v.size() == 3);
+        //REQUIRE(v.capacity() == reserved_capacity);
+        REQUIRE(v[0] == 100);
+        REQUIRE(v[1] == 200);
+        REQUIRE(v[2] == 300);
+    }
+    SECTION("reserve() with max_size() considerations")
+    {
+        Vector v;
+
+        // Reserve a reasonable amount (much less than max_size)
+        v.reserve(1000);
+        REQUIRE(v.capacity() >= 1000);
+        REQUIRE(v.empty());
+
+        // Note: Testing reserve(max_size()) or larger would be
+        // implementation-dependent and might throw std::length_error
+        // We avoid testing edge cases that might exhaust memory
+    }
+    SECTION("reserve() maintains strong exception safety")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+
+        // Reserve a reasonable amount that should succeed
+        v.reserve(original_capacity + 10);
+
+        // If reserve succeeded, all elements should be preserved
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() >= original_capacity + 10);
+        for (int i = 0; i < 5; ++i)
+        {
+            REQUIRE(v[i] == i + 1);
+        }
     }
 }

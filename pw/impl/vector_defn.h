@@ -501,7 +501,16 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::shrink_to_fit()
 {
-    throw internal::Unimplemented(__func__);
+    if (m_storage.allocated() == m_storage.size())
+    {
+        return;
+    }
+    Storage tmp(m_storage.get_allocator());
+    auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
+        uninitialized_move(begin, end, dest);
+    };
+    tmp.reserve(m_storage.size(), lambda);
+    tmp.swap(m_storage, false);
 }
 
 template<class Type, class Allocator>
@@ -510,12 +519,7 @@ vector<Type, Allocator>::reserve(size_type count)
 {
     if (count <= m_storage.allocated())
         return;
-    Storage tmp(m_storage.get_allocator());
-    auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
-        uninitialized_move(begin, end, dest);
-    };
-    tmp.reserve(count, lambda);
-    tmp.swap(m_storage, false);
+    m_storage.reserve(count);
 }
 
 template<class Type, class Allocator>
@@ -531,16 +535,46 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(const_reference value)
 {
-    (void)value;
-    throw internal::Unimplemented(__func__);
+    size_type initsize = m_storage.size();
+
+    if (m_storage.size() >= m_storage.allocated())
+    {
+        Storage tmp(m_storage.get_allocator());
+        auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
+            uninitialized_copy(begin, end, dest);
+        };
+        tmp.reserve(m_storage.calc_size(), lambda);
+        construct_at(addressof(*(tmp.begin() + initsize)), value);
+        m_storage.swap(tmp, false);
+    }
+    else
+    {
+        construct_at(addressof(*m_storage.end()), value);
+    }
+    m_storage.set_size(initsize + 1);
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(value_type&& value)
 {
-    (void)value;
-    throw internal::Unimplemented(__func__);
+    size_type initsize = m_storage.size();
+
+    if (m_storage.size() >= m_storage.allocated())
+    {
+        Storage tmp(m_storage.get_allocator());
+        auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
+            uninitialized_copy(begin, end, dest);
+        };
+        tmp.reserve(m_storage.calc_size(), lambda);
+        construct_at(addressof(*(tmp.begin() + initsize)), move(value));
+        m_storage.swap(tmp, false);
+    }
+    else
+    {
+        construct_at(addressof(*m_storage.end()), move(value));
+    }
+    m_storage.set_size(initsize + 1);
 }
 
 template<class Type, class Allocator>
