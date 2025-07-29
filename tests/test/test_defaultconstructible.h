@@ -2,6 +2,7 @@
 #define INCLUDED_TEST_DEFAULTCONSTRUCTIBLE_H
 
 #include <test_optracker.h>
+#include <compare>
 
 namespace pw::test {
 
@@ -29,6 +30,8 @@ struct DefaultConstructible : public OpTracker
         : OpTracker(s_opCounter, value)
     {
     }
+
+    std::strong_ordering operator<=>(DefaultConstructible const& op2) const;
 
 private:
     static OpCounter s_opCounter;

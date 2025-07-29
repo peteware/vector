@@ -102,9 +102,9 @@ Storage2<Type, Allocator>::reserve(size_type count)
         allocator_traits<Allocator>::deallocate(m_alloc, tmp, count);
         throw;
     }
-    using pw::swap;
-    swap(tmp, m_begin);
-    swap(count, m_allocated);
+    //using pw::swap;
+    pw::swap(tmp, m_begin);
+    pw::swap(count, m_allocated);
 }
 
 template<class Type, class Allocator>
@@ -203,11 +203,11 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
     using pw::swap;
     if (swap_allocator)
     {
-        swap(m_alloc, other.m_alloc);
+        pw::swap(m_alloc, other.m_alloc);
     }
-    swap(m_begin, other.m_begin);
-    swap(m_size, other.m_size);
-    swap(m_allocated, other.m_allocated);
+    pw::swap(m_begin, other.m_begin);
+    pw::swap(m_size, other.m_size);
+    pw::swap(m_allocated, other.m_allocated);
 }
 } // namespace pw::internal
 #endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */

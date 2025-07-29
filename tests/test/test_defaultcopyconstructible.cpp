@@ -13,6 +13,12 @@ DefaultCopyConstructible::getCounter()
     return s_opCounter;
 }
 
+std::strong_ordering
+DefaultCopyConstructible::operator<=>(DefaultCopyConstructible const& op2) const
+{
+    return OpTracker::operator<=>(op2);
+}
+
 bool
 permute(DefaultCopyConstructible& value, int depth)
 {

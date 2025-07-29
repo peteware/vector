@@ -2,6 +2,7 @@
 #define INCLUDED_TEST_COPYCONSTRUCTIBLE_H
 
 #include <test_optracker.h>
+#include <compare>
 
 namespace pw::test {
 /**
@@ -35,6 +36,7 @@ struct CopyConstructible : public OpTracker
     CopyConstructible& operator=(CopyConstructible const& copy);
     CopyConstructible& operator=(CopyConstructible&& move);
     using OpTracker::operator==;
+    std::strong_ordering operator<=>(CopyConstructible const& op2) const;
     // using OpTracker::operator!=;
     // using OpTracker::operator<;
 

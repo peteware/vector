@@ -2234,3 +2234,343 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
         }
     }
 }
+
+TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
+{
+    using Vector = pw::vector<int>;
+
+    SECTION("resize() on empty vector with value")
+    {
+        Vector v;
+
+        v.resize(5, 42);
+        REQUIRE(v.size() == 5);
+        REQUIRE(v.capacity() >= 5);
+        REQUIRE(!v.empty());
+
+        for (Vector::size_type i = 0; i < 5; ++i)
+        {
+            REQUIRE(v[i] == 42);
+        }
+    }
+    SECTION("resize() to zero with value")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_capacity = v.capacity();
+
+        v.resize(0, 99);
+        REQUIRE(v.empty());
+        REQUIRE(v.size() == 0);
+        REQUIRE(v.capacity() == original_capacity);
+        REQUIRE(v.begin() == v.end());
+    }
+    SECTION("resize() to same size with value")
+    {
+        Vector v                 = { 10, 20, 30 };
+        auto   original_size     = v.size();
+        auto   original_capacity = v.capacity();
+
+        v.resize(original_size, 99);
+        REQUIRE(v.size() == original_size);
+        REQUIRE(v.capacity() == original_capacity);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+    }
+    SECTION("resize() to larger size with value")
+    {
+        Vector v = { 1, 2, 3 };
+
+        v.resize(7, 42);
+        REQUIRE(v.size() == 7);
+        REQUIRE(v.capacity() >= 7);
+
+        // Original elements preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+
+        // New elements have specified value
+        REQUIRE(v[3] == 42);
+        REQUIRE(v[4] == 42);
+        REQUIRE(v[5] == 42);
+        REQUIRE(v[6] == 42);
+    }
+    SECTION("resize() to smaller size with value")
+    {
+        Vector v                 = { 10, 20, 30, 40, 50 };
+        auto   original_capacity = v.capacity();
+
+        v.resize(3, 99);
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() == original_capacity);
+
+        // Remaining elements preserved (value parameter ignored when shrinking)
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 20);
+        REQUIRE(v[2] == 30);
+    }
+    SECTION("resize() within existing capacity with value")
+    {
+        Vector v { 1, 2, 3, 4, 5 };
+        v.reserve(100);
+        auto reserved_capacity = v.capacity();
+
+        v.resize(50, 77);
+        REQUIRE(v.size() == 50);
+        REQUIRE(v.capacity() == reserved_capacity);
+
+        // Original elements preserved
+        for (int i = 0; i < 5; ++i)
+        {
+            REQUIRE(v[i] == i + 1);
+        }
+
+        // New elements have specified value
+        for (Vector::size_type i = 5; i < 50; ++i)
+        {
+            REQUIRE(v[i] == 77);
+        }
+    }
+    SECTION("resize() beyond existing capacity with value")
+    {
+        Vector v                 = { 1, 2, 3 };
+        auto   original_capacity = v.capacity();
+
+        v.resize(original_capacity + 10, 88);
+        REQUIRE(v.size() == original_capacity + 10);
+        REQUIRE(v.capacity() > original_capacity);
+
+        // Original elements preserved
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+
+        // New elements have specified value
+        for (Vector::size_type i = 3; i < v.size(); ++i)
+        {
+            REQUIRE(v[i] == 88);
+        }
+    }
+    SECTION("resize() with different values")
+    {
+        Vector v;
+
+        v.resize(3, 10);
+        REQUIRE(v.size() == 3);
+        for (Vector::size_type i = 0; i < 3; ++i)
+        {
+            REQUIRE(v[i] == 10);
+        }
+
+        v.resize(6, 20);
+        REQUIRE(v.size() == 6);
+        // Original elements preserved
+        for (Vector::size_type i = 0; i < 3; ++i)
+        {
+            REQUIRE(v[i] == 10);
+        }
+        // New elements have new value
+        for (Vector::size_type i = 3; i < 6; ++i)
+        {
+            REQUIRE(v[i] == 20);
+        }
+
+        v.resize(9, 30);
+        REQUIRE(v.size() == 9);
+        // Check all values
+        for (Vector::size_type i = 0; i < 3; ++i)
+        {
+            REQUIRE(v[i] == 10);
+        }
+        for (Vector::size_type i = 3; i < 6; ++i)
+        {
+            REQUIRE(v[i] == 20);
+        }
+        for (Vector::size_type i = 6; i < 9; ++i)
+        {
+            REQUIRE(v[i] == 30);
+        }
+    }
+    SECTION("resize() with negative values")
+    {
+        Vector v = { 1, 2 };
+
+        v.resize(5, -42);
+        REQUIRE(v.size() == 5);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == -42);
+        REQUIRE(v[3] == -42);
+        REQUIRE(v[4] == -42);
+    }
+    SECTION("resize() with zero value")
+    {
+        Vector v = { 1, 2, 3 };
+
+        v.resize(6, 0);
+        REQUIRE(v.size() == 6);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 0);
+        REQUIRE(v[4] == 0);
+        REQUIRE(v[5] == 0);
+    }
+    SECTION("resize() with different allocators and value")
+    {
+        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Vector    = pw::vector<int, Allocator>;
+
+        Allocator alloc(5);
+        Vector    v({ 1, 2, 3 }, alloc);
+
+        v.resize(6, 99);
+        REQUIRE(v.size() == 6);
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+        REQUIRE(v[2] == 3);
+        REQUIRE(v[3] == 99);
+        REQUIRE(v[4] == 99);
+        REQUIRE(v[5] == 99);
+
+        v.resize(2, 77);
+        REQUIRE(v.size() == 2);
+        REQUIRE(v.get_allocator() == alloc);
+        REQUIRE(v[0] == 1);
+        REQUIRE(v[1] == 2);
+    }
+    SECTION("resize() large size with value")
+    {
+        Vector v;
+
+        v.resize(1000, 123);
+        REQUIRE(v.size() == 1000);
+        REQUIRE(v.capacity() >= 1000);
+
+        // Verify all elements have the specified value
+        for (Vector::size_type i = 0; i < 1000; ++i)
+        {
+            REQUIRE(v[i] == 123);
+        }
+
+        // Verify front and back
+        REQUIRE(v.front() == 123);
+        REQUIRE(v.back() == 123);
+    }
+    SECTION("resize() with extreme values")
+    {
+        Vector v;
+
+        v.resize(3, 2147483647); // max int
+        REQUIRE(v.size() == 3);
+        for (Vector::size_type i = 0; i < 3; ++i)
+        {
+            REQUIRE(v[i] == 2147483647);
+        }
+
+        v.resize(6, -2147483648); // min int
+        REQUIRE(v.size() == 6);
+        // Original elements preserved
+        for (Vector::size_type i = 0; i < 3; ++i)
+        {
+            REQUIRE(v[i] == 2147483647);
+        }
+        // New elements have min int value
+        for (Vector::size_type i = 3; i < 6; ++i)
+        {
+            REQUIRE(v[i] == -2147483648);
+        }
+    }
+    SECTION("resize() consistency with other methods")
+    {
+        Vector v;
+
+        v.resize(4, 55);
+        REQUIRE(v.size() == 4);
+        REQUIRE(v.front() == 55);
+        REQUIRE(v.back() == 55);
+        REQUIRE(v.at(0) == 55);
+        REQUIRE(v.at(3) == 55);
+        REQUIRE(v[0] == 55);
+        REQUIRE(v[3] == 55);
+
+        v[1] = 100;
+        v[2] = 200;
+
+        v.resize(6, 66);
+        REQUIRE(v.size() == 6);
+        REQUIRE(v.front() == 55);
+        REQUIRE(v.back() == 66);
+        REQUIRE(v[0] == 55);
+        REQUIRE(v[1] == 100);
+        REQUIRE(v[2] == 200);
+        REQUIRE(v[3] == 55);
+        REQUIRE(v[4] == 66);
+        REQUIRE(v[5] == 66);
+    }
+    SECTION("resize() after clear with value")
+    {
+        Vector v                 = { 1, 2, 3, 4, 5 };
+        auto   original_capacity = v.capacity();
+
+        v.clear();
+        REQUIRE(v.empty());
+
+        v.resize(3, 111);
+        REQUIRE(v.size() == 3);
+        REQUIRE(v.capacity() >= original_capacity);
+        REQUIRE(v[0] == 111);
+        REQUIRE(v[1] == 111);
+        REQUIRE(v[2] == 111);
+    }
+    SECTION("resize() effects on iterators with value")
+    {
+        Vector v         = { 10, 20, 30 };
+
+        auto   old_begin = v.begin();
+        auto   old_end   = v.end();
+        REQUIRE(old_end - old_begin == 3);
+
+        v.resize(5, 44);
+
+        auto new_begin = v.begin();
+        auto new_end   = v.end();
+        REQUIRE(new_end - new_begin == 5);
+
+        // Note: old iterators may be invalidated
+        // We only test the new iterators
+        REQUIRE(*new_begin == 10);
+        REQUIRE(*(new_begin + 1) == 20);
+        REQUIRE(*(new_begin + 2) == 30);
+        REQUIRE(*(new_begin + 3) == 44);
+        REQUIRE(*(new_begin + 4) == 44);
+    }
+    SECTION("resize() mixed operations with value")
+    {
+        Vector v;
+
+        v.resize(3, 10);
+        REQUIRE(v.size() == 3);
+
+        v.push_back(15);
+        REQUIRE(v.size() == 4);
+        REQUIRE(v[3] == 15);
+
+        v.resize(7, 20);
+        REQUIRE(v.size() == 7);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 10);
+        REQUIRE(v[2] == 10);
+        REQUIRE(v[3] == 15);
+        REQUIRE(v[4] == 20);
+        REQUIRE(v[5] == 20);
+        REQUIRE(v[6] == 20);
+
+        v.resize(2, 99);
+        REQUIRE(v.size() == 2);
+        REQUIRE(v[0] == 10);
+        REQUIRE(v[1] == 10);
+    }
+}

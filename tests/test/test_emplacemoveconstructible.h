@@ -3,6 +3,7 @@
 
 #include <pw/impl/move.h>
 #include <test_optracker.h>
+#include <compare>
 
 namespace pw::test {
 
@@ -45,6 +46,8 @@ struct EmplaceMoveConstructible : public OpTracker
         m_value2 = value;
         return *this;
     }
+
+    std::strong_ordering operator<=>(EmplaceMoveConstructible const& op2) const;
 
 private:
     int              m_value2 = 1;

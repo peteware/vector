@@ -45,6 +45,12 @@ CopyConstructible::operator=(CopyConstructible&& move)
     return *this;
 }
 
+std::strong_ordering
+CopyConstructible::operator<=>(CopyConstructible const& op2) const
+{
+    return OpTracker::operator<=>(op2);
+}
+
 bool
 permute(CopyConstructible& value, int depth)
 {
