@@ -31,7 +31,7 @@ uninitialized_default_construct(Iterator begin, Iterator end)
     {
         while (current != end)
         {
-            ::new (static_cast<void*>(pw::addressof(*current))) Value;
+            ::new (static_cast<void*>(pw::addressof(*current))) Value {};
             ++current;
         }
     }
