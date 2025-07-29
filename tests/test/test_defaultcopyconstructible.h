@@ -2,6 +2,7 @@
 #define INCLUDED_TEST_DEFAULTCOPYCONSTRUCTIBLE_H
 
 #include <test_optracker.h>
+#include <compare>
 
 namespace pw::test {
 struct DefaultCopyConstructible : public OpTracker
@@ -44,6 +45,7 @@ struct DefaultCopyConstructible : public OpTracker
 
     bool operator==(DefaultCopyConstructible const& op2) const { return OpTracker::operator==(op2); }
     bool operator!=(DefaultCopyConstructible const& op2) const { return OpTracker::operator!=(op2); }
+    std::strong_ordering operator<=>(DefaultCopyConstructible const& op2) const;
     // using OpTracker::operator<;
 
 private:

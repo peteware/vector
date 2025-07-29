@@ -5,6 +5,7 @@
 #include <test_opcounter.h>
 
 #include <iosfwd>
+#include <compare>
 
 namespace pw::test {
 
@@ -28,6 +29,7 @@ protected:
     bool       operator==(OpTracker const& op2) const;
     bool       operator!=(OpTracker const& op2) const;
     bool       operator<(OpTracker const& op2) const;
+    std::strong_ordering operator<=>(OpTracker const& op2) const;
 
 private:
     OpCounter& m_opCounter;

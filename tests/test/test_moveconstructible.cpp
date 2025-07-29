@@ -58,6 +58,12 @@ MoveConstructible::operator!=(MoveConstructible const& op2) const
     return OpTracker::operator!=(op2);
 }
 
+std::strong_ordering
+MoveConstructible::operator<=>(MoveConstructible const& op2) const
+{
+    return OpTracker::operator<=>(op2);
+}
+
 bool
 permute(MoveConstructible& value, int depth)
 {

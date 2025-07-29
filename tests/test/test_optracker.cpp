@@ -90,6 +90,19 @@ OpTracker::operator<(OpTracker const& op2) const
     return m_value < op2.m_value;
 }
 
+std::strong_ordering
+OpTracker::operator<=>(OpTracker const& op2) const
+{
+    m_opCounter.addLt(); // Track the comparison operation
+    if (m_value < op2.m_value) {
+        return std::strong_ordering::less;
+    } else if (m_value > op2.m_value) {
+        return std::strong_ordering::greater;
+    } else {
+        return std::strong_ordering::equal;
+    }
+}
+
 bool
 permute(OpTracker& value, int depth)
 {
