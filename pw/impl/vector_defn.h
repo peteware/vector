@@ -127,9 +127,9 @@ constexpr vector<Type, Allocator>::~vector()
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::swap(vector& other) noexcept(
-    pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-    pw::allocator_traits<allocator_type>::is_always_equal::value)
+vector<Type, Allocator>::swap(vector& other)
+    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     m_storage.swap(other.m_storage, allocator_traits<allocator_type>::propagate_on_container_swap::value);
 }
@@ -218,9 +218,9 @@ vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(vector&& other) noexcept(
-    pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
-    pw::allocator_traits<allocator_type>::is_always_equal::value)
+vector<Type, Allocator>::operator=(vector&& other)
+    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+             pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     if constexpr (allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
     {
@@ -581,8 +581,36 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::resize(size_type count)
 {
-    (void)count;
-    throw internal::Unimplemented(__func__);
+    if (count == 0)
+    {
+        clear();
+        return;
+    }
+    if (count == size())
+    {
+        return;
+    }
+    if (count < size())
+    {
+        destroy(m_storage.begin() + count - 1, m_storage.end());
+        m_storage.set_size(count);
+        return;
+    }
+    if (m_storage.allocated() < count)
+    {
+        Storage tmp(m_storage.get_allocator());
+        auto    lambda = [begin = m_storage.begin(), end = m_storage.end()](pointer dest) -> void {
+            uninitialized_copy(begin, end, dest);
+        };
+        tmp.reserve(count, lambda);
+        uninitialized_default_construct(tmp.begin() + m_storage.size(), tmp.end());
+        m_storage.swap(tmp, false);
+    }
+    else
+    {
+        uninitialized_default_construct(m_storage.end(), m_storage.end() + count - size());
+        m_storage.set_size(count);
+    }
 }
 
 template<class Type, class Allocator>
