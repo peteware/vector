@@ -94,11 +94,16 @@ std::strong_ordering
 OpTracker::operator<=>(OpTracker const& op2) const
 {
     m_opCounter.addLt(); // Track the comparison operation
-    if (m_value < op2.m_value) {
+    if (m_value < op2.m_value)
+    {
         return std::strong_ordering::less;
-    } else if (m_value > op2.m_value) {
+    }
+    else if (m_value > op2.m_value)
+    {
         return std::strong_ordering::greater;
-    } else {
+    }
+    else
+    {
         return std::strong_ordering::equal;
     }
 }

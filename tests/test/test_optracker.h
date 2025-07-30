@@ -4,8 +4,8 @@
 #include <pw/impl/move.h>
 #include <test_opcounter.h>
 
-#include <iosfwd>
 #include <compare>
+#include <iosfwd>
 
 namespace pw::test {
 
@@ -24,11 +24,11 @@ protected:
     OpTracker(OpTracker&& move) noexcept;
     ~OpTracker();
 
-    OpTracker& operator=(OpTracker const& copy);
-    OpTracker& operator=(OpTracker&& move);
-    bool       operator==(OpTracker const& op2) const;
-    bool       operator!=(OpTracker const& op2) const;
-    bool       operator<(OpTracker const& op2) const;
+    OpTracker&           operator=(OpTracker const& copy);
+    OpTracker&           operator=(OpTracker&& move);
+    bool                 operator==(OpTracker const& op2) const;
+    bool                 operator!=(OpTracker const& op2) const;
+    bool                 operator<(OpTracker const& op2) const;
     std::strong_ordering operator<=>(OpTracker const& op2) const;
 
 private:

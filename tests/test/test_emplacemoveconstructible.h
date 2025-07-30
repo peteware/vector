@@ -1,9 +1,9 @@
 #ifndef INCLUDED_TEST_EMPLACEMOVECONSTRUCTIBLE_H
 #define INCLUDED_TEST_EMPLACEMOVECONSTRUCTIBLE_H
 
+#include <compare>
 #include <pw/impl/move.h>
 #include <test_optracker.h>
-#include <compare>
 
 namespace pw::test {
 

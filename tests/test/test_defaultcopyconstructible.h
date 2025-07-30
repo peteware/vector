@@ -1,8 +1,8 @@
 #ifndef INCLUDED_TEST_DEFAULTCOPYCONSTRUCTIBLE_H
 #define INCLUDED_TEST_DEFAULTCOPYCONSTRUCTIBLE_H
 
-#include <test_optracker.h>
 #include <compare>
+#include <test_optracker.h>
 
 namespace pw::test {
 struct DefaultCopyConstructible : public OpTracker

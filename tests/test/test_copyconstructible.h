@@ -1,8 +1,8 @@
 #ifndef INCLUDED_TEST_COPYCONSTRUCTIBLE_H
 #define INCLUDED_TEST_COPYCONSTRUCTIBLE_H
 
-#include <test_optracker.h>
 #include <compare>
+#include <test_optracker.h>
 
 namespace pw::test {
 /**

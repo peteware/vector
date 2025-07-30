@@ -1,8 +1,8 @@
 #ifndef INCLUDED_TEST_MOVECONSTRUCTIBLE_H
 #define INCLUDED_TEST_MOVECONSTRUCTIBLE_H
 
-#include <test_optracker.h>
 #include <compare>
+#include <test_optracker.h>
 
 namespace pw::test {
 
@@ -28,10 +28,10 @@ struct MoveConstructible : public OpTracker
     MoveConstructible(MoveConstructible const& copy);
     MoveConstructible(MoveConstructible&& move);
 
-    MoveConstructible& operator=(MoveConstructible&& move);
-    MoveConstructible& operator=(MoveConstructible const& copy);
-    bool               operator==(MoveConstructible const& op2) const;
-    bool               operator!=(MoveConstructible const& op2) const;
+    MoveConstructible&   operator=(MoveConstructible&& move);
+    MoveConstructible&   operator=(MoveConstructible const& copy);
+    bool                 operator==(MoveConstructible const& op2) const;
+    bool                 operator!=(MoveConstructible const& op2) const;
     std::strong_ordering operator<=>(MoveConstructible const& op2) const;
 
 private:

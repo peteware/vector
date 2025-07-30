@@ -90,9 +90,9 @@ constexpr vector<Type, Allocator>::~vector()
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::swap(vector& other) noexcept(
-    pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-    pw::allocator_traits<allocator_type>::is_always_equal::value)
+vector<Type, Allocator>::swap(vector& other)
+    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
 }
@@ -115,9 +115,9 @@ vector<Type, Allocator>::operator=(pw::initializer_list<value_type> ilist)
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(vector&& other) noexcept(
-    pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
-    pw::allocator_traits<allocator_type>::is_always_equal::value)
+vector<Type, Allocator>::operator=(vector&& other)
+    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+             pw::allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
     return *this;
