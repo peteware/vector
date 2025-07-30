@@ -2247,9 +2247,9 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
     {
         WHEN("shrink_to_fit() is called when capacity equals size")
         {
-            Vector v = { 1, 2, 3 };
-            auto original_size     = v.size();
-            auto original_capacity = v.capacity();
+            Vector v                 = { 1, 2, 3 };
+            auto   original_size     = v.size();
+            auto   original_capacity = v.capacity();
 
             v.shrink_to_fit();
 
@@ -3088,10 +3088,10 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
     {
         WHEN("resize() is called affecting iterators")
         {
-            Vector v = { 10, 20, 30 };
+            Vector v         = { 10, 20, 30 };
 
-            auto old_begin = v.begin();
-            auto old_end   = v.end();
+            auto   old_begin = v.begin();
+            auto   old_end   = v.end();
             REQUIRE(old_end - old_begin == 3);
 
             v.resize(5);
@@ -3632,10 +3632,10 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
     {
         WHEN("resize() is called with value affecting iterators")
         {
-            Vector v = { 10, 20, 30 };
+            Vector v         = { 10, 20, 30 };
 
-            auto old_begin = v.begin();
-            auto old_end   = v.end();
+            auto   old_begin = v.begin();
+            auto   old_end   = v.end();
             REQUIRE(old_end - old_begin == 3);
 
             v.resize(5, 44);
