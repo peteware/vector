@@ -664,10 +664,22 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
-    (void)begin;
-    (void)end;
-    throw internal::Unimplemented(__func__);
-    // return &makeReference<value_type>();
+    iterator first     = m_storage.begin() + pw::distance(cbegin(), end);
+    iterator last      = first + pw::distance(begin, end);
+    iterator rightside = last;
+
+    while (first != last && rightside != m_storage.end())
+    {
+        *first++ = pw::move(*rightside++);
+    }
+    if (first != last)
+    {
+        pw::destroy(first, last);
+    }
+    else
+    {
+    }
+    return first;
 }
 
 template<class Type, class Allocator>
@@ -688,11 +700,18 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
-    (void)position;
-    (void)count;
-    (void)value;
-    throw internal::Unimplemented(__func__);
-    // return &makeReference<value_type>();
+    size_type const total = size() + count;
+    Storage         tmp(m_storage.get_allocator());
+
+    tmp.reserve(total);
+    iterator first = m_storage.begin() + pw::distance(cbegin(), position);
+
+    if (total < m_storage.allocated())
+    {
+        // move right side to uninitialized memory
+        // move overlapping right side
+        // copy value into no
+    }
 }
 
 template<class Type, class Allocator>
