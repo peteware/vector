@@ -176,7 +176,7 @@ vector<Type, Allocator>::operator=(const vector& other)
     }
     else if (m_storage.size() == other.size())
     {
-        copy(other.begin(), other.end(), m_storage.begin());
+        pw::copy(other.begin(), other.end(), m_storage.begin());
     }
     else
     {
@@ -190,7 +190,7 @@ vector<Type, Allocator>::operator=(const vector& other)
         // │    size() = 4        │                    │ size() = 3      │
         // └─── m_begin        m_end                   └─── m_begin   m_end
         size_type initsize = min(m_storage.size(), other.size());
-        copy(other.begin(), other.begin() + initsize, m_storage.begin());
+        pw::copy(other.begin(), other.begin() + initsize, m_storage.begin());
         if (size() < other.size())
         {
             pw::uninitialized_copy(other.begin() + initsize, other.end(), m_storage.begin() + initsize);
@@ -243,7 +243,7 @@ vector<Type, Allocator>::operator=(vector&& other)
         }
         else
         {
-            destroy(m_storage.begin() + initsize, m_storage.end());
+            pw::destroy(m_storage.begin() + initsize, m_storage.end());
         }
         m_storage.set_size(other.size());
     }
@@ -571,12 +571,12 @@ vector<Type, Allocator>::push_back(value_type&& value)
             pw::uninitialized_copy(begin, end, dest);
         };
         tmp.reserve(m_storage.calc_size(), lambda);
-        pw::construct_at(pw::addressof(*(tmp.begin() + initsize)), move(value));
+        pw::construct_at(pw::addressof(*(tmp.begin() + initsize)), pw::move(value));
         m_storage.swap(tmp, false);
     }
     else
     {
-        pw::construct_at(pw::addressof(*m_storage.end()), move(value));
+        pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
     }
     m_storage.set_size(initsize + 1);
 }
@@ -632,7 +632,7 @@ vector<Type, Allocator>::resize(size_type count, const_reference value)
     }
     if (count < size())
     {
-        destroy(m_storage.begin() + count - 1, m_storage.end());
+        pw::destroy(m_storage.begin() + count - 1, m_storage.end());
         m_storage.set_size(count);
         return;
     }
@@ -749,8 +749,23 @@ constexpr auto
 operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
     -> decltype(op1[0] <=> op2[0])
 {
-    throw internal::Unimplemented(__func__);
-    // return op1[0] <=> op2[0];
+    for (size_t i = 0; i < pw::min(op1.size(), op2.size()); ++i)
+    {
+        auto cmp = op1[i] <=> op2[i];
+        if (cmp != 0)
+        {
+            return cmp;
+        }
+    }
+    if (op1.size() < op2.size())
+    {
+        return std::strong_ordering::less;
+    }
+    else if (op1.size() > op2.size())
+    {
+        return std::strong_ordering::greater;
+    }
+    return std::strong_ordering::equal;
 }
 } // namespace pw
 #endif /* PW_IMPL_VECTOR_DEFN_H */

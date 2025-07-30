@@ -45,7 +45,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
             {
                 for (size_t i = 0; i < size; ++i)
                 {
-                    REQUIRE(v[i] == value_type{});
+                    REQUIRE(v[i] == value_type {});
                 }
             }
         }
@@ -63,7 +63,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
             {
                 for (size_t i = 0; i < size; ++i)
                 {
-                    REQUIRE(v[i] == value_type{});
+                    REQUIRE(v[i] == value_type {});
                 }
             }
         }
@@ -119,7 +119,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
             {
                 for (size_t i = count; i < size; ++i)
                 {
-                    REQUIRE(v[i] == value_type{});
+                    REQUIRE(v[i] == value_type {});
                 }
             }
         }
@@ -187,14 +187,6 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
                 }
             }
         }
-        WHEN("resize() adds elements with value")
-        {
-            value_type   value;
-            size_t const size = count + 3;
-
-            pw::test::permute(value, 3);
-            REQUIRE_THROWS_AS(v.resize(size, value), pw::internal::Unimplemented);
-        }
     }
 }
 
@@ -216,7 +208,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
 
         WHEN("resize() to current size")
         {
-            size_t const original_size = v.size();
+            size_t const original_size     = v.size();
             size_t const original_capacity = v.capacity();
 
             v.resize(original_size);
@@ -229,9 +221,9 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
 
         WHEN("resize() to smaller size")
         {
-            size_t const new_size = 5;
+            size_t const new_size          = 5;
             size_t const original_capacity = v.capacity();
-            Vector original_values(v);
+            Vector       original_values(v);
 
             v.resize(new_size);
             THEN("size decreases, capacity unchanged")
@@ -263,8 +255,8 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
         WHEN("resize() within capacity")
         {
             size_t const original_capacity = v.capacity();
-            size_t const new_size = 15;
-            Vector original_values(v);
+            size_t const new_size          = 15;
+            Vector       original_values(v);
 
             v.resize(new_size);
             THEN("size increases, capacity unchanged")
@@ -283,7 +275,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
             {
                 for (size_t i = original_values.size(); i < new_size; ++i)
                 {
-                    REQUIRE(v[i] == value_type{});
+                    REQUIRE(v[i] == value_type {});
                 }
             }
         }
@@ -291,8 +283,8 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
         WHEN("resize() beyond capacity")
         {
             size_t const original_capacity = v.capacity();
-            size_t const new_size = original_capacity + 10;
-            Vector original_values(v);
+            size_t const new_size          = original_capacity + 10;
+            Vector       original_values(v);
 
             v.resize(new_size);
             THEN("size increases, capacity increases")
@@ -312,7 +304,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
             {
                 for (size_t i = original_values.size(); i < new_size; ++i)
                 {
-                    REQUIRE(v[i] == value_type{});
+                    REQUIRE(v[i] == value_type {});
                 }
             }
         }
@@ -393,39 +385,6 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
     }
     counter = pw::test::DefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
-}
-
-SCENARIO("resize() with value parameter throws unimplemented", "[vector][resize][unimplemented]")
-{
-    using Vector = pw::vector<int>;
-    Vector v;
-
-    GIVEN("An empty vector")
-    {
-        WHEN("resize() with value is called")
-        {
-            THEN("it throws Unimplemented exception")
-            {
-                REQUIRE_THROWS_AS(v.resize(5, 42), pw::internal::Unimplemented);
-            }
-        }
-    }
-
-    GIVEN("A vector with elements")
-    {
-        v.push_back(1);
-        v.push_back(2);
-        v.push_back(3);
-
-        WHEN("resize() with value is called")
-        {
-            THEN("it throws Unimplemented exception")
-            {
-                REQUIRE_THROWS_AS(v.resize(10, 99), pw::internal::Unimplemented);
-                REQUIRE_THROWS_AS(v.resize(1, 99), pw::internal::Unimplemented);
-            }
-        }
-    }
 }
 
 SCENARIO("resize() stress tests", "[vector][resize][stress]")
