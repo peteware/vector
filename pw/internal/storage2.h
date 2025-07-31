@@ -69,6 +69,30 @@ constexpr Storage2<Type, Allocator>::~Storage2()
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
 }
 
+/**
+ * @brief Reserves storage for at least the specified number of elements.
+ *
+ * Allocates new memory for at least `count` elements and moves existing elements
+ * to the new storage. The size remains unchanged. This is typically used to
+ * ensure sufficient capacity before adding elements.
+ *
+ * @param count The minimum number of elements to reserve space for.
+ *
+ * @throws Any exception thrown by the allocator or element move constructors.
+ *         If an exception occurs during destruction of old elements, the new
+ *         memory is deallocated and the exception is rethrown, leaving the
+ *         storage in a valid but unspecified state.
+ *
+ * @post If successful, allocated() >= count. Existing elements are preserved
+ *       and size() remains unchanged.
+ *
+ * @complexity Linear in size() for moving existing elements.
+ *
+ * @note If count <= allocated(), this function has no effect.
+ * @note Strong exception safety: if an exception is thrown, the original
+ *       state is preserved (except for destructor exceptions).
+ */
+
 template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> func)
@@ -80,6 +104,28 @@ Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer b
         set_size(count);
     }
 }
+
+/**
+ * @brief Reserves storage for at least the specified number of elements and initializes them.
+ *
+ * Allocates memory for at least `count` elements, moves existing elements to the new storage,
+ * calls the provided function to initialize the new elements, and updates the size.
+ *
+ * @param count The number of elements to reserve space for. Must be greater than 0.
+ * @param func Function to call with the new storage begin pointer for element initialization.
+ *             The function is responsible for constructing `count` elements starting at the
+ *             provided pointer.
+ *
+ * @throws Any exception thrown by the allocator, element move constructors, or the
+ *         initialization function. If an exception is thrown, the storage remains in
+ *         a valid but unspecified state.
+ *
+ * @pre count > 0
+ * @post If successful, size() == count and allocated() >= count
+ *
+ * @complexity Linear in the number of existing elements (for moving) plus the complexity
+ *             of the initialization function.
+ */
 
 template<class Type, class Allocator>
 constexpr void
@@ -102,7 +148,6 @@ Storage2<Type, Allocator>::reserve(size_type count)
         allocator_traits<Allocator>::deallocate(m_alloc, tmp, count);
         throw;
     }
-    //using pw::swap;
     pw::swap(tmp, m_begin);
     pw::swap(count, m_allocated);
 }
@@ -178,7 +223,9 @@ Storage2<Type, Allocator>::allocated() const noexcept
 }
 
 /**
- * @return The next size to allocate.
+ * Doubles the existing value for allocated()
+ *
+ * @return The next size to allocate (always >= 1).
  */
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::size_type
