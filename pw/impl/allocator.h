@@ -3,7 +3,6 @@
 
 #include <pw/impl/bool_type.h>
 #include <pw/impl/is_constant_evaluated.h>
-#include <pw/impl/is_same.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
 

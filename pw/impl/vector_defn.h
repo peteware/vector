@@ -1,10 +1,9 @@
 #ifndef PW_IMPL_VECTOR_DEFN_H
 #define PW_IMPL_VECTOR_DEFN_H
 
-#include "pw/internal/unimplemented.h"
-
 #include <pw/impl/vector_decl.h>
 
+#include "pw/internal/unimplemented.h"
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/distance.h>
@@ -712,6 +711,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         // move overlapping right side
         // copy value into no
     }
+    return first;
 }
 
 template<class Type, class Allocator>
@@ -723,7 +723,7 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)first;
     (void)last;
     throw internal::Unimplemented(__func__);
-    return &makeReference<value_type>();
+    //return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
