@@ -490,7 +490,7 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::size_type
 vector<Type, Allocator>::max_size() const noexcept
 {
-    return (1 << (sizeof(size_type) * 8 - 4)) / sizeof(Type);
+    return (static_cast<size_type>(1) << (sizeof(size_type) * 8 - 4)) / sizeof(Type);
 }
 
 template<class Type, class Allocator>
@@ -700,14 +700,34 @@ constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
     size_type const total = size() + count;
-    Storage         tmp(m_storage.get_allocator());
-
-    tmp.reserve(total);
-    iterator first = m_storage.begin() + pw::distance(cbegin(), position);
+    iterator        first = m_storage.begin() + pw::distance(cbegin(), position);
 
     if (total < m_storage.allocated())
     {
+        if (position == cend())
+        {
+            pw::uninitialized_fill(m_storage.end(), m_storage.end() + count, value);
+            m_storage.set_size(total);
+        }
+        else
+        {
+            reverse_iterator rightside { m_storage.end() - 1 };
+            reverse_iterator farright { m_storage.end() + count - 1 };
+            reverse_iterator leftside { first };
+            pw::uninitialized_move(rightside, leftside, farright);
+            pw::uninitialized_fill(first, first + count, value);
+            m_storage.set_size(total);
+        }
+    }
+    else
+    {
+        Storage tmp(m_storage.get_allocator());
+
+        tmp.reserve(total);
+
         // move right side to uninitialized memory
+        iterator rightside = m_storage.begin() + pw::distance(cbegin(), position);
+        pw::uninitialized_move(first, m_storage.end(), tmp.begin() + pw::distance(m_storage.begin(), first));
         // move overlapping right side
         // copy value into no
     }

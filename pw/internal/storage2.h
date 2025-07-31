@@ -92,7 +92,6 @@ constexpr Storage2<Type, Allocator>::~Storage2()
  * @note Strong exception safety: if an exception is thrown, the original
  *       state is preserved (except for destructor exceptions).
  */
-
 template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> func)
@@ -126,7 +125,6 @@ Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer b
  * @complexity Linear in the number of existing elements (for moving) plus the complexity
  *             of the initialization function.
  */
-
 template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::reserve(size_type count)
