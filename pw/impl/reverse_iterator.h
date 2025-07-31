@@ -212,42 +212,42 @@ template<class Iterator1, class Iterator2>
 constexpr bool
 operator==(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base == op2.m_base;
+    return op1.base() == op2.base();
 }
 
 template<class Iterator1, class Iterator2>
 constexpr bool
 operator!=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base != op2.m_base;
+    return op1.base() != op2.base();
 }
 
 template<class Iterator1, class Iterator2>
 constexpr bool
 operator<(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base > op2.m_base;
+    return op1.base() > op2.base();
 }
 
 template<class Iterator1, class Iterator2>
 constexpr bool
 operator<=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base >= op2.m_base;
+    return op1.base() >= op2.base();
 }
 
 template<class Iterator1, class Iterator2>
 constexpr bool
 operator>(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base < op2.m_base;
+    return op1.base() < op2.base();
 }
 
 template<class Iterator1, class Iterator2>
 constexpr bool
 operator>=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2)
 {
-    return op1.m_base <= op2.m_base;
+    return op1.base() <= op2.base();
 }
 
 } // namespace pw
