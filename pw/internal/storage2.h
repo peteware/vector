@@ -39,6 +39,7 @@ struct Storage2
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
     constexpr size_type          calc_size() const noexcept;
+    constexpr allocator_type&    allocator() noexcept;
     constexpr allocator_type     get_allocator() const;
     constexpr void               swap(Storage2& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
@@ -235,6 +236,13 @@ Storage2<Type, Allocator>::calc_size() const noexcept
 template<class Type, class Allocator>
 constexpr typename Storage2<Type, Allocator>::allocator_type
 Storage2<Type, Allocator>::get_allocator() const
+{
+    return m_alloc;
+}
+
+template<class Type, class Allocator>
+constexpr typename Storage2<Type, Allocator>::allocator_type&
+Storage2<Type, Allocator>::allocator() noexcept
 {
     return m_alloc;
 }

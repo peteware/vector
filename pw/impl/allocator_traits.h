@@ -17,6 +17,16 @@ constexpr bool is_defined = false;
 template<typename T>
 constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
 
+/**
+ * @brief Provides a uniform interface to allocator types.
+ *
+ * This class template provides a standardized way to access allocator
+ * functionality and type information. It defines standard type aliases
+ * and static member functions that work with any allocator type, providing
+ * defaults when the allocator doesn't define certain members.
+ *
+ * @tparam Alloc The allocator type to provide traits for
+ */
 template<class Alloc>
 struct allocator_traits
 {
@@ -40,10 +50,42 @@ struct allocator_traits
         alloc.deallocate(p, count);
     }
 
+    /**
+     * @brief Constructs an object in allocated uninitialized storage.
+     *
+     * Constructs an object of type Type at the location pointed to by p using
+     * the provided arguments. This function provides a uniform interface for
+     * object construction that works with any allocator type.
+     *
+     * The construction is performed using placement new with perfect forwarding
+     * of the provided arguments to the Type constructor. The allocator parameter
+     * is ignored in the default implementation but may be used by specialized
+     * allocator types that override this behavior.
+     *
+     * @tparam Type The type of object to construct. Must be constructible from Args.
+     * @tparam Args The types of the constructor arguments (deduced).
+     *
+     * @param alloc The allocator instance (unused in default implementation).
+     * @param p Pointer to uninitialized memory where the object will be constructed.
+     *          Must point to storage suitable for an object of type Type.
+     * @param args Arguments to forward to the Type constructor.
+     *
+     * @throws Any exception thrown by the Type constructor.
+     *
+     * @pre p must point to uninitialized memory of sufficient size and alignment for Type.
+     * @post An object of type Type is constructed at location p.
+     *
+     * @complexity Constant, plus the complexity of the Type constructor.
+     *
+     * @note This function uses perfect forwarding to preserve value categories
+     *       of the constructor arguments.
+     * @note The memory pointed to by p must have been allocated but not yet
+     *       contain a constructed object.
+     */
     template<class Type, class... Args>
-    static constexpr void construct(allocator_type& alloc, Type* p, Args&&... args)
+    static constexpr void construct(allocator_type&, Type* p, Args&&... args)
     {
-        construct_at(p, pw::forward<Args>(args)...);
+        pw::construct_at(p, pw::forward<Args>(args)...);
     }
 
     template<class Type>
