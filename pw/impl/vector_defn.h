@@ -587,19 +587,13 @@ vector<Type, Allocator>::resize(size_type count)
     if (count == 0)
     {
         clear();
-        return;
     }
-    if (count == size())
+    else if (count <= size())
     {
-        return;
-    }
-    if (count < size())
-    {
-        pw::destroy(m_storage.begin() + count - 1, m_storage.end());
+        pw::destroy(m_storage.begin() + count, m_storage.end());
         m_storage.set_size(count);
-        return;
     }
-    if (m_storage.allocated() < count)
+    else if (count > m_storage.allocated())
     {
         Storage tmp(m_storage.get_allocator());
         auto    lambda = [begin = m_storage.begin(), end = m_storage.end()](pointer dest) -> void {
@@ -659,26 +653,51 @@ vector<Type, Allocator>::erase(const_iterator position)
     return erase(position, position + 1);
 }
 
+/**
+ * Removes the elements in the range [begin, end).
+ *
+ * @param begin Iterator to the first element to remove
+ * @param end   Iterator to one past the last element to remove
+ *
+ * @return Iterator following the last removed element.
+ *         - If end == end() prior to removal, then the updated end() iterator is returned.
+ *         - If [begin, end) is an empty range, then end is returned.
+ */
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
-    iterator first     = m_storage.begin() + pw::distance(cbegin(), end);
-    iterator last      = first + pw::distance(begin, end);
-    iterator rightside = last;
+    size_type const offset  = pw::distance(cbegin(), begin);
+    iterator        dest    = m_storage.begin() + offset;
+    iterator        last    = m_storage.begin() + pw::distance(cbegin(), end);
+    iterator        farside = last;
+    iterator        where   = last;
 
-    while (first != last && rightside != m_storage.end())
+    if (begin == end)
     {
-        *first++ = pw::move(*rightside++);
+        return last;
     }
-    if (first != last)
+    /*
+     * Shift the elements after the erased range to the left.
+     */
+    while (dest != last && farside != m_storage.end())
     {
-        pw::destroy(first, last);
+        *dest++ = pw::move(*farside++);
     }
-    else
+    /*
+     * If we have not reached the end of the storage then we need to move
+     * the remaining elements to the left.
+     */
+    while (farside != m_storage.end())
     {
+        *dest++ = pw::move(*farside++);
     }
-    return first;
+    pw::destroy(dest, m_storage.end());
+    size_t newsize = pw::distance(m_storage.begin(), dest);
+    if (end == cend())
+        where = m_storage.begin() + newsize;
+    m_storage.set_size(newsize);
+    return where;
 }
 
 template<class Type, class Allocator>
@@ -728,12 +747,19 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         tmp.reserve(total);
         iterator iter_orig = begin();
         iterator iter_tmp  = tmp.begin();
+        /*
+         * Copy the original elements before the insertion point
+         */
         while (iter_orig != first_orig)
         {
-            pw::allocator_traits<Allocator>::construct(tmp.allocator(), pw::addressof(*iter_tmp), *iter_orig);
+            pw::allocator_traits<Allocator>::construct(
+                tmp.allocator(), pw::addressof(*iter_tmp), pw::move(*iter_orig));
             ++iter_tmp;
             ++iter_orig;
         }
+        /*
+         * Copy the value to insert count times
+         */
         iterator ret { iter_tmp };
         while (count)
         {
@@ -741,10 +767,14 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
             ++iter_tmp;
             --count;
         }
+        /*
+         * Move the original elements after the insertion point
+         */
         iterator iter_end = tmp.begin() + total;
         while (iter_orig != end())
         {
-            pw::allocator_traits<Allocator>::construct(tmp.allocator(), pw::addressof(*iter_tmp), *iter_orig);
+            pw::allocator_traits<Allocator>::construct(
+                tmp.allocator(), pw::addressof(*iter_tmp), pw::move(*iter_orig));
             ++iter_tmp;
             ++iter_orig;
         }
