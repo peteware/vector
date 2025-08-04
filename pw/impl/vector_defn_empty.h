@@ -107,9 +107,9 @@ vector<Type, Allocator>::operator=(const vector& other)
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(pw::initializer_list<value_type> ilist)
+vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 {
-    (void)ilist;
+    (void)init_list;
     return *this;
 }
 
@@ -142,9 +142,9 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::assign(pw::initializer_list<value_type> ilist)
+vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
 {
-    (void)ilist;
+    (void)init_list;
 }
 
 template<class Type, class Allocator>
@@ -236,15 +236,15 @@ vector<Type, Allocator>::begin() noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
-vector<Type, Allocator>::end() noexcept
+constexpr typename vector<Type, Allocator>::const_iterator
+vector<Type, Allocator>::begin() const noexcept
 {
     return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_iterator
-vector<Type, Allocator>::begin() const noexcept
+constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::end() noexcept
 {
     return &makeReference<value_type>();
 }
@@ -278,17 +278,17 @@ vector<Type, Allocator>::rbegin() noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reverse_iterator
-vector<Type, Allocator>::rend() noexcept
-{
-    return reverse_iterator(begin());
-}
-
-template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rbegin() const noexcept
 {
     return const_reverse_iterator(end());
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::reverse_iterator
+vector<Type, Allocator>::rend() noexcept
+{
+    return reverse_iterator(begin());
 }
 
 template<class Type, class Allocator>
@@ -395,6 +395,16 @@ vector<Type, Allocator>::erase(const_iterator position)
     return erase(position, position + 1);
 }
 
+/**
+ * Removes the elements in the range [begin, end).
+ *
+ * @param begin Iterator to the first element to remove
+ * @param end   Iterator to one past the last element to remove
+ *
+ * @return Iterator following the last removed element.
+ *         - If end == end() prior to removal, then the updated end() iterator is returned.
+ *         - If [begin, end) is an empty range, then end is returned.
+ */
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
@@ -419,6 +429,13 @@ vector<Type, Allocator>::insert(const_iterator position, const_reference value)
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
+{
+    return &makeReference<value_type>();
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
     (void)position;
@@ -435,6 +452,15 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)position;
     (void)first;
     (void)last;
+    return &makeReference<value_type>();
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
+{
+    (void)position;
+    (void)init_list;
     return &makeReference<value_type>();
 }
 

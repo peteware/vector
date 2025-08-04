@@ -432,17 +432,17 @@ vector<Type, Allocator>::rbegin() noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reverse_iterator
-vector<Type, Allocator>::rend() noexcept
-{
-    return reverse_iterator(begin());
-}
-
-template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rbegin() const noexcept
 {
     return const_reverse_iterator(end());
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::reverse_iterator
+vector<Type, Allocator>::rend() noexcept
+{
+    return reverse_iterator(begin());
 }
 
 template<class Type, class Allocator>
@@ -691,6 +691,14 @@ vector<Type, Allocator>::insert(const_iterator position, const_reference value)
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
+{
+    throw internal::Unimplemented(__func__);
+    //   return iterator();
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
     size_type const total      = size() + count;
@@ -768,6 +776,16 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)first;
     (void)last;
     throw internal::Unimplemented(__func__);
+}
+
+template<class Type, class Allocator>
+constexpr typename vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
+{
+    (void)position;
+    (void)init_list;
+    throw internal::Unimplemented(__func__);
+    //   return iterator();
 }
 
 template<class Type, class Allocator>
