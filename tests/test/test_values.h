@@ -31,7 +31,7 @@ struct Values
 
         for (size_t i = 0; i < count; ++i)
         {
-            pw::test::permute(value, count);
+            pw::test::permute(value, 100);
             if (i == 0)
                 first_value = value;
             values.push_back(value);
