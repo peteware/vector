@@ -687,7 +687,7 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::pop_back()
 {
-    throw internal::Unimplemented(__func__);
+    (void)erase(end() - 1);
 }
 
 template<class Type, class Allocator>
