@@ -12,6 +12,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
     {
         Vector     v;
         value_type val;
+        v.reserve(1);
         WHEN("emplace_back() one element")
         {
             v.emplace_back(val);

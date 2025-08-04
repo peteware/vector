@@ -776,7 +776,6 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)first;
     (void)last;
     throw internal::Unimplemented(__func__);
-    //return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
@@ -784,8 +783,12 @@ template<class... Args>
 constexpr typename vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
-    throw internal::Unimplemented(__func__);
-    // return makeReference<value_type>();
+    if (capacity() == size())
+    {
+        throw std::bad_alloc();
+    }
+    pw::construct_at(pw::addressof(*(m_storage.end())), pw::forward<Args>(args)...);
+    m_storage.set_size(size() + 1);
 }
 
 template<class Type, class Allocator>
