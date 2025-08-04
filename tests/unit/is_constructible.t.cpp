@@ -10,18 +10,18 @@ SCENARIO("is_constructible", "[type_traits]")
         {
             int a = 0;
         };
-        WHEN("Call is_constructibe() with invalid args")
+        WHEN("Call is_constructible() with invalid args")
         {
             THEN("it is not")
             {
-                REQUIRE(!pw::is_constructible<Example, int>::value);
+                REQUIRE(!pw::is_constructible<Example, char*>::value);
             }
         }
         WHEN("Call is_constructibe_v with invalid args")
         {
             THEN("it is not")
             {
-                REQUIRE(!pw::is_constructible_v<Example, int>);
+                REQUIRE(!pw::is_constructible_v<Example, char*>);
             }
         }
         WHEN("Call is_constructibe() with no args")
