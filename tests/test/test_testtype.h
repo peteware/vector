@@ -13,10 +13,11 @@ namespace pw::test {
 //using TestTypeList = std::tuple<std::vector<int>>;
 
 // I use this for testing a type that can take an allocator
-//using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
+using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 
 // This just for pw::vector implementation
-using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
+
+//using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
 } // namespace pw::test
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

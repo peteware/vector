@@ -17,14 +17,6 @@
 #include <pw/impl/uninitialized_move.h>
 
 namespace pw {
-template<class Type>
-Type&
-makeReference()
-{
-    static Type s_value;
-
-    return s_value;
-}
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
@@ -789,6 +781,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     }
     pw::construct_at(pw::addressof(*(m_storage.end())), pw::forward<Args>(args)...);
     m_storage.set_size(size() + 1);
+    return back();
 }
 
 template<class Type, class Allocator>
@@ -798,7 +791,6 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
     (void)position;
     throw internal::Unimplemented(__func__);
-    // return &makeReference<value_type>();
 }
 
 template<class Type, class Allocator>
