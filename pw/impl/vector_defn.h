@@ -1,6 +1,8 @@
 #ifndef PW_IMPL_VECTOR_DEFN_H
 #define PW_IMPL_VECTOR_DEFN_H
 
+#include "move_backward.h"
+
 #include <pw/impl/vector_decl.h>
 
 #include "pw/internal/unimplemented.h"
@@ -667,37 +669,18 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
-    size_type const offset  = pw::distance(cbegin(), begin);
-    iterator        dest    = m_storage.begin() + offset;
-    iterator        last    = m_storage.begin() + pw::distance(cbegin(), end);
-    iterator        farside = last;
-    iterator        where   = last;
+    size_type const offset = pw::distance(cbegin(), begin);
+    iterator        dest   = m_storage.begin() + offset;
+    iterator        last   = m_storage.begin() + pw::distance(cbegin(), end);
 
     if (begin == end)
     {
         return last;
     }
-    /*
-     * Shift the elements after the erased range to the left.
-     */
-    while (dest != last && farside != m_storage.end())
-    {
-        *dest++ = pw::move(*farside++);
-    }
-    /*
-     * If we have not reached the end of the storage then we need to move
-     * the remaining elements to the left.
-     */
-    while (farside != m_storage.end())
-    {
-        *dest++ = pw::move(*farside++);
-    }
-    pw::destroy(dest, m_storage.end());
-    size_t newsize = pw::distance(m_storage.begin(), dest);
-    if (end == cend())
-        where = m_storage.begin() + newsize;
-    m_storage.set_size(newsize);
-    return where;
+    pw::move(last, m_storage.end(), dest);
+    pw::destroy(last, m_storage.end());
+    m_storage.set_size(m_storage.size() - pw::distance(begin, end));
+    return dest;
 }
 
 template<class Type, class Allocator>

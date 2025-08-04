@@ -42,9 +42,10 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
             iter = v.erase(v.begin());
             THEN("one less value")
             {
-                REQUIRE(v.begin() == iter);
                 REQUIRE(generate.count - 1 == v.size());
+                REQUIRE(v[0] != generate.first_value);
                 REQUIRE(generate.last_value == v[generate.count - 2]);
+                REQUIRE(v.begin() == iter);
             }
         }
         WHEN("erase() in middle")
@@ -54,9 +55,10 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
             iter = v.erase(v.begin() + 1);
             THEN("one less value")
             {
-                REQUIRE(v.begin() + 1 == iter);
                 REQUIRE(generate.count - 1 == v.size());
+                REQUIRE(v[0] == generate.first_value);
                 REQUIRE(generate.last_value == v[generate.count - 2]);
+                REQUIRE(v.begin() + 1 == iter);
             }
         }
         WHEN("erase() last item")
@@ -66,8 +68,9 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
             iter = v.erase(v.end() - 1);
             THEN("one less value")
             {
-                REQUIRE(v.end() == iter);
+                REQUIRE(v[0] == generate.first_value);
                 REQUIRE(generate.count - 1 == v.size());
+                REQUIRE(v.end() == iter);
             }
         }
         WHEN("erase(begin,end)")
@@ -87,9 +90,9 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
             iter = v.erase(v.begin(), v.end() - 2);
             THEN("there are 2 values")
             {
-                REQUIRE(v.begin() == iter);
                 REQUIRE(2 == v.size());
                 REQUIRE(generate.last_value == v[1]);
+                REQUIRE(v.begin() == iter);
             }
         }
         WHEN("erase() at begin()+2 to end()")
@@ -98,9 +101,9 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
             iter = v.erase(v.begin() + 2, v.end());
             THEN("there are 3 fewer values")
             {
-                REQUIRE(v.begin() + 2 == iter);
                 REQUIRE(generate.count - 3 == v.size());
                 REQUIRE(generate.first_value == v[0]);
+                REQUIRE(v.begin() + 2 == iter);
             }
         }
     }

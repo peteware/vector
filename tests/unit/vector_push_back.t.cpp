@@ -134,15 +134,10 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         {
             generate.values.push_back(copyObject);
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
-            THEN("Move constructed existing items")
+            THEN("Copy constructed existing items and new item")
             {
                 INFO("counter: " << counter);
-                REQUIRE(generate.count == counter.getMoveConstructor());
-            }
-            THEN("Copy constructed new item")
-            {
-                INFO("counter: " << counter);
-                REQUIRE(1 == counter.getCopyConstructor());
+                REQUIRE(generate.count + 1 == counter.getCopyConstructor());
             }
         }
     }

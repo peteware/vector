@@ -316,8 +316,7 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
     using value_type = typename Vector::value_type;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
-    size_t                    count = 5;
+    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
 
     GIVEN("An empty vector")
     {
@@ -325,7 +324,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() is called")
         {
-            counter = pw::test::DefaultCopyConstructible::getCounter();
+            size_t count = 5;
+            counter      = pw::test::DefaultCopyConstructible::getCounter();
+
             v.resize(count);
             counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
             THEN("default constructed count times")
@@ -340,20 +341,20 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
     GIVEN("A vector with existing elements")
     {
-        Vector v;
-        v.resize(3);
-        counter = pw::test::DefaultCopyConstructible::getCounter();
+        Vector v { 1, 2, 3 };
 
         WHEN("resize() increases size")
         {
-            pw::test::OpCounter before = pw::test::DefaultCopyConstructible::getCounter();
-            v.resize(count + 2);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - before;
-            THEN("only new elements are default constructed")
+            counter = pw::test::DefaultCopyConstructible::getCounter();
+            v.resize(v.size() + 2);
+            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            THEN("new elements are default constructed and original copy constructed")
             {
+                // Expect copy construction so exceptions leave unchanged
                 INFO("counter: " << counter);
-                REQUIRE(4 == counter.getDefaultConstructor());
-                REQUIRE(counter.getDefaultConstructor() == counter.constructorCount());
+                REQUIRE(2 == counter.getDefaultConstructor());
+                REQUIRE(counter.getDefaultConstructor() + counter.getCopyConstructor() ==
+                        counter.constructorCount());
             }
         }
 
