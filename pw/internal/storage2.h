@@ -25,6 +25,7 @@ struct Storage2
     using const_iterator  = const_pointer;
 
     constexpr explicit Storage2(allocator_type const& alloc);
+    constexpr Storage2(allocator_type const& alloc, size_type count);
     constexpr ~Storage2();
 
     constexpr void               reserve(size_type count, std::function<void(pointer begin)> func);
@@ -60,6 +61,15 @@ constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
     , m_begin(0)
     , m_size(0)
     , m_allocated(0)
+{
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc, size_type count)
+    : m_alloc(alloc)
+    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
+    , m_size(0)
+    , m_allocated(count)
 {
 }
 
