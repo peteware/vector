@@ -693,8 +693,56 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
 {
-    throw internal::Unimplemented(__func__);
-    //   return iterator();
+    size_type const total  = size() + 1;
+    size_type const offset = pw::distance(cbegin(), position);
+    iterator        where  = m_storage.begin() + offset;
+
+    if (total <= m_storage.allocated())
+    {
+        if (position == cend())
+        {
+            pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
+            m_storage.set_size(total);
+        }
+        else
+        {
+            pw::construct_at(pw::addressof(*m_storage.end()), pw::move(*(m_storage.end() - 1)));
+            pw::move_backward(where, m_storage.end() - 1, m_storage.end());
+            *where = pw::move(value);
+            m_storage.set_size(total);
+        }
+        return m_storage.begin() + offset;
+    }
+    else
+    {
+        Storage tmp(m_storage.get_allocator());
+        tmp.reserve(m_storage.calc_size());
+        
+        iterator iter_orig = begin();
+        iterator iter_tmp  = tmp.begin();
+        
+        while (iter_orig != where)
+        {
+            pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
+            ++iter_tmp;
+            ++iter_orig;
+        }
+        
+        iterator ret = iter_tmp;
+        pw::construct_at(pw::addressof(*iter_tmp), pw::move(value));
+        ++iter_tmp;
+        
+        while (iter_orig != end())
+        {
+            pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
+            ++iter_tmp;
+            ++iter_orig;
+        }
+        
+        m_storage.swap(tmp, false);
+        m_storage.set_size(total);
+        return ret;
+    }
 }
 
 template<class Type, class Allocator>
@@ -772,10 +820,13 @@ template<class Iterator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
-    (void)position;
-    (void)first;
-    (void)last;
-    throw internal::Unimplemented(__func__);
+    size_type const offset = pw::distance(cbegin(), position);
+    iterator        dest   = m_storage.begin() + offset;
+    while (first != last)
+    {
+        dest = insert(dest, *first++);
+    }
+    return dest;
 }
 
 template<class Type, class Allocator>
