@@ -3,9 +3,9 @@
 
 #include <pw/impl/bool_type.h>
 
-#include "basicunit_base_allocator.h"
+#include "test_base_allocator.h"
 
-namespace basicunit {
+namespace pw::test {
 template<class Type>
 struct allocator_copy_assignment : allocator_base<Type>
 {
@@ -20,5 +20,5 @@ allocator_copy_assignment<Type>::allocator_copy_assignment(int instance)
 {
 }
 
-} // namespace basicunit
+} // namespace pw::test
 #endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H */

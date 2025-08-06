@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_BASICUNIT_ALLOCATOR_BASE_H
-#define INCLUDED_PW_BASICUNIT_ALLOCATOR_BASE_H
+#ifndef INCLUDED_PW_TEST_ALLOCATOR_BASE_H
+#define INCLUDED_PW_TEST_ALLOCATOR_BASE_H
 
 #include <pw/impl/bool_type.h>
 #include <pw/impl/ptrdiff.h>
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-namespace basicunit {
+namespace pw::test {
 
 template<class Type>
 struct allocator_base
@@ -61,6 +61,6 @@ operator<<(std::ostream& out, allocator_base<Type> const& alloc)
     out << "allocator_base<" << typeid(Type).name() << "> instance " << alloc.m_instance;
     return out;
 }
-} // namespace basicunit
+} // namespace pw::test
 
-#endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_BASE_H */
+#endif /* INCLUDED_PW_TEST_ALLOCATOR_BASE_H */

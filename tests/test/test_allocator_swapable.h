@@ -1,9 +1,9 @@
-#ifndef INCLUDED_PW_BASICUNIT_ALLOCATOR_SWAPABLE_H
-#define INCLUDED_PW_BASICUNIT_ALLOCATOR_SWAPABLE_H
+#ifndef INCLUDED_PW_TEST_ALLOCATOR_SWAPABLE_H
+#define INCLUDED_PW_TEST_ALLOCATOR_SWAPABLE_H
 
-#include "basicunit_base_allocator.h"
+#include "test_base_allocator.h"
 
-namespace basicunit {
+namespace pw::test {
 
 /**
  * @brief An allocator that inherits from allocator_base but allows container swap propagation
@@ -23,6 +23,6 @@ struct allocator_swapable : allocator_base<Type>
     }
 };
 
-} // namespace basicunit
+} // namespace pw::test
 
-#endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_SWAPABLE_H */
+#endif /* INCLUDED_PW_TEST_ALLOCATOR_SWAPABLE_H */

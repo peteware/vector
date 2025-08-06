@@ -1,6 +1,6 @@
-#include "basicunit_allocator_copy_assignment.h"
-#include "basicunit_allocator_move_assignment.h"
-#include "basicunit_allocator_swapable.h"
+#include "../test/test_allocator_copy_assignment.h"
+#include "test_allocator_move_assignment.h"
+#include "test_allocator_swapable.h"
 
 #include <pw/vector>
 #include <unistd.h>
@@ -85,7 +85,7 @@ TEST_CASE("Constructors", "[vector][constructor]")
 
 TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
 {
-    using Allocator = basicunit::allocator_move_assignment<int>;
+    using Allocator = pw::test::allocator_move_assignment<int>;
     using Vector    = pw::vector<int, Allocator>;
 
     Allocator alloc;
@@ -185,7 +185,7 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
 
 TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 {
-    using Allocator  = basicunit::allocator_move_assignment<int>;
+    using Allocator  = pw::test::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
     using value_type = typename Vector::value_type;
 
@@ -515,7 +515,7 @@ TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
 
 TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
 {
-    using Allocator = basicunit::allocator_copy_assignment<int>;
+    using Allocator = pw::test::allocator_copy_assignment<int>;
     using Vector    = pw::vector<int, Allocator>;
 
     GIVEN("vector with copy assignment allocator")
@@ -575,7 +575,7 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
     GIVEN("A vector with propagate_on_move_assignment = true")
     {
-        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Allocator = pw::test::allocator_move_assignment<int>;
         using Vector    = pw::vector<int, Allocator>;
 
         Allocator alloc1 { 5 };
@@ -593,7 +593,7 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     }
     GIVEN("A vector with propagate_on_move_assignment = false")
     {
-        using Allocator = basicunit::allocator_base<int>;
+        using Allocator = pw::test::allocator_base<int>;
         using Vector    = pw::vector<int, Allocator>;
 
         Allocator alloc1 { 5 };
@@ -622,7 +622,7 @@ TEST_CASE("Assignment with initializer_List use allocator", "[assignment][alloca
     // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
     GIVEN("A vector with propagate_on_move_assignment = true")
     {
-        using Allocator = basicunit::allocator_move_assignment<int>;
+        using Allocator = pw::test::allocator_move_assignment<int>;
         using Vector    = pw::vector<int, Allocator>;
 
         Allocator alloc1 { 5 };
@@ -648,7 +648,7 @@ TEST_CASE("Swap uses allocator", "[swap][allocator]")
     //     using propagate_on_container_swap            = true_type;
     GIVEN("A vector with propagate_on_container_swap = true")
     {
-        using Allocator = basicunit::allocator_swapable<int>;
+        using Allocator = pw::test::allocator_swapable<int>;
         using Vector    = pw::vector<int, Allocator>;
 
         Allocator alloc1 { 5 };
@@ -670,7 +670,7 @@ TEST_CASE("Swap uses allocator", "[swap][allocator]")
     }
     GIVEN("A vector with propagate_on_container_swap = false")
     {
-        using Allocator = basicunit::allocator_base<int>;
+        using Allocator = pw::test::allocator_base<int>;
         using Vector    = pw::vector<int, Allocator>;
 
         Allocator alloc1 { 1 };
@@ -693,7 +693,7 @@ TEST_CASE("Swap uses allocator", "[swap][allocator]")
 
 TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 {
-    using Allocator  = basicunit::allocator_move_assignment<int>;
+    using Allocator  = pw::test::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
     using value_type = typename Vector::value_type;
 
@@ -1219,7 +1219,7 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
 
         WHEN("push_back() with different allocators")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);
@@ -2160,7 +2160,7 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
     {
         WHEN("clear() is called")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);
@@ -2421,7 +2421,7 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
     {
         WHEN("shrink_to_fit() is called")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);
@@ -2685,7 +2685,7 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
     {
         WHEN("reserve() is called")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);
@@ -3011,7 +3011,7 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
     {
         WHEN("resize() is called")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);
@@ -3482,7 +3482,7 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
     {
         WHEN("resize() is called with value")
         {
-            using Allocator = basicunit::allocator_move_assignment<int>;
+            using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 
             Allocator alloc(5);

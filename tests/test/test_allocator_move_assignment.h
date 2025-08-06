@@ -3,9 +3,9 @@
 
 #include <pw/impl/bool_type.h>
 
-#include "basicunit_base_allocator.h"
+#include "test_base_allocator.h"
 
-namespace basicunit {
+namespace pw::test {
 
 template<class Type>
 struct allocator_move_assignment : public allocator_base<Type>
@@ -21,5 +21,5 @@ allocator_move_assignment<Type>::allocator_move_assignment(int instance)
 {
 }
 
-} // namespace basicunit
+} // namespace pw::test
 #endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_MOVE_ASSIGNMENT_H */
