@@ -1,6 +1,3 @@
-#ifndef INCLUDED_TESTS_REVERSE_ITERATOR_T_H
-#define INCLUDED_TESTS_REVERSE_ITERATOR_T_H
-
 #include <pw/impl/reverse_iterator.h>
 #include <pw/impl/size.h>
 
@@ -50,5 +47,3 @@ SCENARIO("check reverse_iterator")
         }
     }
 }
-
-#endif /* INCLUDED_TESTS_REVERSE_ITERATOR_T_H */
