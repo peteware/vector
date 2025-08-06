@@ -547,6 +547,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
 
         WHEN("insert with init_list")
         {
+            Vector           expected { 1, 2, 3 };
             Vector::iterator iter;
 
             iter = v.insert(v.begin(), { 1, 2, 3 });
@@ -557,9 +558,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
             }
             THEN("elements match")
             {
-                REQUIRE(v[0] == 1);
-                REQUIRE(v[1] == 2);
-                REQUIRE(v[2] == 3);
+                REQUIRE(v == expected);
             }
             THEN("returned iter is at begin()")
             {
@@ -570,6 +569,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
     GIVEN("A vector with 5 elements")
     {
         Vector           v { 1, 2, 3, 4, 5 };
+        Vector const     expected = { -1, -2, 1, 2, 3, 4, 5 };
         Vector::iterator iter;
 
         REQUIRE(v.size() == v.capacity());
@@ -582,13 +582,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
             }
             THEN("elements match")
             {
-                REQUIRE(v[0] == -1);
-                REQUIRE(v[1] == -2);
-                REQUIRE(v[2] == 1);
-                REQUIRE(v[3] == 2);
-                REQUIRE(v[4] == 3);
-                REQUIRE(v[5] == 4);
-                REQUIRE(v[6] == 5);
+                REQUIRE(v == expected);
             }
             THEN("returned iter is at begin")
             {
@@ -611,13 +605,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
             }
             THEN("elements match")
             {
-                REQUIRE(v[0] == -1);
-                REQUIRE(v[1] == -2);
-                REQUIRE(v[2] == 1);
-                REQUIRE(v[3] == 2);
-                REQUIRE(v[4] == 3);
-                REQUIRE(v[5] == 4);
-                REQUIRE(v[6] == 5);
+                REQUIRE(v == expected);
             }
             THEN("returned iter is at begin")
             {

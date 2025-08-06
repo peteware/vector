@@ -8,7 +8,7 @@ namespace pw::test {
 /**
  * This provides a simple way to populate a container
  * with a fixed number of values.  It saves
- * how mnany values in `count` and the
+ * how many values in `count` and the
  * `first_value` and `last_value`. 
  *
  * It uses permute() to generate unique values.
