@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_COPYCONSTRUCTIBLE_H
-#define INCLUDED_TEST_COPYCONSTRUCTIBLE_H
+#ifndef INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H
+#define INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H
 
 #include <compare>
 #include <test_optracker.h>
@@ -47,4 +47,4 @@ private:
 bool permute(CopyConstructible& value, int depth);
 } // namespace pw::test
 
-#endif /*  INCLUDED_TEST_COPYCONSTRUCTIBLE_H */
+#endif /*  INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H */

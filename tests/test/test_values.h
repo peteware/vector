@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_VALUES_H
-#define INCLUDED_TEST_VALUES_H
+#ifndef INCLUDED_PW_TEST_VALUES_H
+#define INCLUDED_PW_TEST_VALUES_H
 
 #include <iostream>
 
@@ -54,4 +54,4 @@ operator<<(std::ostream& out, Values<Container> const& values)
 }
 
 } // namespace pw::test
-#endif /* INCLUDED_TEST_VALUES_H */
+#endif /* INCLUDED_PW_TEST_VALUES_H */

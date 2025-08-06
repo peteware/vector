@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_OPTRACKER_H
-#define INCLUDED_TEST_OPTRACKER_H
+#ifndef INCLUDED_PW_TEST_OPTRACKER_H
+#define INCLUDED_PW_TEST_OPTRACKER_H
 
 #include <pw/impl/move.h>
 #include <test_opcounter.h>
@@ -40,4 +40,4 @@ bool          permute(OpTracker& value, int depth);
 std::ostream& operator<<(std::ostream& out, OpTracker const& op2);
 } // namespace pw::test
 
-#endif /*  INCLUDED_TEST_OPTRACKER_H */
+#endif /*  INCLUDED_PW_TEST_OPTRACKER_H */

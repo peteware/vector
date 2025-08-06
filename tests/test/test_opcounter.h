@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_OPCOUNTER_H
-#define INCLUDED_TEST_OPCOUNTER_H
+#ifndef INCLUDED_PW_TEST_OPCOUNTER_H
+#define INCLUDED_PW_TEST_OPCOUNTER_H
 
 #include <iosfwd>
 
@@ -87,4 +87,4 @@ private:
 std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);
 } // namespace pw::test
 
-#endif /*  INCLUDED_TEST_OPCOUNTER_H */
+#endif /*  INCLUDED_PW_TEST_OPCOUNTER_H */

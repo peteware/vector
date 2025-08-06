@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_MOVECONSTRUCTIBLE_H
-#define INCLUDED_TEST_MOVECONSTRUCTIBLE_H
+#ifndef INCLUDED_PW_TEST_MOVECONSTRUCTIBLE_H
+#define INCLUDED_PW_TEST_MOVECONSTRUCTIBLE_H
 
 #include <compare>
 #include <test_optracker.h>
@@ -41,4 +41,4 @@ private:
 bool permute(MoveConstructible& value, int depth);
 
 } // namespace pw::test
-#endif /*  INCLUDED_TEST_MOVECONSTRUCTIBLE_H */
+#endif /*  INCLUDED_PW_TEST_MOVECONSTRUCTIBLE_H */

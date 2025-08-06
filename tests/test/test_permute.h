@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_PERMUTE_H
-#define INCLUDED_TEST_PERMUTE_H
+#ifndef INCLUDED_PW_TEST_PERMUTE_H
+#define INCLUDED_PW_TEST_PERMUTE_H
 
 #include <string>
 
@@ -45,4 +45,4 @@ permute_n(Type& value, int depth, int count)
 
 } // namespace pw::test
 
-#endif /* INCLUDED_TEST_PERMUTE_H */
+#endif /* INCLUDED_PW_TEST_PERMUTE_H */

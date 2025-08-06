@@ -1,5 +1,5 @@
-#ifndef INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H
-#define INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H
+#ifndef INCLUDED_PW_TEST_RANDOM_ACCESS_ITERATOR_H
+#define INCLUDED_PW_TEST_RANDOM_ACCESS_ITERATOR_H
 
 #include <pw/impl/iterator_tag.h>
 #include <test_opcounter.h>
@@ -46,4 +46,4 @@ private:
 
 } // namespace pw::test
 
-#endif /* INCLUDED_TEST_RANDOM_ACCESS_ITERATOR_H */
+#endif /* INCLUDED_PW_TEST_RANDOM_ACCESS_ITERATOR_H */
