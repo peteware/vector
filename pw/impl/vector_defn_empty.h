@@ -1,5 +1,5 @@
-#ifndef PW_IMPL_VECTOR_DEFN_H
-#define PW_IMPL_VECTOR_DEFN_H
+#ifndef INCLUDED_PW_IMPL_VECTOR_DEFN_H
+#define INCLUDED_PW_IMPL_VECTOR_DEFN_H
 
 #include <pw/impl/vector_decl.h>
 
@@ -508,4 +508,4 @@ operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloc
     return op1[0] <=> op2[0];
 }
 } // namespace pw
-#endif /* PW_IMPL_VECTOR_DEFN_H */
+#endif /* INCLUDED_PW_IMPL_VECTOR_DEFN_H */

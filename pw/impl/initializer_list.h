@@ -1,5 +1,5 @@
-#ifndef PW_IMPL_INITIALIZER_LIST_H
-#define PW_IMPL_INITIALIZER_LIST_H
+#ifndef INCLUDED_PW_IMPL_INITIALIZER_LIST_H
+#define INCLUDED_PW_IMPL_INITIALIZER_LIST_H
 
 #include <initializer_list>
 
@@ -8,4 +8,4 @@ template<class Type>
 using initializer_list = std::initializer_list<Type>;
 } // namespace pw
 
-#endif /* PW_IMPL_INITIALIZER_LIST_H */
+#endif /* INCLUDED_PW_IMPL_INITIALIZER_LIST_H */

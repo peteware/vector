@@ -1,5 +1,5 @@
-#ifndef PW_IMPL_VECTOR_DECL_H // -*- c++ -*-
-#define PW_IMPL_VECTOR_DECL_H
+#ifndef INCLUDED_PW_IMPL_VECTOR_DECL_H // -*- c++ -*-
+#define INCLUDED_PW_IMPL_VECTOR_DECL_H
 
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
@@ -124,4 +124,4 @@ constexpr auto operator<=>(const vector<Type, Allocator>& op1, const vector<Type
     -> decltype(op1[0] <=> op2[0]);
 
 } // namespace pw
-#endif /* PW_IMPL_VECTOR_DECL_H */
+#endif /* INCLUDED_PW_IMPL_VECTOR_DECL_H */

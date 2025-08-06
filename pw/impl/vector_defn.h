@@ -1,5 +1,5 @@
-#ifndef PW_IMPL_VECTOR_DEFN_H
-#define PW_IMPL_VECTOR_DEFN_H
+#ifndef INCLUDED_PW_IMPL_VECTOR_DEFN_H
+#define INCLUDED_PW_IMPL_VECTOR_DEFN_H
 
 #include "fill_n.h"
 #include "move_backward.h"
@@ -954,4 +954,4 @@ operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloc
     return std::strong_ordering::equal;
 }
 } // namespace pw
-#endif /* PW_IMPL_VECTOR_DEFN_H */
+#endif /* INCLUDED_PW_IMPL_VECTOR_DEFN_H */
