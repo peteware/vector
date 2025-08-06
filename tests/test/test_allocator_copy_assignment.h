@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H
-#define INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H
+#ifndef INCLUDED_PW_TEST_ALLOCATOR_COPY_ASSIGNMENT_H
+#define INCLUDED_PW_TEST_ALLOCATOR_COPY_ASSIGNMENT_H
 
 #include <pw/impl/bool_type.h>
 
@@ -21,4 +21,4 @@ allocator_copy_assignment<Type>::allocator_copy_assignment(int instance)
 }
 
 } // namespace pw::test
-#endif /* INCLUDED_PW_BASICUNIT_ALLOCATOR_COPY_ASSIGNMENT_H */
+#endif /* INCLUDED_PW_TEST_ALLOCATOR_COPY_ASSIGNMENT_H */

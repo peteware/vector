@@ -1,4 +1,4 @@
-#include "../test/test_allocator_copy_assignment.h"
+#include "test_allocator_copy_assignment.h"
 #include "test_allocator_move_assignment.h"
 #include "test_allocator_swapable.h"
 
