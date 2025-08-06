@@ -153,12 +153,13 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
         }
     }
 
-    GIVEN("a vector with 5 elements")
+    GIVEN("a vector with 5 elements and not enough capacity")
     {
         pw::test::Values<Vector> generate(5);
         Vector                   v(generate.values);
 
-        WHEN("insert(begin(), std::move(value)) is called")
+        REQUIRE(v.size() == v.capacity());
+        WHEN("insert(begin(), std::move(value)) is called with not enough capacity")
         {
             typename Vector::iterator iter;
             value_type                value;

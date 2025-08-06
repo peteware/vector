@@ -694,65 +694,43 @@ template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
 {
-    size_type const total  = size() + 1;
+    size_type const count  = 1;
+    size_type const total  = size() + count;
     size_type const offset = pw::distance(cbegin(), position);
-    iterator        where  = m_storage.begin() + offset;
 
     if (total <= m_storage.allocated())
     {
         if (position == cend())
         {
-            pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
-            m_storage.set_size(total);
+            pw::uninitialized_fill(m_storage.end(), m_storage.end() + count, pw::move(value));
         }
         else
         {
-            pw::construct_at(pw::addressof(*m_storage.end()), pw::move(*(m_storage.end() - 1)));
-            pw::move_backward(where, m_storage.end() - 1, m_storage.end());
-            *where = pw::move(value);
-            m_storage.set_size(total);
+            pw::uninitialized_move(m_storage.end() - count, m_storage.end(), m_storage.end());
+            pw::move_backward(m_storage.begin() + offset, m_storage.end() - count, m_storage.end());
+            pw::fill_n(m_storage.begin() + offset, count, value);
         }
-        return m_storage.begin() + offset;
     }
     else
     {
-        Storage tmp(m_storage.get_allocator());
-        tmp.reserve(m_storage.calc_size());
+        Storage tmp(m_storage.get_allocator(), m_storage.calc_size());
 
-        iterator iter_orig = begin();
-        iterator iter_tmp  = tmp.begin();
-
-        while (iter_orig != where)
-        {
-            pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
-            ++iter_tmp;
-            ++iter_orig;
-        }
-
-        iterator ret = iter_tmp;
-        pw::construct_at(pw::addressof(*iter_tmp), pw::move(value));
-        ++iter_tmp;
-
-        while (iter_orig != end())
-        {
-            pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
-            ++iter_tmp;
-            ++iter_orig;
-        }
-
+        pw::uninitialized_move(m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + count);
+        pw::allocator_traits<Allocator>::construct(
+            tmp.allocator(), pw::addressof(*(tmp.begin() + offset)), value);
+        pw::uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
         m_storage.swap(tmp, false);
-        m_storage.set_size(total);
-        return ret;
     }
+    m_storage.set_size(total);
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
-    size_type const total      = size() + count;
-    size_type const offset     = pw::distance(cbegin(), position);
-    iterator        first_orig = m_storage.begin() + offset;
+    size_type const total  = size() + count;
+    size_type const offset = pw::distance(cbegin(), position);
 
     if (total < m_storage.allocated())
     {
@@ -763,54 +741,22 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         else
         {
             pw::uninitialized_move(m_storage.end() - count, m_storage.end(), m_storage.end());
-            pw::move_backward(first_orig, m_storage.end() - count, m_storage.end());
-            pw::fill_n(first_orig, count, value);
+            pw::move_backward(m_storage.begin() + offset, m_storage.end() - count, m_storage.end());
+            // TODO: Can this fill to uninitialized memory?
+            pw::fill_n(m_storage.begin() + offset, count, value);
         }
-        m_storage.set_size(total);
-        return m_storage.begin() + offset;
     }
     else
     {
-        Storage tmp(m_storage.get_allocator());
+        Storage tmp(m_storage.get_allocator(), total);
 
-        tmp.reserve(total);
-        iterator iter_orig = begin();
-        iterator iter_tmp  = tmp.begin();
-        /*
-         * Copy the original elements before the insertion point
-         */
-        while (iter_orig != first_orig)
-        {
-            pw::allocator_traits<Allocator>::construct(
-                tmp.allocator(), pw::addressof(*iter_tmp), pw::move(*iter_orig));
-            ++iter_tmp;
-            ++iter_orig;
-        }
-        /*
-         * Copy the value to insert count times
-         */
-        iterator ret { iter_tmp };
-        while (count)
-        {
-            pw::allocator_traits<Allocator>::construct(tmp.allocator(), pw::addressof(*iter_tmp), value);
-            ++iter_tmp;
-            --count;
-        }
-        /*
-         * Move the original elements after the insertion point
-         */
-        iterator iter_end = tmp.begin() + total;
-        while (iter_orig != end())
-        {
-            pw::allocator_traits<Allocator>::construct(
-                tmp.allocator(), pw::addressof(*iter_tmp), pw::move(*iter_orig));
-            ++iter_tmp;
-            ++iter_orig;
-        }
+        pw::uninitialized_move(m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + count);
+        pw::uninitialized_fill(tmp.begin() + offset, tmp.begin() + offset + count, value);
+        pw::uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
         m_storage.swap(tmp, false);
-        m_storage.set_size(total);
-        return ret;
     }
+    m_storage.set_size(total);
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>
