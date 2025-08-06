@@ -1,5 +1,5 @@
-#ifndef _INCLUDED_PW_INTERNAL_DETECT_PROP_H_
-#define _INCLUDED_PW_INTERNAL_DETECT_PROP_H_
+#ifndef  INCLUDED_PW_INTERNAL_DETECT_PROP_H_
+#define  INCLUDED_PW_INTERNAL_DETECT_PROP_H_
 
 namespace pw::internal {
 template<class Alloc>
@@ -17,4 +17,4 @@ auto detect_prop_on_swap(int) -> typename Alloc::propagate_on_container_swap;
 template<class Alloc>
 auto detect_prop_on_swap(long) -> false_type;
 } // namespace pw::internal
-#endif /* _INCLUDED_PW_INTERNAL_DETECT_PROP_H_ */
+#endif /*  INCLUDED_PW_INTERNAL_DETECT_PROP_H_ */

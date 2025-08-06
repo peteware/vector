@@ -1,7 +1,7 @@
-#ifndef PW_MEMORY_RESOURCE_H // -*- c++ -*-
-#define PW_MEMORY_RESOURCE_H
+#ifndef INCLUDED_PW_MEMORY_RESOURCE_H // -*- c++ -*-
+#define INCLUDED_PW_MEMORY_RESOURCE_H
 
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/pmr_polymorphic_allocator.h>
 
-#endif /*  PW_MEMORY_RESOURCE_H */
+#endif /*  INCLUDED_PW_MEMORY_RESOURCE_H */

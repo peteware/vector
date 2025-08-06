@@ -1,5 +1,5 @@
-#ifndef PW_INTERNAL_UNIMPLEMENTED_H
-#define PW_INTERNAL_UNIMPLEMENTED_H
+#ifndef INCLUDED_PW_INTERNAL_UNIMPLEMENTED_H
+#define INCLUDED_PW_INTERNAL_UNIMPLEMENTED_H
 #include <stdexcept>
 
 namespace pw::internal {
@@ -16,4 +16,4 @@ public:
     }
 };
 } // namespace pw::internal
-#endif //PW_INTERNAL_UNIMPLEMENTED_H
+#endif //INCLUDED_PW_INTERNAL_UNIMPLEMENTED_H

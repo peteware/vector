@@ -1,5 +1,5 @@
-#ifndef PW_TYPE_TRAITS_H // -*- c++ -*-
-#define PW_TYPE_TRAITS_H
+#ifndef INCLUDED_PW_TYPE_TRAITS_H // -*- c++ -*-
+#define INCLUDED_PW_TYPE_TRAITS_H
 
 #include <pw/impl/bool_type.h>
 #include <pw/impl/conditional.h>
@@ -8,4 +8,4 @@
 #include <pw/impl/is_same.h>
 #include <pw/impl/void.h>
 
-#endif /*  PW_TYPE_TRAITS_H */
+#endif /*  INCLUDED_PW_TYPE_TRAITS_H */

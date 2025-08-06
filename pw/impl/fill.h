@@ -1,5 +1,5 @@
-#ifndef _INCLUDED_PW_IMPL_FILL_H_
-#define _INCLUDED_PW_IMPL_FILL_H_
+#ifndef  INCLUDED_PW_IMPL_FILL_H_
+#define  INCLUDED_PW_IMPL_FILL_H_
 
 namespace pw {
 
@@ -21,4 +21,4 @@ fill(ForwardIterator begin, ForwardIterator end, Type const& value)
 }
 
 } // namespace pw
-#endif /*  _INCLUDED_PW_IMPL_FILL_H_ */
+#endif /*   INCLUDED_PW_IMPL_FILL_H_ */
