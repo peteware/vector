@@ -762,11 +762,8 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         }
         else
         {
-            // make room
             pw::uninitialized_move(m_storage.end() - count, m_storage.end(), m_storage.end());
-            // move range into above space
             pw::move_backward(first_orig, m_storage.end() - count, m_storage.end());
-            // fill the value
             pw::fill_n(first_orig, count, value);
         }
         m_storage.set_size(total);
@@ -841,30 +838,19 @@ vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<va
     {
         Storage tmp(m_storage.get_allocator(), m_storage.size() + init_list.size());
 
-        // move left part to tmp
         pw::uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
-        // move init_list into tmp
         pw::uninitialized_move(init_list.begin(), init_list.end(), tmp.begin() + offset);
-        // move rest into tmp
         if (!m_storage.empty())
         {
-            pw::uninitialized_move(m_storage.begin() + offset + init_list.size(),
-                                   m_storage.end(),
-                                   tmp.begin() + offset + init_list.size());
+            pw::uninitialized_move(
+                m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + init_list.size());
         }
         m_storage.swap(tmp, false);
     }
     else
     {
-        // move right side
-        // TODO: this is wrong.  Only move the end - init_list.size()
-        pw::uninitialized_move(
-            m_storage.begin() + offset + init_list.size(), m_storage.end(), m_storage.end());
-        // move elements into above space
-        pw::move(m_storage.begin() + offset,
-                 m_storage.begin() + offset + init_list.size(),
-                 m_storage.begin() + offset + init_list.size());
-        // move init_list into range
+        pw::uninitialized_move(m_storage.end() - init_list.size(), m_storage.end(), m_storage.end());
+        pw::move_backward(m_storage.begin() + offset, m_storage.end() - init_list.size(), m_storage.end());
         pw::move(init_list.begin(), init_list.end(), m_storage.begin() + offset);
     }
     m_storage.set_size(total);

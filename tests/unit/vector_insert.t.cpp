@@ -571,12 +571,43 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
     {
         Vector           v { 1, 2, 3, 4, 5 };
         Vector::iterator iter;
-        WHEN("insert(begin, init_list")
+
+        REQUIRE(v.size() == v.capacity());
+        WHEN("insert(begin, init_list) without capacity")
         {
             iter = v.insert(v.begin(), { -1, -2 });
             THEN("size is 7")
             {
                 REQUIRE(v.size() == 7);
+            }
+            THEN("elements match")
+            {
+                REQUIRE(v[0] == -1);
+                REQUIRE(v[1] == -2);
+                REQUIRE(v[2] == 1);
+                REQUIRE(v[3] == 2);
+                REQUIRE(v[4] == 3);
+                REQUIRE(v[5] == 4);
+                REQUIRE(v[6] == 5);
+            }
+            THEN("returned iter is at begin")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+        }
+        WHEN("insert(begin, init_list) with capacity")
+        {
+            Vector::size_type const capacity = v.capacity() + 2;
+
+            v.reserve(capacity);
+            iter = v.insert(v.begin(), { -1, -2 });
+            THEN("size is 7")
+            {
+                REQUIRE(v.size() == 7);
+            }
+            THEN("capacity is unchanged")
+            {
+                REQUIRE(v.capacity() == capacity);
             }
             THEN("elements match")
             {
