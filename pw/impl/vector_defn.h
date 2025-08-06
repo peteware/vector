@@ -1,6 +1,7 @@
 #ifndef PW_IMPL_VECTOR_DEFN_H
 #define PW_IMPL_VECTOR_DEFN_H
 
+#include "fill_n.h"
 #include "move_backward.h"
 
 #include <pw/impl/vector_decl.h>
@@ -717,28 +718,28 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
     {
         Storage tmp(m_storage.get_allocator());
         tmp.reserve(m_storage.calc_size());
-        
+
         iterator iter_orig = begin();
         iterator iter_tmp  = tmp.begin();
-        
+
         while (iter_orig != where)
         {
             pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
             ++iter_tmp;
             ++iter_orig;
         }
-        
+
         iterator ret = iter_tmp;
         pw::construct_at(pw::addressof(*iter_tmp), pw::move(value));
         ++iter_tmp;
-        
+
         while (iter_orig != end())
         {
             pw::construct_at(pw::addressof(*iter_tmp), pw::move(*iter_orig));
             ++iter_tmp;
             ++iter_orig;
         }
-        
+
         m_storage.swap(tmp, false);
         m_storage.set_size(total);
         return ret;
@@ -758,17 +759,17 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         if (position == cend())
         {
             pw::uninitialized_fill(m_storage.end(), m_storage.end() + count, value);
-            m_storage.set_size(total);
         }
         else
         {
-            reverse_iterator rightside { m_storage.end() - 1 };
-            reverse_iterator farright { m_storage.end() + count - 1 };
-            reverse_iterator leftside { first_orig };
-            pw::uninitialized_move(rightside, leftside, farright);
-            pw::uninitialized_fill(first_orig, first_orig + count, value);
-            m_storage.set_size(total);
+            // make room
+            pw::uninitialized_move(m_storage.end() - count, m_storage.end(), m_storage.end());
+            // move range into above space
+            pw::move_backward(first_orig, m_storage.end() - count, m_storage.end());
+            // fill the value
+            pw::fill_n(first_orig, count, value);
         }
+        m_storage.set_size(total);
         return m_storage.begin() + offset;
     }
     else
@@ -820,23 +821,54 @@ template<class Iterator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
-    size_type const offset = pw::distance(cbegin(), position);
-    iterator        dest   = m_storage.begin() + offset;
+    size_type offset = pw::distance(cbegin(), position);
+    iterator  dest   = m_storage.begin() + offset;
     while (first != last)
     {
-        dest = insert(dest, *first++);
+        dest = insert(dest, *first++) + 1;
     }
-    return dest;
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>
 constexpr typename vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
 {
-    (void)position;
-    (void)init_list;
-    throw internal::Unimplemented(__func__);
-    //   return iterator();
+    size_type       offset = pw::distance(cbegin(), position);
+    size_type const total  = size() + init_list.size();
+
+    if (size() + init_list.size() > m_storage.allocated())
+    {
+        Storage tmp(m_storage.get_allocator(), m_storage.size() + init_list.size());
+
+        // move left part to tmp
+        pw::uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
+        // move init_list into tmp
+        pw::uninitialized_move(init_list.begin(), init_list.end(), tmp.begin() + offset);
+        // move rest into tmp
+        if (!m_storage.empty())
+        {
+            pw::uninitialized_move(m_storage.begin() + offset + init_list.size(),
+                                   m_storage.end(),
+                                   tmp.begin() + offset + init_list.size());
+        }
+        m_storage.swap(tmp, false);
+    }
+    else
+    {
+        // move right side
+        // TODO: this is wrong.  Only move the end - init_list.size()
+        pw::uninitialized_move(
+            m_storage.begin() + offset + init_list.size(), m_storage.end(), m_storage.end());
+        // move elements into above space
+        pw::move(m_storage.begin() + offset,
+                 m_storage.begin() + offset + init_list.size(),
+                 m_storage.begin() + offset + init_list.size());
+        // move init_list into range
+        pw::move(init_list.begin(), init_list.end(), m_storage.begin() + offset);
+    }
+    m_storage.set_size(total);
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>
@@ -891,6 +923,7 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
             m_storage.allocator(), pw::addressof(*where), pw::forward<Args>(args)...);
     }
     m_storage.set_size(total);
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>

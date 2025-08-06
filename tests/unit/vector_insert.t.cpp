@@ -73,8 +73,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector>  generate(5);
-        size_t                    added;
-        size_t                    offset;
         value_type                value;
         typename Vector::iterator where;
 
@@ -96,6 +94,203 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
             THEN("last is still last")
             {
                 REQUIRE(generate.last_value == generate.values.back());
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", pw::test::TestTypeList)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+
+    GIVEN("an empty vector")
+    {
+        Vector v;
+
+        WHEN("insert(begin(), std::move(value)) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 3);
+            value_type moved_value = value;
+            iter                   = v.insert(v.begin(), std::move(moved_value));
+
+            THEN("size() is increased")
+            {
+                REQUIRE(1 == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("at(0) returns same value")
+            {
+                REQUIRE(value == v.at(0));
+            }
+        }
+
+        WHEN("insert(end(), std::move(value)) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 3);
+            value_type moved_value = value;
+            iter                   = v.insert(v.end(), std::move(moved_value));
+
+            THEN("size() is increased")
+            {
+                REQUIRE(1 == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("at(0) returns same value")
+            {
+                REQUIRE(value == v.at(0));
+            }
+        }
+    }
+
+    GIVEN("a vector with 5 elements")
+    {
+        pw::test::Values<Vector> generate(5);
+        Vector                   v(generate.values);
+
+        WHEN("insert(begin(), std::move(value)) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 7);
+            value_type moved_value   = value;
+            size_t     original_size = v.size();
+
+            iter                     = v.insert(v.begin(), std::move(moved_value));
+
+            THEN("size() is increased by 1")
+            {
+                REQUIRE(original_size + 1 == v.size());
+            }
+            THEN("begin() is same as returned iterator")
+            {
+                REQUIRE(v.begin() == iter);
+            }
+            THEN("inserted value is at front")
+            {
+                REQUIRE(value == v.front());
+            }
+            THEN("original first element moved to position 1")
+            {
+                REQUIRE(generate.first_value == v[1]);
+            }
+            THEN("original last element is still at back")
+            {
+                REQUIRE(generate.last_value == v.back());
+            }
+        }
+
+        WHEN("insert(end(), std::move(value)) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 7);
+            value_type moved_value   = value;
+            size_t     original_size = v.size();
+
+            iter                     = v.insert(v.end(), std::move(moved_value));
+
+            THEN("size() is increased by 1")
+            {
+                REQUIRE(original_size + 1 == v.size());
+            }
+            THEN("returned iterator points to inserted element")
+            {
+                REQUIRE(v.end() - 1 == iter);
+            }
+            THEN("inserted value is at back")
+            {
+                REQUIRE(value == v.back());
+            }
+            THEN("original first element is still at front")
+            {
+                REQUIRE(generate.first_value == v.front());
+            }
+        }
+
+        WHEN("insert(middle, std::move(value)) is called")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 7);
+            value_type moved_value   = value;
+            size_t     original_size = v.size();
+            size_t     insert_pos    = v.size() / 2;
+
+            iter                     = v.insert(v.begin() + insert_pos, std::move(moved_value));
+
+            THEN("size() is increased by 1")
+            {
+                REQUIRE(original_size + 1 == v.size());
+            }
+            THEN("returned iterator points to inserted element")
+            {
+                REQUIRE(v.begin() + insert_pos == iter);
+            }
+            THEN("inserted value is at correct position")
+            {
+                REQUIRE(value == v[insert_pos]);
+            }
+            THEN("elements before insertion point are unchanged")
+            {
+                for (size_t i = 0; i < insert_pos; ++i)
+                {
+                    REQUIRE(generate.values[i] == v[i]);
+                }
+            }
+            THEN("elements after insertion point are shifted")
+            {
+                for (size_t i = insert_pos; i < original_size; ++i)
+                {
+                    REQUIRE(generate.values[i] == v[i + 1]);
+                }
+            }
+        }
+    }
+
+    GIVEN("a vector with sufficient capacity")
+    {
+        Vector v;
+        v.reserve(10);
+        pw::test::Values<Vector> generate(5);
+        for (auto const& val : generate.values)
+        {
+            v.push_back(val);
+        }
+
+        WHEN("insert(middle, std::move(value)) is called without reallocation")
+        {
+            typename Vector::iterator iter;
+            value_type                value;
+            pw::test::permute(value, 7);
+            value_type moved_value       = value;
+            size_t     original_capacity = v.capacity();
+            size_t     original_size     = v.size();
+            size_t     insert_pos        = v.size() / 2;
+
+            iter                         = v.insert(v.begin() + insert_pos, std::move(moved_value));
+
+            THEN("capacity() is unchanged")
+            {
+                REQUIRE(original_capacity == v.capacity());
+            }
+            THEN("size() is increased by 1")
+            {
+                REQUIRE(original_size + 1 == v.size());
+            }
+            THEN("inserted value is at correct position")
+            {
+                REQUIRE(value == v[insert_pos]);
             }
         }
     }
@@ -341,203 +536,65 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", pw::test::TestTypeList)
+SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
 {
-    using Vector     = TestType;
+    using Vector     = pw::vector<int>;
     using value_type = typename Vector::value_type;
-    
-    GIVEN("an empty vector")
+
+    GIVEN("An empty vector")
     {
         Vector v;
 
-        WHEN("insert(begin(), std::move(value)) is called")
+        WHEN("insert with init_list")
         {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 3);
-            value_type moved_value = value;
-            iter = v.insert(v.begin(), std::move(moved_value));
-            
-            THEN("size() is increased")
+            Vector::iterator iter;
+
+            iter = v.insert(v.begin(), { 1, 2, 3 });
+
+            THEN("size is 3")
             {
-                REQUIRE(1 == v.size());
+                REQUIRE(v.size() == 3);
             }
-            THEN("begin() is same as returned iterator")
+            THEN("elements match")
+            {
+                REQUIRE(v[0] == 1);
+                REQUIRE(v[1] == 2);
+                REQUIRE(v[2] == 3);
+            }
+            THEN("returned iter is at begin()")
             {
                 REQUIRE(v.begin() == iter);
-            }
-            THEN("at(0) returns same value")
-            {
-                REQUIRE(value == v.at(0));
-            }
-        }
-        
-        WHEN("insert(end(), std::move(value)) is called")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 3);
-            value_type moved_value = value;
-            iter = v.insert(v.end(), std::move(moved_value));
-            
-            THEN("size() is increased")
-            {
-                REQUIRE(1 == v.size());
-            }
-            THEN("begin() is same as returned iterator")
-            {
-                REQUIRE(v.begin() == iter);
-            }
-            THEN("at(0) returns same value")
-            {
-                REQUIRE(value == v.at(0));
             }
         }
     }
-    
-    GIVEN("a vector with 5 elements")
+    GIVEN("A vector with 5 elements")
     {
-        pw::test::Values<Vector> generate(5);
-        Vector v(generate.values);
-        
-        WHEN("insert(begin(), std::move(value)) is called")
+        Vector           v { 1, 2, 3, 4, 5 };
+        Vector::iterator iter;
+        WHEN("insert(begin, init_list")
         {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 7);
-            value_type moved_value = value;
-            size_t original_size = v.size();
-            
-            iter = v.insert(v.begin(), std::move(moved_value));
-            
-            THEN("size() is increased by 1")
+            iter = v.insert(v.begin(), { -1, -2 });
+            THEN("size is 7")
             {
-                REQUIRE(original_size + 1 == v.size());
+                REQUIRE(v.size() == 7);
             }
-            THEN("begin() is same as returned iterator")
+            THEN("elements match")
+            {
+                REQUIRE(v[0] == -1);
+                REQUIRE(v[1] == -2);
+                REQUIRE(v[2] == 1);
+                REQUIRE(v[3] == 2);
+                REQUIRE(v[4] == 3);
+                REQUIRE(v[5] == 4);
+                REQUIRE(v[6] == 5);
+            }
+            THEN("returned iter is at begin")
             {
                 REQUIRE(v.begin() == iter);
-            }
-            THEN("inserted value is at front")
-            {
-                REQUIRE(value == v.front());
-            }
-            THEN("original first element moved to position 1")
-            {
-                REQUIRE(generate.first_value == v[1]);
-            }
-            THEN("original last element is still at back")
-            {
-                REQUIRE(generate.last_value == v.back());
-            }
-        }
-        
-        WHEN("insert(end(), std::move(value)) is called")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 7);
-            value_type moved_value = value;
-            size_t original_size = v.size();
-            
-            iter = v.insert(v.end(), std::move(moved_value));
-            
-            THEN("size() is increased by 1")
-            {
-                REQUIRE(original_size + 1 == v.size());
-            }
-            THEN("returned iterator points to inserted element")
-            {
-                REQUIRE(v.end() - 1 == iter);
-            }
-            THEN("inserted value is at back")
-            {
-                REQUIRE(value == v.back());
-            }
-            THEN("original first element is still at front")
-            {
-                REQUIRE(generate.first_value == v.front());
-            }
-        }
-        
-        WHEN("insert(middle, std::move(value)) is called")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 7);
-            value_type moved_value = value;
-            size_t original_size = v.size();
-            size_t insert_pos = v.size() / 2;
-            
-            iter = v.insert(v.begin() + insert_pos, std::move(moved_value));
-            
-            THEN("size() is increased by 1")
-            {
-                REQUIRE(original_size + 1 == v.size());
-            }
-            THEN("returned iterator points to inserted element")
-            {
-                REQUIRE(v.begin() + insert_pos == iter);
-            }
-            THEN("inserted value is at correct position")
-            {
-                REQUIRE(value == v[insert_pos]);
-            }
-            THEN("elements before insertion point are unchanged")
-            {
-                for (size_t i = 0; i < insert_pos; ++i)
-                {
-                    REQUIRE(generate.values[i] == v[i]);
-                }
-            }
-            THEN("elements after insertion point are shifted")
-            {
-                for (size_t i = insert_pos; i < original_size; ++i)
-                {
-                    REQUIRE(generate.values[i] == v[i + 1]);
-                }
-            }
-        }
-    }
-    
-    GIVEN("a vector with sufficient capacity")
-    {
-        Vector v;
-        v.reserve(10);
-        pw::test::Values<Vector> generate(5);
-        for (auto const& val : generate.values)
-        {
-            v.push_back(val);
-        }
-        
-        WHEN("insert(middle, std::move(value)) is called without reallocation")
-        {
-            typename Vector::iterator iter;
-            value_type                value;
-            pw::test::permute(value, 7);
-            value_type moved_value = value;
-            size_t original_capacity = v.capacity();
-            size_t original_size = v.size();
-            size_t insert_pos = v.size() / 2;
-            
-            iter = v.insert(v.begin() + insert_pos, std::move(moved_value));
-            
-            THEN("capacity() is unchanged")
-            {
-                REQUIRE(original_capacity == v.capacity());
-            }
-            THEN("size() is increased by 1")
-            {
-                REQUIRE(original_size + 1 == v.size());
-            }
-            THEN("inserted value is at correct position")
-            {
-                REQUIRE(value == v[insert_pos]);
             }
         }
     }
 }
-
 SCENARIO("insert() op counts", "[vector][insert][optracker]")
 {
     using Vector     = pw::vector<pw::test::DefaultCopyConstructible>;
