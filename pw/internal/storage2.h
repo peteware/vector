@@ -15,12 +15,12 @@ struct Storage2
 {
     using value_type      = Type;
     using allocator_type  = Allocator;
-    using size_type       = typename allocator_traits<Allocator>::size_type;
-    using difference_type = typename allocator_traits<Allocator>::difference_type;
+    using size_type       = allocator_traits<Allocator>::size_type;
+    using difference_type = allocator_traits<Allocator>::difference_type;
     using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer         = typename allocator_traits<Allocator>::pointer;
-    using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
+    using pointer         = allocator_traits<Allocator>::pointer;
+    using const_pointer   = allocator_traits<Allocator>::const_pointer;
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
@@ -98,7 +98,7 @@ constexpr Storage2<Type, Allocator>::~Storage2()
  * @post If successful, allocated() >= count. Existing elements are preserved
  *       and size() remains unchanged.
  *
- * @complexity Linear in size() for moving existing elements.
+ * @complexity Linear for moving existing elements.
  *
  * @note If count <= allocated(), this function has no effect.
  * @note Strong exception safety: if an exception is thrown, the original
@@ -180,28 +180,28 @@ Storage2<Type, Allocator>::empty() const noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::pointer
+constexpr Storage2<Type, Allocator>::pointer
 Storage2<Type, Allocator>::begin() noexcept
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::const_pointer
+constexpr Storage2<Type, Allocator>::const_pointer
 Storage2<Type, Allocator>::begin() const noexcept
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::pointer
+constexpr Storage2<Type, Allocator>::pointer
 Storage2<Type, Allocator>::end() noexcept
 {
     return m_begin + m_size;
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::const_pointer
+constexpr Storage2<Type, Allocator>::const_pointer
 Storage2<Type, Allocator>::end() const noexcept
 {
     return m_begin + m_size;
@@ -216,14 +216,14 @@ Storage2<Type, Allocator>::set_size(size_type size) noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::size_type
+constexpr Storage2<Type, Allocator>::size_type
 Storage2<Type, Allocator>::size() const noexcept
 {
     return m_size;
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::size_type
+constexpr Storage2<Type, Allocator>::size_type
 Storage2<Type, Allocator>::allocated() const noexcept
 {
     return m_allocated;
@@ -235,21 +235,21 @@ Storage2<Type, Allocator>::allocated() const noexcept
  * @return The next size to allocate (always >= 1).
  */
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::size_type
+constexpr Storage2<Type, Allocator>::size_type
 Storage2<Type, Allocator>::calc_size() const noexcept
 {
     return max(static_cast<size_type>(1), 2 * m_allocated);
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::allocator_type
+constexpr Storage2<Type, Allocator>::allocator_type
 Storage2<Type, Allocator>::get_allocator() const
 {
     return m_alloc;
 }
 
 template<class Type, class Allocator>
-constexpr typename Storage2<Type, Allocator>::allocator_type&
+constexpr Storage2<Type, Allocator>::allocator_type&
 Storage2<Type, Allocator>::allocator() noexcept
 {
     return m_alloc;

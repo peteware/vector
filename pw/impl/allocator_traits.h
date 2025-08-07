@@ -43,7 +43,12 @@ struct allocator_traits
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
     using is_always_equal                        = typename is_empty<Alloc>::type;
 
-    static pointer        allocate(allocator_type& alloc, size_type n) { return alloc.allocate(n); }
+    static pointer allocate(allocator_type& alloc, size_type n)
+    {
+        if (n == 0)
+            return nullptr;
+        return alloc.allocate(n);
+    }
 
     static constexpr void deallocate(allocator_type& alloc, pointer p, size_type count)
     {
