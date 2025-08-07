@@ -4,7 +4,6 @@
 #include <pw/impl/addressof.h>
 #include <pw/impl/construct_at.h>
 #include <pw/impl/destroy.h>
-#include <pw/impl/iterator_traits.h>
 
 namespace pw {
 

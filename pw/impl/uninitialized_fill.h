@@ -2,8 +2,8 @@
 #define INCLUDED_PW_IMPL_UNINITIALIZED_FILL_CONSTRUCT_H
 
 #include <pw/impl/addressof.h>
+#include <pw/impl/construct_at.h>
 #include <pw/impl/destroy.h>
-#include <pw/impl/iterator_traits.h>
 
 namespace pw {
 
@@ -34,7 +34,7 @@ uninitialized_fill(Iterator begin, Iterator end, Type const& value)
     {
         while (current != end)
         {
-            ::new (static_cast<void*>(pw::addressof(*current))) Type(value);
+            pw::construct_at(pw::addressof(*current), value);
             ++current;
         }
     }

@@ -11,7 +11,6 @@
 TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
 
     GIVEN("An empty vector of TestType")
     {

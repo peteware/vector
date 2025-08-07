@@ -102,8 +102,6 @@ public:
     void moveto(iterator begin, iterator end, iterator dest);
     template<class Iterator>
     void copyto(Iterator first, Iterator last, iterator dest);
-
-private:
 };
 
 template<class Type, class Allocator>

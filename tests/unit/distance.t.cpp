@@ -8,12 +8,12 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
 {
     GIVEN("Two pointers")
     {
-        char const  str[] = "abcdef";
+        constexpr char str[] = "abcdef";
         char const* s     = &str[0];
         char const* e     = &str[4];
         WHEN("get the distance")
         {
-            pw::ptrdiff_t d = pw::distance(s, e);
+            const pw::ptrdiff_t d = pw::distance(s, e);
             THEN("distance is 4")
             {
                 REQUIRE(4 == d);
@@ -27,7 +27,7 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
                 REQUIRE(-4 == d);
             }
         }
-        WHEN("nullptrs are used")
+        WHEN("nullptr are used")
         {
             char*         a = nullptr;
             pw::ptrdiff_t d = pw::distance(a, a);

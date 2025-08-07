@@ -1,5 +1,6 @@
-#include <test_copyconstructible.h>
+#include <pw/impl/move.h>
 
+#include <test_copyconstructible.h>
 #include <test_permute.h>
 
 namespace pw::test {

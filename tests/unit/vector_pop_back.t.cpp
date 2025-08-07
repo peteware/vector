@@ -10,7 +10,6 @@
 TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
 
     GIVEN("A vector with 5 elements")
     {

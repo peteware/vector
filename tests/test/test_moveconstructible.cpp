@@ -1,7 +1,7 @@
+#include <pw/impl/move.h>
+
 #include <test_moveconstructible.h>
 #include <test_permute.h>
-
-#include <iostream>
 
 namespace pw::test {
 OpCounter MoveConstructible::s_opCounter;

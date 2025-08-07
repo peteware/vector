@@ -73,7 +73,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector>  generate(5);
-        value_type                value{};
+        value_type                value {};
         typename Vector::iterator where;
 
         WHEN("insert() at begin")
@@ -347,7 +347,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
         pw::test::Values<Vector>  generate(5);
         size_t                    added;
         size_t                    offset;
-        value_type                value{};
+        value_type                value {};
         typename Vector::iterator where;
 
         Vector                    v(generate.values);
@@ -429,8 +429,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
 
 TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]", pw::test::TestTypeList)
 {
-    using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using Vector = TestType;
     GIVEN("an empty vector")
     {
         Vector                   v;
@@ -543,8 +542,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
 
 SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
 {
-    using Vector     = pw::vector<int>;
-    using value_type = typename Vector::value_type;
+    using Vector = pw::vector<int>;
 
     GIVEN("An empty vector")
     {
@@ -621,8 +619,7 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
 }
 SCENARIO("insert() op counts", "[vector][insert][optracker]")
 {
-    using Vector     = pw::vector<pw::test::DefaultCopyConstructible>;
-    using value_type = typename Vector::value_type;
+    using Vector = pw::vector<pw::test::DefaultCopyConstructible>;
 
     pw::test::OpCounter       counter;
     pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();

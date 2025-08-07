@@ -123,9 +123,6 @@ Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer b
  * calls the provided function to initialize the new elements, and updates the size.
  *
  * @param count The number of elements to reserve space for. Must be greater than 0.
- * @param func Function to call with the new storage begin pointer for element initialization.
- *             The function is responsible for constructing `count` elements starting at the
- *             provided pointer.
  *
  * @throws Any exception thrown by the allocator, element move constructors, or the
  *         initialization function. If an exception is thrown, the storage remains in

@@ -11,7 +11,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeList)
 {
     using Vector = TestType;
     typename Vector::iterator iter;
-    using value_type = typename Vector::value_type;
+
     GIVEN("an empty vector")
     {
         Vector v;

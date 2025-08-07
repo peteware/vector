@@ -1,7 +1,6 @@
 #ifndef INCLUDED_PW_TEST_OPTRACKER_H
 #define INCLUDED_PW_TEST_OPTRACKER_H
 
-#include <pw/impl/move.h>
 #include <test_opcounter.h>
 
 #include <compare>
@@ -11,7 +10,6 @@ namespace pw::test {
 
 struct OpTracker
 {
-public:
     using value_type = int;
     value_type value() const;
     OpTracker& setValue(value_type const& value);

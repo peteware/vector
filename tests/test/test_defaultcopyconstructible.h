@@ -1,6 +1,8 @@
 #ifndef INCLUDED_PW_TEST_DEFAULTCOPYCONSTRUCTIBLE_H
 #define INCLUDED_PW_TEST_DEFAULTCOPYCONSTRUCTIBLE_H
 
+#include <pw/impl/move.h>
+
 #include <compare>
 #include <test_optracker.h>
 

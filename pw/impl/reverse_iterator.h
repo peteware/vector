@@ -94,6 +94,7 @@ constexpr reverse_iterator<Iterator>&
 reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
 {
     m_base = other.m_base;
+    return *this;
 }
 
 template<class Iterator>

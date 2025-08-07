@@ -74,23 +74,23 @@ constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type con
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(vector&& other) noexcept
+constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
     : m_storage(allocator_type())
 {
-    auto lambda = [begin = other.begin(), end = other.end()](pointer dest) -> void {
+    auto lambda = [begin = copy.begin(), end = copy.end()](pointer dest) -> void {
         pw::uninitialized_move(begin, end, dest);
     };
-    m_storage.reserve(other.size(), lambda);
+    m_storage.reserve(copy.size(), lambda);
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc)
+constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
     : m_storage(alloc)
 {
-    auto lambda = [begin = other.begin(), end = other.end()](pointer dest) -> void {
+    auto lambda = [begin = copy.begin(), end = copy.end()](pointer dest) -> void {
         pw::uninitialized_move(begin, end, dest);
     };
-    m_storage.reserve(other.size(), lambda);
+    m_storage.reserve(copy.size(), lambda);
 }
 
 template<class Type, class Allocator>

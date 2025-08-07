@@ -1,7 +1,6 @@
 #ifndef INCLUDED_PW_IMPL_DECLVAL_H
 #define INCLUDED_PW_IMPL_DECLVAL_H
 
-#include <pw/impl/bool_type.h>
 namespace pw {
 
 template<typename Type>

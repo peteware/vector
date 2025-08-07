@@ -26,9 +26,9 @@ OpTracker::OpTracker(OpTracker const& copy)
     m_opCounter.addCopyConstructor();
 }
 
-OpTracker::OpTracker(OpTracker&& copy) noexcept
-    : m_opCounter(copy.m_opCounter)
-    , m_value(copy.m_value)
+OpTracker::OpTracker(OpTracker&& move) noexcept
+    : m_opCounter(move.m_opCounter)
+    , m_value(move.m_value)
 {
     //copy.m_value *= -2;
     m_opCounter.addMoveConstructor();

@@ -310,8 +310,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
 }
 SCENARIO("resize() op counts", "[vector][resize][optracker]")
 {
-    using Vector     = pw::vector<pw::test::DefaultCopyConstructible>;
-    using value_type = typename Vector::value_type;
+    using Vector = pw::vector<pw::test::DefaultCopyConstructible>;
 
     pw::test::OpCounter       counter;
     pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();

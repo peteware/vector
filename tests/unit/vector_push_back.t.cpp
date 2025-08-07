@@ -91,7 +91,6 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
     using Vector                   = pw::vector<pw::test::DefaultCopyConstructible>;
-    using value_type               = typename Vector::value_type;
     pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
     pw::test::OpCounter       counter;
 

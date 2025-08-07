@@ -1,6 +1,10 @@
+/*
+ * Add all of the includes as a sanity check
+ */
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/cstddef>
+#include <pw/iterator>
 #include <pw/memory>
 #include <pw/memory_resource>
 #include <pw/type_traits>

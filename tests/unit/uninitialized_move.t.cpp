@@ -5,7 +5,6 @@
 
 #include <test_copyconstructible.h>
 #include <test_opcounter.h>
-#include <test_permute.h>
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")
 {

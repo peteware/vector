@@ -125,7 +125,7 @@ private:
     static auto destroy_impl(A& a, // NOLINT(runtime/references)
                              T* p) -> decltype(a.destroy(p))
     {
-        a.destroy(p);
+        return a.destroy(p);
     }
 
     template<typename T>

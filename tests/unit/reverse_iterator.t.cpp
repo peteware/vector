@@ -5,13 +5,13 @@
 
 SCENARIO("check reverse_iterator")
 {
-    pw::size_t const count        = 4;
-    int              array[count] = { 3, 1, 5, 6 };
+    constexpr pw::size_t count        = 4;
+    int                  array[count] = { 3, 1, 5, 6 };
     GIVEN("An array count ints")
     {
         WHEN("get an end iterator")
         {
-            pw::reverse_iterator<int*> iter(&array[count]);
+            const pw::reverse_iterator<int*> iter(&array[count]);
             THEN("iter is end")
             {
                 REQUIRE(array[count - 1] == *iter);
@@ -31,7 +31,7 @@ SCENARIO("check reverse_iterator")
         }
         WHEN("post increment iterator")
         {
-            iter++;
+            ++iter;
             THEN("iter is prev")
             {
                 REQUIRE(array[count - 2] == *iter);

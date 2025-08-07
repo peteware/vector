@@ -26,7 +26,7 @@ permute(std::string& value, int depth)
     }
     else
     {
-        value.push_back(value.back() + 1);
+        value.push_back(value.back() + static_cast<char>(1));
     }
     return true;
 }
@@ -34,7 +34,7 @@ permute(std::string& value, int depth)
 bool
 permute(float& value, int depth)
 {
-    if (value >= (float)depth)
+    if (value >= static_cast<float>(depth))
     {
         return false;
     }
@@ -45,7 +45,7 @@ permute(float& value, int depth)
 bool
 permute(double& value, int depth)
 {
-    if (value >= (float)depth)
+    if (value >= static_cast<double>(depth))
     {
         return false;
     }

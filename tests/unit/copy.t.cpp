@@ -2,8 +2,6 @@
 
 #include <test_copyconstructible.h>
 #include <test_defaultcopyconstructible.h>
-#include <test_moveconstructible.h>
-#include <test_opcounter.h>
 
 #include <catch2/catch.hpp>
 

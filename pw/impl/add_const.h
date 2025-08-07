@@ -10,7 +10,7 @@ struct add_const
 };
 
 template<class Type>
-using add_const_t = typename add_const<Type>::type;
+using add_const_t = add_const<Type>::type;
 
 } // namespace pw
 #endif /* INCLUDED_ADD_CONST_H */
