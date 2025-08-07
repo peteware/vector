@@ -117,11 +117,6 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::~vector()
-{
-}
-
-template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::swap(vector& other)
     noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
@@ -295,14 +290,14 @@ vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::allocator_type
+constexpr vector<Type, Allocator>::allocator_type
 vector<Type, Allocator>::get_allocator() const
 {
     return m_storage.get_allocator();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reference
+constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::at(size_type position)
 {
     if (position >= size())
@@ -313,7 +308,7 @@ vector<Type, Allocator>::at(size_type position)
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reference
+constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::at(size_type position) const
 {
     if (position >= size())
@@ -324,42 +319,42 @@ vector<Type, Allocator>::at(size_type position) const
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reference
+constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::operator[](size_type position)
 {
     return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reference
+constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::operator[](size_type position) const
 {
     return *(m_storage.begin() + position);
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reference
+constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
 {
     return *m_storage.begin();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reference
+constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
 {
     return *m_storage.begin();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reference
+constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
 {
     return *(m_storage.end() - 1);
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reference
+constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
 {
     return *(m_storage.end() - 1);
@@ -384,84 +379,84 @@ vector<Type, Allocator>::data() const noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::begin() noexcept
 {
     return m_storage.begin();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_iterator
+constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
 {
     return m_storage.begin();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::end() noexcept
 {
     return m_storage.end();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_iterator
+constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::end() const noexcept
 {
     return m_storage.end();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_iterator
+constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cbegin() const noexcept
 {
     return m_storage.begin();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_iterator
+constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cend() const noexcept
 {
     return m_storage.end();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reverse_iterator
+constexpr vector<Type, Allocator>::reverse_iterator
 vector<Type, Allocator>::rbegin() noexcept
 {
     return reverse_iterator(end());
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reverse_iterator
+constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rbegin() const noexcept
 {
     return const_reverse_iterator(end());
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::reverse_iterator
+constexpr vector<Type, Allocator>::reverse_iterator
 vector<Type, Allocator>::rend() noexcept
 {
     return reverse_iterator(begin());
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reverse_iterator
+constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rend() const noexcept
 {
     return const_reverse_iterator(begin());
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reverse_iterator
+constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crbegin() const noexcept
 {
     return const_reverse_iterator(end());
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::const_reverse_iterator
+constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crend() const noexcept
 {
     return const_reverse_iterator(begin());
@@ -475,21 +470,21 @@ vector<Type, Allocator>::empty() const noexcept
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::size_type
+constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::size() const noexcept
 {
     return m_storage.size();
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::size_type
+constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::max_size() const noexcept
 {
     return (static_cast<size_type>(1) << (sizeof(size_type) * 8 - 4)) / sizeof(Type);
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::size_type
+constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const noexcept
 {
     return m_storage.allocated();
@@ -533,8 +528,8 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(const_reference value)
 {
-    size_type const count = 1;
-    size_type const total = m_storage.size() + count;
+    constexpr size_type count = 1;
+    size_type const     total = m_storage.size() + count;
 
     if (total <= m_storage.allocated())
     {
@@ -557,8 +552,8 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(value_type&& value)
 {
-    size_type const count = 1;
-    size_type const total = m_storage.size() + count;
+    constexpr size_type count = 1;
+    size_type const     total = m_storage.size() + count;
 
     if (total <= m_storage.allocated())
     {
@@ -631,7 +626,7 @@ vector<Type, Allocator>::resize(size_type total, const_reference value)
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator position)
 {
     return erase(position, position + 1);
@@ -648,7 +643,7 @@ vector<Type, Allocator>::erase(const_iterator position)
  *         - If [begin, end) is an empty range, then end is returned.
  */
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
     size_type const offset = pw::distance(cbegin(), begin);
@@ -673,19 +668,19 @@ vector<Type, Allocator>::pop_back()
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, const_reference value)
 {
     return insert(position, static_cast<size_type>(1), value);
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
 {
-    size_type const count  = 1;
-    size_type const offset = pw::distance(cbegin(), position);
-    size_type const total  = size() + count;
+    constexpr size_type count  = 1;
+    size_type const     offset = pw::distance(cbegin(), position);
+    size_type const     total  = size() + count;
 
     if (total <= m_storage.allocated())
     {
@@ -715,7 +710,7 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
 {
     size_type const offset = pw::distance(cbegin(), position);
@@ -750,7 +745,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
 
 template<class Type, class Allocator>
 template<class Iterator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
 {
     size_type offset = pw::distance(cbegin(), position);
@@ -764,7 +759,7 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
 }
 
 template<class Type, class Allocator>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
 {
     size_type       offset = pw::distance(cbegin(), position);
@@ -795,7 +790,7 @@ vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<va
 
 template<class Type, class Allocator>
 template<class... Args>
-constexpr typename vector<Type, Allocator>::reference
+constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
     size_type const total = size() + 1;
@@ -820,13 +815,13 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 
 template<class Type, class Allocator>
 template<class... Args>
-constexpr typename vector<Type, Allocator>::iterator
+constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
-    size_type const total  = size() + 1;
-    size_type const count  = 1;
-    size_type const offset = pw::distance(cbegin(), position);
-    iterator        where  = m_storage.begin() + offset;
+    size_type const     total  = size() + 1;
+    constexpr size_type count  = 1;
+    size_type const     offset = pw::distance(cbegin(), position);
+    iterator            where  = m_storage.begin() + offset;
 
     if (total <= capacity())
     {

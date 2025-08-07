@@ -21,10 +21,10 @@ public:
     using difference_type        = ptrdiff_t;
     using reference              = value_type&;
     using const_reference        = value_type const&;
-    using pointer                = typename allocator_traits<Allocator>::pointer;
-    using const_pointer          = typename allocator_traits<Allocator>::const_pointer;
-    using iterator               = typename allocator_traits<Allocator>::pointer;
-    using const_iterator         = typename allocator_traits<Allocator>::const_pointer;
+    using pointer                = allocator_traits<Allocator>::pointer;
+    using const_pointer          = allocator_traits<Allocator>::const_pointer;
+    using iterator               = allocator_traits<Allocator>::pointer;
+    using const_iterator         = allocator_traits<Allocator>::const_pointer;
     using reverse_iterator       = pw::reverse_iterator<iterator>;
     using const_reverse_iterator = pw::reverse_iterator<iterator const>;
 
@@ -43,7 +43,7 @@ public:
     template<class Iterator>
     constexpr vector(Iterator first, Iterator last, allocator_type const& alloc = allocator_type());
 
-    constexpr ~vector();
+    constexpr ~vector() = default;
 
     constexpr vector& operator=(const vector& other);
     constexpr vector& operator=(pw::initializer_list<value_type> init_list);
