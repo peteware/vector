@@ -533,76 +533,74 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(const_reference value)
 {
-    size_type initsize = m_storage.size();
+    size_type const count = 1;
+    size_type const total = m_storage.size() + count;
 
-    if (m_storage.size() >= m_storage.allocated())
+    if (total <= m_storage.allocated())
     {
-        Storage tmp(m_storage.get_allocator());
-        auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
-            pw::uninitialized_copy(begin, end, dest);
-        };
-        tmp.reserve(m_storage.calc_size(), lambda);
-        pw::construct_at(pw::addressof(*(tmp.begin() + initsize)), value);
-        m_storage.swap(tmp, false);
+        pw::allocator_traits<Allocator>::construct(
+            m_storage.allocator(), pw::addressof(*m_storage.end()), value);
     }
     else
     {
-        pw::construct_at(pw::addressof(*m_storage.end()), value);
+        Storage tmp(m_storage.get_allocator(), m_storage.calc_size());
+
+        pw::uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
+        pw::allocator_traits<Allocator>::construct(
+            m_storage.allocator(), pw::addressof(*(tmp.begin() + total - count)), value);
+        m_storage.swap(tmp, false);
     }
-    m_storage.set_size(initsize + 1);
+    m_storage.set_size(total);
 }
 
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(value_type&& value)
 {
-    size_type initsize = m_storage.size();
+    size_type const count = 1;
+    size_type const total = m_storage.size() + count;
 
-    if (m_storage.size() >= m_storage.allocated())
-    {
-        Storage tmp(m_storage.get_allocator());
-        auto    lambda = [begin = begin(), end = end()](pointer dest) -> void {
-            pw::uninitialized_copy(begin, end, dest);
-        };
-        tmp.reserve(m_storage.calc_size(), lambda);
-        pw::construct_at(pw::addressof(*(tmp.begin() + initsize)), pw::move(value));
-        m_storage.swap(tmp, false);
-    }
-    else
+    if (total <= m_storage.allocated())
     {
         pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
     }
-    m_storage.set_size(initsize + 1);
+    else
+    {
+        Storage tmp(m_storage.get_allocator(), m_storage.calc_size());
+
+        pw::uninitialized_move(m_storage.begin(), m_storage.end(), tmp.begin());
+        pw::allocator_traits<Allocator>::construct(
+            m_storage.allocator(), pw::addressof(*(tmp.begin() + total - 1)), pw::move(value));
+        m_storage.swap(tmp, false);
+    }
+    m_storage.set_size(total);
 }
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::resize(size_type count)
+vector<Type, Allocator>::resize(size_type total)
 {
-    if (count == 0)
+    if (total == 0)
     {
         clear();
     }
-    else if (count <= size())
+    else if (total <= size())
     {
-        pw::destroy(m_storage.begin() + count, m_storage.end());
-        m_storage.set_size(count);
+        pw::destroy(m_storage.begin() + total, m_storage.end());
     }
-    else if (count > m_storage.allocated())
+    else if (total <= m_storage.allocated())
     {
-        Storage tmp(m_storage.get_allocator());
-        auto    lambda = [begin = m_storage.begin(), end = m_storage.end()](pointer dest) -> void {
-            pw::uninitialized_copy(begin, end, dest);
-        };
-        tmp.reserve(count, lambda);
-        pw::uninitialized_default_construct(tmp.begin() + m_storage.size(), tmp.end());
-        m_storage.swap(tmp, false);
+        pw::uninitialized_default_construct(m_storage.end(), m_storage.end() + total - size());
     }
     else
     {
-        pw::uninitialized_default_construct(m_storage.end(), m_storage.end() + count - size());
-        m_storage.set_size(count);
+        Storage tmp(m_storage.get_allocator(), total);
+
+        pw::uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
+        pw::uninitialized_default_construct(tmp.begin() + m_storage.size(), tmp.begin() + total);
+        m_storage.swap(tmp, false);
     }
+    m_storage.set_size(total);
 }
 
 template<class Type, class Allocator>

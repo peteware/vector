@@ -375,9 +375,9 @@ vector<Type, Allocator>::push_back(value_type&& value)
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::resize(size_type count)
+vector<Type, Allocator>::resize(size_type total)
 {
-    (void)count;
+    (void)total;
 }
 
 template<class Type, class Allocator>
