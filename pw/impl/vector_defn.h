@@ -605,38 +605,29 @@ vector<Type, Allocator>::resize(size_type total)
 
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::resize(size_type count, const_reference value)
+vector<Type, Allocator>::resize(size_type total, const_reference value)
 {
-    if (count == 0)
+    if (total == 0)
     {
         clear();
-        return;
     }
-    if (count == size())
+    else if (total <= size())
     {
-        return;
+        pw::destroy(m_storage.begin() + total, m_storage.end());
     }
-    if (count < size())
+    else if (total <= m_storage.allocated())
     {
-        pw::destroy(m_storage.begin() + count - 1, m_storage.end());
-        m_storage.set_size(count);
-        return;
-    }
-    if (m_storage.allocated() < count)
-    {
-        Storage tmp(m_storage.get_allocator());
-        auto    lambda = [begin = m_storage.begin(), end = m_storage.end()](pointer dest) -> void {
-            pw::uninitialized_copy(begin, end, dest);
-        };
-        tmp.reserve(count, lambda);
-        pw::uninitialized_fill(tmp.begin() + m_storage.size(), tmp.end(), value);
-        m_storage.swap(tmp, false);
+        pw::uninitialized_fill(m_storage.end(), m_storage.end() + total - size(), value);
     }
     else
     {
-        pw::uninitialized_fill(m_storage.end(), m_storage.end() + count - size(), value);
-        m_storage.set_size(count);
+        Storage tmp(m_storage.get_allocator(), total);
+
+        pw::uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
+        pw::uninitialized_fill(tmp.begin() + m_storage.size(), tmp.begin() + total, value);
+        m_storage.swap(tmp, false);
     }
+    m_storage.set_size(total);
 }
 
 template<class Type, class Allocator>

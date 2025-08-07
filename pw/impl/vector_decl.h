@@ -91,7 +91,7 @@ public:
     constexpr void                    push_back(const_reference value);
     constexpr void                    push_back(value_type&& value);
     constexpr void                    resize(size_type total);
-    constexpr void                    resize(size_type count, const_reference value);
+    constexpr void                    resize(size_type total, const_reference value);
     constexpr iterator                erase(const_iterator position);
     constexpr iterator                erase(const_iterator begin, const_iterator end);
     constexpr void                    pop_back();
