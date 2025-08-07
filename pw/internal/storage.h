@@ -183,7 +183,7 @@ template<class Type, class Allocator>
 typename Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::newsize() const
 {
-    return pw::max((size_type)INITIAL_SIZE, m_allocated * 2);
+    return pw::max(static_cast<size_type>(INITIAL_SIZE), m_allocated * 2);
 }
 
 template<class Type, class Allocator>
