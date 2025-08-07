@@ -55,15 +55,15 @@ constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type con
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(vector&& other) noexcept
+constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
 {
-    (void)other;
+    (void)copy;
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(vector&& other, const Allocator& alloc)
+constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
 {
-    (void)other;
+    (void)copy;
     (void)alloc;
 }
 

@@ -68,7 +68,7 @@ private:
     enum { INITIAL_SIZE = 1 };
 
 public:
-    Storage(allocator_type const& alloc = allocator_type());
+    explicit Storage(allocator_type const& alloc = allocator_type());
     explicit Storage(size_type count, allocator_type const& alloc = allocator_type());
     ~Storage();
     Storage&              operator=(Storage& op2) = delete;
@@ -109,8 +109,8 @@ private:
 template<class Type, class Allocator>
 Storage<Type, Allocator>::Storage(allocator_type const& alloc)
     : m_alloc(alloc)
-    , m_begin(0)
-    , m_end(0)
+    , m_begin(nullptr)
+    , m_end(nullptr)
     , m_allocated(0)
 {
 }

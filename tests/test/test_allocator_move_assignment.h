@@ -12,7 +12,7 @@ struct allocator_move_assignment : public allocator_base<Type>
 {
     using propagate_on_container_move_assignment = pw::true_type;
 
-    allocator_move_assignment(int instance = -1);
+    explicit allocator_move_assignment(int instance = -1);
 };
 
 template<class Type>

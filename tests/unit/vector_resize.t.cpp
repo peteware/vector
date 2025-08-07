@@ -400,9 +400,9 @@ SCENARIO("resize() stress tests", "[vector][resize][stress]")
             {
                 v.resize(i);
                 REQUIRE(v.size() == i);
-                for (size_t j = 0; j < v.size(); ++j)
+                for (int j : v)
                 {
-                    REQUIRE(v[j] == 0);
+                    REQUIRE(j == 0);
                 }
             }
 
@@ -424,9 +424,9 @@ SCENARIO("resize() stress tests", "[vector][resize][stress]")
                 THEN("final state is correct")
                 {
                     REQUIRE(v.size() == 100);
-                    for (size_t j = 0; j < v.size(); ++j)
+                    for (int j : v)
                     {
-                        REQUIRE(v[j] == 0);
+                        REQUIRE(j == 0);
                     }
                 }
             }

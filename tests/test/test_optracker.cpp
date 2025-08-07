@@ -20,15 +20,15 @@ OpTracker::OpTracker(OpCounter& opCounter, value_type const& value)
 }
 
 OpTracker::OpTracker(OpTracker const& copy)
-    : m_value(copy.m_value)
-    , m_opCounter(copy.m_opCounter)
+    : m_opCounter(copy.m_opCounter)
+    , m_value(copy.m_value)
 {
     m_opCounter.addCopyConstructor();
 }
 
 OpTracker::OpTracker(OpTracker&& copy) noexcept
-    : m_value(copy.m_value)
-    , m_opCounter(copy.m_opCounter)
+    : m_opCounter(copy.m_opCounter)
+    , m_value(copy.m_value)
 {
     //copy.m_value *= -2;
     m_opCounter.addMoveConstructor();

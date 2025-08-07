@@ -12,7 +12,7 @@ SCENARIO("move", "[move]")
     GIVEN("A MoveConstructible object")
     {
         pw::test::MoveConstructible m;
-        pw::test::OpCounter         init = m.getCounter();
+        pw::test::OpCounter         init = pw::test::MoveConstructible::getCounter();
 
         WHEN("An lvalue is move()")
         {

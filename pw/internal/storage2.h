@@ -28,7 +28,7 @@ struct Storage2
     constexpr Storage2(allocator_type const& alloc, size_type count);
     constexpr ~Storage2();
 
-    constexpr void               reserve(size_type count, std::function<void(pointer begin)> func);
+    constexpr void               reserve(size_type count, std::function<void(pointer begin)> const& func);
     constexpr void               reserve(size_type count);
     constexpr void               reset();
     [[nodiscard]] constexpr bool empty() const noexcept;
@@ -58,7 +58,7 @@ private:
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
     : m_alloc(alloc)
-    , m_begin(0)
+    , m_begin(nullptr)
     , m_size(0)
     , m_allocated(0)
 {
@@ -106,7 +106,7 @@ constexpr Storage2<Type, Allocator>::~Storage2()
  */
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> func)
+Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> const& func)
 {
     if (count > 0)
     {

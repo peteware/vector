@@ -29,7 +29,7 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
         }
         WHEN("nullptrs are used")
         {
-            char*         a = 0;
+            char*         a = nullptr;
             pw::ptrdiff_t d = pw::distance(a, a);
             THEN("distances is 0")
             {

@@ -34,10 +34,10 @@ public:
                      value_type const&     value,
                      allocator_type const& alloc = allocator_type());
     constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
-    constexpr vector(vector const& other);
-    constexpr vector(vector const& other, allocator_type const& alloc);
-    constexpr vector(vector&& other) noexcept;
-    constexpr vector(vector&& other, allocator_type const& alloc);
+    constexpr vector(vector const& copy);
+    constexpr vector(vector const& copy, allocator_type const& alloc);
+    constexpr vector(vector&& copy) noexcept;
+    constexpr vector(vector&& copy, allocator_type const& alloc);
     constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
 
     template<class Iterator>
@@ -57,7 +57,7 @@ public:
     template<class Iterator>
     constexpr void                    assign(Iterator begin, Iterator end);
     constexpr void                    assign(size_type count, value_type const& value);
-    constexpr void                    assign(pw::initializer_list<value_type> ilist);
+    constexpr void                    assign(pw::initializer_list<value_type> init_list);
     constexpr allocator_type          get_allocator() const;
     constexpr reference               at(size_type position);
     constexpr const_reference         at(size_type position) const;
@@ -98,7 +98,7 @@ public:
     constexpr iterator                insert(const_iterator position, const_reference value);
     constexpr iterator                insert(const_iterator position, value_type&& value);
     constexpr iterator                insert(const_iterator position, size_type count, const_reference value);
-    constexpr iterator                insert(const_iterator position, pw::initializer_list<value_type> ilist);
+    constexpr iterator insert(const_iterator position, pw::initializer_list<value_type> init_list);
     template<class Iterator>
     constexpr iterator insert(const_iterator position, Iterator first, Iterator last);
     template<class... Args>

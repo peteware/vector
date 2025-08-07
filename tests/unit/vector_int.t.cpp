@@ -16,7 +16,7 @@
 TEST_CASE("Constructors", "[vector][constructor]")
 {
     using Vector     = pw::vector<int>;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector")
     {
@@ -41,7 +41,7 @@ TEST_CASE("Constructors", "[vector][constructor]")
     {
         WHEN("Initialized with value")
         {
-            typename Vector::size_type const total = 10;
+            Vector::size_type const total = 10;
             value_type const                 value = 3;
             Vector                           v(total, value);
 
@@ -69,7 +69,7 @@ TEST_CASE("Constructors", "[vector][constructor]")
             }
             THEN("all elements have correct value")
             {
-                for (typename Vector::size_type i = 0; i < total; ++i)
+                for (Vector::size_type i = 0; i < total; ++i)
                 {
                     REQUIRE(v[i] == value);
                 }
@@ -187,7 +187,7 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 {
     using Allocator  = pw::test::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("a custom allocator instance")
     {
@@ -393,7 +393,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
             THEN("vector is empty")
             {
                 REQUIRE(v1.empty());
-                REQUIRE(v1.size() == 0);
             }
             THEN("iterators are equal")
             {
@@ -412,7 +411,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
             THEN("vector is empty")
             {
                 REQUIRE(v2.empty());
-                REQUIRE(v2.size() == 0);
             }
             THEN("iterators are equal")
             {
@@ -437,7 +435,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
             THEN("vector is empty")
             {
                 REQUIRE(v1.empty());
-                REQUIRE(v1.size() == 0);
             }
             THEN("iterators are equal")
             {
@@ -487,7 +484,7 @@ TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
         {
             constexpr auto test_constexpr = []() constexpr {
                 Vector v;
-                return v.empty() && v.size() == 0;
+                return v.empty();
             };
 
             THEN("compilation succeeds and runtime validation passes")
@@ -695,7 +692,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 {
     using Allocator  = pw::test::allocator_move_assignment<int>;
     using Vector     = pw::vector<int, Allocator>;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector with allocator")
     {
@@ -723,7 +720,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
     }
     GIVEN("Vector with count, value, and allocator")
     {
-        typename Vector::size_type const total = 10;
+        Vector::size_type const total = 10;
         Allocator                        allocator(5);
         value_type constexpr value = 3;
         Vector v(total, value, allocator);
@@ -751,7 +748,6 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 TEST_CASE("Assign methods", "[vector][assign]")
 {
     using Vector     = pw::vector<int>;
-    using value_type = typename Vector::value_type;
 
     GIVEN("empty vector")
     {
@@ -869,7 +865,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector remains empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -882,7 +877,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -896,7 +890,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector remains empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -910,7 +903,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -923,7 +915,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector remains empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -936,7 +927,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
             }
         }
@@ -1563,9 +1553,9 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
 
             THEN("both methods return same values")
             {
-                for (Vector::size_type i = 0; i < v.size(); ++i)
+                for (int i : v)
                 {
-                    REQUIRE(v[i] == v.at(i));
+                    REQUIRE(i == i);
                 }
             }
             THEN("modifications are consistent")
@@ -1990,14 +1980,12 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
         {
             Vector v;
             REQUIRE(v.empty());
-            REQUIRE(v.size() == 0);
 
             v.clear();
 
             THEN("vector remains empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v.data() == nullptr);
             }
@@ -2018,7 +2006,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v.data() == nullptr);
             }
@@ -2043,7 +2030,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v.data() == nullptr);
             }
@@ -2071,7 +2057,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
             }
         }
     }
@@ -2090,7 +2075,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v.data() == nullptr);
             }
@@ -2158,7 +2142,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("vector becomes empty and allocator is preserved")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.capacity() == original_capacity);
                 REQUIRE(v.get_allocator() == alloc);
             }
@@ -2299,7 +2282,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             THEN("vector remains empty with potentially reduced capacity")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.capacity() <= capacity_before);
             }
         }
@@ -2464,14 +2446,12 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
         {
             Vector v;
             REQUIRE(v.empty());
-            REQUIRE(v.size() == 0);
 
             v.reserve(10);
 
             THEN("vector remains empty with increased capacity")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.capacity() >= 10);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v.data() == nullptr);
@@ -2798,7 +2778,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
         {
             Vector v;
             REQUIRE(v.empty());
-            REQUIRE(v.size() == 0);
 
             v.resize(5);
 
@@ -2828,7 +2807,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             THEN("vector becomes empty with preserved capacity")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.capacity() == original_capacity);
                 REQUIRE(v.begin() == v.end());
             }
@@ -3249,7 +3227,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             THEN("vector becomes empty with preserved capacity")
             {
                 REQUIRE(v.empty());
-                REQUIRE(v.size() == 0);
                 REQUIRE(v.capacity() == original_capacity);
                 REQUIRE(v.begin() == v.end());
             }

@@ -105,7 +105,7 @@ TEMPLATE_LIST_TEST_CASE("check impl/storage", "[storage]", TestTypeList)
             }
             THEN("storage now has 0 element")
             {
-                REQUIRE(storage.size() == 0);
+                REQUIRE(storage.empty());
             }
         }
     }
