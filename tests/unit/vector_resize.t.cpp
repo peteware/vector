@@ -72,7 +72,6 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
     {
         size_t const count = 5;
         value_type   first_value;
-        value_type   last_value;
         value_type   value;
         Vector       values;
 
@@ -82,7 +81,6 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
             if (i == 0)
                 first_value = value;
             values.push_back(value);
-            last_value = value;
         }
         Vector v(values);
 

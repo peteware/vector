@@ -877,7 +877,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
         WHEN("assign(0, value) on non-empty vector")
         {
             Vector v                 = { 1, 2, 3, 4, 5 };
-            auto   original_capacity = v.capacity();
             v.assign(static_cast<Vector::size_type>(0), 99);
 
             THEN("vector becomes empty")
@@ -885,9 +884,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.empty());
                 REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
-                // I commented this out because it is not guaranteed that the capacity
-                // remains the same after an assign with 0 items.
-                //REQUIRE(v.capacity() >= original_capacity);
             }
         }
 
@@ -908,7 +904,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
         WHEN("assign(empty_range) on non-empty vector")
         {
             Vector v                 = { 10, 20, 30 };
-            auto   original_capacity = v.capacity();
             int    arr[]             = { 1, 2, 3 };
             v.assign(arr, arr);
 
@@ -917,9 +912,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.empty());
                 REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
-                // I commented this out because it is not guaranteed that the capacity
-                // remains the same after an assign with 0 items.
-                //REQUIRE(v.capacity() >= original_capacity);
             }
         }
 
@@ -939,7 +931,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
         WHEN("assign(empty_initializer_list) on non-empty vector")
         {
             Vector v                 = { 7, 8, 9, 10 };
-            auto   original_capacity = v.capacity();
             v.assign({});
 
             THEN("vector becomes empty")
@@ -947,9 +938,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.empty());
                 REQUIRE(v.size() == 0);
                 REQUIRE(v.begin() == v.end());
-                // I commented this out because it is not guaranteed that the capacity
-                // remains the same after an assign with 0 items.
-                //REQUIRE(v.capacity() >= original_capacity);
             }
         }
     }
@@ -1032,7 +1020,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
         WHEN("push_back() causes capacity growth")
         {
             Vector v;
-            auto   original_capacity = v.capacity();
 
             // Add elements until capacity grows
             for (int i = 0; i < 10; ++i)
@@ -1271,7 +1258,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
         WHEN("push_back() after clear")
         {
             Vector v                 = { 1, 2, 3, 4, 5 };
-            auto   original_capacity = v.capacity();
 
             v.clear();
             REQUIRE(v.empty());
@@ -2249,10 +2235,8 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
         {
             Vector v                 = { 1, 2, 3 };
             auto   original_size     = v.size();
-            auto   original_capacity = v.capacity();
 
             v.shrink_to_fit();
-
             THEN("size is preserved and capacity is adequate")
             {
                 REQUIRE(v.size() == original_size);

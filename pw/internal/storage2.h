@@ -88,6 +88,7 @@ constexpr Storage2<Type, Allocator>::~Storage2()
  * ensure sufficient capacity before adding elements.
  *
  * @param count The minimum number of elements to reserve space for.
+ * @param func Function to call with the new storage begin pointer for element initialization.
  *
  * @throws Any exception thrown by the allocator or element move constructors.
  *         If an exception occurs during destruction of old elements, the new

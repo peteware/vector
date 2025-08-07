@@ -18,7 +18,7 @@ public:
     explicit ThrowingType(int v = 0)
         : value(v)
     {
-        if (++construction_count > throw_after_n && throw_after_n >= 0)
+        if (++construction_count > throw_after_n && throw_after_n > 0)
         {
             --construction_count;
             throw std::runtime_error("Construction limit reached");
@@ -308,11 +308,6 @@ TEST_CASE("Constructor Exception Safety - Resource Cleanup", "[vector][construct
 {
     SECTION("Verify no memory leaks on constructor exception")
     {
-        // This would typically be verified with tools like valgrind or AddressSanitizer
-        // but we can at least check object counts
-
-        auto initial_count = ThrowingType::construction_count;
-
         try
         {
             ThrowingType::reset();

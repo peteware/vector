@@ -71,7 +71,7 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
             size_t capacity = v.capacity();
             for (size_t i = 0; i < capacity; ++i)
             {
-                value_type t;
+                value_type t{};
                 v.push_back(t);
             }
             REQUIRE(capacity < v.capacity());

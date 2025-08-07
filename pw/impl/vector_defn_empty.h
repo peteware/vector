@@ -84,11 +84,6 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
 }
 
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::~vector()
-{
-}
-
-template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::swap(vector& other)
     noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||

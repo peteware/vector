@@ -73,7 +73,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
     GIVEN("A vector with 5 elements")
     {
         pw::test::Values<Vector>  generate(5);
-        value_type                value;
+        value_type                value{};
         typename Vector::iterator where;
 
         WHEN("insert() at begin")
@@ -293,6 +293,10 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             {
                 REQUIRE(value == v[insert_pos]);
             }
+            THEN("returned iterator points to pos")
+            {
+                REQUIRE(iter == v.begin() + insert_pos);
+            }
         }
     }
 }
@@ -343,7 +347,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
         pw::test::Values<Vector>  generate(5);
         size_t                    added;
         size_t                    offset;
-        value_type                value;
+        value_type                value{};
         typename Vector::iterator where;
 
         Vector                    v(generate.values);

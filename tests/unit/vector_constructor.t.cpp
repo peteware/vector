@@ -50,7 +50,6 @@ TEMPLATE_LIST_TEST_CASE("count constructors in vector", "[vector][constructor]",
     GIVEN("An empty vector")
     {
         Vector       v;
-        size_t const count = 5;
 
         WHEN("Nothing was called")
         {
