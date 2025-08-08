@@ -126,51 +126,31 @@ vector<Type, Allocator>::operator=(const vector& other)
         tmp.set_size(other.size());
         m_storage.swap(tmp, true);
     }
-    else if (m_storage.allocated() < other.size())
+    else if (m_storage.size() < other.size())
     {
-        // Not enough space in m_storage, so we need to reallocate
-        /*
-         *     m_storage:                 other:
-         *    ┌────┬────┬────┐           ┌────┬────┬────┬────┬────┬────┬────┐
-         * ┌─▶│ 1  │ 2  │ 3  │        ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │
-         * │  └────┴────┴────┘        │  └────┴────┴────┴────┴────┴────┴────┘
-         * │                 ▲        │                      ▲
-         * │ m_allocated = 3 │        │    m_allocated = 7   │
-         * │                 │        │                      │
-         * └─── m_begin   m_end       └─── m_begin        m_end
-
-         */
-        Storage tmp { allocator_type(), other.size() };
-
-        pw::uninitialized_copy(other.begin(), other.end(), tmp.begin());
-        tmp.set_size(other.size());
-        m_storage.swap(tmp, false);
+        if (m_storage.allocated() >= other.size())
+        {
+            pw::copy(other.begin(), other.begin() + m_storage.size(), m_storage.begin());
+            pw::uninitialized_copy(other.begin() + m_storage.size(), other.end(), m_storage.end());
+        }
+        else
+        {
+            // Not enough space so we need to reallocate
+            Storage tmp { allocator_type(), other.size() };
+            pw::uninitialized_copy(other.begin(), other.end(), tmp.begin());
+            tmp.set_size(other.size());
+            m_storage.swap(tmp, false);
+        }
+        m_storage.set_size(other.size());
     }
     else if (m_storage.size() == other.size())
     {
         pw::copy(other.begin(), other.end(), m_storage.begin());
     }
-    else
+    else // m_storage.size() > other.size()
     {
-        // Enough space just copy.  If too much space then not all is initialized
-        //     m_storage:                                 other:
-        //    ┌────┬────┬────┬────┬────┬────┬────┐        ┌────┬────┬────┐
-        // ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │     ┌─▶│ 1  │ 2  │ 3  │
-        // │  └────┴────┴────┴────┴────┴────┴────┘     │  └────┴────┴────┘
-        // │                      ▲                    │                 ▲
-        // │    m_allocated = 7   │                    │ m_allocated = 3 │
-        // │    size() = 4        │                    │ size() = 3      │
-        // └─── m_begin        m_end                   └─── m_begin   m_end
-        size_type initsize = min(m_storage.size(), other.size());
-        pw::copy(other.begin(), other.begin() + initsize, m_storage.begin());
-        if (size() < other.size())
-        {
-            pw::uninitialized_copy(other.begin() + initsize, other.end(), m_storage.begin() + initsize);
-        }
-        else
-        {
-            pw::destroy(m_storage.begin() + initsize, m_storage.end());
-        }
+        pw::copy(other.begin(), other.end(), m_storage.begin());
+        pw::destroy(m_storage.begin() + other.size(), m_storage.end());
         m_storage.set_size(other.size());
     }
     return *this;
@@ -426,21 +406,21 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rend() const noexcept
 {
-    return const_reverse_iterator(begin());
+    return const_reverse_iterator(cbegin());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crbegin() const noexcept
 {
-    return const_reverse_iterator(end());
+    return const_reverse_iterator(cend());
 }
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crend() const noexcept
 {
-    return const_reverse_iterator(begin());
+    return const_reverse_iterator(cbegin());
 }
 
 template<class Type, class Allocator>

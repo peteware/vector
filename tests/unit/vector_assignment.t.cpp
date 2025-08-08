@@ -1,8 +1,9 @@
+#include "test_base_allocator.h"
+
 #include <test_testtype.h>
 
-#include <pw/impl/move.h>
-
 #include <pw/algorithm>
+#include <pw/impl/move.h>
 
 #include <catch2/catch.hpp>
 
@@ -10,7 +11,7 @@
  * Type Requirements:
  * - No extra
  */
-TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeListInt)
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
@@ -24,72 +25,130 @@ TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::
             op2 = v;
             THEN("equal")
             {
-                REQUIRE(pw::equal(v.begin(), v.end(), op2.begin(), op2.end()));
+                REQUIRE(v == op2);
             }
         }
         WHEN("operator=(const_ref) lhs has elements")
         {
-            Vector op2(5);
+            Vector op2 { 1, 2 };
             op2 = v;
             THEN("equal")
             {
-                REQUIRE(pw::equal(v.begin(), v.end(), op2.begin(), op2.end()));
+                REQUIRE(v == op2);
             }
         }
         WHEN("operator=(const_ref) rhs has elements")
         {
-            Vector op2(5);
+            Vector op2 { 1, 2 };
             v = op2;
-            THEN("equal")
+            THEN("they  are same")
             {
-                REQUIRE(pw::equal(v.begin(), v.end(), op2.begin(), op2.end()));
+                REQUIRE(v == op2);
             }
         }
         WHEN("operator=(move) both empty")
         {
             Vector op2;
             op2 = pw::move(v);
-            THEN("size() is same")
+            THEN("they are same")
             {
-                REQUIRE(v.size() == op2.size());
+                REQUIRE(v == op2);
             }
         }
         WHEN("operator=(move) lhs has elements")
         {
-            Vector op2(5);
-            REQUIRE(op2.size() == 5);
+            Vector op2 { 1, 2 };
             op2 = pw::move(v);
-            THEN("size() is same")
+            THEN("they are same")
             {
-                REQUIRE(op2.size() == 0);
+                REQUIRE(v == op2);
             }
         }
         WHEN("operator=(move) rhs has elements")
         {
-            Vector op2(5);
+            Vector expected { 1, 2 };
+            Vector op2 { 1, 2 };
             v = pw::move(op2);
-            THEN("size() is same")
+            THEN("equal")
             {
-                REQUIRE(v.size() == 5);
+                REQUIRE(v == expected);
             }
         }
         WHEN("operator=(initializer_list) lhs is empty")
         {
-            v = { value_type(), value_type(), value_type() };
+            Vector expected { 10, 11, 12 };
+            v = { 10, 11, 12 };
 
-            THEN("size() is 3")
+            THEN("equal")
             {
-                REQUIRE(v.size() == 3);
+                REQUIRE(v == expected);
             }
         }
-        WHEN("operator=(initializer_list) lhs has elements")
+        WHEN("operator=(initializer_list) lhs has fewer")
         {
-            v.resize(10);
-            v = { value_type(), value_type(), value_type() };
+            Vector expected { 1, 2, 3 };
+            v.resize(2);
+            v = { 1, 2, 3 };
 
-            THEN("size() is 3")
+            THEN("equal")
             {
-                REQUIRE(v.size() == 3);
+                REQUIRE(v == expected);
+            }
+        }
+        WHEN("operator=(initializer_list) rhs has fewer")
+        {
+            Vector expected { 1, 2, 3 };
+            v.resize(5);
+            v = { 1, 2, 3 };
+
+            THEN("equal")
+            {
+                REQUIRE(v == expected);
+            }
+        }
+    }
+}
+
+SCENARIO("Assignment operator", "[vector][operator=]")
+{
+    using Vector = pw::vector<int, pw::test::allocator_base<int>>;
+    REQUIRE(!pw::allocator_traits<Vector::allocator_type>::propagate_on_container_move_assignment::value);
+    GIVEN("A vector with allocator move assignment false")
+    {
+        WHEN("operator=(const_ref) lhs.size() < rhs.size() but less allocated")
+        {
+            typename Vector::size_type const capacity = 10;
+            Vector                           lhs { 1, 2 };
+            Vector                           rhs { 1, 2, 3 };
+
+            lhs = rhs;
+            THEN("they are same")
+            {
+                REQUIRE(lhs == rhs);
+            }
+        }
+        WHEN("operator=(const_ref) lhs.size() < rhs.size() but lhs allocated")
+        {
+            typename Vector::size_type const capacity = 10;
+            Vector                           lhs { 1, 2 };
+            Vector                           rhs { 1, 2, 3 };
+            lhs.reserve(rhs.size());
+            lhs = rhs;
+            THEN("they are same")
+            {
+                REQUIRE(lhs == rhs);
+            }
+        }
+        WHEN("operator=(move) lhs.size() < rhs.size() but lhs allocated")
+        {
+            typename Vector::size_type const capacity = 10;
+            Vector                           lhs { 1, 2 };
+            Vector                           rhs { 1, 2, 3 };
+            lhs.reserve(rhs.size());
+            lhs = pw::move(rhs);
+            THEN("they are same")
+            {
+                REQUIRE(lhs == rhs);
             }
         }
     }

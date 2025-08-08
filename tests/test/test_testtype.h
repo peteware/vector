@@ -17,7 +17,7 @@ using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::v
 
 // This just for pw::vector implementation
 
-//using TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
+using TestTypeListInt = std::tuple<pw::vector<int>, std::vector<int>>;
 } // namespace pw::test
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */
