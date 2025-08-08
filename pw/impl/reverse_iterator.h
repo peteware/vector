@@ -77,14 +77,14 @@ constexpr reverse_iterator<Iterator>::reverse_iterator()
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>::reverse_iterator(iterator_type iterator)
-    : m_base(--iterator)
+    : m_base(iterator)
 {
 }
 
 template<class Iterator>
 template<class Other>
 constexpr reverse_iterator<Iterator>::reverse_iterator(const reverse_iterator<Other>& other)
-    : m_base(other.m_base)
+    : m_base(other.base())
 {
 }
 
@@ -93,7 +93,7 @@ template<class Other>
 constexpr reverse_iterator<Iterator>&
 reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
 {
-    m_base = other.m_base;
+    m_base = other.base();
     return *this;
 }
 
@@ -101,14 +101,14 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>::reference
 reverse_iterator<Iterator>::operator*() const
 {
-    return *m_base;
+    return *(m_base - 1);
 }
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>::reference
 reverse_iterator<Iterator>::operator->() const
 {
-    return *m_base;
+    return *(m_base - 1);
 }
 
 /**
@@ -124,7 +124,7 @@ constexpr reverse_iterator<Iterator>::iterator_type
 reverse_iterator<Iterator>::base() const
 {
     iterator_type iterator = m_base;
-    return ++iterator;
+    return iterator;
 }
 
 template<class Iterator>
@@ -156,7 +156,7 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>
 reverse_iterator<Iterator>::operator--(int)
 {
-    reverse_iterator iterator(*this);
+    reverse_iterator iterator { *this };
     ++m_base;
     return iterator;
 }
@@ -165,7 +165,7 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>
 reverse_iterator<Iterator>::operator+(difference_type n) const
 {
-    reverse_iterator iterator = this;
+    reverse_iterator iterator { *this };
     advance(m_base, -n);
     return iterator;
 }
@@ -174,8 +174,8 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>
 reverse_iterator<Iterator>::operator-(difference_type n) const
 {
-    reverse_iterator iterator = this;
-    advance(iterator.m_base, n);
+    reverse_iterator iterator { *this };
+    pw::advance(iterator.m_base, n);
     return iterator;
 }
 
@@ -183,7 +183,7 @@ template<class Iterator>
 constexpr reverse_iterator<Iterator>&
 reverse_iterator<Iterator>::operator+=(difference_type n)
 {
-    advance(m_base, -n);
+    pw::advance(m_base, -n);
     return *this;
 }
 

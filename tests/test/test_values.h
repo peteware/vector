@@ -2,6 +2,8 @@
 #define INCLUDED_PW_TEST_VALUES_H
 
 #include <iostream>
+#include <pw/impl/forward.h>
+#include <test/test_permute.h>
 
 namespace pw::test {
 
@@ -16,14 +18,14 @@ namespace pw::test {
 template<class Container>
 struct Values
 {
-    using value_type = typename Container::value_type;
+    using value_type = Container::value_type;
     value_type   first_value;
     value_type   last_value;
     size_t const count;
     Container    values;
 
     template<class... Args>
-    Values(size_t total, Args&&... args)
+    explicit Values(size_t total, Args&&... args)
         : count(total)
         , values(pw::forward<Args>(args)...)
     {

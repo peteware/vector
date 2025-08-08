@@ -25,8 +25,8 @@ public:
     using const_pointer          = allocator_traits<Allocator>::const_pointer;
     using iterator               = allocator_traits<Allocator>::pointer;
     using const_iterator         = allocator_traits<Allocator>::const_pointer;
-    using reverse_iterator       = pw::reverse_iterator<iterator>;
-    using const_reverse_iterator = pw::reverse_iterator<iterator const>;
+    using reverse_iterator       = reverse_iterator<iterator>;
+    using const_reverse_iterator = pw::reverse_iterator<const_iterator>;
 
     constexpr vector() noexcept(noexcept(allocator_type()));
     constexpr explicit vector(allocator_type const& alloc) noexcept;
