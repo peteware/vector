@@ -25,6 +25,26 @@ TEMPLATE_LIST_TEST_CASE("emplace()", "[vector][func][emplace]", pw::test::TestTy
             {
                 REQUIRE(v.front() == val);
             }
+            THEN("back() == val")
+            {
+                REQUIRE(v.back() == val);
+            }
+        }
+        WHEN("emplace() at end()")
+        {
+            v.emplace(v.end(), val);
+            THEN("size() == 1")
+            {
+                REQUIRE(v.size() == 1);
+            }
+            THEN("front() == val")
+            {
+                REQUIRE(v.front() == val);
+            }
+            THEN("back() == val")
+            {
+                REQUIRE(v.back() == val);
+            }
         }
     }
     GIVEN("A vector with reserved space")

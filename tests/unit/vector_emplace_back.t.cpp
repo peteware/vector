@@ -1,20 +1,21 @@
 #include <test_emplacemoveconstructible.h>
 #include <test_testtype.h>
+#include <test_values.h>
 
 #include <catch2/catch.hpp>
 
 TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector")
     {
-        Vector     v;
-        value_type val;
-        v.reserve(1);
+        Vector v;
+
         WHEN("emplace_back() one element")
         {
+            value_type val;
             v.emplace_back(val);
             THEN("size() == 1")
             {
@@ -24,6 +25,39 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
             {
                 REQUIRE(v.front() == val);
             }
+        }
+    }
+    GIVEN("A vector with 5 elements")
+    {
+        pw::test::Values<Vector> gen(5);
+        Vector                   v { gen.values[0], gen.values[1], gen.values[2] };
+
+        WHEN("emplace_back() without enough capacity")
+        {
+            REQUIRE(v.capacity() == v.size());
+            v.emplace_back(gen.last_value);
+            THEN("capacity increased")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("last element is as expected")
+            {
+                REQUIRE(v.back() == gen.last_value);
+            }
+        }
+    }
+    WHEN("emplace_back() with enough capacity")
+    {
+        pw::test::Values<Vector> gen(5);
+        Vector                   v { gen.values[0], gen.values[1], gen.values[2] };
+
+        v.reserve(v.size() + 1);
+        REQUIRE(v.capacity() > v.size());
+
+        v.emplace_back(gen.last_value);
+        THEN("last element is as expected")
+        {
+            REQUIRE(v.back() == gen.last_value);
         }
     }
 }
