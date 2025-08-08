@@ -13,16 +13,16 @@ class reverse_iterator
 {
 public:
     using iterator_type     = Iterator;
-    using iterator_category = typename pw::iterator_traits<Iterator>::iterator_category;
-    using value_type        = typename pw::iterator_traits<Iterator>::value_type;
-    using difference_type   = typename pw::iterator_traits<Iterator>::difference_type;
-    using pointer           = typename pw::iterator_traits<Iterator>::pointer;
-    using reference         = typename pw::iterator_traits<Iterator>::reference;
+    using iterator_category = pw::iterator_traits<Iterator>::iterator_category;
+    using value_type        = pw::iterator_traits<Iterator>::value_type;
+    using difference_type   = pw::iterator_traits<Iterator>::difference_type;
+    using pointer           = pw::iterator_traits<Iterator>::pointer;
+    using reference         = pw::iterator_traits<Iterator>::reference;
 
     constexpr reverse_iterator();
     constexpr explicit reverse_iterator(iterator_type iterator);
     template<class Other>
-    constexpr reverse_iterator(const reverse_iterator<Other>& other);
+    constexpr explicit reverse_iterator(const reverse_iterator<Other>& other);
 
     template<class Other>
     constexpr reverse_iterator& operator=(const reverse_iterator<Other>& other);
@@ -98,14 +98,14 @@ reverse_iterator<Iterator>::operator=(const reverse_iterator<Other>& other)
 }
 
 template<class Iterator>
-constexpr typename reverse_iterator<Iterator>::reference
+constexpr reverse_iterator<Iterator>::reference
 reverse_iterator<Iterator>::operator*() const
 {
     return *m_base;
 }
 
 template<class Iterator>
-constexpr typename reverse_iterator<Iterator>::reference
+constexpr reverse_iterator<Iterator>::reference
 reverse_iterator<Iterator>::operator->() const
 {
     return *m_base;
@@ -120,7 +120,7 @@ reverse_iterator<Iterator>::operator->() const
  * @endcode
  */
 template<class Iterator>
-constexpr typename reverse_iterator<Iterator>::iterator_type
+constexpr reverse_iterator<Iterator>::iterator_type
 reverse_iterator<Iterator>::base() const
 {
     iterator_type iterator = m_base;
