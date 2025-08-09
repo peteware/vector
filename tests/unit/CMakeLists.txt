@@ -31,6 +31,7 @@ add_executable(unittest
         vector_pop_back.t.cpp
         vector_push_back.t.cpp
         vector_resize.t.cpp
+        vector_compare.t.cpp
 )
 #target_include_directories( unittest PRIVATE .. ../test ../.. )
 
