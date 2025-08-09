@@ -154,8 +154,8 @@ SCENARIO("Storage move construct counts", "[storage][move]")
 {
     using Storage                     = pw::internal::Storage<pw::test::DefaultCopyConstructible>;
 
-    int const                 size    = 5;
-    int const                 genSize = size - 2;
+    constexpr int             size    = 5;
+    constexpr int             genSize = size - 2;
     Storage                   storage(size);
     pw::test::Values<Storage> gen(genSize, genSize);
     pw::test::OpCounter       counter;

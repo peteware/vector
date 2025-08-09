@@ -11,7 +11,7 @@ SCENARIO("check reverse_iterator")
     {
         WHEN("get an end iterator")
         {
-            const pw::reverse_iterator iter(&array[count]);
+            const pw::reverse_iterator iter { &array[count] };
             THEN("iter is end")
             {
                 REQUIRE(array[count - 1] == *iter);

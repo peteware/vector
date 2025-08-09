@@ -39,7 +39,7 @@ struct Storage2
     constexpr Storage2&          set_size(size_type size) noexcept;
     constexpr size_type          size() const noexcept;
     constexpr size_type          allocated() const noexcept;
-    constexpr size_type          calc_size() const noexcept;
+    [[nodiscard]] constexpr size_type          calc_size() const noexcept;
     constexpr allocator_type&    allocator() noexcept;
     constexpr allocator_type     get_allocator() const;
     constexpr void               swap(Storage2& other, bool swap_allocator)

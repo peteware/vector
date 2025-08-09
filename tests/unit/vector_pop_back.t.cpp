@@ -9,11 +9,11 @@
  */
 TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeList)
 {
-    using Vector     = TestType;
+    using Vector = TestType;
 
     GIVEN("A vector with 5 elements")
     {
-        size_t const             count = 5;
+        constexpr size_t         count = 5;
         pw::test::Values<Vector> generate(count);
         Vector&                  v        = generate.values;
         size_t const             capacity = v.capacity();
@@ -33,7 +33,7 @@ TEMPLATE_LIST_TEST_CASE("pop_back()", "[vector][pop_back]", pw::test::TestTypeLi
     }
     GIVEN("A vector with 1 element")
     {
-        size_t const             count = 1;
+        constexpr size_t         count = 1;
         pw::test::Values<Vector> generate(count);
         Vector&                  v        = generate.values;
         size_t const             capacity = v.capacity();

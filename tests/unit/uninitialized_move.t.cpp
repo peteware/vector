@@ -10,7 +10,7 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
 {
     GIVEN("A src and dst array")
     {
-        size_t const                count        = 3;
+        constexpr size_t            count        = 3;
         pw::test::CopyConstructible array[count] = {
             pw::test::CopyConstructible(2),
             pw::test::CopyConstructible(1),
@@ -39,7 +39,7 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
     }
     GIVEN("Arrays of int")
     {
-        int const src[] = { 1, 2, 3 };
+        constexpr int src[] = { 1, 2, 3 };
         int       dst[] = { 4, 5, 6 };
 
         WHEN("move the int from src to dst")

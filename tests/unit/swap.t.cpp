@@ -6,8 +6,8 @@ SCENARIO("validate swap()", "[swap, algorithm]")
 {
     GIVEN("Two integers")
     {
-        int const v1   = 3;
-        int const v2   = 5;
+        constexpr int v1   = 3;
+        constexpr int v2   = 5;
         int       val1 = v1;
         int       val2 = v2;
         WHEN("swap() them")

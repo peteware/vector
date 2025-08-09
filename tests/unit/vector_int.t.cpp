@@ -29,7 +29,7 @@ TEST_CASE("Constructors", "[vector][constructor]")
             }
             THEN("size() is 0")
             {
-                REQUIRE(!v.size());
+                REQUIRE(v.size() == 0);
             }
             THEN("begin() is end()")
             {
@@ -41,9 +41,9 @@ TEST_CASE("Constructors", "[vector][constructor]")
     {
         WHEN("Initialized with value")
         {
-            Vector::size_type const total = 10;
-            value_type const                 value = 3;
-            Vector                           v(total, value);
+            constexpr Vector::size_type total = 10;
+            constexpr value_type        value = 3;
+            Vector                      v(total, value);
 
             THEN("empty() is false")
             {
@@ -207,9 +207,9 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         WHEN("constructor is called with count, value, and allocator")
         {
             // constexpr vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
-            Vector::size_type const count = 30;
-            value_type const        value = 812;
-            Vector                  v(count, value, alloc);
+            constexpr Vector::size_type count = 30;
+            constexpr value_type        value = 812;
+            Vector                      v(count, value, alloc);
 
             THEN("allocator is preserved")
             {
@@ -241,8 +241,8 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
         WHEN("constructor is called with count and allocator but no value")
         {
             // constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
-            Vector::size_type const count = 30;
-            Vector                  v(count, alloc);
+            constexpr Vector::size_type count = 30;
+            Vector                      v(count, alloc);
 
             THEN("allocator is preserved")
             {
@@ -383,8 +383,8 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 
         WHEN("constructor is called with zero count and value")
         {
-            value_type const value = 42;
-            Vector           v1(static_cast<Vector::size_type>(0), value, alloc);
+            constexpr value_type value = 42;
+            Vector               v1(static_cast<Vector::size_type>(0), value, alloc);
 
             THEN("allocator is preserved")
             {
@@ -720,8 +720,8 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
     }
     GIVEN("Vector with count, value, and allocator")
     {
-        Vector::size_type const total = 10;
-        Allocator                        allocator(5);
+        constexpr Vector::size_type total = 10;
+        Allocator                   allocator(5);
         value_type constexpr value = 3;
         Vector v(total, value, allocator);
 
@@ -747,7 +747,7 @@ TEST_CASE("Constructors with Allocator", "[vector][constructor][allocator]")
 
 TEST_CASE("Assign methods", "[vector][assign]")
 {
-    using Vector     = pw::vector<int>;
+    using Vector = pw::vector<int>;
 
     GIVEN("empty vector")
     {
@@ -871,7 +871,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
 
         WHEN("assign(0, value) on non-empty vector")
         {
-            Vector v                 = { 1, 2, 3, 4, 5 };
+            Vector v = { 1, 2, 3, 4, 5 };
             v.assign(static_cast<Vector::size_type>(0), 99);
 
             THEN("vector becomes empty")
@@ -896,8 +896,8 @@ TEST_CASE("Assign methods", "[vector][assign]")
 
         WHEN("assign(empty_range) on non-empty vector")
         {
-            Vector v                 = { 10, 20, 30 };
-            int    arr[]             = { 1, 2, 3 };
+            Vector v     = { 10, 20, 30 };
+            int    arr[] = { 1, 2, 3 };
             v.assign(arr, arr);
 
             THEN("vector becomes empty")
@@ -921,7 +921,7 @@ TEST_CASE("Assign methods", "[vector][assign]")
 
         WHEN("assign(empty_initializer_list) on non-empty vector")
         {
-            Vector v                 = { 7, 8, 9, 10 };
+            Vector v = { 7, 8, 9, 10 };
             v.assign({});
 
             THEN("vector becomes empty")
@@ -1221,8 +1221,8 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
 
         WHEN("push_back() large number of elements")
         {
-            Vector    v;
-            const int count = 1000;
+            Vector        v;
+            constexpr int count = 1000;
 
             for (int i = 0; i < count; ++i)
             {
@@ -1247,7 +1247,7 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
 
         WHEN("push_back() after clear")
         {
-            Vector v                 = { 1, 2, 3, 4, 5 };
+            Vector v = { 1, 2, 3, 4, 5 };
 
             v.clear();
             REQUIRE(v.empty());
@@ -1307,7 +1307,7 @@ TEST_CASE("at() methods", "[vector][at][access]")
 
         WHEN("at() is called on const empty vector")
         {
-            const Vector v;
+            constexpr Vector v;
 
             THEN("out_of_range exception is thrown")
             {
@@ -2216,8 +2216,8 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
     {
         WHEN("shrink_to_fit() is called when capacity equals size")
         {
-            Vector v                 = { 1, 2, 3 };
-            auto   original_size     = v.size();
+            Vector v             = { 1, 2, 3 };
+            auto   original_size = v.size();
 
             v.shrink_to_fit();
             THEN("size is preserved and capacity is adequate")

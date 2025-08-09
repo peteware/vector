@@ -117,9 +117,8 @@ SCENARIO("Assignment operator", "[vector][operator=]")
     {
         WHEN("operator=(const_ref) lhs.size() < rhs.size() but less allocated")
         {
-            Vector::size_type const capacity = 10;
-            Vector                           lhs { 1, 2 };
-            Vector                           rhs { 1, 2, 3 };
+            Vector lhs { 1, 2 };
+            Vector rhs { 1, 2, 3 };
 
             lhs = rhs;
             THEN("they are same")
@@ -129,9 +128,8 @@ SCENARIO("Assignment operator", "[vector][operator=]")
         }
         WHEN("operator=(const_ref) lhs.size() < rhs.size() but lhs allocated")
         {
-            Vector::size_type const capacity = 10;
-            Vector                           lhs { 1, 2 };
-            Vector                           rhs { 1, 2, 3 };
+            Vector lhs { 1, 2 };
+            Vector rhs { 1, 2, 3 };
             lhs.reserve(rhs.size());
             lhs = rhs;
             THEN("they are same")
@@ -141,9 +139,9 @@ SCENARIO("Assignment operator", "[vector][operator=]")
         }
         WHEN("operator=(move) lhs.size() < rhs.size() but lhs allocated")
         {
-            Vector::size_type const capacity = 10;
-            Vector                           lhs { 1, 2 };
-            Vector                           rhs { 1, 2, 3 };
+            constexpr Vector::size_type capacity = 10;
+            Vector                      lhs { 1, 2 };
+            Vector                      rhs { 1, 2, 3 };
             lhs.reserve(rhs.size());
             lhs = pw::move(rhs);
             THEN("they are same")

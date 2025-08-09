@@ -38,7 +38,7 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
         {
             value_type const orig  = value;
             value_type       last  = value;
-            int const        total = 20;
+            constexpr int    total = 20;
             for (int i = 0; i < total; ++i)
             {
                 last = value;
@@ -62,7 +62,7 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const             count = 5;
+        constexpr size_t         count = 5;
         pw::test::Values<Vector> generate(count);
         Vector&                  v = generate.values;
 

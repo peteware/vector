@@ -20,7 +20,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         Vector v;
         WHEN("resize() is 0")
         {
-            size_t const size = 0;
+            constexpr size_t size = 0;
 
             v.resize(size);
             THEN("size is changed")
@@ -32,7 +32,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         }
         WHEN("resize() increases size")
         {
-            size_t const size = 3;
+            constexpr size_t size = 3;
 
             v.resize(size);
             THEN("size is changed")
@@ -51,7 +51,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         }
         WHEN("resize() to large size")
         {
-            size_t const size = 1000;
+            constexpr size_t size = 1000;
 
             v.resize(size);
             THEN("size is changed correctly")
@@ -70,7 +70,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
     }
     GIVEN("A vector with 5 elements")
     {
-        size_t const count = 5;
+        constexpr size_t count = 5;
         value_type   first_value;
         value_type   value;
         Vector       values;
@@ -86,7 +86,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
 
         WHEN("resize() is 0")
         {
-            size_t const size = 0;
+            constexpr size_t size = 0;
 
             v.resize(size);
             THEN("size is changed")
@@ -98,7 +98,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         }
         WHEN("resize() increases size")
         {
-            size_t const size = count + 3;
+            constexpr size_t size = count + 3;
 
             v.resize(size);
             THEN("size is changed")
@@ -124,7 +124,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         WHEN("resize() decreases size")
         {
             size_t const capacity = v.capacity();
-            size_t const size     = count - 2;
+            constexpr size_t size     = count - 2;
 
             v.resize(size);
             THEN("size is smaller")
@@ -146,7 +146,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         WHEN("resize() decreases to 1 element")
         {
             size_t const capacity = v.capacity();
-            size_t const size     = 1;
+            constexpr size_t size     = 1;
 
             v.resize(size);
             THEN("size is 1")
@@ -166,7 +166,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
         WHEN("resize() does not change size")
         {
             size_t const capacity = v.capacity();
-            size_t const size     = count;
+            constexpr size_t size     = count;
 
             v.resize(size);
             THEN("size is unchanged")
@@ -219,7 +219,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
 
         WHEN("resize() to smaller size")
         {
-            size_t const new_size          = 5;
+            constexpr size_t new_size          = 5;
             size_t const original_capacity = v.capacity();
             Vector       original_values(v);
 
@@ -253,7 +253,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
         WHEN("resize() within capacity")
         {
             size_t const original_capacity = v.capacity();
-            size_t const new_size          = 15;
+            constexpr size_t new_size          = 15;
             Vector       original_values(v);
 
             v.resize(new_size);

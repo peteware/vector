@@ -54,7 +54,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", pw::test::TestTypeL
         WHEN("assign(begin,end)")
         {
             value_type   value;
-            size_t const count         = 3;
+            constexpr size_t count         = 3;
             value_type   values[count] = { pw::test::permute_n(value, 4, 1),
                                            pw::test::permute_n(value, 4, 1),
                                            pw::test::permute_n(value, 4, 1) };
