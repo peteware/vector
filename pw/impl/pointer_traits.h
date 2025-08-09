@@ -16,11 +16,11 @@ template<class Ptr>
 struct pointer_traits
 {
     using pointer         = Ptr;
-    using element_type    = typename internal::element_type<Ptr>::type;
-    using difference_type = typename internal::difference_type<Ptr>::type;
+    using element_type    = internal::element_type<Ptr>::type;
+    using difference_type = internal::difference_type<Ptr>::type;
 
     template<typename U>
-    using rebind = typename internal::rebind_ptr<Ptr, U>::type;
+    using rebind = internal::rebind_ptr<Ptr, U>::type;
 
     static pointer pointer_to(element_type& r) { return Ptr::pointer_to(r); }
 };

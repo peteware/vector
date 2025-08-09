@@ -18,7 +18,7 @@ struct extract_or<Extract, Obj, Default, void_t<Extract<Obj>>>
 };
 
 template<template<typename> class Extract, typename Obj, typename Default>
-using extract_or_type = typename extract_or<Extract, Obj, Default, void>::type;
+using extract_or_type = extract_or<Extract, Obj, Default, void>::type;
 
 } // namespace pw::internal
 

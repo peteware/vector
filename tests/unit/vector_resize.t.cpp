@@ -13,7 +13,7 @@
 TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector of TestType")
     {
@@ -191,7 +191,7 @@ TEMPLATE_LIST_TEST_CASE("Test resize()", "[vector][resize]", pw::test::TestTypeL
 TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("A vector at maximum capacity")
     {

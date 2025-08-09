@@ -14,7 +14,7 @@
 TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeListInt)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector of TestType")
     {
@@ -117,7 +117,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
     {
         WHEN("operator=(const_ref) lhs.size() < rhs.size() but less allocated")
         {
-            typename Vector::size_type const capacity = 10;
+            Vector::size_type const capacity = 10;
             Vector                           lhs { 1, 2 };
             Vector                           rhs { 1, 2, 3 };
 
@@ -129,7 +129,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
         }
         WHEN("operator=(const_ref) lhs.size() < rhs.size() but lhs allocated")
         {
-            typename Vector::size_type const capacity = 10;
+            Vector::size_type const capacity = 10;
             Vector                           lhs { 1, 2 };
             Vector                           rhs { 1, 2, 3 };
             lhs.reserve(rhs.size());
@@ -141,7 +141,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
         }
         WHEN("operator=(move) lhs.size() < rhs.size() but lhs allocated")
         {
-            typename Vector::size_type const capacity = 10;
+            Vector::size_type const capacity = 10;
             Vector                           lhs { 1, 2 };
             Vector                           rhs { 1, 2, 3 };
             lhs.reserve(rhs.size());

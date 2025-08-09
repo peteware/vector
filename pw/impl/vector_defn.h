@@ -439,6 +439,7 @@ vector<Type, Allocator>::size() const noexcept
 
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
+// ReSharper disable once CppMemberFunctionMayBeStatic
 vector<Type, Allocator>::max_size() const noexcept
 {
     return (static_cast<size_type>(1) << (sizeof(size_type) * 8 - 4)) / sizeof(value_type);

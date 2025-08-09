@@ -18,7 +18,7 @@
 TEMPLATE_LIST_TEST_CASE("access methods", "[vector][access]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("An empty vector of TestType")
     {

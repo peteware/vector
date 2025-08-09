@@ -54,8 +54,8 @@ struct Storage
     using difference_type = ptrdiff_t;
     using reference       = value_type&;
     using const_reference = value_type const&;
-    using pointer         = typename allocator_traits<Allocator>::pointer;
-    using const_pointer   = typename allocator_traits<Allocator>::const_pointer;
+    using pointer         = allocator_traits<Allocator>::pointer;
+    using const_pointer   = allocator_traits<Allocator>::const_pointer;
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
@@ -130,28 +130,28 @@ Storage<Type, Allocator>::~Storage()
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::iterator
 Storage<Type, Allocator>::begin()
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::iterator
 Storage<Type, Allocator>::end()
 {
     return m_end;
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::const_iterator
+Storage<Type, Allocator>::const_iterator
 Storage<Type, Allocator>::begin() const
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::const_iterator
+Storage<Type, Allocator>::const_iterator
 Storage<Type, Allocator>::end() const
 {
     return m_end;
@@ -166,21 +166,21 @@ Storage<Type, Allocator>::set_size(size_type count)
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::size() const
 {
     return m_end - m_begin;
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::capacity() const
 {
     return m_allocated;
 }
 
 template<class Type, class Allocator>
-typename Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::size_type
 Storage<Type, Allocator>::newsize() const
 {
     return pw::max(static_cast<size_type>(INITIAL_SIZE), m_allocated * 2);

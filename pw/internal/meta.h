@@ -11,10 +11,10 @@
 namespace pw::internal {
 
 template<typename Type>
-using get_const_void_pointer = typename Type::const_void_pointer;
+using get_const_void_pointer = Type::const_void_pointer;
 
 template<typename Type>
-using get_difference_type = typename Type::difference_type;
+using get_difference_type = Type::difference_type;
 
 template<class Type, class = void>
 struct difference_type
@@ -34,13 +34,13 @@ struct get_first_arg<Class<Type, Args...>>
 template<class Type, class = void>
 struct element_type
 {
-    using type = typename get_first_arg<Type>::type;
+    using type = get_first_arg<Type>::type;
 };
 
 template<typename Type>
 struct element_type<Type, void_t<typename Type::element_type>>
 {
-    using type = typename Type::element_type;
+    using type = Type::element_type;
 };
 
 template<typename Type, typename U>
@@ -55,13 +55,13 @@ struct rebind_first_arg<Class<Type, Args...>, U>
 template<typename Type, typename U, typename = void>
 struct rebind_ptr
 {
-    using type = typename rebind_first_arg<Type, U>::type;
+    using type = rebind_first_arg<Type, U>::type;
 };
 
 template<typename Type, typename U>
 struct rebind_ptr<Type, U, void_t<typename Type::template rebind<U>>>
 {
-    using type = typename Type::template rebind<U>;
+    using type = Type::template rebind<U>;
 };
 
 } // End of namespace pw::internal

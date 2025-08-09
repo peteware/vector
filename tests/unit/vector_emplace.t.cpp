@@ -6,8 +6,8 @@
 TEMPLATE_LIST_TEST_CASE("emplace()", "[vector][func][emplace]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-    using size_type  = typename Vector::size_type;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
 
     GIVEN("An empty vector")
     {

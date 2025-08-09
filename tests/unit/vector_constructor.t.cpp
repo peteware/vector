@@ -145,7 +145,7 @@ TEMPLATE_LIST_TEST_CASE("Count-value constructor",
     {
         WHEN("constructed with size 0 and value 42")
         {
-            Vector v(static_cast<typename Vector::size_type>(0), 42);
+            Vector v(static_cast<Vector::size_type>(0), 42);
 
             THEN("the vector is empty")
             {
@@ -157,7 +157,7 @@ TEMPLATE_LIST_TEST_CASE("Count-value constructor",
         }
         WHEN("constructed with size 3 and value 42")
         {
-            Vector v(static_cast<typename Vector::size_type>(3), 42);
+            Vector v(static_cast<Vector::size_type>(3), 42);
 
             THEN("the vector has 3 elements with value 42")
             {
@@ -170,7 +170,7 @@ TEMPLATE_LIST_TEST_CASE("Count-value constructor",
         }
         WHEN("constructed with size 1 and value -7")
         {
-            Vector v(static_cast<typename Vector::size_type>(1), -7);
+            Vector v(static_cast<Vector::size_type>(1), -7);
 
             THEN("the vector has 1 element with value -7")
             {
@@ -206,7 +206,7 @@ TEMPLATE_LIST_TEST_CASE("Copy constructor", "[phase1][vector][constructor][copy]
         WHEN("copying a vector with elements")
         {
             Vector source { 99, 99, 99 };
-            Vector copy(source);
+            Vector copy(source); // NOLINT(*-unnecessary-copy-initialization)
 
             THEN("the copy has the same elements")
             {
@@ -218,7 +218,7 @@ TEMPLATE_LIST_TEST_CASE("Copy constructor", "[phase1][vector][constructor][copy]
         WHEN("copying a vector with different values")
         {
             Vector source { 1, 2, 3, 4 };
-            Vector copy(source);
+            Vector copy(source); // NOLINT(*-unnecessary-copy-initialization)
 
             THEN("the copy has identical content")
             {
@@ -231,7 +231,7 @@ TEMPLATE_LIST_TEST_CASE("Copy constructor", "[phase1][vector][constructor][copy]
         WHEN("copy constructor from larger vector")
         {
             Vector source { 10, 20, 30, 40, 50 };
-            Vector copy(source);
+            Vector copy(source); // NOLINT(*-unnecessary-copy-initialization)
 
             THEN("the copy has the source content")
             {

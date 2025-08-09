@@ -19,8 +19,8 @@ public:
 
     explicit back_insert_iterator(container_type& container);
 
-    back_insert_iterator<Container>& operator=(const typename Container::value_type& value);
-    back_insert_iterator<Container>& operator=(typename Container::value_type&& value);
+    back_insert_iterator<Container>& operator=(const Container::value_type& value);
+    back_insert_iterator<Container>& operator=(Container::value_type&& value);
     back_insert_iterator<Container>& operator*();
     back_insert_iterator<Container>& operator++();
     back_insert_iterator<Container>& operator++(int);

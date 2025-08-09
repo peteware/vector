@@ -26,7 +26,7 @@
 TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
     GIVEN("an empty vector")
     {
         Vector v;
@@ -100,7 +100,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
 TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
     GIVEN("an empty vector")
     {
         Vector v;
@@ -311,7 +311,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
 TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw::test::TestTypeList)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
     GIVEN("an empty vector")
     {
         Vector v;
