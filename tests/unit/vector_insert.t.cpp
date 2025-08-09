@@ -30,7 +30,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
     GIVEN("an empty vector")
     {
         Vector v;
-
         WHEN("insert(begin, value) is called")
         {
             typename Vector::iterator iter;
@@ -75,7 +74,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value)", "[vector][insert]", pw::test:
         pw::test::Values<Vector>  generate(5);
         value_type                value {};
         typename Vector::iterator where;
-
         WHEN("insert() at begin")
         {
             generate.values.insert(generate.values.begin(), value);
@@ -103,11 +101,9 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
-
     GIVEN("an empty vector")
     {
         Vector v;
-
         WHEN("insert(begin(), std::move(value)) is called")
         {
             typename Vector::iterator iter;
@@ -129,7 +125,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(value == v.at(0));
             }
         }
-
         WHEN("insert(end(), std::move(value)) is called")
         {
             typename Vector::iterator iter;
@@ -157,7 +152,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
     {
         pw::test::Values<Vector> generate(5);
         Vector                   v(generate.values);
-
         REQUIRE(v.size() == v.capacity());
         WHEN("insert(begin(), std::move(value)) is called with not enough capacity")
         {
@@ -190,7 +184,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(generate.last_value == v.back());
             }
         }
-
         WHEN("insert(end(), std::move(value)) is called")
         {
             typename Vector::iterator iter;
@@ -218,7 +211,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(generate.first_value == v.front());
             }
         }
-
         WHEN("insert(middle, std::move(value)) is called")
         {
             typename Vector::iterator iter;
@@ -258,7 +250,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             }
         }
     }
-
     GIVEN("a vector with sufficient capacity")
     {
         Vector v;
@@ -269,6 +260,22 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             v.push_back(val);
         }
 
+        WHEN("insert(end(), std::move(value)) is called")
+        {
+            value_type value;
+            pw::test::permute(value, 7);
+            value_type moved_value = value;
+            v.insert(v.end(), pw::move(value));
+
+            THEN("back() is value")
+            {
+                REQUIRE(v.back() == value);
+            }
+            THEN("front() is first value")
+            {
+                REQUIRE(v.front() == generate.first_value);
+            }
+        }
         WHEN("insert(middle, std::move(value)) is called without reallocation")
         {
             typename Vector::iterator iter;
@@ -308,7 +315,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
     GIVEN("an empty vector")
     {
         Vector v;
-
         WHEN("insert(begin(), count, value)")
         {
             typename Vector::iterator iter;
@@ -434,7 +440,6 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
     {
         Vector                   v;
         pw::test::Values<Vector> generate(5);
-
         WHEN("insert(begin, first, last) is called without capacity")
         {
             typename Vector::iterator iter;
@@ -547,7 +552,6 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
     GIVEN("An empty vector")
     {
         Vector v;
-
         WHEN("insert with init_list")
         {
             Vector           expected { 1, 2, 3 };
@@ -574,7 +578,6 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
         Vector           v { 1, 2, 3, 4, 5 };
         Vector const     expected = { -1, -2, 1, 2, 3, 4, 5 };
         Vector::iterator iter;
-
         REQUIRE(v.size() == v.capacity());
         WHEN("insert(begin, init_list) without capacity")
         {
@@ -624,12 +627,10 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
     pw::test::OpCounter       counter;
     pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
     size_t                    count = 5;
-
     GIVEN("An empty vector")
     {
         Vector                             v;
         pw::test::DefaultCopyConstructible copyObject;
-
         WHEN("insert(count) at begin")
         {
             pw::test::DefaultCopyConstructible copyObject;
