@@ -388,7 +388,7 @@ TEST_CASE("Constructor Exception Safety - Edge Cases", "[vector][constructor][ed
         MultiExceptionType::reset();
         MultiExceptionType::throw_runtime_error = true;
 
-        REQUIRE_THROWS_AS((pw::vector<MultiExceptionType>(5)), std::runtime_error);
+        REQUIRE_THROWS_AS(pw::vector<MultiExceptionType>(5), std::runtime_error);
         REQUIRE(MultiExceptionType::construction_count == 0);
     }
 }

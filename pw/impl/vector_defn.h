@@ -819,7 +819,7 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
     {
         return false;
     }
-    return (op1 <=> op2) == 0;
+    return op1 <=> op2 == 0;
 }
 
 template<class Type, class Allocator>
