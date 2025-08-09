@@ -607,17 +607,13 @@ constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
 {
     size_type const offset = pw::distance(cbegin(), begin);
-    iterator        dest   = m_storage.begin() + offset;
-    iterator        last   = m_storage.begin() + pw::distance(cbegin(), end);
+    size_type const last   = pw::distance(cbegin(), end);
+    size_type const width  = pw::distance(begin, end);
 
-    if (begin == end)
-    {
-        return last;
-    }
-    pw::move(last, m_storage.end(), dest);
-    pw::destroy(last, m_storage.end());
-    m_storage.set_size(m_storage.size() - pw::distance(begin, end));
-    return dest;
+    pw::move(m_storage.begin() + last, m_storage.end(), m_storage.begin() + offset);
+    pw::destroy(m_storage.begin() + last, m_storage.end());
+    m_storage.set_size(size() - width);
+    return m_storage.begin() + offset;
 }
 
 template<class Type, class Allocator>
