@@ -20,65 +20,86 @@ TEMPLATE_LIST_TEST_CASE("iterator methods on a vector", "[vector][iter]", pw::te
         REQUIRE(pw::is_same<value_type, typename Vector::value_type>::value);
         WHEN("begin() is called")
         {
-            typename Vector::iterator iter;
-            iter = v.begin();
-            THEN("cbegin() is same")
-            {
-                REQUIRE(iter == v.cbegin());
-            }
+            auto iter = v.begin();
             THEN("end() is same")
             {
                 REQUIRE(iter == v.end());
             }
-            THEN("cend() is same as end()")
+        }
+        WHEN("cbegin() is called")
+        {
+            auto iter = v.cbegin();
+            THEN("cend() is same")
             {
                 REQUIRE(iter == v.cend());
             }
         }
         WHEN("rbegin() is called")
         {
-            typename Vector::reverse_iterator riter;
-            riter = v.rbegin();
-            THEN("crbegin() is same")
-            {
-                REQUIRE(riter == v.crbegin());
-            }
+            auto iter = v.rbegin();
             THEN("rend() is same")
             {
-                REQUIRE(riter == v.rend());
+                REQUIRE(iter == v.rend());
             }
             THEN("crend() is same as rend()")
             {
-                REQUIRE(riter == v.crend());
+                REQUIRE(iter == v.crend());
+            }
+        }
+        WHEN("crbegin() is called")
+        {
+            auto iter = v.crbegin();
+            THEN("rend() is same")
+            {
+                REQUIRE(iter == v.rend());
+            }
+            THEN("crend() is same")
+            {
+                REQUIRE(iter == v.crend());
             }
         }
     }
     GIVEN("An empty const vector")
     {
         Vector const v;
-        REQUIRE(v.empty());
-        REQUIRE(v.size() == 0);
-        REQUIRE(v.capacity() == 0);
-
         WHEN("begin() is called")
         {
-            typename Vector::const_iterator iter;
-            iter = v.begin();
+            auto iter = v.begin();
+            THEN("end() is same")
+            {
+                REQUIRE(iter == v.end());
+            }
+        }
+        WHEN("cbegin() is called")
+        {
+            auto iter = v.cbegin();
             THEN("cend() is same")
             {
                 REQUIRE(iter == v.cend());
-            }
-            THEN("cbegin() is same")
-            {
-                REQUIRE(iter == v.cbegin());
             }
             THEN("end() is same")
             {
                 REQUIRE(iter == v.end());
             }
-            THEN("cend() is same as end()")
+        }
+        WHEN("rbegin() is called")
+        {
+            auto iter = v.rbegin();
+            THEN("rend() is same")
             {
-                REQUIRE(iter == v.cend());
+                REQUIRE(iter == v.rend());
+            }
+            THEN("crend() is same")
+            {
+                REQUIRE(iter == v.crend());
+            }
+        }
+        WHEN("crbegin() is called")
+        {
+            auto iter = v.crbegin();
+            THEN("crend() is same")
+            {
+                REQUIRE(iter == v.crend());
             }
         }
     }
@@ -88,9 +109,8 @@ TEMPLATE_LIST_TEST_CASE("iterator methods on a vector", "[vector][iter]", pw::te
         Vector&                  v = gen.values;
         WHEN("begin() is called")
         {
-            typename Vector::iterator iter;
-            iter = v.begin();
-            THEN("cbegin() is same")
+            auto iter = v.begin();
+            THEN("begin() is same as cbegin()")
             {
                 REQUIRE(iter == v.cbegin());
             }
@@ -99,10 +119,21 @@ TEMPLATE_LIST_TEST_CASE("iterator methods on a vector", "[vector][iter]", pw::te
                 REQUIRE(*iter == gen.first_value);
             }
         }
+        WHEN("cbegin() is called")
+        {
+            auto iter = v.cbegin();
+            THEN("begin() is same")
+            {
+                REQUIRE(iter == v.begin());
+            }
+            THEN("iter points to first value")
+            {
+                REQUIRE(*iter == gen.first_value);
+            }
+        }
         WHEN("rbegin() is called")
         {
-            typename Vector::reverse_iterator iter;
-            iter = v.rbegin();
+            auto iter = v.rbegin();
             THEN("crbegin() is same")
             {
                 REQUIRE(iter == v.crbegin());
@@ -111,55 +142,159 @@ TEMPLATE_LIST_TEST_CASE("iterator methods on a vector", "[vector][iter]", pw::te
             {
                 REQUIRE(*iter == gen.last_value);
             }
-            THEN("end() is same")
+            THEN("iter.base() is end()")
             {
                 REQUIRE(iter.base() == v.end());
             }
         }
+        WHEN("crbegin() is called")
+        {
+            auto iter = v.crbegin();
+            THEN("iter.base() is cend()")
+            {
+                REQUIRE(iter.base() == v.cend());
+            }
+            THEN("*iter is last value")
+            {
+                REQUIRE(*iter == gen.last_value);
+            }
+        }
+        WHEN("end() is called")
+        {
+            auto iter = v.end();
+            THEN("iter points to last value")
+            {
+                REQUIRE(*(iter - 1) == gen.last_value);
+            }
+        }
+        WHEN("cend() is called")
+        {
+            auto iter = v.cend();
+            THEN("iter points to last value")
+            {
+                REQUIRE(*(iter - 1) == gen.last_value);
+            }
+        }
         WHEN("rend() is called")
         {
-            typename Vector::reverse_iterator iter;
-            iter = v.rend();
-            THEN("crend() is same")
-            {
-                REQUIRE(iter == v.crend());
-            }
-            THEN("iter.base() is begin()")
+            auto iter = v.rend();
+            THEN("iter.base() points to begin()")
             {
                 REQUIRE(iter.base() == v.begin());
             }
-            THEN("iter is first value")
+            THEN("iter - 1 points to first value")
+            {
+                REQUIRE(*(iter - 1) == gen.first_value);
+            }
+        }
+        WHEN("crend() is called")
+        {
+            auto iter = v.crend();
+            THEN("iter.base() points to begin()")
+            {
+                REQUIRE(iter.base() == v.begin());
+            }
+            THEN("iter - 1 points to first value")
             {
                 REQUIRE(*(iter - 1) == gen.first_value);
             }
         }
     }
-    GIVEN("An empty const vector")
+    GIVEN("An const vector with 3 elements")
     {
-        Vector const v;
-        REQUIRE(v.empty());
-        REQUIRE(v.size() == 0);
-        REQUIRE(v.capacity() == 0);
-
+        pw::test::Values<Vector> gen(3);
+        Vector const             v { gen.values[0], gen.values[1], gen.values[2] };
         WHEN("begin() is called")
         {
-            typename Vector::const_iterator iter;
-            iter = v.begin();
-            THEN("cend() is same")
-            {
-                REQUIRE(iter == v.cend());
-            }
+            auto iter = v.begin();
             THEN("cbegin() is same")
             {
                 REQUIRE(iter == v.cbegin());
             }
-            THEN("end() is same")
+            THEN("iter points to first element")
             {
-                REQUIRE(iter == v.end());
+                REQUIRE(*iter == gen.first_value);
             }
-            THEN("cend() is same as end()")
+        }
+        WHEN("cbegin() is called")
+        {
+            auto iter = v.cbegin();
+        }
+        WHEN("rbegin() is called")
+        {
+            auto iter = v.rbegin();
+
+            THEN("iter is crbegin()")
+            {
+                REQUIRE(iter == v.crbegin());
+            }
+            THEN("iter points to last element")
+            {
+                REQUIRE(*iter == gen.last_value);
+            }
+            THEN("iter.base() is same as end()")
+            {
+                REQUIRE(iter.base() == v.end());
+            }
+        }
+        WHEN("crbegin() is called")
+        {
+            auto iter = v.crbegin();
+            THEN("rbegin() is same")
+            {
+                REQUIRE(iter == v.rbegin());
+            }
+            THEN("iter points to last value")
+            {
+                REQUIRE(*iter == gen.last_value);
+            }
+        }
+        WHEN("end() is called")
+        {
+            auto iter = v.end();
+            THEN("iter points to last value")
+            {
+                REQUIRE(*(iter - 1) == gen.last_value);
+            }
+            THEN("cend() is same")
             {
                 REQUIRE(iter == v.cend());
+            }
+        }
+        WHEN("cend() is called")
+        {
+            auto iter = v.cend();
+            THEN("iter points to last value")
+            {
+                REQUIRE(*(iter - 1) == gen.last_value);
+            }
+        }
+        WHEN("rend() is called")
+        {
+            auto iter = v.rend();
+            THEN("crend() is same")
+            {
+                REQUIRE(iter == v.crend());
+            }
+            THEN("iter.base() points to begin()")
+            {
+                REQUIRE(iter.base() == v.begin());
+            }
+            THEN("iter - 1 points to first value")
+            {
+                REQUIRE(*(iter - 1) == gen.first_value);
+            }
+        }
+        WHEN("crend() is called")
+        {
+            auto iter = v.crend();
+            THEN("iter.base() points to begin()")
+            {
+                REQUIRE(iter.base() == v.begin());
+            }
+            THEN("iter - 1 points to first value")
+            {
+                REQUIRE(*(iter - 1) == gen.first_value);
             }
         }
     }
