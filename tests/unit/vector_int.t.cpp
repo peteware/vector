@@ -17,70 +17,6 @@ TEST_CASE("Constructors", "[vector][constructor]")
 {
     using Vector     = pw::vector<int>;
     using value_type = Vector::value_type;
-
-    GIVEN("An empty vector")
-    {
-        WHEN("Nothing changes")
-        {
-            Vector v;
-            THEN("empty() is true")
-            {
-                REQUIRE(v.empty());
-            }
-            THEN("size() is 0")
-            {
-                REQUIRE(v.size() == 0); // NOLINT(*-container-size-empty)
-            }
-            THEN("begin() is end()")
-            {
-                REQUIRE(v.begin() == v.end());
-            }
-        }
-    }
-    GIVEN("A vector of count values")
-    {
-        WHEN("Initialized with value")
-        {
-            constexpr Vector::size_type total = 10;
-            constexpr value_type        value = 3;
-            Vector                      v(total, value);
-
-            THEN("empty() is false")
-            {
-                REQUIRE(!v.empty());
-            }
-            THEN("size() is total")
-            {
-                REQUIRE(total == v.size());
-            }
-            THEN("capacity is at least size")
-            {
-                REQUIRE(v.capacity() >= v.size());
-            }
-            THEN("begin() returns element")
-            {
-                REQUIRE(v.begin() != v.end());
-                REQUIRE(*v.begin() == value);
-            }
-            THEN("end() returns element")
-            {
-                REQUIRE(v.begin() != v.end());
-                REQUIRE(*(v.end() - 1) == value);
-            }
-            THEN("all elements have correct value")
-            {
-                for (Vector::size_type i = 0; i < total; ++i)
-                {
-                    REQUIRE(v[i] == value);
-                }
-            }
-            THEN("iterators are valid")
-            {
-                REQUIRE(v.begin() < v.end());
-                REQUIRE(v.end() - v.begin() == static_cast<typename Vector::difference_type>(total));
-            }
-        }
-    }
 }
 
 TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
@@ -465,36 +401,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
 TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
 {
     using Vector = pw::vector<int>;
-
-    GIVEN("constexpr context")
-    {
-        WHEN("default constructor is used in constexpr")
-        {
-            constexpr auto test_constexpr = []() constexpr {
-                Vector v;
-                return v.empty();
-            };
-
-            THEN("compilation succeeds and runtime validation passes")
-            {
-                static_assert(test_constexpr());
-                REQUIRE(test_constexpr());
-            }
-        }
-        WHEN("initializer list constructor is used in constexpr")
-        {
-            constexpr auto test_constexpr = []() constexpr {
-                Vector v { 1, 2, 3 };
-                return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
-            };
-
-            THEN("runtime validation passes")
-            {
-                //static_assert(test_constexpr());
-                REQUIRE(test_constexpr());
-            }
-        }
-    }
 }
 
 TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")

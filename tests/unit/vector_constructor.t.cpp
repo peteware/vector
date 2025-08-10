@@ -12,7 +12,9 @@ using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
 
 TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
 {
-    using Vector = TestType;
+    using Vector     = TestType;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
     GIVEN("An initializer list")
     {
         WHEN("constructed with empty initializer list")
@@ -78,6 +80,98 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
                 REQUIRE(v.empty() == true);
                 REQUIRE(v.begin() == v.end());
                 REQUIRE(v == expected);
+            }
+        }
+    }
+    GIVEN("An empty vector")
+    {
+        WHEN("Nothing changes")
+        {
+            Vector v;
+            THEN("empty() is true")
+            {
+                REQUIRE(v.empty());
+            }
+            THEN("size() is 0")
+            {
+                REQUIRE(v.size() == 0); // NOLINT(*-container-size-empty)
+            }
+            THEN("begin() is end()")
+            {
+                REQUIRE(v.begin() == v.end());
+            }
+        }
+    }
+    GIVEN("A vector of count values")
+    {
+        WHEN("Initialized with value")
+        {
+            constexpr size_type  total = 10;
+            constexpr value_type value = 3;
+            Vector               v(total, value);
+
+            THEN("empty() is false")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("size() is total")
+            {
+                REQUIRE(total == v.size());
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("begin() returns element")
+            {
+                REQUIRE(v.begin() != v.end());
+                REQUIRE(*v.begin() == value);
+            }
+            THEN("end() returns element")
+            {
+                REQUIRE(v.begin() != v.end());
+                REQUIRE(*(v.end() - 1) == value);
+            }
+            THEN("all elements have correct value")
+            {
+                for (size_type i = 0; i < total; ++i)
+                {
+                    REQUIRE(v[i] == value);
+                }
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v.begin() < v.end());
+                REQUIRE(v.end() - v.begin() == static_cast<typename Vector::difference_type>(total));
+            }
+        }
+    }
+    GIVEN("constexpr context")
+    {
+        WHEN("default constructor is used in constexpr")
+        {
+            constexpr auto test_constexpr = []() constexpr {
+                Vector v;
+                return v.empty();
+            };
+
+            THEN("compilation succeeds and runtime validation passes")
+            {
+                static_assert(test_constexpr());
+                REQUIRE(test_constexpr());
+            }
+        }
+        WHEN("initializer list constructor is used in constexpr")
+        {
+            constexpr auto test_constexpr = []() constexpr {
+                Vector v { 1, 2, 3 };
+                return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
+            };
+
+            THEN("runtime validation passes")
+            {
+                //static_assert(test_constexpr());
+                REQUIRE(test_constexpr());
             }
         }
     }
