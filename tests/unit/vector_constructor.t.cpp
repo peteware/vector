@@ -1,3 +1,5 @@
+#include "test_base_allocator.h"
+
 #include <pw/algorithm>
 #include <pw/vector>
 
@@ -9,6 +11,9 @@
 
 // Phase 1 test type list - using int with pw::vector and std::vector for comparison
 using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
+// Phase 2 test type list - Adds test::allocator_base to track its usage
+using Phase2TestTypeList = std::tuple<pw::vector<int, pw::test::allocator_base<int>>,
+                                      std::vector<int, pw::test::allocator_base<int>>>;
 
 TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
 {
@@ -396,6 +401,410 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
                 Vector expected { 7, 8, 9 };
                 REQUIRE(v.size() == 3);
                 REQUIRE(v == expected);
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Constructors with allocator_base<int>",
+                        "[phase2][vector][constructor]",
+                        Phase2TestTypeList)
+{
+    using Vector         = TestType;
+    using value_type     = Vector::value_type;
+    using size_type      = Vector::size_type;
+    using allocator_type = Vector::allocator_type;
+    GIVEN("default allocator instance")
+    {
+        WHEN("default constructor is called")
+        {
+            // constexpr vector() noexcept(noexcept(allocator_type()));
+            Vector v;
+
+            THEN("vector is empty")
+            {
+                REQUIRE(v.empty());
+            }
+            THEN("allocator matches default instance")
+            {
+                allocator_type alloc;
+                REQUIRE(v.get_allocator().m_instance == alloc.m_instance);
+            }
+        }
+    }
+    GIVEN("a vector with elements { 1, 2, 3, 10 }")
+    {
+        Vector v1 { 1, 2, 3, 10 };
+        WHEN("copy constructor is called")
+        {
+            // constexpr vector(vector const& other);
+            Vector v2(v1);
+
+            THEN("allocators are equal")
+            {
+                REQUIRE(v1.get_allocator() == v2.get_allocator());
+            }
+            THEN("sizes are equal")
+            {
+                REQUIRE(v1.size() == v2.size());
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v2.capacity() >= v2.size());
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v2.empty());
+            }
+            THEN("all elements are copied correctly")
+            {
+                REQUIRE(v1[0] == v2[0]);
+                REQUIRE(v1[1] == v2[1]);
+                REQUIRE(v1[2] == v2[2]);
+                REQUIRE(v1[3] == v2[3]);
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v2.begin() != v2.end());
+            }
+        }
+        WHEN("move constructor is called")
+        {
+            // constexpr vector(vector&& other) noexcept;
+            auto   original_size = v1.size();
+            Vector v2(pw::move(v1));
+
+            THEN("allocators are equal")
+            {
+                REQUIRE(v1.get_allocator() == v2.get_allocator());
+            }
+            THEN("size is preserved")
+            {
+                REQUIRE(v2.size() == original_size);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v2.capacity() >= v2.size());
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v2.empty());
+            }
+            THEN("all elements are moved correctly")
+            {
+                REQUIRE(v2[0] == 1);
+                REQUIRE(v2[1] == 2);
+                REQUIRE(v2[2] == 3);
+                REQUIRE(v2[3] == 10);
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v2.begin() != v2.end());
+            }
+        }
+    }
+    GIVEN("a custom allocator instance")
+    {
+        allocator_type alloc(3);
+        WHEN("default constructor is called with allocator")
+        {
+            // constexpr explicit vector(allocator_type const& alloc) noexcept;
+            Vector v(alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v.get_allocator() == alloc);
+            }
+        }
+        WHEN("constructor is called with count, value, and allocator")
+        {
+            // constexpr vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
+            constexpr size_type  count = 30;
+            constexpr value_type value = 812;
+            Vector               v(count, value, alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v.get_allocator() == alloc);
+            }
+            THEN("size matches count")
+            {
+                REQUIRE(v.size() == count);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("all elements have the specified value")
+            {
+                REQUIRE(v[0] == value);
+                REQUIRE(v[count - 1] == value);
+                for (auto i = 0; i < count; ++i)
+                {
+                    REQUIRE(v[i] == value);
+                }
+            }
+        }
+        WHEN("constructor is called with count and allocator but no value")
+        {
+            // constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
+            constexpr size_type count = 30;
+            Vector              v(count, alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v.get_allocator() == alloc);
+            }
+            THEN("size matches count")
+            {
+                REQUIRE(v.size() == count);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v.begin() != v.end());
+                REQUIRE(v.end() - v.begin() == static_cast<Vector::difference_type>(count));
+            }
+        }
+        WHEN("copy constructor is called with different allocator")
+        {
+            // constexpr vector(vector const& other, allocator_type const& alloc);
+            allocator_type alloc2;
+            Vector         v1({ 1, 2, 3, 4 }, alloc);
+            Vector         v2(v1, alloc2);
+            THEN("new allocator is used")
+            {
+                REQUIRE(v2.get_allocator() == alloc2);
+            }
+            THEN("size is copied")
+            {
+                REQUIRE(v2.size() == v1.size());
+            }
+            THEN("elements are copied correctly")
+            {
+                REQUIRE(v2[0] == v1[0]);
+                REQUIRE(v2[3] == v1[3]);
+            }
+        }
+        WHEN("move constructor is called with different allocator")
+        {
+            // constexpr vector(vector&& other, allocator_type const& alloc);
+            allocator_type alloc2;
+            Vector         v1({ 1, 2, 3 }, alloc);
+            Vector         v2(pw::move(v1), alloc2);
+            THEN("new allocator is used")
+            {
+                REQUIRE(v2.get_allocator() == alloc2);
+            }
+            THEN("size is moved")
+            {
+                REQUIRE(v2.size() == v1.size());
+            }
+            THEN("elements are moved correctly")
+            {
+                REQUIRE(v2[0] == 1);
+                REQUIRE(v2[2] == 3);
+            }
+        }
+        WHEN("constructor is called with initializer list and allocator")
+        {
+            // constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
+            Vector v({ 1, 2, 3, 4 }, alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v.get_allocator() == alloc);
+            }
+            THEN("size matches initializer list")
+            {
+                REQUIRE(v.size() == 4);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("all elements are initialized correctly")
+            {
+                REQUIRE(v[0] == 1);
+                REQUIRE(v[1] == 2);
+                REQUIRE(v[2] == 3);
+                REQUIRE(v[3] == 4);
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v.begin() != v.end());
+            }
+        }
+        WHEN("constructor is called with iterator range and allocator")
+        {
+            // template<class Iterator>
+            // constexpr vector(Iterator first, Iterator last, allocator_type const& alloc = allocator_type());
+            value_type d[3] = { 23, 2, 1 };
+            Vector     v(&d[0], &d[3], alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v.get_allocator() == alloc);
+            }
+            THEN("size matches range")
+            {
+                REQUIRE(v.size() == 3);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("elements are copied from range")
+            {
+                REQUIRE(v[0] == 23);
+                REQUIRE(v[1] == 2);
+                REQUIRE(v[2] == 1);
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v.empty());
+            }
+        }
+    }
+    GIVEN("constructors with zero count")
+    {
+        allocator_type alloc(3);
+
+        WHEN("constructor is called with zero count and value")
+        {
+            constexpr value_type value = 42;
+            Vector               v1(static_cast<Vector::size_type>(0), value, alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v1.get_allocator() == alloc);
+            }
+            THEN("vector is empty")
+            {
+                REQUIRE(v1.empty());
+            }
+            THEN("iterators are equal")
+            {
+                REQUIRE(v1.begin() == v1.end());
+            }
+        }
+        WHEN("constructor is called with zero count and no value")
+        {
+            Vector v2(static_cast<Vector::size_type>(0), alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v2.get_allocator() == alloc);
+            }
+            THEN("vector is empty")
+            {
+                REQUIRE(v2.empty());
+            }
+            THEN("iterators are equal")
+            {
+                REQUIRE(v2.begin() == v2.end());
+            }
+        }
+    }
+    GIVEN("iterator range edge cases")
+    {
+        allocator_type alloc(3);
+        value_type     d[] = { 1, 2, 3 };
+
+        WHEN("constructor is called with empty range")
+        {
+            Vector v1(&d[0], &d[0], alloc); // first == last
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v1.get_allocator() == alloc);
+            }
+            THEN("vector is empty")
+            {
+                REQUIRE(v1.empty());
+            }
+            THEN("iterators are equal")
+            {
+                REQUIRE(v1.begin() == v1.end());
+            }
+        }
+        WHEN("constructor is called with single element range")
+        {
+            Vector v2(&d[0], &d[1], alloc);
+
+            THEN("allocator is preserved")
+            {
+                REQUIRE(v2.get_allocator() == alloc);
+            }
+            THEN("size is one")
+            {
+                REQUIRE(v2.size() == 1);
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v2.capacity() >= v2.size());
+            }
+            THEN("element is copied correctly")
+            {
+                REQUIRE(v2[0] == 1);
+            }
+            THEN("vector is not empty")
+            {
+                REQUIRE(!v2.empty());
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v2.begin() != v2.end());
+            }
+        }
+    }
+    GIVEN("Two empty vectors with allocator")
+    {
+        Vector v1(allocator_type(5));
+        Vector v2(allocator_type(10));
+        WHEN("Default allocator")
+        {
+            THEN("allocators are different")
+            {
+                REQUIRE(!(v1.get_allocator() == v2.get_allocator()));
+            }
+        }
+    }
+    GIVEN("Vector with count, value, and allocator")
+    {
+        constexpr size_type total = 10;
+        allocator_type      allocator(5);
+        value_type constexpr value = 3;
+        Vector v(total, value, allocator);
+
+        WHEN("access elements")
+        {
+            THEN("begin() returns element")
+            {
+                REQUIRE(*v.begin() == value);
+            }
+            THEN("end() returns element")
+            {
+                REQUIRE(*(v.end() - 1) == value);
+            }
+            THEN("the get_allocator() returns original instance")
+            {
+                REQUIRE(allocator == v.get_allocator());
             }
         }
     }
