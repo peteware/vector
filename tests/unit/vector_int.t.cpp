@@ -29,7 +29,7 @@ TEST_CASE("Constructors", "[vector][constructor]")
             }
             THEN("size() is 0")
             {
-                REQUIRE(v.size() == 0);
+                REQUIRE(v.size() == 0); // NOLINT(*-container-size-empty)
             }
             THEN("begin() is end()")
             {
@@ -107,7 +107,6 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
             }
         }
     }
-
     GIVEN("a vector with elements { 1, 2, 3, 10 }")
     {
         Vector v1 { 1, 2, 3, 10 };
@@ -145,7 +144,6 @@ TEST_CASE("Constructors without allocator", "[constructor][no-allocator]")
                 REQUIRE(v2.begin() != v2.end());
             }
         }
-
         WHEN("move constructor is called")
         {
             // constexpr vector(vector&& other) noexcept;
@@ -203,7 +201,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v.get_allocator() == alloc);
             }
         }
-
         WHEN("constructor is called with count, value, and allocator")
         {
             // constexpr vector(size_type count, value_type const& value, allocator_type const& alloc = allocator_type());
@@ -237,7 +234,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 }
             }
         }
-
         WHEN("constructor is called with count and allocator but no value")
         {
             // constexpr explicit vector(size_type count, allocator_type const& alloc = allocator_type());
@@ -266,7 +262,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v.end() - v.begin() == static_cast<Vector::difference_type>(count));
             }
         }
-
         WHEN("copy constructor is called with different allocator")
         {
             // constexpr vector(vector const& other, allocator_type const& alloc);
@@ -288,7 +283,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v2[3] == v1[3]);
             }
         }
-
         WHEN("move constructor is called with different allocator")
         {
             // constexpr vector(vector&& other, allocator_type const& alloc);
@@ -310,7 +304,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v2[2] == 3);
             }
         }
-
         WHEN("constructor is called with initializer list and allocator")
         {
             // constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
@@ -344,7 +337,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v.begin() != v.end());
             }
         }
-
         WHEN("constructor is called with iterator range and allocator")
         {
             // template<class Iterator>
@@ -376,7 +368,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
             }
         }
     }
-
     GIVEN("constructors with zero count")
     {
         Allocator alloc(3);
@@ -399,7 +390,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v1.begin() == v1.end());
             }
         }
-
         WHEN("constructor is called with zero count and no value")
         {
             Vector v2(static_cast<Vector::size_type>(0), alloc);
@@ -418,7 +408,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
             }
         }
     }
-
     GIVEN("iterator range edge cases")
     {
         Allocator  alloc(3);
@@ -441,7 +430,6 @@ TEST_CASE("Constructors use allocator", "[constructor][allocator]")
                 REQUIRE(v1.begin() == v1.end());
             }
         }
-
         WHEN("constructor is called with single element range")
         {
             Vector v2(&d[0], &d[1], alloc);
@@ -493,7 +481,6 @@ TEST_CASE("Constexpr Constructor Tests", "[constructor][constexpr]")
                 REQUIRE(test_constexpr());
             }
         }
-
         WHEN("initializer list constructor is used in constexpr")
         {
             constexpr auto test_constexpr = []() constexpr {
@@ -540,7 +527,6 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
                 REQUIRE(v[0] == 1);
             }
         }
-
         WHEN("copy assignment is performed")
         {
             // constexpr vector& operator=(const vector& other);
@@ -766,7 +752,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                     REQUIRE(x == 42);
             }
         }
-
         WHEN("assign(0, value) is called")
         {
             Vector v;
@@ -777,7 +762,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.empty());
             }
         }
-
         WHEN("assign(iterator, iterator) is called")
         {
             int    arr[] = { 1, 2, 3, 4 };
@@ -794,7 +778,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                     REQUIRE(v[i] == arr[i]);
             }
         }
-
         WHEN("assign(empty_range) is called")
         {
             Vector v;
@@ -806,7 +789,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.empty());
             }
         }
-
         WHEN("assign(initializer_list) is called")
         {
             Vector v;
@@ -823,7 +805,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v[2] == 9);
             }
         }
-
         WHEN("assign(empty_initializer_list) is called")
         {
             Vector v;
@@ -835,7 +816,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             }
         }
     }
-
     GIVEN("vector with existing contents")
     {
         WHEN("assign replaces old contents")
@@ -854,7 +834,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
             }
         }
     }
-
     GIVEN("assign with zero items")
     {
         WHEN("assign(0, value) on empty vector")
@@ -868,7 +847,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("assign(0, value) on non-empty vector")
         {
             Vector v = { 1, 2, 3, 4, 5 };
@@ -880,7 +858,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("assign(empty_range) on empty vector")
         {
             Vector v;
@@ -893,7 +870,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("assign(empty_range) on non-empty vector")
         {
             Vector v     = { 10, 20, 30 };
@@ -906,7 +882,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("assign(empty_initializer_list) on empty vector")
         {
             Vector v;
@@ -918,7 +893,6 @@ TEST_CASE("Assign methods", "[vector][assign]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("assign(empty_initializer_list) on non-empty vector")
         {
             Vector v = { 7, 8, 9, 10 };
@@ -956,7 +930,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v.at(0) == 42);
             }
         }
-
         WHEN("multiple push_back() calls are made")
         {
             Vector v;
@@ -978,7 +951,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             }
         }
     }
-
     GIVEN("non-empty vector")
     {
         WHEN("push_back() is called")
@@ -1004,7 +976,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             }
         }
     }
-
     GIVEN("capacity and growth scenarios")
     {
         WHEN("push_back() causes capacity growth")
@@ -1033,7 +1004,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 }
             }
         }
-
         WHEN("push_back() preserves existing elements")
         {
             Vector v = { 100, 200, 300 };
@@ -1062,7 +1032,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             }
         }
     }
-
     GIVEN("copy semantics and value handling")
     {
         WHEN("push_back() with copy semantics")
@@ -1090,7 +1059,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v[0] == 88);
             }
         }
-
         WHEN("push_back() with different values")
         {
             Vector v;
@@ -1109,7 +1077,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             }
         }
     }
-
     GIVEN("iterator and capacity scenarios")
     {
         WHEN("push_back() effects on iterators")
@@ -1139,7 +1106,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(*(end_after - 1) == 4);
             }
         }
-
         WHEN("push_back() with reserved capacity")
         {
             Vector v;
@@ -1165,7 +1131,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             }
         }
     }
-
     GIVEN("consistency and special scenarios")
     {
         WHEN("push_back() consistency with other methods")
@@ -1193,7 +1158,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v.size() == 5);
             }
         }
-
         WHEN("push_back() with different allocators")
         {
             using Allocator = pw::test::allocator_move_assignment<int>;
@@ -1218,7 +1182,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v[2] == 30);
             }
         }
-
         WHEN("push_back() large number of elements")
         {
             Vector        v;
@@ -1244,7 +1207,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v.back() == (count - 1) * 2);
             }
         }
-
         WHEN("push_back() after clear")
         {
             Vector v = { 1, 2, 3, 4, 5 };
@@ -1261,7 +1223,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v.back() == 100);
             }
         }
-
         WHEN("push_back() mixed with other operations")
         {
             Vector v;
@@ -1304,7 +1265,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
                 REQUIRE_THROWS_AS(v.at(100), std::out_of_range);
             }
         }
-
         WHEN("at() is called on const empty vector")
         {
             constexpr Vector v;
@@ -1317,7 +1277,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
             }
         }
     }
-
     GIVEN("single element vector")
     {
         WHEN("at() is called on single element vector")
@@ -1340,7 +1299,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
                 REQUIRE(v[0] == 99);
             }
         }
-
         WHEN("at() is called on const single element vector")
         {
             const Vector v = { 42 };
@@ -1356,7 +1314,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
             }
         }
     }
-
     GIVEN("multi-element vector")
     {
         WHEN("at() is called on multi-element vector")
@@ -1384,7 +1341,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
                 REQUIRE(v[2] == 333);
             }
         }
-
         WHEN("at() is called on const multi-element vector")
         {
             const Vector v = { 10, 20, 30, 40, 50 };
@@ -1405,7 +1361,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
             }
         }
     }
-
     GIVEN("boundary conditions and reference semantics")
     {
         WHEN("at() boundary conditions are tested")
@@ -1427,7 +1382,6 @@ TEST_CASE("at() methods", "[vector][at][access]")
                 REQUIRE(v.at(500) == 7);
             }
         }
-
         WHEN("at() return type and reference semantics are tested")
         {
             Vector v = { 100 };
@@ -1464,7 +1418,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
                 REQUIRE(v.at(0) == 99);
             }
         }
-
         WHEN("const operator[] is used on single element vector")
         {
             const Vector v = { 42 };
@@ -1475,7 +1428,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
             }
         }
     }
-
     GIVEN("multi-element vector")
     {
         WHEN("operator[] is used on multi-element vector")
@@ -1497,7 +1449,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
                 REQUIRE(v.at(2) == 333);
             }
         }
-
         WHEN("const operator[] is used on multi-element vector")
         {
             const Vector v = { 10, 20, 30, 40, 50 };
@@ -1512,7 +1463,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
             }
         }
     }
-
     GIVEN("boundary conditions and semantics")
     {
         WHEN("operator[] boundary conditions are tested")
@@ -1533,7 +1483,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
                 REQUIRE(v[500] == 7);
             }
         }
-
         WHEN("operator[] return type and reference semantics are tested")
         {
             Vector v = { 100 };
@@ -1546,7 +1495,6 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
                 REQUIRE(v.at(0) == 200);
             }
         }
-
         WHEN("operator[] vs at() comparison is performed")
         {
             Vector v = { 1, 2, 3 };
@@ -1599,7 +1547,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
                 REQUIRE(v[0] == 77);
             }
         }
-
         WHEN("const front() and back() are used on single element vector")
         {
             const Vector v = { 42 };
@@ -1612,7 +1559,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
             }
         }
     }
-
     GIVEN("multi-element vector")
     {
         WHEN("front() and back() are used on multi-element vector")
@@ -1642,7 +1588,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
                 REQUIRE(v.front() == 10);
             }
         }
-
         WHEN("const front() and back() are used on multi-element vector")
         {
             const Vector v = { 10, 20, 30, 40, 50 };
@@ -1657,7 +1602,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
             }
         }
     }
-
     GIVEN("reference semantics and consistency")
     {
         WHEN("front() and back() return type and reference semantics are tested")
@@ -1687,7 +1631,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
                 REQUIRE(const_back_ref == 2000);
             }
         }
-
         WHEN("front() and back() consistency with other access methods is tested")
         {
             Vector v = { 7, 8, 9, 10, 11 };
@@ -1718,7 +1661,6 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
                 REQUIRE(*(v.end() - 1) == 111);
             }
         }
-
         WHEN("front() and back() are used on large vector")
         {
             Vector v(static_cast<Vector::size_type>(1000), 5);
@@ -1764,7 +1706,6 @@ TEST_CASE("data() method", "[vector][data][access]")
             }
         }
     }
-
     GIVEN("single element vector")
     {
         WHEN("data() is called on single element vector")
@@ -1788,7 +1729,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 REQUIRE(v.front() == 99);
             }
         }
-
         WHEN("const data() is called on single element vector")
         {
             const Vector v   = { 42 };
@@ -1804,7 +1744,6 @@ TEST_CASE("data() method", "[vector][data][access]")
             }
         }
     }
-
     GIVEN("multi-element vector")
     {
         WHEN("data() is called on multi-element vector")
@@ -1833,7 +1772,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 REQUIRE(v.at(2) == 333);
             }
         }
-
         WHEN("const data() is called on multi-element vector")
         {
             const Vector v   = { 10, 20, 30, 40, 50 };
@@ -1855,7 +1793,6 @@ TEST_CASE("data() method", "[vector][data][access]")
             }
         }
     }
-
     GIVEN("pointer arithmetic and consistency")
     {
         WHEN("data() pointer arithmetic is performed")
@@ -1879,7 +1816,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 }
             }
         }
-
         WHEN("data() consistency with iterators is tested")
         {
             Vector v   = { 7, 8, 9, 10, 11 };
@@ -1900,7 +1836,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 }
             }
         }
-
         WHEN("data() is used on large vector")
         {
             Vector v(static_cast<Vector::size_type>(1000), 7);
@@ -1926,7 +1861,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 REQUIRE(v.at(500) == 555);
             }
         }
-
         WHEN("data() is used after vector operations")
         {
             Vector v = { 1, 2, 3 };
@@ -1945,7 +1879,6 @@ TEST_CASE("data() method", "[vector][data][access]")
                 REQUIRE(*(after_assign_ptr + 1) == 20);
             }
         }
-
         WHEN("data() return type verification is performed")
         {
             Vector        v  = { 100, 200 };
@@ -1954,8 +1887,6 @@ TEST_CASE("data() method", "[vector][data][access]")
             THEN("return types are correct")
             {
                 static_assert(std::is_same_v<decltype(v.data()), int*>);
-
-                const Vector& cv = v;
                 static_assert(std::is_same_v<decltype(cv.data()), const int*>);
             }
             THEN("pointers point to same location")
@@ -1991,7 +1922,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("single element vector")
     {
         WHEN("clear() is called")
@@ -2015,7 +1945,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("multi-element vector")
     {
         WHEN("clear() is called")
@@ -2039,7 +1968,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector with reserved capacity")
     {
         WHEN("clear() is called after reserving capacity")
@@ -2060,7 +1988,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("large vector")
     {
         WHEN("clear() is called")
@@ -2084,7 +2011,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector that needs to be cleared multiple times")
     {
         WHEN("clear() is called multiple times")
@@ -2103,7 +2029,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector for reuse after clearing")
     {
         WHEN("clear() is called then vector is reused")
@@ -2125,7 +2050,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector with custom allocator")
     {
         WHEN("clear() is called")
@@ -2147,7 +2071,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector with iterators")
     {
         WHEN("clear() is called")
@@ -2169,7 +2092,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             }
         }
     }
-
     GIVEN("vector to be cleared and then accessed")
     {
         WHEN("clear() is called followed by access methods")
@@ -2211,7 +2133,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector with elements")
     {
         WHEN("shrink_to_fit() is called when capacity equals size")
@@ -2233,7 +2154,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector after reserve")
     {
         WHEN("shrink_to_fit() is called after reserve")
@@ -2263,7 +2183,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector that was cleared after having capacity")
     {
         WHEN("shrink_to_fit() is called after clear")
@@ -2286,7 +2205,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector for multiple shrink_to_fit calls")
     {
         WHEN("shrink_to_fit() is called multiple times")
@@ -2316,7 +2234,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("large vector with many elements")
     {
         WHEN("shrink_to_fit() is called to preserve data integrity")
@@ -2358,7 +2275,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector with reserved capacity for iterator effects")
     {
         WHEN("shrink_to_fit() is called affecting pointers and iterators")
@@ -2382,7 +2298,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector with custom allocator")
     {
         WHEN("shrink_to_fit() is called")
@@ -2415,7 +2330,6 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
             }
         }
     }
-
     GIVEN("vector to test non-binding request behavior")
     {
         WHEN("shrink_to_fit() is called as non-binding request")
@@ -2458,7 +2372,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector with elements")
     {
         WHEN("reserve() is called with zero capacity")
@@ -2481,7 +2394,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
                 REQUIRE(v[2] == 3);
             }
         }
-
         WHEN("reserve() is called with less than current capacity")
         {
             Vector v                 = { 1, 2, 3, 4, 5 };
@@ -2504,7 +2416,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
                 REQUIRE(v[4] == 5);
             }
         }
-
         WHEN("reserve() is called equal to current capacity")
         {
             Vector v                 = { 1, 2, 3 };
@@ -2525,7 +2436,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
                 REQUIRE(v[2] == 3);
             }
         }
-
         WHEN("reserve() is called greater than current capacity")
         {
             Vector v                 = { 1, 2, 3 };
@@ -2548,7 +2458,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for large capacity reservation")
     {
         WHEN("reserve() is called with large capacity")
@@ -2577,7 +2486,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for multiple reserve calls")
     {
         WHEN("reserve() is called multiple times")
@@ -2606,7 +2514,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector to test data integrity preservation")
     {
         WHEN("reserve() is called after building vector")
@@ -2644,7 +2551,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector with custom allocator")
     {
         WHEN("reserve() is called")
@@ -2672,7 +2578,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for testing pointer and iterator effects")
     {
         WHEN("reserve() is called with significant capacity increase")
@@ -2696,7 +2601,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for testing reserve followed by operations")
     {
         WHEN("reserve() is called followed by various operations")
@@ -2728,7 +2632,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for testing reasonable capacity limits")
     {
         WHEN("reserve() is called with reasonable size")
@@ -2744,7 +2647,6 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
             }
         }
     }
-
     GIVEN("vector for testing exception safety")
     {
         WHEN("reserve() is called with reasonable increase")
@@ -2794,7 +2696,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("non-empty vector")
     {
         WHEN("resize() is called to zero")
@@ -2811,7 +2712,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("resize() is called to same size")
         {
             Vector v                 = { 10, 20, 30 };
@@ -2829,7 +2729,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
                 REQUIRE(v[2] == 30);
             }
         }
-
         WHEN("resize() is called to larger size")
         {
             Vector v = { 1, 2, 3 };
@@ -2855,7 +2754,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
                 REQUIRE(v[6] == 0);
             }
         }
-
         WHEN("resize() is called to smaller size")
         {
             Vector v                 = { 10, 20, 30, 40, 50 };
@@ -2876,7 +2774,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector with reserved capacity")
     {
         WHEN("resize() is called within existing capacity")
@@ -2907,7 +2804,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
                 }
             }
         }
-
         WHEN("resize() is called beyond existing capacity")
         {
             Vector v                 = { 1, 2, 3 };
@@ -2935,7 +2831,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector for multiple resize operations")
     {
         WHEN("resize() is called multiple times")
@@ -2968,7 +2863,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector with custom allocator")
     {
         WHEN("resize() is called")
@@ -3002,7 +2896,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector to test data integrity preservation")
     {
         WHEN("resize() is called to preserve and extend data")
@@ -3045,7 +2938,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector for iterator effects testing")
     {
         WHEN("resize() is called affecting iterators")
@@ -3072,7 +2964,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector for consistency testing with other methods")
     {
         WHEN("resize() is called and other access methods are used")
@@ -3105,7 +2996,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector that was cleared")
     {
         WHEN("resize() is called after clear")
@@ -3128,7 +3018,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector for large size testing")
     {
         WHEN("resize() is called with large size")
@@ -3157,7 +3046,6 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
             }
         }
     }
-
     GIVEN("vector for alternating size testing")
     {
         WHEN("resize() is called alternating between sizes")
@@ -3214,7 +3102,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("non-empty vector")
     {
         WHEN("resize() is called to zero with value")
@@ -3231,7 +3118,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
                 REQUIRE(v.begin() == v.end());
             }
         }
-
         WHEN("resize() is called to same size with value")
         {
             Vector v                 = { 10, 20, 30 };
@@ -3249,7 +3135,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
                 REQUIRE(v[2] == 30);
             }
         }
-
         WHEN("resize() is called to larger size with value")
         {
             Vector v = { 1, 2, 3 };
@@ -3275,7 +3160,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
                 REQUIRE(v[6] == 42);
             }
         }
-
         WHEN("resize() is called to smaller size with value")
         {
             Vector v                 = { 10, 20, 30, 40, 50 };
@@ -3296,7 +3180,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector with reserved capacity")
     {
         WHEN("resize() is called within existing capacity with value")
@@ -3327,7 +3210,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
                 }
             }
         }
-
         WHEN("resize() is called beyond existing capacity with value")
         {
             Vector v                 = { 1, 2, 3 };
@@ -3355,7 +3237,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for multiple resize operations with different values")
     {
         WHEN("resize() is called multiple times with different values")
@@ -3400,7 +3281,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for testing special values")
     {
         WHEN("resize() is called with negative values")
@@ -3419,7 +3299,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
                 REQUIRE(v[4] == -42);
             }
         }
-
         WHEN("resize() is called with zero value")
         {
             Vector v = { 1, 2, 3 };
@@ -3438,7 +3317,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector with custom allocator")
     {
         WHEN("resize() is called with value")
@@ -3472,7 +3350,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for large size testing with value")
     {
         WHEN("resize() is called with large size and value")
@@ -3500,7 +3377,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for testing extreme values")
     {
         WHEN("resize() is called with extreme integer values")
@@ -3530,7 +3406,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for consistency testing with other methods")
     {
         WHEN("resize() is called with value and other access methods are used")
@@ -3565,7 +3440,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector that was cleared")
     {
         WHEN("resize() is called with value after clear")
@@ -3588,7 +3462,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for iterator effects testing with value")
     {
         WHEN("resize() is called with value affecting iterators")
@@ -3615,7 +3488,6 @@ TEST_CASE("resize() with value method", "[vector][resize][modifiers][value]")
             }
         }
     }
-
     GIVEN("vector for mixed operations testing")
     {
         WHEN("resize() is called with value mixed with other operations")
