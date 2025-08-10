@@ -10,9 +10,7 @@
 // Phase 1 test type list - using int with pw::vector and std::vector for comparison
 using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
 
-TEMPLATE_LIST_TEST_CASE("Initializer list constructor",
-                        "[phase1][vector][constructor][init-list]",
-                        Phase1TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
 {
     using Vector = TestType;
     GIVEN("An initializer list")
@@ -68,11 +66,6 @@ TEMPLATE_LIST_TEST_CASE("Initializer list constructor",
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Default constructor", "[phase1][vector][constructor][default]", Phase1TestTypeList)
-{
-    using Vector = TestType;
     GIVEN("A default constructed vector")
     {
         WHEN("default constructed")
@@ -88,11 +81,6 @@ TEMPLATE_LIST_TEST_CASE("Default constructor", "[phase1][vector][constructor][de
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Count constructor", "[phase1][vector][constructor][count]", Phase1TestTypeList)
-{
-    using Vector = TestType;
     GIVEN("A vector constructed with count only")
     {
         WHEN("constructed with size 0")
@@ -134,13 +122,6 @@ TEMPLATE_LIST_TEST_CASE("Count constructor", "[phase1][vector][constructor][coun
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Count-value constructor",
-                        "[phase1][vector][constructor][count-value]",
-                        Phase1TestTypeList)
-{
-    using Vector = TestType;
     GIVEN("A vector constructed with count and value")
     {
         WHEN("constructed with size 0 and value 42")
@@ -182,11 +163,6 @@ TEMPLATE_LIST_TEST_CASE("Count-value constructor",
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Copy constructor", "[phase1][vector][constructor][copy]", Phase1TestTypeList)
-{
-    using Vector = TestType;
     GIVEN("A source vector")
     {
         WHEN("copying an empty vector")
@@ -241,11 +217,6 @@ TEMPLATE_LIST_TEST_CASE("Copy constructor", "[phase1][vector][constructor][copy]
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Move constructor", "[phase1][vector][constructor][move]", Phase1TestTypeList)
-{
-    using Vector = TestType;
     GIVEN("A source vector for moving")
     {
         WHEN("moving an empty vector")
@@ -279,14 +250,6 @@ TEMPLATE_LIST_TEST_CASE("Move constructor", "[phase1][vector][constructor][move]
             }
         }
     }
-}
-
-TEMPLATE_LIST_TEST_CASE("Iterator range constructor",
-                        "[phase1][vector][constructor][range]",
-                        Phase1TestTypeList)
-{
-    using Vector = TestType;
-
     GIVEN("A source container for iterator range")
     {
         WHEN("constructed from empty range")
