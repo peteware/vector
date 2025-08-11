@@ -14,7 +14,7 @@ AlignConsecutiveDeclarations:
 AllowShortFunctionsOnASingleLine: InlineOnly
 AlignTrailingComments: true
 AlwaysBreakAfterReturnType: TopLevelDefinitions
-AlwaysBreakTemplateDeclarations: true
+BreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:
@@ -41,7 +41,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None
 PenaltyReturnTypeOnItsOwnLine: 0
 PenaltyBreakAssignment: 50
-ReflowComments: false
+ReflowComments: Never
 SortIncludes: true
 SpaceAfterTemplateKeyword: false
 ...

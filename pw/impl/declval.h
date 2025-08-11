@@ -5,6 +5,7 @@ namespace pw {
 
 template<typename Type>
 Type
+// ReSharper disable once CppFunctionDoesntReturnValue
 declval() noexcept
 {
     static_assert(sizeof(Type) == 0, "Do not instantiate");

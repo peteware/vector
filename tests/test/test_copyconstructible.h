@@ -18,11 +18,12 @@ namespace pw::test {
  * T u = v;	// The value of u is equivalent to the value of v.
  * @endcode
  * The value of v is unchanged
+ *
  * @code
- * T(v)	        // The value of T(v) is equivalent to the value of v.
+ * v == T(v);	        // The value of T(v) is equivalent to the value of v.
  * @endcode
+ *
  * The value of v is unchanged.
- * 
  */
 struct CopyConstructible : public OpTracker
 {

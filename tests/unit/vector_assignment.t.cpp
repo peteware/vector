@@ -139,9 +139,8 @@ SCENARIO("Assignment operator", "[vector][operator=]")
         }
         WHEN("operator=(move) lhs.size() < rhs.size() but lhs allocated")
         {
-            constexpr Vector::size_type capacity = 10;
-            Vector                      lhs { 1, 2 };
-            Vector                      rhs { 1, 2, 3 };
+            Vector lhs { 1, 2 };
+            Vector rhs { 1, 2, 3 };
             lhs.reserve(rhs.size());
             lhs = pw::move(rhs);
             THEN("they are same")
