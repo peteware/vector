@@ -20,7 +20,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
     using Vector     = TestType;
     using value_type = Vector::value_type;
     using size_type  = Vector::size_type;
-    GIVEN("An initializer list")
+    GIVEN("Construct with initializer_list")
     {
         WHEN("constructed with empty initializer list")
         {
@@ -73,24 +73,9 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
             }
         }
     }
-    GIVEN("A default constructed vector")
+    GIVEN("Construct by default")
     {
         WHEN("default constructed")
-        {
-            Vector v;
-
-            THEN("the vector is empty")
-            {
-                Vector expected {};
-                REQUIRE(v.empty() == true);
-                REQUIRE(v.begin() == v.end());
-                REQUIRE(v == expected);
-            }
-        }
-    }
-    GIVEN("An empty vector")
-    {
-        WHEN("Nothing changes")
         {
             Vector v;
             THEN("empty() is true")
@@ -107,14 +92,24 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
             }
         }
     }
-    GIVEN("A vector of count values")
+    GIVEN("Construct with count")
     {
-        WHEN("Initialized with value")
+        WHEN("constructed with count 0")
+        {
+            Vector v(0);
+            THEN("the vector is empty")
+            {
+                Vector expected {};
+                REQUIRE(v.empty() == true);
+                REQUIRE(v.begin() == v.end());
+                REQUIRE(v == expected);
+            }
+        }
+        WHEN("constructed with count 10")
         {
             constexpr size_type  total = 10;
-            constexpr value_type value = 3;
-            Vector               v(total, value);
-
+            constexpr value_type value {};
+            Vector               v(total);
             THEN("empty() is false")
             {
                 REQUIRE(!v.empty());
@@ -150,79 +145,71 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
                 REQUIRE(v.end() - v.begin() == static_cast<typename Vector::difference_type>(total));
             }
         }
-    }
-    GIVEN("constexpr context")
-    {
-        WHEN("default constructor is used in constexpr")
-        {
-            constexpr auto test_constexpr = []() constexpr {
-                Vector v;
-                return v.empty();
-            };
-
-            THEN("compilation succeeds and runtime validation passes")
-            {
-                static_assert(test_constexpr());
-                REQUIRE(test_constexpr());
-            }
-        }
-        WHEN("initializer list constructor is used in constexpr")
-        {
-            constexpr auto test_constexpr = []() constexpr {
-                Vector v { 1, 2, 3 };
-                return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
-            };
-
-            THEN("runtime validation passes")
-            {
-                //static_assert(test_constexpr());
-                REQUIRE(test_constexpr());
-            }
-        }
-    }
-    GIVEN("A vector constructed with count only")
-    {
-        WHEN("constructed with size 0")
-        {
-            Vector v(0);
-
-            THEN("the vector is empty")
-            {
-                Vector expected {};
-                REQUIRE(v.empty() == true);
-                REQUIRE(v.begin() == v.end());
-                REQUIRE(v == expected);
-            }
-        }
-        WHEN("constructed with size 5")
-        {
-            Vector v(5);
-
-            THEN("the vector has 5 default-constructed elements")
-            {
-                Vector expected { 0, 0, 0, 0, 0 };
-                REQUIRE(v.size() == 5);
-                REQUIRE(v.empty() == false);
-                REQUIRE(v.capacity() >= 5);
-                REQUIRE(v == expected);
-            }
-        }
-        WHEN("constructed with size 1")
+        WHEN("constructed with count 1")
         {
             Vector v(1);
-
             THEN("the vector has 1 default-constructed element")
             {
                 Vector expected { 0 };
-                REQUIRE(v.size() == 1);
-                REQUIRE(v.empty() == false);
-                REQUIRE(v.capacity() >= 1);
                 REQUIRE(v == expected);
+            }
+            THEN("size() is 1")
+            {
+                REQUIRE(v.size() == 1);
+            }
+            THEN("it is empty")
+            {
+                REQUIRE(v.empty() == false);
+            }
+            THEN("capacity() >= 1")
+            {
+                REQUIRE(v.capacity() >= 1);
             }
         }
     }
-    GIVEN("A vector constructed with count and value")
+    GIVEN("Construct with (count, value)")
     {
+        WHEN("constructed with count=10, value=3)")
+        {
+            constexpr size_type  count = 10;
+            constexpr value_type value = 3;
+            Vector               v(count, value);
+
+            THEN("empty() is false")
+            {
+                REQUIRE(!v.empty());
+            }
+            THEN("size() is total")
+            {
+                REQUIRE(count == v.size());
+            }
+            THEN("capacity is at least size")
+            {
+                REQUIRE(v.capacity() >= v.size());
+            }
+            THEN("begin() returns element")
+            {
+                REQUIRE(v.begin() != v.end());
+                REQUIRE(*v.begin() == value);
+            }
+            THEN("end() returns element")
+            {
+                REQUIRE(v.begin() != v.end());
+                REQUIRE(*(v.end() - 1) == value);
+            }
+            THEN("all elements have correct value")
+            {
+                for (size_type i = 0; i < count; ++i)
+                {
+                    REQUIRE(v[i] == value);
+                }
+            }
+            THEN("iterators are valid")
+            {
+                REQUIRE(v.begin() < v.end());
+                REQUIRE(v.end() - v.begin() == static_cast<typename Vector::difference_type>(count));
+            }
+        }
         WHEN("constructed with size 0 and value 42")
         {
             Vector v(static_cast<Vector::size_type>(0), 42);
@@ -262,7 +249,36 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
             }
         }
     }
-    GIVEN("A source vector")
+    GIVEN("constexpr context")
+    {
+        WHEN("default constructor is used in constexpr")
+        {
+            constexpr auto test_constexpr = []() constexpr {
+                Vector v;
+                return v.empty();
+            };
+
+            THEN("compilation succeeds and runtime validation passes")
+            {
+                static_assert(test_constexpr());
+                REQUIRE(test_constexpr());
+            }
+        }
+        WHEN("initializer list constructor is used in constexpr")
+        {
+            constexpr auto test_constexpr = []() constexpr {
+                Vector v { 1, 2, 3 };
+                return v.size() == 3 && v[0] == 1 && v[1] == 2 && v[2] == 3;
+            };
+
+            THEN("runtime validation passes")
+            {
+                //static_assert(test_constexpr());
+                REQUIRE(test_constexpr());
+            }
+        }
+    }
+    GIVEN("Copy constructor")
     {
         WHEN("copying an empty vector")
         {
@@ -303,20 +319,8 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
                 REQUIRE(copy == source);
             }
         }
-        WHEN("copy constructor from larger vector")
-        {
-            Vector source { 10, 20, 30, 40, 50 };
-            Vector copy(source); // NOLINT(*-unnecessary-copy-initialization)
-
-            THEN("the copy has the source content")
-            {
-                Vector expected { 10, 20, 30, 40, 50 };
-                REQUIRE(copy == expected);
-                REQUIRE(copy == source);
-            }
-        }
     }
-    GIVEN("A source vector for moving")
+    GIVEN("Move constructor")
     {
         WHEN("moving an empty vector")
         {
@@ -349,13 +353,12 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
             }
         }
     }
-    GIVEN("A source container for iterator range")
+    GIVEN("Construct with range (iter1, iter2)")
     {
         WHEN("constructed from empty range")
         {
             Vector source {};
             Vector v(source.begin(), source.end());
-
             THEN("the vector is empty")
             {
                 Vector expected {};
@@ -439,7 +442,6 @@ TEMPLATE_LIST_TEST_CASE("Constructors with allocator_base<int>",
         {
             // constexpr vector(vector const& other);
             Vector v2(v1);
-
             THEN("allocators are equal")
             {
                 REQUIRE(v1.get_allocator() == v2.get_allocator());
