@@ -219,15 +219,26 @@ constexpr void
 vector<Type, Allocator>::assign(Iterator begin, Iterator end)
 {
     m_storage.reset();
-    size_type count = pw::distance(begin, end);
-    if (count == 0)
+    if constexpr (is_base_of<pw::forward_iterator_tag, Iterator>::value)
     {
-        return;
+        size_type count = pw::distance(begin, end);
+        if (count == 0)
+        {
+            return;
+        }
+        auto lambda = [begin = begin, end = end](pointer dest) -> void {
+            pw::uninitialized_copy(begin, end, dest);
+        };
+        m_storage.reserve(count, lambda);
     }
-    auto lambda = [begin = begin, end = end](pointer dest) -> void {
-        pw::uninitialized_copy(begin, end, dest);
-    };
-    m_storage.reserve(count, lambda);
+    else
+    {
+        while (begin != end)
+        {
+            push_back(*begin);
+            ++begin;
+        }
+    }
 }
 
 template<class Type, class Allocator>
