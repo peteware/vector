@@ -1,4 +1,5 @@
 #include "test_base_allocator.h"
+#include "test_input_iterator.h"
 
 #include <pw/algorithm>
 #include <pw/vector>
@@ -17,9 +18,11 @@ using Phase2TestTypeList = std::tuple<pw::vector<int, pw::test::allocator_base<i
 
 TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
 {
-    using Vector     = TestType;
-    using value_type = Vector::value_type;
-    using size_type  = Vector::size_type;
+    using Vector         = TestType;
+    using value_type     = Vector::value_type;
+    using size_type      = Vector::size_type;
+    using allocator_type = Vector::allocator_type;
+
     GIVEN("Construct with initializer_list")
     {
         WHEN("constructed with empty initializer list")
@@ -404,6 +407,19 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
                 Vector expected { 7, 8, 9 };
                 REQUIRE(v.size() == 3);
                 REQUIRE(v == expected);
+            }
+        }
+        WHEN("constructed from input iterator")
+        {
+            Vector                        v { 1, 2, 3, 4, 5 };
+            pw::test::test_input_iterator iter(v.begin());
+            pw::test::test_input_iterator end(v.end());
+            Vector                        constructed(iter, end);
+            THEN("the vector has the same elements")
+            {
+                Vector expected { 1, 2, 3, 4, 5 };
+                REQUIRE(constructed.size() == 5);
+                REQUIRE(constructed == expected);
             }
         }
     }

@@ -17,6 +17,7 @@ target_sources(pwtest PUBLIC
         test_defaultconstructible.h
         test_defaultcopyconstructible.h
         test_emplacemoveconstructible.h
+        test_input_iterator.h
         test_moveconstructible.h
         test_opcounter.h
         test_optracker.h

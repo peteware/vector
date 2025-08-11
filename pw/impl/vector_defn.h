@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_VECTOR_DEFN_H
 
 #include "fill_n.h"
+#include "is_base_of.h"
 #include "move_backward.h"
 
 #include <pw/impl/vector_decl.h>
@@ -94,12 +95,24 @@ template<class Iterator>
 constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocator_type const& alloc)
     : m_storage(alloc)
 {
-    size_type count  = pw::distance(first, last);
+    if constexpr (pw::is_base_of<pw::forward_iterator_tag, Iterator>::value)
+    {
+        size_type count  = pw::distance(first, last);
 
-    auto      lambda = [begin = first, end = last](pointer dest) -> void {
-        pw::uninitialized_copy(begin, end, dest);
-    };
-    m_storage.reserve(count, lambda);
+        auto      lambda = [begin = first, end = last](pointer dest) -> void {
+            pw::uninitialized_copy(begin, end, dest);
+        };
+        m_storage.reserve(count, lambda);
+    }
+    else
+    {
+        // This is an input iterator so we need to grow as we go
+        while (first != last)
+        {
+            push_back(*first);
+            ++first;
+        }
+    }
 }
 
 template<class Type, class Allocator>
