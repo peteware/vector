@@ -1,4 +1,6 @@
 
+#include "test_input_iterator.h"
+
 #include <test_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_same.h>
@@ -542,6 +544,26 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, first, last)", "[vector][insert][test]
                 REQUIRE(generate.last_value == v.back());
             }
         }
+        WHEN("insert(end, first, last) is called with input iterators")
+        {
+            typename Vector::iterator iter;
+            v.reserve(v.size() + generate.values.size());
+            pw::test::test_input_iterator<typename Vector::iterator> first { generate.values.begin() };
+            pw::test::test_input_iterator<typename Vector::iterator> last { generate.values.end() };
+            iter = v.insert(v.end(), first, last);
+            THEN("size() is increased")
+            {
+                REQUIRE(2 * generate.values.size() == v.size());
+            }
+            THEN("iter is at start of insert")
+            {
+                REQUIRE(v.begin() + generate.values.size() == iter);
+            }
+            THEN("back() returns same value")
+            {
+                REQUIRE(generate.last_value == v.back());
+            }
+        }
     }
 }
 
@@ -629,8 +651,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
     size_t                    count = 5;
     GIVEN("An empty vector")
     {
-        Vector                             v;
-        pw::test::DefaultCopyConstructible copyObject;
+        Vector v;
         WHEN("insert(count) at begin")
         {
             pw::test::DefaultCopyConstructible copyObject;

@@ -737,7 +737,8 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
 
     while (first != last)
     {
-        dest = insert(dest, *first++) + 1;
+        dest = insert(dest, *first) + 1;
+        ++first;
     }
     return m_storage.begin() + offset;
 }
