@@ -18,7 +18,6 @@
 TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeListInt)
 {
     using Vector     = TestType;
-    using value_type = Vector::value_type;
 
     GIVEN("An empty vector of TestType")
     {

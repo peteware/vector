@@ -18,10 +18,9 @@ using Phase2TestTypeList = std::tuple<pw::vector<int, pw::test::allocator_base<i
 
 TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
 {
-    using Vector         = TestType;
-    using value_type     = Vector::value_type;
-    using size_type      = Vector::size_type;
-    using allocator_type = Vector::allocator_type;
+    using Vector     = TestType;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
 
     GIVEN("Construct with initializer_list")
     {

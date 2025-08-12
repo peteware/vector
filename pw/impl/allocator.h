@@ -25,14 +25,14 @@ template<class Type>
 constexpr Type*
 allocator<Type>::allocate(size_type count)
 {
-    return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    return static_cast<Type*>(operator new(count * sizeof(Type)));
 }
 
 template<class Type>
 constexpr void
 allocator<Type>::deallocate(Type* ptr, size_type count)
 {
-    if (pw::is_constant_evaluated())
+    if (is_constant_evaluated())
     {
         // In constant evaluation, we cannot use `::operator delete` as it may not be available.
         // This is a workaround to avoid issues in constant expressions.
