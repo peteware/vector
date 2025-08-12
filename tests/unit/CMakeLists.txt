@@ -5,6 +5,7 @@ add_executable(unittest
         copy.t.cpp
         cstddef.t.cpp
         distance.t.cpp
+        equal.t.cpp
         exchange.t.cpp
         is_constructible.t.cpp
         is_empty.t.cpp
@@ -13,6 +14,7 @@ add_executable(unittest
         reverse_iterator.t.cpp
         storage.t.cpp
         swap.t.cpp
+        uninitialized_copy.t.cpp
         uninitialized_move.t.cpp
         vector_1.t.cpp
         vector_access.t.cpp
@@ -20,6 +22,7 @@ add_executable(unittest
         vector_assignment.t.cpp
         vector_capacity.t.cpp
         vector_clear.t.cpp
+        vector_compare.t.cpp
         vector_constructor.t.cpp
         vector_constructor_exception_safety.t.cpp
         vector_emplace.t.cpp
@@ -31,12 +34,9 @@ add_executable(unittest
         vector_pop_back.t.cpp
         vector_push_back.t.cpp
         vector_resize.t.cpp
-        vector_compare.t.cpp
-        uninitialized_copy.t.cpp
 )
 #target_include_directories( unittest PRIVATE .. ../test ../.. )
 
 target_link_libraries(unittest pw catch2 pwtest)
 add_test(NAME unittest
         COMMAND unittest)
-
