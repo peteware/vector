@@ -3,10 +3,10 @@
 
 #include <pw/vector>
 #include <string>
+#include <test_base_allocator.h>
+#include <test_permute.h>
 #include <tuple>
 #include <vector>
-
-#include <test_permute.h>
 
 namespace pw::test {
 // I use this type list to make sure tests work with std container
@@ -18,6 +18,13 @@ using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::v
 // This just for pw::vector implementation
 
 using TestTypeListInt = std::tuple<pw::vector<int>, std::vector<int>>;
+
+// Phase 1 test type list - using int with pw::vector and std::vector for comparison
+using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
+// Phase 2 test type list - Adds test::allocator_base to track its usage
+using Phase2TestTypeList = std::tuple<pw::vector<int, pw::test::allocator_base<int>>,
+                                      std::vector<int, pw::test::allocator_base<int>>>;
+
 } // namespace pw::test
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

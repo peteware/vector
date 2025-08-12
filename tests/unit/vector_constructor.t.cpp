@@ -1,5 +1,6 @@
 #include "test_base_allocator.h"
 #include "test_input_iterator.h"
+#include "test_testtype.h"
 
 #include <pw/algorithm>
 #include <pw/vector>
@@ -10,13 +11,9 @@
 
 #include <catch2/catch.hpp>
 
-// Phase 1 test type list - using int with pw::vector and std::vector for comparison
-using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
-// Phase 2 test type list - Adds test::allocator_base to track its usage
-using Phase2TestTypeList = std::tuple<pw::vector<int, pw::test::allocator_base<int>>,
-                                      std::vector<int, pw::test::allocator_base<int>>>;
-
-TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]", Phase1TestTypeList)
+TEMPLATE_LIST_TEST_CASE("Constructors with int",
+                        "[phase1][vector][constructor]",
+                        pw::test::Phase1TestTypeList)
 {
     using Vector     = TestType;
     using value_type = Vector::value_type;
@@ -426,7 +423,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int", "[phase1][vector][constructor]"
 
 TEMPLATE_LIST_TEST_CASE("Constructors with allocator_base<int>",
                         "[phase2][vector][constructor]",
-                        Phase2TestTypeList)
+                        pw::test::Phase2TestTypeList)
 {
     using Vector         = TestType;
     using value_type     = Vector::value_type;
