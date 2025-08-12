@@ -3,8 +3,7 @@
 
 #include <stdexcept>
 
-namespace pw {
-namespace test {
+namespace pw { namespace test {
 
 // Helper class that throws on construction after N instances
 class ThrowingType
@@ -40,6 +39,7 @@ public:
     ThrowingType(ThrowingType&& other) noexcept(false)
         : value(other.value)
     {
+        other.value = -other.value;
         if (should_throw_on_move || (++construction_count > throw_after_n && throw_after_n >= 0))
         {
             --construction_count;
@@ -47,7 +47,11 @@ public:
         }
     }
 
-    ~ThrowingType() { --construction_count; }
+    ~ThrowingType()
+    {
+        --construction_count;
+        value = -2;
+    }
 
     static void reset()
     {
@@ -64,7 +68,6 @@ inline int  ThrowingType::throw_after_n        = -1;
 inline bool ThrowingType::should_throw_on_copy = false;
 inline bool ThrowingType::should_throw_on_move = false;
 
-} // namespace test
-} // namespace pw
+}} // namespace pw::test
 
 #endif // PW_TEST_THROWINGTYPE_H

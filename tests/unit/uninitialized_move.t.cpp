@@ -1,3 +1,5 @@
+#include "test_throwingtype.h"
+
 #include <catch2/catch.hpp>
 
 #include <pw/impl/equal.h>
@@ -40,8 +42,7 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
     GIVEN("Arrays of int")
     {
         constexpr int src[] = { 1, 2, 3 };
-        int       dst[] = { 4, 5, 6 };
-
+        int           dst[] = { 4, 5, 6 };
         WHEN("move the int from src to dst")
         {
             pw::uninitialized_move(&src[0], &src[3], &dst[0]);
@@ -49,10 +50,39 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             {
                 REQUIRE(src[0] == 1);
             }
-
             THEN("src and dst same")
             {
                 REQUIRE(pw::equal(&dst[0], &dst[3], &src[0], &src[3]));
+            }
+        }
+    }
+    GIVEN("Two arrays of ThrowingType")
+    {
+        using ThrowingType = pw::test::ThrowingType;
+        ThrowingType::reset();
+        ThrowingType src[5] = {
+            ThrowingType(1), ThrowingType(2), ThrowingType(3), ThrowingType(4), ThrowingType(5)
+        };
+        ThrowingType dest[5];
+        ThrowingType::reset();
+        WHEN("move the ThrowingType from src to dest")
+        {
+            ThrowingType::throw_after_n = 2;
+            REQUIRE_THROWS(pw::uninitialized_move(&src[0], &src[5], &dest[0]));
+            THEN("move constructor called; destructor not")
+            {
+                REQUIRE(ThrowingType::construction_count == 0);
+            }
+            THEN("values are moved, too")
+            {
+                REQUIRE(src[0].value == -1);  // ThrowingType move constructor sets value to -other.value
+                REQUIRE(src[1].value == -2);  // ThrowingType move constructor sets value to -other.value
+                REQUIRE(src[2].value == -3);  // ThrowingType move constructor sets value to -other.value
+                REQUIRE(dest[0].value == -2); // ThrowingType destructor sets value to -2
+                REQUIRE(dest[1].value == -2); // ThrowingType destructor sets value to -2
+                REQUIRE(dest[2].value == 3);  // Sets value = other.value before exception is raised
+                REQUIRE(dest[3].value == 0);
+                REQUIRE(dest[4].value == 0);
             }
         }
     }

@@ -28,7 +28,7 @@ namespace pw {
  *         are destroyed and the function has no effect.
  */
 template<class InputIterator, class OutputIterator>
-void
+constexpr void
 uninitialized_copy(InputIterator begin, InputIterator end, OutputIterator out)
 {
     OutputIterator current = out;

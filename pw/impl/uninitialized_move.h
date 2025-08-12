@@ -22,7 +22,7 @@ namespace pw {
  * @param begin Iterator to the first element in the source range
  * @param end Iterator to one past the last element in the source range
  * @param out Iterator to the start of the uninitialized destination range
- *
+ * @return OutputIterator pointing to one past the last element constructed in the destination range.
  * @throws Any exception thrown by the element type's move constructor.
  *         Strong exception guarantee: if an exception is thrown during the
  *         initialization of any element, all previously constructed elements
@@ -33,7 +33,7 @@ namespace pw {
  *       unspecified state, as they have been moved from.
  */
 template<class InputIterator, class OutputIterator>
-void
+OutputIterator
 uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
 {
     OutputIterator current = out;
@@ -52,6 +52,7 @@ uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
         pw::destroy(out, current);
         throw;
     }
+    return current;
 }
 } // namespace pw
 #endif /*  INCLUDED_PW_IMPL_UNINITIALIZED_MOVE_CONSTRUCT_H */
