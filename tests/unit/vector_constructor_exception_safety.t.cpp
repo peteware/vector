@@ -2,45 +2,10 @@
 #include <new>
 #include <pw/vector>
 #include <stdexcept>
+#include <test_multi_exception_type.h>
 #include <test_throwing_allocator.h>
 #include <test_throwingtype.h>
 
-namespace {
-class MultiExceptionType
-{
-public:
-    static int  construction_count;
-    static bool throw_bad_alloc;
-    static bool throw_runtime_error;
-
-    MultiExceptionType()
-    {
-        ++construction_count;
-        if (throw_bad_alloc)
-        {
-            --construction_count;
-            throw std::bad_alloc();
-        }
-        if (throw_runtime_error)
-        {
-            --construction_count;
-            throw std::runtime_error("test");
-        }
-    }
-
-    ~MultiExceptionType() { --construction_count; }
-
-    static void reset()
-    {
-        construction_count  = 0;
-        throw_bad_alloc     = false;
-        throw_runtime_error = false;
-    }
-};
-int  MultiExceptionType::construction_count  = 0;
-bool MultiExceptionType::throw_bad_alloc     = false;
-bool MultiExceptionType::throw_runtime_error = false;
-} // namespace
 
 TEST_CASE("Constructor Exception Safety", "[vector][constructor][exception_safety]")
 {
@@ -289,10 +254,10 @@ TEST_CASE("Constructor Exception Safety - Edge Cases", "[vector][constructor][ed
 
     SECTION("Multiple exception types")
     {
-        MultiExceptionType::reset();
-        MultiExceptionType::throw_runtime_error = true;
+        pw::test::MultiExceptionType::reset();
+        pw::test::MultiExceptionType::throw_runtime_error = true;
 
-        REQUIRE_THROWS_AS(pw::vector<MultiExceptionType>(5), std::runtime_error);
-        REQUIRE(MultiExceptionType::construction_count == 0);
+        REQUIRE_THROWS_AS(pw::vector<pw::test::MultiExceptionType>(5), std::runtime_error);
+        REQUIRE(pw::test::MultiExceptionType::construction_count == 0);
     }
 }
