@@ -16,7 +16,7 @@ TEMPLATE_LIST_TEST_CASE("Test assign()", "[vector][assign]", pw::test::TestTypeL
     using Vector     = TestType;
     using value_type = Vector::value_type;
 
-    GIVEN("An empty vector of TestType")
+    GIVEN("An empty vector")
     {
         Vector v;
         WHEN("assign(count,value) and lhs is empty")

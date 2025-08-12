@@ -28,21 +28,19 @@ struct Storage2
     constexpr Storage2(allocator_type const& alloc, size_type count);
     constexpr ~Storage2();
 
-    constexpr void               reserve(size_type count, std::function<void(pointer begin)> const& func);
-    constexpr void               reserve(size_type count);
-    constexpr void               reset();
-    [[nodiscard]] constexpr bool empty() const noexcept;
-    constexpr pointer            begin() noexcept;
-    constexpr const_pointer      begin() const noexcept;
-    constexpr pointer            end() noexcept;
-    constexpr const_pointer      end() const noexcept;
-    constexpr Storage2&          set_size(size_type size) noexcept;
-    constexpr size_type          size() const noexcept;
-    constexpr size_type          allocated() const noexcept;
-    [[nodiscard]] constexpr size_type          calc_size() const noexcept;
-    constexpr allocator_type&    allocator() noexcept;
-    constexpr allocator_type     get_allocator() const;
-    constexpr void               swap(Storage2& other, bool swap_allocator)
+    constexpr void                    reset();
+    [[nodiscard]] constexpr bool      empty() const noexcept;
+    constexpr pointer                 begin() noexcept;
+    constexpr const_pointer           begin() const noexcept;
+    constexpr pointer                 end() noexcept;
+    constexpr const_pointer           end() const noexcept;
+    constexpr Storage2&               set_size(size_type size) noexcept;
+    constexpr size_type               size() const noexcept;
+    constexpr size_type               allocated() const noexcept;
+    [[nodiscard]] constexpr size_type calc_size() const noexcept;
+    constexpr allocator_type&         allocator() noexcept;
+    constexpr allocator_type          get_allocator() const;
+    constexpr void                    swap(Storage2& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
 
@@ -78,85 +76,6 @@ constexpr Storage2<Type, Allocator>::~Storage2()
 {
     pw::destroy(m_begin, m_begin + m_size);
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
-}
-
-/**
- * @brief Reserves storage for at least the specified number of elements.
- *
- * Allocates new memory for at least `count` elements and moves existing elements
- * to the new storage. The size remains unchanged. This is typically used to
- * ensure sufficient capacity before adding elements.
- *
- * @param count The minimum number of elements to reserve space for.
- * @param func Function to call with the new storage begin pointer for element initialization.
- *
- * @throws Any exception thrown by the allocator or element move constructors.
- *         If an exception occurs during destruction of old elements, the new
- *         memory is deallocated and the exception is rethrown, leaving the
- *         storage in a valid but unspecified state.
- *
- * @post If successful, allocated() >= count. Existing elements are preserved
- *       and size() remains unchanged.
- *
- * @complexity Linear for moving existing elements.
- *
- * @note If count <= allocated(), this function has no effect.
- * @note Strong exception safety: if an exception is thrown, the original
- *       state is preserved (except for destructor exceptions).
- */
-template<class Type, class Allocator>
-constexpr void
-Storage2<Type, Allocator>::reserve(size_type count, std::function<void(pointer begin)> const& func)
-{
-    if (count > 0)
-    {
-        reserve(count);
-        func(begin());
-        set_size(count);
-    }
-}
-
-/**
- * @brief Reserves storage for at least the specified number of elements and initializes them.
- *
- * Allocates memory for at least `count` elements, moves existing elements to the new storage,
- * calls the provided function to initialize the new elements, and updates the size.
- *
- * @param count The number of elements to reserve space for. Must be greater than 0.
- *
- * @throws Any exception thrown by the allocator, element move constructors, or the
- *         initialization function. If an exception is thrown, the storage remains in
- *         a valid but unspecified state.
- *
- * @pre count > 0
- * @post If successful, size() == count and allocated() >= count
- *
- * @complexity Linear in the number of existing elements (for moving) plus the complexity
- *             of the initialization function.
- */
-template<class Type, class Allocator>
-constexpr void
-Storage2<Type, Allocator>::reserve(size_type count)
-{
-    pointer tmp = allocator_traits<Allocator>::allocate(m_alloc, count);
-
-    pw::uninitialized_move(begin(), end(), tmp);
-    /*
-     * If a destructor throws (which is strongly discouraged) then
-     * this is left in a valid but unspecified state.  The memory
-     * is deallocated
-     */
-    try
-    {
-        pw::destroy(begin(), end());
-    }
-    catch (...)
-    {
-        allocator_traits<Allocator>::deallocate(m_alloc, tmp, count);
-        throw;
-    }
-    pw::swap(tmp, m_begin);
-    pw::swap(count, m_allocated);
 }
 
 template<class Type, class Allocator>
