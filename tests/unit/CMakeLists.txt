@@ -12,7 +12,6 @@ add_executable(unittest
         memory.t.cpp
         move.t.cpp
         reverse_iterator.t.cpp
-        storage.t.cpp
         swap.t.cpp
         uninitialized_copy.t.cpp
         uninitialized_move.t.cpp

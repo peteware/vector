@@ -13,6 +13,6 @@ target_sources(pw-internal INTERFACE
         extract_or.h
         is_supported.h
         meta.h
-        storage.h
+        storage2.h
 )
 target_link_libraries(pw-internal INTERFACE pw-impl)
