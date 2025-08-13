@@ -4,7 +4,7 @@
 #include <test_allocator_move_assignment.h>
 #include <test_allocator_swapable.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 TEST_CASE("swap() uses allocator", "[swap][allocator]")
 {

@@ -3,7 +3,7 @@
 #include <test_copyconstructible.h>
 #include <test_defaultcopyconstructible.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("copy", "[copy]")
 {

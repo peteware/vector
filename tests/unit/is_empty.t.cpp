@@ -1,6 +1,6 @@
 #include <pw/impl/is_empty.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("is_empty", "[type_traits]")
 {

@@ -1,7 +1,7 @@
 #include <pw/vector>
 #include <test_allocator_move_assignment.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
 {

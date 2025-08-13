@@ -3,7 +3,7 @@
 
 #include <test_emplacemoveconstructible.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("Allocator traits", "[allocator_traits]")
 {

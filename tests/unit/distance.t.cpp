@@ -1,16 +1,16 @@
 #include <pw/impl/distance.h>
 
-#include <test/test_random_access_iterator.h>
+#include <test_random_access_iterator.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("validate distance() algorithm", "[distance][algorithm]")
 {
     GIVEN("Two pointers")
     {
         constexpr char str[] = "abcdef";
-        char const* s     = &str[0];
-        char const* e     = &str[4];
+        char const*    s     = &str[0];
+        char const*    e     = &str[4];
         WHEN("get the distance")
         {
             const pw::ptrdiff_t d = pw::distance(s, e);

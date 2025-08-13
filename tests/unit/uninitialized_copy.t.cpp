@@ -1,6 +1,6 @@
+#include <catch2/catch_all.hpp>
 #include <pw/impl/destroy.h>
 #include <pw/impl/uninitialized_copy.h>
-#include <tests/catch2/catch.hpp>
 #include <tests/test/test_throwingtype.h>
 
 SCENARIO("uninitialized_copy() handles exceptions", "[uninitialized_copy]")

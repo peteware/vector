@@ -1,6 +1,6 @@
 #include <pw/impl/is_constructible.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("is_constructible", "[type_traits]")
 {

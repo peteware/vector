@@ -3,7 +3,7 @@
 #include <test_same.h>
 #include <test_testtype.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include <pw/algorithm>
 

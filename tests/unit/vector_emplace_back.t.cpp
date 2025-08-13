@@ -2,7 +2,7 @@
 #include <test_testtype.h>
 #include <test_values.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::test::TestTypeList)
 {

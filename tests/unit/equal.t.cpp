@@ -1,5 +1,5 @@
+#include <catch2/catch_all.hpp>
 #include <pw/impl/equal.h>
-#include <tests/catch2/catch.hpp>
 
 SCENARIO("pw::equal() compares integer arrays", "[equal]")
 {

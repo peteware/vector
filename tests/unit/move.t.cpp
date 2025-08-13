@@ -5,7 +5,7 @@
 #include <test_moveconstructible.h>
 #include <test_opcounter.h>
 
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 SCENARIO("move", "[move]")
 {

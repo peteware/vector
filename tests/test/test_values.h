@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <pw/impl/forward.h>
-#include <test/test_permute.h>
+#include <test_permute.h>
 
 namespace pw::test {
 
