@@ -11,12 +11,6 @@
 
 namespace pw {
 
-template<typename T, typename = void>
-constexpr bool is_defined = false;
-
-template<typename T>
-constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
-
 /**
  * @brief Provides a uniform interface to allocator types.
  *
@@ -30,14 +24,14 @@ constexpr bool is_defined<T, decltype(sizeof(T), void())> = true;
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type     = Alloc;
-    using value_type         = Alloc::value_type;
-    using pointer            = pointer_traits<value_type*>::pointer;
-    using const_pointer      = pointer_traits<pointer>::template rebind<const value_type>;
-    using void_pointer       = pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer = pointer_traits<pointer>::template rebind<const void>;
-    using difference_type    = pointer_traits<pointer>::difference_type;
-    using size_type          = make_unsigned<difference_type>::type;
+    using allocator_type                         = Alloc;
+    using value_type                             = Alloc::value_type;
+    using pointer                                = pointer_traits<value_type*>::pointer;
+    using const_pointer                          = pointer_traits<pointer>::template rebind<const value_type>;
+    using void_pointer                           = pointer_traits<pointer>::template rebind<void>;
+    using const_void_pointer                     = pointer_traits<pointer>::template rebind<const void>;
+    using difference_type                        = pointer_traits<pointer>::difference_type;
+    using size_type                              = make_unsigned<difference_type>::type;
     using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
     using propagate_on_container_move_assignment = decltype(internal::detect_prop_on_move<Alloc>(0));
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
