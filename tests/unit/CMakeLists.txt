@@ -28,13 +28,13 @@ add_executable(unittest
         vector_emplace_back.t.cpp
         vector_erase.t.cpp
         vector_insert.t.cpp
-        vector_int.t.cpp
         vector_iter.t.cpp
         vector_pop_back.t.cpp
         vector_push_back.t.cpp
         vector_reserve.t.cpp
         vector_resize.t.cpp
         vector_shrink_to_fit.t.cpp
+        vector_swap.t.cpp
 )
 #target_include_directories( unittest PRIVATE .. ../test ../.. )
 

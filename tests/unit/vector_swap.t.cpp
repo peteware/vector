@@ -3,13 +3,10 @@
 #include "test_allocator_swapable.h"
 
 #include <pw/vector>
-#include <unistd.h>
-
 #include <pw/impl/move.h>
-
 #include <catch2/catch.hpp>
 
-TEST_CASE("Swap uses allocator", "[swap][allocator]")
+TEST_CASE("swap() uses allocator", "[swap][allocator]")
 {
     //
     // constexpr void
