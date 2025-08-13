@@ -3,7 +3,8 @@
 
 #include <pw/algorithm>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 /*
  * Type requirements:
@@ -19,7 +20,7 @@
  */
 TEMPLATE_LIST_TEST_CASE("capacity methods", "[vector][capacity]", pw::test::TestTypeList)
 {
-    using Vector     = TestType;
+    using Vector = TestType;
 
     GIVEN("An empty vector of TestType")
     {

@@ -8,7 +8,8 @@
 #include <tuple>
 #include <vector>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 TEMPLATE_LIST_TEST_CASE("Constructors with int",
                         "[phase1][vector][constructor]",

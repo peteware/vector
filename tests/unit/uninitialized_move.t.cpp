@@ -4,7 +4,7 @@
 #include <test_opcounter.h>
 #include <test_throwingtype.h>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")
 {

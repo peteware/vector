@@ -1,7 +1,7 @@
 #include <pw/impl/reverse_iterator.h>
 #include <pw/impl/size.h>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 SCENARIO("check reverse_iterator")
 {

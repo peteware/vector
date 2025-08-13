@@ -1,7 +1,8 @@
 #include <test_emplacemoveconstructible.h>
 #include <test_testtype.h>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 TEMPLATE_LIST_TEST_CASE("emplace()", "[vector][func][emplace]", pw::test::TestTypeList)
 {

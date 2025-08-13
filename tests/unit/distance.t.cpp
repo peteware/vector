@@ -2,7 +2,7 @@
 
 #include <test_random_access_iterator.h>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 SCENARIO("validate distance() algorithm", "[distance][algorithm]")
 {

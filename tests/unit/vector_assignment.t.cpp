@@ -1,13 +1,14 @@
 #include <pw/algorithm>
 #include <pw/impl/move.h>
 #include <pw/vector>
+#include <test_allocator_base.h>
 #include <test_allocator_copy_assignment.h>
 #include <test_allocator_move_assignment.h>
 #include <test_allocator_swapable.h>
-#include <test_allocator_base.h>
 #include <test_testtype.h>
 
-#include <catch2/catch_all.hpp>
+#include <catch2/catch_template_test_macros.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 /*
  * Type Requirements:
