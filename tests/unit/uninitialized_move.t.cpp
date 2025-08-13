@@ -1,12 +1,10 @@
-#include "test_throwingtype.h"
-
-#include <catch2/catch.hpp>
-
 #include <pw/impl/equal.h>
 #include <pw/impl/uninitialized_move.h>
-
 #include <test_copyconstructible.h>
 #include <test_opcounter.h>
+#include <test_throwingtype.h>
+
+#include <catch2/catch.hpp>
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")
 {

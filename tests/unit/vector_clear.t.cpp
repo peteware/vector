@@ -1,7 +1,6 @@
-#include "test_allocator_move_assignment.h"
-
 #include <pw/algorithm>
 #include <pw/vector>
+#include <test_allocator_move_assignment.h>
 #include <test_testtype.h>
 #include <test_values.h>
 
@@ -13,7 +12,7 @@
  */
 TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeList)
 {
-    using Vector     = TestType;
+    using Vector = TestType;
 
     GIVEN("An empty vector of TestType")
     {

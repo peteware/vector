@@ -1,18 +1,16 @@
 
-#include "test_input_iterator.h"
-
+#include <pw/algorithm>
 #include <test_defaultcopyconstructible.h>
+#include <test_input_iterator.h>
 #include <test_permute.h>
 #include <test_same.h>
 #include <test_testtype.h>
 #include <test_values.h>
 
-#include <pw/algorithm>
-
-#include <catch2/catch.hpp>
-
 #include <iostream>
 #include <iterator>
+
+#include <catch2/catch.hpp>
 
 /*
  * Type requirements:

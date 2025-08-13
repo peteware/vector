@@ -1,6 +1,6 @@
-#include "test_allocator_move_assignment.h"
-
 #include <pw/vector>
+#include <test_allocator_move_assignment.h>
+
 #include <catch2/catch.hpp>
 
 TEST_CASE("reserve() method", "[vector][reserve][capacity]")

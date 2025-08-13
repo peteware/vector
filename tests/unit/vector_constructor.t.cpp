@@ -1,9 +1,8 @@
-#include "test_base_allocator.h"
-#include "test_input_iterator.h"
-#include "test_testtype.h"
-
 #include <pw/algorithm>
 #include <pw/vector>
+#include <test_base_allocator.h>
+#include <test_input_iterator.h>
+#include <test_testtype.h>
 
 #include <initializer_list>
 #include <tuple>

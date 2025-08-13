@@ -1,9 +1,9 @@
-#include "test_allocator_copy_assignment.h"
-#include "test_allocator_move_assignment.h"
-#include "test_allocator_swapable.h"
-
-#include <pw/vector>
 #include <pw/impl/move.h>
+#include <pw/vector>
+#include <test_allocator_copy_assignment.h>
+#include <test_allocator_move_assignment.h>
+#include <test_allocator_swapable.h>
+
 #include <catch2/catch.hpp>
 
 TEST_CASE("swap() uses allocator", "[swap][allocator]")

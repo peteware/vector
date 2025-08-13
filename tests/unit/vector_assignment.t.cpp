@@ -1,13 +1,11 @@
-#include "test_allocator_copy_assignment.h"
-#include "test_allocator_move_assignment.h"
-#include "test_allocator_swapable.h"
-#include "test_base_allocator.h"
-
-#include <test_testtype.h>
-
 #include <pw/algorithm>
 #include <pw/impl/move.h>
 #include <pw/vector>
+#include <test_allocator_copy_assignment.h>
+#include <test_allocator_move_assignment.h>
+#include <test_allocator_swapable.h>
+#include <test_base_allocator.h>
+#include <test_testtype.h>
 
 #include <catch2/catch.hpp>
 
