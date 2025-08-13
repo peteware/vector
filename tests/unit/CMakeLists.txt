@@ -34,6 +34,7 @@ add_executable(unittest
         vector_push_back.t.cpp
         vector_reserve.t.cpp
         vector_resize.t.cpp
+        vector_shrink_to_fit.t.cpp
 )
 #target_include_directories( unittest PRIVATE .. ../test ../.. )
 
