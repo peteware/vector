@@ -472,10 +472,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with allocator_base<int>",
             }
             THEN("all elements are copied correctly")
             {
-                REQUIRE(v1[0] == v2[0]);
-                REQUIRE(v1[1] == v2[1]);
-                REQUIRE(v1[2] == v2[2]);
-                REQUIRE(v1[3] == v2[3]);
+                REQUIRE(v1 == v2);
             }
             THEN("iterators are valid")
             {

@@ -4,10 +4,12 @@
 #include <test_defaultcopyconstructible.h>
 #include <test_moveconstructible.h>
 #include <test_opcounter.h>
+#include <test_testtype.h>
 
+#include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-SCENARIO("move", "[move]")
+TEMPLATE_LIST_TEST_CASE("move", "[move]", pw::test::Phase2TestTypeList)
 {
     GIVEN("A MoveConstructible object")
     {
