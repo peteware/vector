@@ -1,6 +1,6 @@
 #include <pw/algorithm>
 #include <pw/vector>
-#include <test_base_allocator.h>
+#include <test_allocator_base.h>
 #include <test_input_iterator.h>
 #include <test_testtype.h>
 

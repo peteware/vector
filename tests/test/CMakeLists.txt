@@ -12,7 +12,7 @@ target_sources(pwtest PUBLIC
         test_allocator_copy_assignment.h
         test_allocator_move_assignment.h
         test_allocator_swapable.h
-        test_base_allocator.h
+        test_allocator_base.h
         test_copyconstructible.h
         test_defaultconstructible.h
         test_defaultcopyconstructible.h

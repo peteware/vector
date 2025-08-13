@@ -2,7 +2,7 @@
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
 #include <pw/vector>
-#include <test_base_allocator.h>
+#include <test_allocator_base.h>
 #include <test_permute.h>
 
 #include <string>
