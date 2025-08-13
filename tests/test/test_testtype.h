@@ -2,9 +2,10 @@
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
 #include <pw/vector>
-#include <string>
 #include <test_base_allocator.h>
 #include <test_permute.h>
+
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -16,7 +17,6 @@ namespace pw::test {
 using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
 
 // This just for pw::vector implementation
-
 using TestTypeListInt = std::tuple<pw::vector<int>, std::vector<int>>;
 
 // Phase 1 test type list - using int with pw::vector and std::vector for comparison
