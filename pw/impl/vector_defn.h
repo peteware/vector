@@ -1,22 +1,21 @@
 #ifndef INCLUDED_PW_IMPL_VECTOR_DEFN_H
 #define INCLUDED_PW_IMPL_VECTOR_DEFN_H
 
-#include "fill_n.h"
-#include "is_base_of.h"
-#include "move_backward.h"
-
 #include <pw/impl/vector_decl.h>
 
-#include "pw/internal/unimplemented.h"
 #include <pw/impl/copy.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/distance.h>
+#include <pw/impl/fill_n.h>
+#include <pw/impl/is_base_of.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
+#include <pw/impl/move_backward.h>
 #include <pw/impl/uninitialized_copy.h>
 #include <pw/impl/uninitialized_default_construct.h>
 #include <pw/impl/uninitialized_fill.h>
 #include <pw/impl/uninitialized_move.h>
+#include <pw/internal/unimplemented.h>
 
 namespace pw {
 
@@ -244,18 +243,6 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
     pw::uninitialized_fill(tmp.begin(), tmp.begin() + count, value);
     tmp.set_size(count);
     m_storage.swap(tmp, false);
-    // m_storage.reset();
-    // if (count == 0)
-    // {
-    //     return;
-    // }
-    // auto lambda = [count, value](pointer dest) mutable -> void {
-    //     while (count--)
-    //     {
-    //         pw::construct_at(dest++, value);
-    //     }
-    // };
-    // m_storage.reserve(count, lambda);
 }
 
 template<class Type, class Allocator>
