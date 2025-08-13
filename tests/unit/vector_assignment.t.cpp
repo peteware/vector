@@ -1,7 +1,7 @@
-#include "test_base_allocator.h"
 #include "test_allocator_copy_assignment.h"
 #include "test_allocator_move_assignment.h"
 #include "test_allocator_swapable.h"
+#include "test_base_allocator.h"
 
 #include <test_testtype.h>
 
@@ -17,7 +17,7 @@
  */
 TEMPLATE_LIST_TEST_CASE("Assignment operator", "[vector][operator=]", pw::test::TestTypeListInt)
 {
-    using Vector     = TestType;
+    using Vector = TestType;
 
     GIVEN("An empty vector of TestType")
     {
@@ -153,8 +153,8 @@ TEST_CASE("Copy Assignment uses allocator", "[assignment][allocator][copy]")
             {
                 INFO("alloc.m_version = "
                      << alloc.m_instance
-                     << " v1.get_allocator().m_instance = " << v1.get_allocator().m_instance
-                     << " v2.get_allocator().m_instance = " << v2.get_allocator().m_instance);
+                     << " v1.copy_allocator().m_instance = " << v1.get_allocator().m_instance
+                     << " v2.copy_allocator().m_instance = " << v2.get_allocator().m_instance);
                 REQUIRE(v2.get_allocator() == v1.get_allocator());
             }
         }

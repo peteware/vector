@@ -10,6 +10,23 @@
 #include <pw/impl/uninitialized_move.h>
 
 namespace pw::internal {
+
+/**
+ * The Storage2 struct is an internal implementation that
+ * helps insure any allocated memory is deallocated.
+ *
+ * @verbatim
+ *    ┌────┬────┬────┬────┬────┬────┬────┐
+ * ┌─▶│ 1  │ 2  │ 3  │ 4  │    │    │    │
+ * │  └────┴────┴────┴────┴────┴────┴────┘
+ * │    m_size = 4        ▲
+ * │                      │
+ * │    m_allocated = 7   │
+ * │                   end()
+ * └─── m_begin
+ * @endverbatim
+ */
+
 template<class Type, class Allocator = pw::allocator<Type>>
 struct Storage2
 {
@@ -39,7 +56,7 @@ struct Storage2
     constexpr size_type               allocated() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
-    constexpr allocator_type          get_allocator() const;
+    constexpr allocator_type          copy_allocator() const;
     constexpr void                    swap(Storage2& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
@@ -162,7 +179,7 @@ Storage2<Type, Allocator>::calc_size() const noexcept
 
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>::allocator_type
-Storage2<Type, Allocator>::get_allocator() const
+Storage2<Type, Allocator>::copy_allocator() const
 {
     return m_alloc;
 }
