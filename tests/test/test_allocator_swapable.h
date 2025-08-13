@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_TEST_ALLOCATOR_SWAPABLE_H
 #define INCLUDED_PW_TEST_ALLOCATOR_SWAPABLE_H
 
-#include "test_base_allocator.h"
+#include <test_base_allocator.h>
 
 namespace pw::test {
 

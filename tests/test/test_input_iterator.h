@@ -1,11 +1,10 @@
 #ifndef INCLUDED_PW_TEST_INPUT_ITERATOR_H
 #define INCLUDED_PW_TEST_INPUT_ITERATOR_H
 
-#include "pw/impl/move.h"
-
 #include <memory>
 #include <pw/impl/iterator_tag.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/move.h>
 
 namespace pw::test {
 
