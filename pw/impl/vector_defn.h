@@ -19,18 +19,37 @@
 
 namespace pw {
 
+/**
+ * @brief Default constructor. Constructs an empty vector.
+ * @return A default-constructed vector with no elements
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
     : m_storage(allocator_type())
 {
 }
 
+/**
+ * @brief Constructs an empty vector with the given allocator.
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector with no elements using the specified allocator
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
     : m_storage(alloc)
 {
 }
 
+/**
+ * @brief Constructs a vector with count copies of value.
+ * @param count The number of elements to create
+ * @param value The value to initialize each element with
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector containing count copies of value
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(size_type             count,
                                           value_type const&     value,
@@ -41,6 +60,13 @@ constexpr vector<Type, Allocator>::vector(size_type             count,
     m_storage.set_size(count);
 }
 
+/**
+ * @brief Constructs a vector with count default-constructed elements.
+ * @param count The number of elements to create
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector containing count default-constructed elements
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(size_type count, allocator_type const& alloc)
     : m_storage(alloc, count)
@@ -49,6 +75,12 @@ constexpr vector<Type, Allocator>::vector(size_type count, allocator_type const&
     m_storage.set_size(count);
 }
 
+/**
+ * @brief Copy constructor. Creates a copy of another vector.
+ * @param copy The vector to copy from
+ * @return A vector that is a copy of the given vector
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy)
     : m_storage(allocator_type(), copy.size())
@@ -57,6 +89,13 @@ constexpr vector<Type, Allocator>::vector(vector const& copy)
     m_storage.set_size(copy.size());
 }
 
+/**
+ * @brief Copy constructor with allocator. Creates a copy using the specified allocator.
+ * @param copy The vector to copy from
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector that is a copy of the given vector using the specified allocator
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
     : m_storage(alloc, copy.size())
@@ -65,6 +104,12 @@ constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type con
     m_storage.set_size(copy.size());
 }
 
+/**
+ * @brief Move constructor. Takes ownership of another vector's resources.
+ * @param copy The vector to move from
+ * @return A vector that has taken ownership of the moved vector's resources
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
     : m_storage(allocator_type(), copy.size())
@@ -73,6 +118,13 @@ constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
     m_storage.set_size(copy.size());
 }
 
+/**
+ * @brief Move constructor with allocator. Moves from another vector using the specified allocator.
+ * @param copy The vector to move from
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector that has taken ownership of the moved vector's resources
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
     : m_storage(alloc, copy.size())
@@ -81,6 +133,13 @@ constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
     m_storage.set_size(copy.size());
 }
 
+/**
+ * @brief Constructs a vector from an initializer list.
+ * @param init The initializer list to construct from
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector containing the elements from the initializer list
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init, allocator_type const& alloc)
     : m_storage(alloc, init.size())
@@ -89,6 +148,14 @@ constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init,
     m_storage.set_size(init.size());
 }
 
+/**
+ * @brief Constructs a vector from an iterator range.
+ * @param first Iterator to the first element to copy
+ * @param last Iterator to one past the last element to copy
+ * @param alloc The allocator to use for memory allocation
+ * @return A vector containing the elements from the iterator range
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class Iterator>
 constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocator_type const& alloc)
@@ -114,6 +181,12 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
     }
 }
 
+/**
+ * @brief Swaps the contents of this vector with another vector.
+ * @param other The vector to swap with
+ * @return None
+ * @exception None (conditionally noexcept based on allocator traits)
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::swap(vector& other)
@@ -123,6 +196,12 @@ vector<Type, Allocator>::swap(vector& other)
     m_storage.swap(other.m_storage, allocator_traits<allocator_type>::propagate_on_container_swap::value);
 }
 
+/**
+ * @brief Copy assignment operator. Assigns contents from another vector.
+ * @param other The vector to copy from
+ * @return Reference to this vector
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(const vector& other)
@@ -168,6 +247,12 @@ vector<Type, Allocator>::operator=(const vector& other)
     return *this;
 }
 
+/**
+ * @brief Initializer list assignment operator. Assigns contents from an initializer list.
+ * @param init_list The initializer list to assign from
+ * @return Reference to this vector
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
@@ -180,6 +265,12 @@ vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
     return *this;
 }
 
+/**
+ * @brief Move assignment operator. Moves contents from another vector.
+ * @param other The vector to move from
+ * @return Reference to this vector
+ * @exception None (conditionally noexcept based on allocator traits)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(vector&& other)
@@ -210,6 +301,13 @@ vector<Type, Allocator>::operator=(vector&& other)
     return *this;
 }
 
+/**
+ * @brief Assigns new contents from an iterator range, replacing current contents.
+ * @param begin Iterator to the first element to assign
+ * @param end Iterator to one past the last element to assign
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class Iterator>
 constexpr void
@@ -235,6 +333,13 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
     }
 }
 
+/**
+ * @brief Assigns count copies of value, replacing current contents.
+ * @param count The number of elements to assign
+ * @param value The value to assign to each element
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::assign(size_type count, value_type const& value)
@@ -245,6 +350,12 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
     m_storage.swap(tmp, false);
 }
 
+/**
+ * @brief Assigns contents from an initializer list, replacing current contents.
+ * @param init_list The initializer list to assign from
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
@@ -255,6 +366,11 @@ vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
     m_storage.swap(tmp, false);
 }
 
+/**
+ * @brief Returns the allocator associated with the vector.
+ * @return Copy of the allocator
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::allocator_type
 vector<Type, Allocator>::get_allocator() const
@@ -262,6 +378,12 @@ vector<Type, Allocator>::get_allocator() const
     return m_storage.copy_allocator();
 }
 
+/**
+ * @brief Returns a reference to the element at specified position with bounds checking.
+ * @param position The position of the element to return
+ * @return Reference to the requested element
+ * @exception std::out_of_range if position >= size()
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::at(size_type position)
@@ -273,6 +395,12 @@ vector<Type, Allocator>::at(size_type position)
     return *(m_storage.begin() + position);
 }
 
+/**
+ * @brief Returns a const reference to the element at specified position with bounds checking.
+ * @param position The position of the element to return
+ * @return Const reference to the requested element
+ * @exception std::out_of_range if position >= size()
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::at(size_type position) const
@@ -284,6 +412,12 @@ vector<Type, Allocator>::at(size_type position) const
     return *(m_storage.begin() + position);
 }
 
+/**
+ * @brief Returns a reference to the element at specified position (no bounds checking).
+ * @param position The position of the element to return
+ * @return Reference to the requested element
+ * @exception None (undefined behavior if position >= size())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::operator[](size_type position)
@@ -291,6 +425,12 @@ vector<Type, Allocator>::operator[](size_type position)
     return *(m_storage.begin() + position);
 }
 
+/**
+ * @brief Returns a const reference to the element at specified position (no bounds checking).
+ * @param position The position of the element to return
+ * @return Const reference to the requested element
+ * @exception None (undefined behavior if position >= size())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::operator[](size_type position) const
@@ -298,6 +438,11 @@ vector<Type, Allocator>::operator[](size_type position) const
     return *(m_storage.begin() + position);
 }
 
+/**
+ * @brief Returns a reference to the first element.
+ * @return Reference to the first element
+ * @exception None (undefined behavior if empty())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::front()
@@ -305,6 +450,11 @@ vector<Type, Allocator>::front()
     return *m_storage.begin();
 }
 
+/**
+ * @brief Returns a const reference to the first element.
+ * @return Const reference to the first element
+ * @exception None (undefined behavior if empty())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::front() const
@@ -312,6 +462,11 @@ vector<Type, Allocator>::front() const
     return *m_storage.begin();
 }
 
+/**
+ * @brief Returns a reference to the last element.
+ * @return Reference to the last element
+ * @exception None (undefined behavior if empty())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::back()
@@ -319,6 +474,11 @@ vector<Type, Allocator>::back()
     return *(m_storage.end() - 1);
 }
 
+/**
+ * @brief Returns a const reference to the last element.
+ * @return Const reference to the last element
+ * @exception None (undefined behavior if empty())
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reference
 vector<Type, Allocator>::back() const
@@ -326,6 +486,11 @@ vector<Type, Allocator>::back() const
     return *(m_storage.end() - 1);
 }
 
+/**
+ * @brief Returns a pointer to the underlying array.
+ * @return Pointer to the underlying element storage, or nullptr if empty
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr Type*
 vector<Type, Allocator>::data() noexcept
@@ -335,6 +500,11 @@ vector<Type, Allocator>::data() noexcept
     return m_storage.begin();
 }
 
+/**
+ * @brief Returns a const pointer to the underlying array.
+ * @return Const pointer to the underlying element storage, or nullptr if empty
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr Type const*
 vector<Type, Allocator>::data() const noexcept
@@ -344,6 +514,11 @@ vector<Type, Allocator>::data() const noexcept
     return m_storage.begin();
 }
 
+/**
+ * @brief Returns an iterator to the beginning.
+ * @return Iterator to the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::begin() noexcept
@@ -351,6 +526,11 @@ vector<Type, Allocator>::begin() noexcept
     return m_storage.begin();
 }
 
+/**
+ * @brief Returns a const iterator to the beginning.
+ * @return Const iterator to the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::begin() const noexcept
@@ -358,6 +538,11 @@ vector<Type, Allocator>::begin() const noexcept
     return m_storage.begin();
 }
 
+/**
+ * @brief Returns an iterator to the end.
+ * @return Iterator to one past the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::end() noexcept
@@ -365,6 +550,11 @@ vector<Type, Allocator>::end() noexcept
     return m_storage.end();
 }
 
+/**
+ * @brief Returns a const iterator to the end.
+ * @return Const iterator to one past the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::end() const noexcept
@@ -372,6 +562,11 @@ vector<Type, Allocator>::end() const noexcept
     return m_storage.end();
 }
 
+/**
+ * @brief Returns a const iterator to the beginning.
+ * @return Const iterator to the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cbegin() const noexcept
@@ -379,6 +574,11 @@ vector<Type, Allocator>::cbegin() const noexcept
     return m_storage.begin();
 }
 
+/**
+ * @brief Returns a const iterator to the end.
+ * @return Const iterator to one past the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_iterator
 vector<Type, Allocator>::cend() const noexcept
@@ -386,6 +586,11 @@ vector<Type, Allocator>::cend() const noexcept
     return m_storage.end();
 }
 
+/**
+ * @brief Returns a reverse iterator to the beginning.
+ * @return Reverse iterator to the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reverse_iterator
 vector<Type, Allocator>::rbegin() noexcept
@@ -393,6 +598,11 @@ vector<Type, Allocator>::rbegin() noexcept
     return reverse_iterator(end());
 }
 
+/**
+ * @brief Returns a const reverse iterator to the beginning.
+ * @return Const reverse iterator to the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rbegin() const noexcept
@@ -400,6 +610,11 @@ vector<Type, Allocator>::rbegin() const noexcept
     return const_reverse_iterator(end());
 }
 
+/**
+ * @brief Returns a reverse iterator to the end.
+ * @return Reverse iterator to one before the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reverse_iterator
 vector<Type, Allocator>::rend() noexcept
@@ -407,6 +622,11 @@ vector<Type, Allocator>::rend() noexcept
     return reverse_iterator(begin());
 }
 
+/**
+ * @brief Returns a const reverse iterator to the end.
+ * @return Const reverse iterator to one before the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::rend() const noexcept
@@ -414,6 +634,11 @@ vector<Type, Allocator>::rend() const noexcept
     return const_reverse_iterator(cbegin());
 }
 
+/**
+ * @brief Returns a const reverse iterator to the beginning.
+ * @return Const reverse iterator to the last element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crbegin() const noexcept
@@ -421,6 +646,11 @@ vector<Type, Allocator>::crbegin() const noexcept
     return const_reverse_iterator(cend());
 }
 
+/**
+ * @brief Returns a const reverse iterator to the end.
+ * @return Const reverse iterator to one before the first element
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reverse_iterator
 vector<Type, Allocator>::crend() const noexcept
@@ -428,6 +658,11 @@ vector<Type, Allocator>::crend() const noexcept
     return const_reverse_iterator(cbegin());
 }
 
+/**
+ * @brief Checks whether the vector is empty.
+ * @return true if the vector is empty, false otherwise
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr bool
 vector<Type, Allocator>::empty() const noexcept
@@ -435,6 +670,11 @@ vector<Type, Allocator>::empty() const noexcept
     return m_storage.empty();
 }
 
+/**
+ * @brief Returns the number of elements.
+ * @return The number of elements in the vector
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::size() const noexcept
@@ -442,6 +682,11 @@ vector<Type, Allocator>::size() const noexcept
     return m_storage.size();
 }
 
+/**
+ * @brief Returns the maximum number of elements.
+ * @return The maximum possible number of elements
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
 // ReSharper disable once CppMemberFunctionMayBeStatic
@@ -450,6 +695,11 @@ vector<Type, Allocator>::max_size() const noexcept
     return (static_cast<size_type>(1) << (sizeof(size_type) * 8 - 4)) / sizeof(value_type);
 }
 
+/**
+ * @brief Returns the number of elements that can be held in currently allocated storage.
+ * @return The capacity of the currently allocated storage
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const noexcept
@@ -457,6 +707,11 @@ vector<Type, Allocator>::capacity() const noexcept
     return m_storage.allocated();
 }
 
+/**
+ * @brief Reduces memory usage by freeing unused memory.
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::shrink_to_fit()
@@ -471,6 +726,12 @@ vector<Type, Allocator>::shrink_to_fit()
     m_storage.swap(tmp, false);
 }
 
+/**
+ * @brief Reserves storage for at least count elements.
+ * @param count The number of elements to reserve capacity for
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::reserve(size_type count)
@@ -483,6 +744,11 @@ vector<Type, Allocator>::reserve(size_type count)
     m_storage.swap(tmp, false);
 }
 
+/**
+ * @brief Removes all elements from the vector.
+ * @return None
+ * @exception None (noexcept)
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::clear() noexcept
@@ -492,6 +758,12 @@ vector<Type, Allocator>::clear() noexcept
     m_storage.set_size(0);
 }
 
+/**
+ * @brief Adds an element to the end.
+ * @param value The value to append
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(const_reference value)
@@ -516,6 +788,12 @@ vector<Type, Allocator>::push_back(const_reference value)
     m_storage.set_size(total);
 }
 
+/**
+ * @brief Adds an element to the end by moving.
+ * @param value The value to move and append
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::push_back(value_type&& value)
@@ -539,6 +817,12 @@ vector<Type, Allocator>::push_back(value_type&& value)
     m_storage.set_size(total);
 }
 
+/**
+ * @brief Resizes the vector to contain total elements.
+ * @param total The new size of the vector
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::resize(size_type total)
@@ -566,6 +850,13 @@ vector<Type, Allocator>::resize(size_type total)
     m_storage.set_size(total);
 }
 
+/**
+ * @brief Resizes the vector to contain total elements with specified value.
+ * @param total The new size of the vector
+ * @param value The value to initialize new elements with
+ * @return None
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::resize(size_type total, const_reference value)
@@ -593,6 +884,12 @@ vector<Type, Allocator>::resize(size_type total, const_reference value)
     m_storage.set_size(total);
 }
 
+/**
+ * @brief Removes the element at the given position.
+ * @param position Iterator to the element to remove
+ * @return Iterator following the last removed element
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::erase(const_iterator position)
@@ -628,6 +925,11 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
     return dest;
 }
 
+/**
+ * @brief Removes the last element.
+ * @return None
+ * @exception None (undefined behavior if empty())
+ */
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::pop_back()
@@ -635,6 +937,13 @@ vector<Type, Allocator>::pop_back()
     (void)erase(end() - 1);
 }
 
+/**
+ * @brief Inserts a value before the given position.
+ * @param position Iterator before which the content will be inserted
+ * @param value The value to insert
+ * @return Iterator pointing to the inserted value
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, const_reference value)
@@ -642,6 +951,13 @@ vector<Type, Allocator>::insert(const_iterator position, const_reference value)
     return insert(position, static_cast<size_type>(1), value);
 }
 
+/**
+ * @brief Inserts a value by moving before the given position.
+ * @param position Iterator before which the content will be inserted
+ * @param value The value to move and insert
+ * @return Iterator pointing to the inserted value
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
@@ -677,6 +993,14 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
     return m_storage.begin() + offset;
 }
 
+/**
+ * @brief Inserts count copies of value before the given position.
+ * @param position Iterator before which the content will be inserted
+ * @param count Number of elements to insert
+ * @param value The value to insert
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
@@ -711,6 +1035,14 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     return m_storage.begin() + offset;
 }
 
+/**
+ * @brief Inserts elements from range [first, last) before position.
+ * @param position Iterator before which the content will be inserted
+ * @param first Iterator to the first element to insert
+ * @param last Iterator to one past the last element to insert
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class Iterator>
 constexpr vector<Type, Allocator>::iterator
@@ -727,6 +1059,13 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     return m_storage.begin() + offset;
 }
 
+/**
+ * @brief Inserts elements from initializer list before position.
+ * @param position Iterator before which the content will be inserted
+ * @param init_list Initializer list to insert the values from
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
@@ -757,6 +1096,12 @@ vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<va
     return m_storage.begin() + offset;
 }
 
+/**
+ * @brief Constructs and inserts an element at the end.
+ * @param args Arguments to forward to the constructor of the element
+ * @return Reference to the inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class... Args>
 constexpr vector<Type, Allocator>::reference
@@ -782,6 +1127,13 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     return back();
 }
 
+/**
+ * @brief Constructs and inserts an element at the specified position.
+ * @param position Iterator before which the new element will be constructed
+ * @param args Arguments to forward to the constructor of the element
+ * @return Iterator pointing to the emplaced element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class... Args>
 constexpr vector<Type, Allocator>::iterator
@@ -813,6 +1165,13 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
     return m_storage.begin() + offset;
 }
 
+/**
+ * @brief Specializes the swap algorithm for vector.
+ * @param op1 First vector to swap
+ * @param op2 Second vector to swap
+ * @return None
+ * @exception None (conditionally noexcept based on vector::swap)
+ */
 template<class Type, class Allocator>
 constexpr void
 swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexcept(op1.swap(op2)))
@@ -820,6 +1179,13 @@ swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexce
     op1.swap(op2);
 }
 
+/**
+ * @brief Checks if the contents of two vectors are equal.
+ * @param op1 First vector to compare
+ * @param op2 Second vector to compare
+ * @return true if the contents are equal, false otherwise
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr bool
 operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
@@ -831,6 +1197,13 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
     return op1 <=> op2 == 0;
 }
 
+/**
+ * @brief Compares the contents of two vectors lexicographically.
+ * @param op1 First vector to compare
+ * @param op2 Second vector to compare
+ * @return Strong ordering result of the comparison
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr auto
 operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
