@@ -745,6 +745,14 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
     return &makeReference<value_type>();
 }
 
+/**
+ * @brief Inserts count copies of value before the given position.
+ * @param position Iterator before which the content will be inserted
+ * @param count Number of elements to insert
+ * @param value The value to insert
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, size_type count, const_reference value)
@@ -755,6 +763,14 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     return &makeReference<value_type>();
 }
 
+/**
+ * @brief Inserts elements from range [first, last) before position.
+ * @param position Iterator before which the content will be inserted
+ * @param first Iterator to the first element to insert
+ * @param last Iterator to one past the last element to insert
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class Iterator>
 constexpr vector<Type, Allocator>::iterator
@@ -766,6 +782,13 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     return &makeReference<value_type>();
 }
 
+/**
+ * @brief Inserts elements from initializer list before position.
+ * @param position Iterator before which the content will be inserted
+ * @param init_list Initializer list to insert the values from
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
@@ -775,23 +798,45 @@ vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<va
     return &makeReference<value_type>();
 }
 
+/**
+ * @brief Constructs and inserts an element at the end.
+ * @param args Arguments to forward to the constructor of the element
+ * @return Reference to the inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class... Args>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
+    (void)args;
     return makeReference<value_type>();
 }
 
+/**
+ * @brief Constructs and inserts an element at the specified position.
+ * @param position Iterator before which the new element will be constructed
+ * @param args Arguments to forward to the constructor of the element
+ * @return Iterator pointing to the emplaced element
+ * @exception std::bad_alloc if memory allocation fails
+ */
 template<class Type, class Allocator>
 template<class... Args>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
     (void)position;
+    (void)args;
     return &makeReference<value_type>();
 }
 
+/**
+ * @brief Specializes the swap algorithm for vector.
+ * @param op1 First vector to swap
+ * @param op2 Second vector to swap
+ * @return None
+ * @exception None (conditionally noexcept based on vector::swap)
+ */
 template<class Type, class Allocator>
 constexpr void
 swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexcept(op1.swap(op2)))
@@ -800,6 +845,13 @@ swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexce
     (void)op2;
 }
 
+/**
+ * @brief Checks if the contents of two vectors are equal.
+ * @param op1 First vector to compare
+ * @param op2 Second vector to compare
+ * @return true if the contents are equal, false otherwise
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr bool
 operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
@@ -811,6 +863,13 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
     return op1 <=> op2 == 0;
 }
 
+/**
+ * @brief Compares the contents of two vectors lexicographically.
+ * @param op1 First vector to compare
+ * @param op2 Second vector to compare
+ * @return Strong ordering result of the comparison
+ * @exception None
+ */
 template<class Type, class Allocator>
 constexpr auto
 operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
