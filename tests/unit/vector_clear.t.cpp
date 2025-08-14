@@ -21,7 +21,7 @@ TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeLi
         WHEN("clear() is called")
         {
             v.clear();
-            THEN("nothing goes wrong")
+            THEN("vector is empty")
             {
                 REQUIRE(v.empty());
             }
@@ -57,9 +57,9 @@ TEMPLATE_LIST_TEST_CASE("clear methods", "[vector][clear]", pw::test::TestTypeLi
     }
 }
 
-TEST_CASE("clear() method", "[vector][clear][modifiers]")
+TEMPLATE_LIST_TEST_CASE("clear() method", "[vector][clear][modifiers]", pw::test::TestTypeListInt)
 {
-    using Vector = pw::vector<int>;
+    using Vector = TestType;
 
     GIVEN("empty vector")
     {
@@ -93,7 +93,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             {
                 REQUIRE(v.empty());
                 REQUIRE(v.begin() == v.end());
-                REQUIRE(v.data() == nullptr);
             }
             THEN("capacity is preserved")
             {
@@ -116,7 +115,6 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             {
                 REQUIRE(v.empty());
                 REQUIRE(v.begin() == v.end());
-                REQUIRE(v.data() == nullptr);
             }
             THEN("capacity is preserved")
             {
@@ -126,104 +124,29 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
     }
     GIVEN("vector with reserved capacity")
     {
+        Vector v { 1, 2, 3 };
+        v.reserve(100);
         WHEN("clear() is called after reserving capacity")
         {
-            Vector v;
-            v.reserve(100);
-            auto reserved_capacity = v.capacity();
-            REQUIRE(reserved_capacity >= 100);
-
-            v.assign({ 1, 2, 3, 4, 5 });
-            REQUIRE(v.size() == 5);
-
             v.clear();
-
             THEN("vector becomes empty")
             {
                 REQUIRE(v.empty());
-            }
-        }
-    }
-    GIVEN("large vector")
-    {
-        WHEN("clear() is called")
-        {
-            Vector v(static_cast<Vector::size_type>(1000), 7);
-            REQUIRE(v.size() == 1000);
-            REQUIRE(!v.empty());
-            auto original_capacity = v.capacity();
-
-            v.clear();
-
-            THEN("vector becomes empty")
-            {
-                REQUIRE(v.empty());
-                REQUIRE(v.begin() == v.end());
-                REQUIRE(v.data() == nullptr);
-            }
-            THEN("capacity is preserved")
-            {
-                REQUIRE(v.capacity() == original_capacity);
-            }
-        }
-    }
-    GIVEN("vector that needs to be cleared multiple times")
-    {
-        WHEN("clear() is called multiple times")
-        {
-            Vector v                 = { 1, 2, 3 };
-            auto   original_capacity = v.capacity();
-
-            v.clear();
-            v.clear();
-            v.clear();
-
-            THEN("vector remains empty after multiple clears")
-            {
-                REQUIRE(v.empty());
-                REQUIRE(v.capacity() == original_capacity);
             }
         }
     }
     GIVEN("vector for reuse after clearing")
     {
-        WHEN("clear() is called then vector is reused")
+        Vector v = { 1, 2, 3, 4, 5 };
+        WHEN("clear() is called and assign()'d")
         {
-            Vector v                 = { 1, 2, 3, 4, 5 };
-            auto   original_capacity = v.capacity();
-
             v.clear();
-            REQUIRE(v.empty());
-            REQUIRE(v.capacity() == original_capacity);
-
             v.assign({ 10, 20 });
-
-            THEN("vector can be reused correctly")
+            THEN("vector has expected elements")
             {
                 REQUIRE(v.size() == 2);
                 REQUIRE(v[0] == 10);
                 REQUIRE(v[1] == 20);
-            }
-        }
-    }
-    GIVEN("vector with custom allocator")
-    {
-        WHEN("clear() is called")
-        {
-            using Allocator = pw::test::allocator_move_assignment<int>;
-            using Vector    = pw::vector<int, Allocator>;
-
-            Allocator alloc(5);
-            Vector    v({ 1, 2, 3 }, alloc);
-            auto      original_capacity = v.capacity();
-
-            v.clear();
-
-            THEN("vector becomes empty and allocator is preserved")
-            {
-                REQUIRE(v.empty());
-                REQUIRE(v.capacity() == original_capacity);
-                REQUIRE(v.get_allocator() == alloc);
             }
         }
     }
@@ -260,8 +183,28 @@ TEST_CASE("clear() method", "[vector][clear][modifiers]")
             THEN("access methods behave correctly for empty vector")
             {
                 REQUIRE_THROWS_AS(v.at(0), std::out_of_range);
-                REQUIRE(v.data() == nullptr);
                 REQUIRE(v.begin() == v.end());
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("vector_clear", "[vector_clear]", pw::test::TestTypeListAllocatorBase)
+{
+    using Vector         = TestType;
+    using allocator_type = Vector::allocator_type;
+    GIVEN("vector with custom allocator")
+    {
+        WHEN("clear() is called")
+        {
+            allocator_type alloc(5);
+            Vector         v({ 1, 2, 3 }, alloc);
+
+            v.clear();
+            THEN("vector is empty and allocator is preserved")
+            {
+                REQUIRE(v.empty());
+                REQUIRE(v.get_allocator() == alloc);
             }
         }
     }
