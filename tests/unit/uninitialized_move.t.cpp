@@ -56,20 +56,18 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
     }
     GIVEN("Two arrays of ThrowingType")
     {
-        using ThrowingType = pw::test::ThrowingType;
-        ThrowingType::reset();
-        ThrowingType src[5] = {
-            ThrowingType(1), ThrowingType(2), ThrowingType(3), ThrowingType(4), ThrowingType(5)
-        };
-        ThrowingType dest[5];
-        ThrowingType::reset();
+        using value_type = pw::test::ThrowingType;
+        value_type::reset();
+        value_type src[5] = { value_type(1), value_type(2), value_type(3), value_type(4), value_type(5) };
+        value_type dest[5];
+        value_type::reset();
         WHEN("move the ThrowingType from src to dest")
         {
-            ThrowingType::throw_after_n = 2;
+            value_type::throw_after_n = 2;
             REQUIRE_THROWS(pw::uninitialized_move(&src[0], &src[5], &dest[0]));
             THEN("move constructor called; destructor not")
             {
-                REQUIRE(ThrowingType::construction_count == 0);
+                REQUIRE(value_type::construction_count == 0);
             }
             THEN("values are moved, too")
             {

@@ -4,6 +4,8 @@
 #include <pw/vector>
 #include <test_allocator_base.h>
 #include <test_permute.h>
+#include <test_throwing_allocator.h>
+#include <test_throwingtype.h>
 
 #include <string>
 #include <tuple>
@@ -27,6 +29,16 @@ using Phase2TestTypeList =
 // vector<int> but using allocator_base
 using TestTypeListAllocatorBase =
     std::tuple<pw::vector<int, allocator_base<int>>, std::vector<int, allocator_base<int>>>;
+
+using TestTypeListThrowing = std::tuple<pw::vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
+                                        std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
+
+template<typename Type>
+void
+reset(Type& value)
+{
+    value.reset();
+}
 } // namespace pw::test
 
 #endif /*  INCLUDED_PW_TEST_TESTTYPE_H */

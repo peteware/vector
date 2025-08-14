@@ -1,11 +1,10 @@
 #ifndef PW_TEST_THROWING_ALLOCATOR_H
 #define PW_TEST_THROWING_ALLOCATOR_H
 
-#include <new>
 #include <cstddef>
+#include <new>
 
-namespace pw {
-namespace test {
+namespace pw { namespace test {
 
 // Allocator that can throw on allocation
 template<typename T>
@@ -18,10 +17,10 @@ public:
     static int  throw_after_n_allocations;
 
     ThrowingAllocator() = default;
-    template<typename U>
-    ThrowingAllocator(const ThrowingAllocator<U>&)
-    {
-    }
+    // template<typename U>
+    // ThrowingAllocator(const ThrowingAllocator<U>&)
+    // {
+    // }
 
     T* allocate(std::size_t n)
     {
@@ -33,9 +32,9 @@ public:
         return static_cast<T*>(::operator new(n * sizeof(T)));
     }
 
-    void deallocate(T* p, std::size_t) noexcept { ::operator delete(p); }
+    void        deallocate(T* p, std::size_t) noexcept { ::operator delete(p); }
 
-    bool operator==(const ThrowingAllocator&) const { return true; }
+    bool        operator==(const ThrowingAllocator&) const { return true; }
 
     static void reset()
     {
@@ -53,7 +52,6 @@ inline int ThrowingAllocator<T>::allocate_count = 0;
 template<typename T>
 inline int ThrowingAllocator<T>::throw_after_n_allocations = -1;
 
-} // namespace test
-} // namespace pw
+}} // namespace pw::test
 
 #endif // PW_TEST_THROWING_ALLOCATOR_H
