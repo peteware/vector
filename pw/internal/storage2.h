@@ -65,12 +65,10 @@ struct Storage2
 
     constexpr void uninitialized_fill(iterator begin, iterator end, value_type const& value);
     template<class InputIterator>
-    constexpr void uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
-    constexpr void uninitialized_default_construct(iterator begin, iterator end);
-    template<class InputIterator>
-    constexpr iterator uninitialized_move(InputIterator src_begin, InputIterator src_end, iterator dest);
-    template<class InputIterator>
-    constexpr iterator copy(InputIterator src_begin, InputIterator src_end, iterator dest);
+    constexpr void     uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
+    constexpr void     uninitialized_default_construct(iterator begin, iterator end);
+    constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
+    constexpr iterator copy(const_iterator begin, const_iterator end, iterator dest);
 
 private:
     allocator_type m_alloc;
@@ -293,18 +291,17 @@ Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, itera
 }
 
 template<class Type, class Allocator>
-template<class InputIterator>
 constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::uninitialized_move(InputIterator src_begin, InputIterator src_end, iterator dest)
+Storage2<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
 {
     iterator current = dest;
     try
     {
-        while (src_begin != src_end)
+        while (begin != end)
         {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), pw::move(*src_begin));
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), pw::move(*begin));
             ++current;
-            ++src_begin;
+            ++begin;
         }
     }
     catch (...)
@@ -320,15 +317,14 @@ Storage2<Type, Allocator>::uninitialized_move(InputIterator src_begin, InputIter
 }
 
 template<class Type, class Allocator>
-template<class InputIterator>
 constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::copy(InputIterator src_begin, InputIterator src_end, iterator dest)
+Storage2<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterator dest)
 {
-    while (src_begin != src_end)
+    while (begin != end)
     {
-        *dest = *src_begin;
+        *dest = *begin;
         ++dest;
-        ++src_begin;
+        ++begin;
     }
     return dest;
 }

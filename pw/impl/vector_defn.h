@@ -1080,14 +1080,14 @@ vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<va
     {
         m_storage.uninitialized_move(m_storage.end() - init_list.size(), m_storage.end(), m_storage.end());
         pw::move_backward(m_storage.begin() + offset, m_storage.end() - init_list.size(), m_storage.end());
-        pw::move(init_list.begin(), init_list.end(), m_storage.begin() + offset);
+        m_storage.copy(init_list.begin(), init_list.end(), m_storage.begin() + offset);
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), m_storage.size() + init_list.size());
 
         tmp.uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
-        tmp.uninitialized_move(init_list.begin(), init_list.end(), tmp.begin() + offset);
+        tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin() + offset);
         if (!m_storage.empty())
         {
             tmp.uninitialized_move(
