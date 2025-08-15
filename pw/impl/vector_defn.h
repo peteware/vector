@@ -168,6 +168,7 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
         auto      lambda = [begin = first, end = last, this](pointer dest) -> void {
             m_storage.uninitialized_copy(begin, end, dest);
         };
+        // TODO: Storage2.reserve() doesn't exist!  No unit test?
         m_storage.reserve(count, lambda);
     }
     else
@@ -290,7 +291,8 @@ vector<Type, Allocator>::operator=(vector&& other)
         move(other.begin(), other.begin() + init_size, m_storage.begin());
         if (size() < other.size())
         {
-            m_storage.uninitialized_move(other.begin() + init_size, other.end(), m_storage.begin() + init_size);
+            m_storage.uninitialized_move(
+                other.begin() + init_size, other.end(), m_storage.begin() + init_size);
         }
         else
         {
@@ -773,6 +775,7 @@ vector<Type, Allocator>::push_back(const_reference value)
 
     if (total <= m_storage.allocated())
     {
+        // TODO: Change calls to allocator_traits<>::construct() to Storage2::construct()
         pw::allocator_traits<Allocator>::construct(
             m_storage.allocator(), pw::addressof(*m_storage.end()), value);
     }
@@ -803,6 +806,7 @@ vector<Type, Allocator>::push_back(value_type&& value)
 
     if (total <= m_storage.allocated())
     {
+        // TODO: Change calls to construct_at() to Storage2::construct()
         pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
     }
     else
@@ -833,6 +837,7 @@ vector<Type, Allocator>::resize(size_type total)
     }
     else if (total <= size())
     {
+        // TODO: Change calls to destroy() to Storage2::destroy()
         pw::destroy(m_storage.begin() + total, m_storage.end());
     }
     else if (total <= m_storage.allocated())
@@ -915,6 +920,7 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
     size_type const last   = pw::distance(cbegin(), end);
     size_type const width  = pw::distance(begin, end);
 
+    // TODO: Replace move() and destroy() with Storage2::move(), Storage2::destroy()
     pw::move(m_storage.begin() + last, m_storage.end(), m_storage.begin() + offset);
     pw::destroy(m_storage.begin() + last, m_storage.end());
     m_storage.set_size(size() - width);
@@ -970,6 +976,7 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
         }
         else
         {
+            // TODO: replace move_backward(), fill_n() with Storage2::move_backward(), Storage2::fill_n()
             m_storage.uninitialized_move(m_storage.end() - count, m_storage.end(), m_storage.end());
             pw::move_backward(m_storage.begin() + offset, m_storage.end() - count, m_storage.end());
             pw::fill_n(m_storage.begin() + offset, count, value);

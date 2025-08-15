@@ -63,16 +63,14 @@ struct Storage2
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
 
-    template<class Iterator>
-    constexpr void                    uninitialized_fill(Iterator begin, Iterator end, value_type const& value);
+    constexpr void uninitialized_fill(iterator begin, iterator end, value_type const& value);
     template<class InputIterator>
-    constexpr void                    uninitialized_copy(InputIterator src_begin, InputIterator src_end, iterator dest);
-    template<class Iterator>
-    constexpr void                    uninitialized_default_construct(Iterator begin, Iterator end);
+    constexpr void uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
+    constexpr void uninitialized_default_construct(iterator begin, iterator end);
     template<class InputIterator>
-    constexpr iterator                uninitialized_move(InputIterator src_begin, InputIterator src_end, iterator dest);
+    constexpr iterator uninitialized_move(InputIterator src_begin, InputIterator src_end, iterator dest);
     template<class InputIterator>
-    constexpr iterator                copy(InputIterator src_begin, InputIterator src_end, iterator dest);
+    constexpr iterator copy(InputIterator src_begin, InputIterator src_end, iterator dest);
 
 private:
     allocator_type m_alloc;
@@ -221,11 +219,10 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
 }
 
 template<class Type, class Allocator>
-template<class Iterator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_fill(Iterator begin, Iterator end, value_type const& value)
+Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
 {
-    Iterator current = begin;
+    iterator current = begin;
     try
     {
         while (current != end)
@@ -248,16 +245,16 @@ Storage2<Type, Allocator>::uninitialized_fill(Iterator begin, Iterator end, valu
 template<class Type, class Allocator>
 template<class InputIterator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_copy(InputIterator src_begin, InputIterator src_end, iterator dest)
+Storage2<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
 {
     iterator current = dest;
     try
     {
-        while (src_begin != src_end)
+        while (begin != end)
         {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), *src_begin);
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), *begin);
             ++current;
-            ++src_begin;
+            ++begin;
         }
     }
     catch (...)
@@ -272,11 +269,10 @@ Storage2<Type, Allocator>::uninitialized_copy(InputIterator src_begin, InputIter
 }
 
 template<class Type, class Allocator>
-template<class Iterator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_default_construct(Iterator begin, Iterator end)
+Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
 {
-    Iterator current = begin;
+    iterator current = begin;
     try
     {
         while (current != end)
