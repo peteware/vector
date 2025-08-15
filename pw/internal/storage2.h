@@ -2,10 +2,12 @@
 #define INCLUDED_PW_INTERNAL_STORAGE2_H
 
 #include <functional>
+#include <pw/impl/addressof.h>
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/max.h>
+#include <pw/impl/move.h>
 #include <pw/impl/swap.h>
 #include <pw/impl/uninitialized_move.h>
 
@@ -60,6 +62,12 @@ struct Storage2
     constexpr void                    swap(Storage2& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
+
+    constexpr void                    uninitialized_fill(iterator begin, iterator end, value_type const& value);
+    constexpr void                    uninitialized_copy(const_iterator src_begin, const_iterator src_end, iterator dest);
+    constexpr void                    uninitialized_default_construct(iterator begin, iterator end);
+    constexpr iterator                uninitialized_move(iterator src_begin, iterator src_end, iterator dest);
+    constexpr iterator                copy(const_iterator src_begin, const_iterator src_end, iterator dest);
 
 private:
     allocator_type m_alloc;
@@ -205,6 +213,118 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
     pw::swap(m_begin, other.m_begin);
     pw::swap(m_size, other.m_size);
     pw::swap(m_allocated, other.m_allocated);
+}
+
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
+{
+    iterator current = begin;
+    try
+    {
+        while (current != end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), value);
+            ++current;
+        }
+    }
+    catch (...)
+    {
+        while (begin != current)
+        {
+            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
+            ++begin;
+        }
+        throw;
+    }
+}
+
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::uninitialized_copy(const_iterator src_begin, const_iterator src_end, iterator dest)
+{
+    iterator current = dest;
+    try
+    {
+        while (src_begin != src_end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), *src_begin);
+            ++current;
+            ++src_begin;
+        }
+    }
+    catch (...)
+    {
+        while (dest != current)
+        {
+            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
+            ++dest;
+        }
+        throw;
+    }
+}
+
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
+{
+    iterator current = begin;
+    try
+    {
+        while (current != end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current));
+            ++current;
+        }
+    }
+    catch (...)
+    {
+        while (begin != current)
+        {
+            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
+            ++begin;
+        }
+        throw;
+    }
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::uninitialized_move(iterator src_begin, iterator src_end, iterator dest)
+{
+    iterator current = dest;
+    try
+    {
+        while (src_begin != src_end)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), pw::move(*src_begin));
+            ++current;
+            ++src_begin;
+        }
+    }
+    catch (...)
+    {
+        while (dest != current)
+        {
+            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
+            ++dest;
+        }
+        throw;
+    }
+    return current;
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::copy(const_iterator src_begin, const_iterator src_end, iterator dest)
+{
+    while (src_begin != src_end)
+    {
+        *dest = *src_begin;
+        ++dest;
+        ++src_begin;
+    }
+    return dest;
 }
 } // namespace pw::internal
 #endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */
