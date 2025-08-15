@@ -6,7 +6,7 @@
 namespace pw {
 
 template<class Container>
-pw::back_insert_iterator<Container>
+back_insert_iterator<Container>
 back_inserter(Container& container)
 {
     return pw::back_insert_iterator<Container>(container);

@@ -13,11 +13,11 @@ class reverse_iterator
 {
 public:
     using iterator_type     = Iterator;
-    using iterator_category = pw::iterator_traits<Iterator>::iterator_category;
-    using value_type        = pw::iterator_traits<Iterator>::value_type;
-    using difference_type   = pw::iterator_traits<Iterator>::difference_type;
-    using pointer           = pw::iterator_traits<Iterator>::pointer;
-    using reference         = pw::iterator_traits<Iterator>::reference;
+    using iterator_category = iterator_traits<Iterator>::iterator_category;
+    using value_type        = iterator_traits<Iterator>::value_type;
+    using difference_type   = iterator_traits<Iterator>::difference_type;
+    using pointer           = iterator_traits<Iterator>::pointer;
+    using reference         = iterator_traits<Iterator>::reference;
 
     constexpr reverse_iterator();
     constexpr explicit reverse_iterator(iterator_type iterator);
@@ -52,22 +52,22 @@ constexpr reverse_iterator<Iterator>
 operator-(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& iterator);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator==(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator==(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator!=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator!=(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator<(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator<(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator<=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator<=(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator>(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator>(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 template<class Iterator1, class Iterator2>
 constexpr bool
-operator>=(const pw::reverse_iterator<Iterator1>& op1, const pw::reverse_iterator<Iterator2>& op2);
+operator>=(const reverse_iterator<Iterator1>& op1, const reverse_iterator<Iterator2>& op2);
 
 template<class Iterator>
 constexpr reverse_iterator<Iterator>::reverse_iterator()

@@ -8,7 +8,7 @@ namespace pw::test {
 template<class Type>
 struct allocator_copy_assignment : allocator_base<Type>
 {
-    using propagate_on_container_copy_assignment = pw::true_type;
+    using propagate_on_container_copy_assignment = true_type;
 
     explicit allocator_copy_assignment(int instance = -2);
 };

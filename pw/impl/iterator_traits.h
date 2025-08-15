@@ -19,7 +19,7 @@ struct iterator_traits
 template<class Type>
 struct iterator_traits<Type*>
 {
-    using iterator_category = pw::random_access_iterator_tag;
+    using iterator_category = random_access_iterator_tag;
     using value_type        = Type;
     using difference_type   = ptrdiff_t;
     using pointer           = Type*;

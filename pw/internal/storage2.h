@@ -29,7 +29,7 @@ namespace pw::internal {
  * @endverbatim
  */
 
-template<class Type, class Allocator = pw::allocator<Type>>
+template<class Type, class Allocator = allocator<Type>>
 struct Storage2
 {
     using value_type      = Type;
@@ -56,6 +56,7 @@ struct Storage2
     constexpr Storage2&               set_size(size_type size) noexcept;
     constexpr size_type               size() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
+    [[nodiscard]] constexpr size_type max_size() const noexcept;
     constexpr size_type               allocated() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
@@ -188,6 +189,13 @@ Storage2<Type, Allocator>::calc_size() const noexcept
 
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>::size_type
+Storage2<Type, Allocator>::max_size() const noexcept
+{
+    return allocator_traits<allocator_type>::max_size(m_alloc);
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::size_type
 Storage2<Type, Allocator>::allocated() const noexcept
 {
     return m_allocated;
@@ -210,8 +218,8 @@ Storage2<Type, Allocator>::copy_allocator() const
 template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
-    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-             pw::allocator_traits<allocator_type>::is_always_equal::value)
+    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             allocator_traits<allocator_type>::is_always_equal::value)
 {
     using pw::swap;
     if (swap_allocator)
@@ -244,6 +252,7 @@ Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
 
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>::iterator
+// ReSharper disable once CppMemberFunctionMayBeStatic
 Storage2<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterator dest)
 {
     while (begin != end)

@@ -13,12 +13,12 @@ template<class Type>
 struct allocator_base
 {
     using value_type                             = Type;
-    using size_type                              = pw::size_t;
-    using difference_type                        = pw::ptrdiff_t;
-    using propagate_on_container_copy_assignment = pw::false_type;
-    using propagate_on_container_move_assignment = pw::false_type;
-    using propagate_on_container_swap            = pw::false_type;
-    using is_always_equal                        = pw::false_type;
+    using size_type                              = size_t;
+    using difference_type                        = ptrdiff_t;
+    using propagate_on_container_copy_assignment = false_type;
+    using propagate_on_container_move_assignment = false_type;
+    using propagate_on_container_swap            = false_type;
+    using is_always_equal                        = false_type;
 
     int m_instance;
 

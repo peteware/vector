@@ -7,12 +7,12 @@
 
 namespace pw::internal {
 template<class, class Type, class... Args>
-struct constructible : pw::false_type
+struct constructible : false_type
 {
 };
 
 template<class Type, class... Args>
-struct constructible<void_t<decltype(Type(pw::declval<Args>()...))>, Type, Args...> : pw::true_type
+struct constructible<void_t<decltype(Type(pw::declval<Args>()...))>, Type, Args...> : true_type
 {
 };
 } // namespace pw::internal

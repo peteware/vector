@@ -15,7 +15,7 @@ namespace pw::test {
 template<class Type>
 struct allocator_swapable : allocator_base<Type>
 {
-    using propagate_on_container_swap = pw::true_type;
+    using propagate_on_container_swap = true_type;
 
     explicit allocator_swapable(int instance = 1)
         : allocator_base<Type>(instance)

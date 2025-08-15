@@ -10,7 +10,7 @@ template<class Container>
 class back_insert_iterator
 {
 public:
-    using iterator_category = pw::output_iterator_tag;
+    using iterator_category = output_iterator_tag;
     using value_type        = void;
     using difference_type   = void;
     using pointer           = void;

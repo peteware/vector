@@ -23,6 +23,7 @@ struct allocator
 
 template<class Type>
 constexpr Type*
+// ReSharper disable once CppMemberFunctionMayBeStatic
 allocator<Type>::allocate(size_type count)
 {
     return static_cast<Type*>(operator new(count * sizeof(Type)));
@@ -30,6 +31,7 @@ allocator<Type>::allocate(size_type count)
 
 template<class Type>
 constexpr void
+// ReSharper disable once CppMemberFunctionMayBeStatic
 allocator<Type>::deallocate(Type* ptr, size_type count)
 {
     if (is_constant_evaluated())
@@ -38,7 +40,7 @@ allocator<Type>::deallocate(Type* ptr, size_type count)
         // This is a workaround to avoid issues in constant expressions.
         return;
     }
-    ::operator delete(static_cast<void*>(ptr));
+    operator delete(static_cast<void*>(ptr));
 }
 
 template<class Type1, class Type2>

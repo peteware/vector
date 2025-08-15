@@ -13,7 +13,7 @@ CopyConstructible::getCounter()
     return s_opCounter;
 }
 
-CopyConstructible::CopyConstructible(OpTracker::value_type const& value)
+CopyConstructible::CopyConstructible(value_type const& value)
     : OpTracker(s_opCounter, value)
 {
 }

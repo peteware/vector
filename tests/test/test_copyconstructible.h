@@ -29,7 +29,7 @@ struct CopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
-    CopyConstructible(OpTracker::value_type const& value);
+    CopyConstructible(value_type const& value);
     CopyConstructible(CopyConstructible const& copy);
     CopyConstructible(CopyConstructible&& move) noexcept;
     ~CopyConstructible();

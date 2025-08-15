@@ -18,13 +18,13 @@ namespace pw::internal {
 
  * @endcode
  */
-template<template<typename> typename Predicate, typename Type, typename = pw::void_t<>>
-struct supports : pw::false_type
+template<template<typename> typename Predicate, typename Type, typename = void_t<>>
+struct supports : false_type
 {
 };
 
 template<template<typename> typename Predicate, typename Type>
-struct supports<Predicate, Type, pw::void_t<Predicate<Type>>> : pw::true_type
+struct supports<Predicate, Type, void_t<Predicate<Type>>> : true_type
 {
 };
 

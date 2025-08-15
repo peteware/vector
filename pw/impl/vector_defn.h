@@ -690,10 +690,9 @@ vector<Type, Allocator>::size() const noexcept
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
-// ReSharper disable once CppMemberFunctionMayBeStatic
 vector<Type, Allocator>::max_size() const noexcept
 {
-    return (static_cast<size_type>(1) << (sizeof(size_type) * 8 - 4)) / sizeof(value_type);
+    return m_storage.max_size();
 }
 
 /**
@@ -1122,7 +1121,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
  * @brief Constructs and inserts an element at the specified position.
  * @param position Iterator before which the new element will be constructed
  * @param args Arguments to forward to the constructor of the element
- * @return Iterator pointing to the emplaced element
+ * @return Iterator pointing to the element
  * @exception std::bad_alloc if memory allocation fails
  */
 template<class Type, class Allocator>
@@ -1130,10 +1129,9 @@ template<class... Args>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
-    size_type const     total  = size() + 1;
     constexpr size_type count  = 1;
+    size_type const     total  = size() + count;
     size_type const     offset = pw::distance(cbegin(), position);
-    iterator            where  = m_storage.begin() + offset;
 
     if (total <= capacity())
     {

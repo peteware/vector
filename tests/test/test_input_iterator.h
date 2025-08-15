@@ -11,11 +11,11 @@ namespace pw::test {
 template<class Iterator>
 struct test_input_iterator
 {
-    using iterator_category = pw::input_iterator_tag;
-    using value_type        = pw::iterator_traits<Iterator>::value_type;
-    using difference_type   = pw::iterator_traits<Iterator>::difference_type;
-    using pointer           = pw::iterator_traits<Iterator>::pointer;
-    using reference         = pw::iterator_traits<Iterator>::reference;
+    using iterator_category = input_iterator_tag;
+    using value_type        = iterator_traits<Iterator>::value_type;
+    using difference_type   = iterator_traits<Iterator>::difference_type;
+    using pointer           = iterator_traits<Iterator>::pointer;
+    using reference         = iterator_traits<Iterator>::reference;
 
     test_input_iterator()   = default;
     explicit test_input_iterator(Iterator iterator);

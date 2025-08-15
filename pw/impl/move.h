@@ -6,10 +6,10 @@
 namespace pw {
 
 template<class Type>
-constexpr pw::remove_reference<Type>::type&&
+constexpr remove_reference<Type>::type&&
 move(Type&& value) noexcept
 {
-    return static_cast<pw::remove_reference<Type>::type&&>(value);
+    return static_cast<remove_reference<Type>::type&&>(value);
 }
 
 } // namespace pw

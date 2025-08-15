@@ -25,7 +25,7 @@ namespace pw {
  *       the iterator to count the elements.
  */
 template<class Iterator>
-constexpr pw::iterator_traits<Iterator>::difference_type
+constexpr iterator_traits<Iterator>::difference_type
 distance(Iterator begin, Iterator end)
 {
     using iterator_category = iterator_traits<Iterator>::iterator_category;
@@ -36,7 +36,7 @@ distance(Iterator begin, Iterator end)
     }
     else
     {
-        typename pw::iterator_traits<Iterator>::difference_type d {};
+        typename iterator_traits<Iterator>::difference_type d {};
 
         while (begin != end)
         {
