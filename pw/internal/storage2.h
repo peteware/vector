@@ -72,6 +72,8 @@ struct Storage2
     constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
     constexpr iterator copy(const_iterator begin, const_iterator end, iterator dest);
     constexpr iterator move(iterator begin, iterator end, iterator dest);
+    constexpr iterator move_backward(iterator begin, iterator end, iterator dest);
+    constexpr iterator fill_n(iterator dest, size_type count, value_type const& value);
     constexpr void     destroy(iterator begin, iterator end);
 
 private:
@@ -350,6 +352,45 @@ Storage2<Type, Allocator>::move(iterator begin, iterator end, iterator dest)
         *dest++ = pw::move(*begin++);
     }
     return dest;
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::move_backward(iterator begin, iterator end, iterator dest)
+{
+    while (begin != end)
+    {
+        --dest;
+        --end;
+        allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*dest), pw::move(*end));
+    }
+    return dest;
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::fill_n(iterator dest, size_type count, value_type const& value)
+{
+    iterator current = dest;
+    try
+    {
+        while (count > 0)
+        {
+            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), value);
+            ++current;
+            --count;
+        }
+    }
+    catch (...)
+    {
+        while (dest != current)
+        {
+            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
+            ++dest;
+        }
+        throw;
+    }
+    return current;
 }
 
 template<class Type, class Allocator>
