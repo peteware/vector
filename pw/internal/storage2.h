@@ -55,8 +55,8 @@ struct Storage2
     constexpr const_pointer           end() const noexcept;
     constexpr Storage2&               set_size(size_type size) noexcept;
     constexpr size_type               size() const noexcept;
-    constexpr size_type               allocated() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
+    constexpr size_type               allocated() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
     constexpr void                    swap(Storage2& other, bool swap_allocator)
@@ -64,17 +64,17 @@ struct Storage2
                  allocator_traits<allocator_type>::is_always_equal::value);
 
     template<class... Args>
-    constexpr void construct(iterator iter, Args&&... args);
-    constexpr void uninitialized_fill(iterator begin, iterator end, value_type const& value);
-    template<class InputIterator>
-    constexpr void     uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
-    constexpr void     uninitialized_default_construct(iterator begin, iterator end);
-    constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
+    constexpr void     construct(iterator where, Args&&... args);
+    constexpr void     destroy(iterator begin, iterator end);
     constexpr iterator copy(const_iterator begin, const_iterator end, iterator dest);
     constexpr iterator move(iterator begin, iterator end, iterator dest);
     constexpr iterator move_backward(iterator begin, iterator end, iterator dest);
     constexpr iterator fill_n(iterator dest, size_type count, value_type const& value);
-    constexpr void     destroy(iterator begin, iterator end);
+    constexpr void     uninitialized_fill(iterator begin, iterator end, value_type const& value);
+    constexpr void     uninitialized_default_construct(iterator begin, iterator end);
+    constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
+    template<class InputIterator>
+    constexpr void uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
 
 private:
     allocator_type m_alloc;
@@ -123,6 +123,7 @@ Storage2<Type, Allocator>::reset()
     m_size      = 0;
     m_allocated = 0;
 }
+
 template<class Type, class Allocator>
 constexpr bool
 Storage2<Type, Allocator>::empty() const noexcept
@@ -173,13 +174,6 @@ Storage2<Type, Allocator>::size() const noexcept
     return m_size;
 }
 
-template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::allocated() const noexcept
-{
-    return m_allocated;
-}
-
 /**
  * Doubles the existing value for allocated()
  *
@@ -193,15 +187,22 @@ Storage2<Type, Allocator>::calc_size() const noexcept
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::allocator_type
-Storage2<Type, Allocator>::copy_allocator() const
+constexpr Storage2<Type, Allocator>::size_type
+Storage2<Type, Allocator>::allocated() const noexcept
 {
-    return m_alloc;
+    return m_allocated;
 }
 
 template<class Type, class Allocator>
 constexpr Storage2<Type, Allocator>::allocator_type&
 Storage2<Type, Allocator>::allocator() noexcept
+{
+    return m_alloc;
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::allocator_type
+Storage2<Type, Allocator>::copy_allocator() const
 {
     return m_alloc;
 }
@@ -225,109 +226,20 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
 template<class Type, class Allocator>
 template<class... Args>
 constexpr void
-Storage2<Type, Allocator>::construct(iterator iter, Args&&... args)
+Storage2<Type, Allocator>::construct(iterator where, Args&&... args)
 {
-    allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*iter), pw::forward<Args>(args)...);
+    allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*where), pw::forward<Args>(args)...);
 }
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
+Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
 {
-    iterator current = begin;
-    try
+    while (begin != end)
     {
-        while (current != end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), value);
-            ++current;
-        }
+        allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
+        ++begin;
     }
-    catch (...)
-    {
-        while (begin != current)
-        {
-            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
-            ++begin;
-        }
-        throw;
-    }
-}
-
-template<class Type, class Allocator>
-template<class InputIterator>
-constexpr void
-Storage2<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
-{
-    iterator current = dest;
-    try
-    {
-        while (begin != end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), *begin);
-            ++current;
-            ++begin;
-        }
-    }
-    catch (...)
-    {
-        while (dest != current)
-        {
-            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
-            ++dest;
-        }
-        throw;
-    }
-}
-
-template<class Type, class Allocator>
-constexpr void
-Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
-{
-    iterator current = begin;
-    try
-    {
-        while (current != end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current));
-            ++current;
-        }
-    }
-    catch (...)
-    {
-        while (begin != current)
-        {
-            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
-            ++begin;
-        }
-        throw;
-    }
-}
-
-template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
-{
-    iterator current = dest;
-    try
-    {
-        while (begin != end)
-        {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), pw::move(*begin));
-            ++current;
-            ++begin;
-        }
-    }
-    catch (...)
-    {
-        while (dest != current)
-        {
-            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
-            ++dest;
-        }
-        throw;
-    }
-    return current;
 }
 
 template<class Type, class Allocator>
@@ -362,7 +274,7 @@ Storage2<Type, Allocator>::move_backward(iterator begin, iterator end, iterator 
     {
         --dest;
         --end;
-        allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*dest), pw::move(*end));
+        construct(dest, pw::move(*end));
     }
     return dest;
 }
@@ -376,18 +288,14 @@ Storage2<Type, Allocator>::fill_n(iterator dest, size_type count, value_type con
     {
         while (count > 0)
         {
-            allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*current), value);
+            construct(current, value);
             ++current;
             --count;
         }
     }
     catch (...)
     {
-        while (dest != current)
-        {
-            allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*dest));
-            ++dest;
-        }
+        destroy(dest, current);
         throw;
     }
     return current;
@@ -395,13 +303,87 @@ Storage2<Type, Allocator>::fill_n(iterator dest, size_type count, value_type con
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
+Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
 {
-    while (begin != end)
+    iterator current = begin;
+    try
     {
-        allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
-        ++begin;
+        while (current != end)
+        {
+            construct(current, value);
+            ++current;
+        }
+    }
+    catch (...)
+    {
+        destroy(begin, current);
+        throw;
     }
 }
+
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
+{
+    iterator current = begin;
+    try
+    {
+        while (current != end)
+        {
+            construct(current);
+            ++current;
+        }
+    }
+    catch (...)
+    {
+        destroy(begin, current);
+        throw;
+    }
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
+{
+    iterator current = dest;
+    try
+    {
+        while (begin != end)
+        {
+            construct(current, pw::move(*begin));
+            ++current;
+            ++begin;
+        }
+    }
+    catch (...)
+    {
+        destroy(dest, current);
+        throw;
+    }
+    return current;
+}
+
+template<class Type, class Allocator>
+template<class InputIterator>
+constexpr void
+Storage2<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
+{
+    iterator current = dest;
+    try
+    {
+        while (begin != end)
+        {
+            construct(current, *begin);
+            ++current;
+            ++begin;
+        }
+    }
+    catch (...)
+    {
+        destroy(dest, current);
+        throw;
+    }
+}
+
 } // namespace pw::internal
 #endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */
