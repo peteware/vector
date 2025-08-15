@@ -42,14 +42,14 @@ uninitialized_move(InputIterator begin, InputIterator end, OutputIterator out)
     {
         while (begin != end)
         {
-            pw::construct_at(pw::addressof(*current), pw::move(*begin));
+            construct_at(addressof(*current), move(*begin));
             ++current;
             ++begin;
         }
     }
     catch (...)
     {
-        pw::destroy(out, current);
+        destroy(out, current);
         throw;
     }
     return current;

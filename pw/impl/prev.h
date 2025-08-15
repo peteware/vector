@@ -10,7 +10,7 @@ template<class Iterator>
 constexpr Iterator
 prev(Iterator iterator, typename iterator_traits<Iterator>::difference_type n = 1)
 {
-    pw::advance(iterator, -n);
+    advance(iterator, -n);
     return iterator;
 }
 

@@ -34,13 +34,13 @@ uninitialized_fill(Iterator begin, Iterator end, Type const& value)
     {
         while (current != end)
         {
-            pw::construct_at(pw::addressof(*current), value);
+            construct_at(addressof(*current), value);
             ++current;
         }
     }
     catch (...)
     {
-        pw::destroy(begin, current);
+        destroy(begin, current);
         throw;
     }
 }

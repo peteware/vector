@@ -11,7 +11,7 @@ constexpr Type
 exchange(Type& obj, OtherType&& new_value)
 {
     Type old = pw::move(obj);
-    obj      = pw::forward<OtherType>(new_value);
+    obj      = forward<OtherType>(new_value);
     return old;
 }
 

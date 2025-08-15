@@ -25,7 +25,7 @@ public:
     using const_pointer          = allocator_traits<Allocator>::const_pointer;
     using iterator               = allocator_traits<Allocator>::pointer;
     using const_iterator         = allocator_traits<Allocator>::const_pointer;
-    using reverse_iterator       = reverse_iterator<iterator>;
+    using reverse_iterator       = pw::reverse_iterator<iterator>;
     using const_reverse_iterator = pw::reverse_iterator<const_iterator>;
 
     constexpr vector() noexcept(noexcept(allocator_type()));
@@ -38,7 +38,7 @@ public:
     constexpr vector(vector const& copy, allocator_type const& alloc);
     constexpr vector(vector&& copy) noexcept;
     constexpr vector(vector&& copy, allocator_type const& alloc);
-    constexpr vector(pw::initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
+    constexpr vector(initializer_list<value_type> init, allocator_type const& alloc = allocator_type());
 
     template<class Iterator>
     constexpr vector(Iterator first, Iterator last, allocator_type const& alloc = allocator_type());
@@ -46,18 +46,18 @@ public:
     constexpr ~vector() = default;
 
     constexpr vector& operator=(const vector& other);
-    constexpr vector& operator=(pw::initializer_list<value_type> init_list);
+    constexpr vector& operator=(initializer_list<value_type> init_list);
     constexpr vector& operator=(vector&& other)
-        noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
-                 pw::allocator_traits<allocator_type>::is_always_equal::value);
+        noexcept(allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+                 allocator_traits<allocator_type>::is_always_equal::value);
     constexpr void
-    swap(vector& other) noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-                                 pw::allocator_traits<allocator_type>::is_always_equal::value);
+    swap(vector& other) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+                                 allocator_traits<allocator_type>::is_always_equal::value);
 
     template<class Iterator>
     constexpr void                    assign(Iterator begin, Iterator end);
     constexpr void                    assign(size_type count, value_type const& value);
-    constexpr void                    assign(pw::initializer_list<value_type> init_list);
+    constexpr void                    assign(initializer_list<value_type> init_list);
     constexpr allocator_type          get_allocator() const;
     constexpr reference               at(size_type position);
     constexpr const_reference         at(size_type position) const;
@@ -98,7 +98,7 @@ public:
     constexpr iterator                insert(const_iterator position, const_reference value);
     constexpr iterator                insert(const_iterator position, value_type&& value);
     constexpr iterator                insert(const_iterator position, size_type count, const_reference value);
-    constexpr iterator insert(const_iterator position, pw::initializer_list<value_type> init_list);
+    constexpr iterator                insert(const_iterator position, initializer_list<value_type> init_list);
     template<class Iterator>
     constexpr iterator insert(const_iterator position, Iterator first, Iterator last);
     template<class... Args>

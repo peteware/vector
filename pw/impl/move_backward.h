@@ -26,7 +26,7 @@ move_backward(Iterator1 begin, Iterator1 end, Iterator2 dest)
 {
     while (begin != end)
     {
-        *--dest = pw::move(*--end);
+        *--dest = move(*--end);
     }
     return dest;
 }

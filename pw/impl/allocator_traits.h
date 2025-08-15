@@ -84,7 +84,7 @@ struct allocator_traits
     template<class Type, class... Args>
     static constexpr void construct(allocator_type&, Type* p, Args&&... args)
     {
-        pw::construct_at(p, pw::forward<Args>(args)...);
+        pw::construct_at(p, forward<Args>(args)...);
     }
 
     template<class Type>

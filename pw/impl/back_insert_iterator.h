@@ -47,7 +47,7 @@ template<class Container>
 back_insert_iterator<Container>&
 back_insert_iterator<Container>::operator=(typename Container::value_type&& value)
 {
-    m_container->push_back(pw::move(value));
+    m_container->push_back(move(value));
     return *this;
 }
 

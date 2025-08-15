@@ -25,7 +25,7 @@ move(InputIterator begin, InputIterator end, OutputIterator dest)
 {
     while (begin != end)
     {
-        *dest++ = pw::move(*begin++);
+        *dest++ = move(*begin++);
     }
     return dest;
 }
