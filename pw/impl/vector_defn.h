@@ -756,6 +756,7 @@ constexpr void
 vector<Type, Allocator>::clear() noexcept
 {
     // Calling clear() does not affect the result of capacity().
+    // TODO: Change calls to destroy() to Storage2::destroy()
     pw::destroy(m_storage.begin(), m_storage.end());
     m_storage.set_size(0);
 }
@@ -775,17 +776,14 @@ vector<Type, Allocator>::push_back(const_reference value)
 
     if (total <= m_storage.allocated())
     {
-        // TODO: Change calls to allocator_traits<>::construct() to Storage2::construct()
-        pw::allocator_traits<Allocator>::construct(
-            m_storage.allocator(), pw::addressof(*m_storage.end()), value);
+        m_storage.construct(m_storage.end(), value);
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), m_storage.calc_size());
 
         tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
-        pw::allocator_traits<Allocator>::construct(
-            m_storage.allocator(), pw::addressof(*(tmp.begin() + total - count)), value);
+        tmp.construct(tmp.begin() + total - count, value);
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);
@@ -806,16 +804,14 @@ vector<Type, Allocator>::push_back(value_type&& value)
 
     if (total <= m_storage.allocated())
     {
-        // TODO: Change calls to construct_at() to Storage2::construct()
-        pw::construct_at(pw::addressof(*m_storage.end()), pw::move(value));
+        m_storage.construct(m_storage.end(), pw::move(value));
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), m_storage.calc_size());
 
         tmp.uninitialized_move(m_storage.begin(), m_storage.end(), tmp.begin());
-        pw::allocator_traits<Allocator>::construct(
-            m_storage.allocator(), pw::addressof(*(tmp.begin() + total - 1)), pw::move(value));
+        tmp.construct(tmp.begin() + total - 1, pw::move(value));
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);
@@ -920,9 +916,8 @@ vector<Type, Allocator>::erase(const_iterator begin, const_iterator end)
     size_type const last   = pw::distance(cbegin(), end);
     size_type const width  = pw::distance(begin, end);
 
-    // TODO: Replace move() and destroy() with Storage2::move(), Storage2::destroy()
-    pw::move(m_storage.begin() + last, m_storage.end(), m_storage.begin() + offset);
-    pw::destroy(m_storage.begin() + last, m_storage.end());
+    m_storage.move(m_storage.begin() + last, m_storage.end(), m_storage.begin() + offset);
+    m_storage.destroy(m_storage.begin() + last, m_storage.end());
     m_storage.set_size(size() - width);
     return m_storage.begin() + offset;
 }

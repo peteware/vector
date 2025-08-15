@@ -63,12 +63,16 @@ struct Storage2
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
 
+    template<class... Args>
+    constexpr void construct(iterator iter, Args&&... args);
     constexpr void uninitialized_fill(iterator begin, iterator end, value_type const& value);
     template<class InputIterator>
     constexpr void     uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
     constexpr void     uninitialized_default_construct(iterator begin, iterator end);
     constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
     constexpr iterator copy(const_iterator begin, const_iterator end, iterator dest);
+    constexpr iterator move(iterator begin, iterator end, iterator dest);
+    constexpr void     destroy(iterator begin, iterator end);
 
 private:
     allocator_type m_alloc;
@@ -217,6 +221,14 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
 }
 
 template<class Type, class Allocator>
+template<class... Args>
+constexpr void
+Storage2<Type, Allocator>::construct(iterator iter, Args&&... args)
+{
+    allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*iter), pw::forward<Args>(args)...);
+}
+
+template<class Type, class Allocator>
 constexpr void
 Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
 {
@@ -327,6 +339,28 @@ Storage2<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterat
         ++begin;
     }
     return dest;
+}
+
+template<class Type, class Allocator>
+constexpr Storage2<Type, Allocator>::iterator
+Storage2<Type, Allocator>::move(iterator begin, iterator end, iterator dest)
+{
+    while (begin != end)
+    {
+        *dest++ = pw::move(*begin++);
+    }
+    return dest;
+}
+
+template<class Type, class Allocator>
+constexpr void
+Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
+{
+    while (begin != end)
+    {
+        allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
+        ++begin;
+    }
 }
 } // namespace pw::internal
 #endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */
