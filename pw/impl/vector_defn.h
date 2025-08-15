@@ -161,15 +161,14 @@ template<class Iterator>
 constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocator_type const& alloc)
     : m_storage(alloc)
 {
-    if constexpr (pw::is_base_of<pw::forward_iterator_tag, Iterator>::value)
+    if constexpr (pw::is_base_of<pw::forward_iterator_tag,
+                                 typename pw::iterator_traits<Iterator>::iterator_category>::value)
     {
-        size_type count  = pw::distance(first, last);
-
-        auto      lambda = [begin = first, end = last, this](pointer dest) -> void {
-            m_storage.uninitialized_copy(begin, end, dest);
-        };
-        // TODO: Storage2.reserve() doesn't exist!  No unit test?
-        m_storage.reserve(count, lambda);
+        size_type count = pw::distance(first, last);
+        Storage   tmp { alloc, count };
+        tmp.uninitialized_copy(first, last, tmp.begin());
+        tmp.set_size(count);
+        m_storage.swap(tmp, false);
     }
     else
     {
