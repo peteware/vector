@@ -1,17 +1,17 @@
 #include <catch2/catch_test_macros.hpp>
 #include <pw/impl/allocator.h>
-#include <pw/internal/storage2.h>
+#include <pw/internal/storage.h>
 #include <tests/test/test_opcounter.h>
 #include <tests/test/test_optracker.h>
 #include <tests/test/test_throwingtype.h>
 
 using namespace pw::test;
 
-SCENARIO("Storage2::uninitialized_fill() constructs objects with allocator_traits", "[storage2]")
+SCENARIO("Storage::uninitialized_fill() constructs objects with allocator_traits", "[storage]")
 {
-    GIVEN("A Storage2 instance with allocated memory")
+    GIVEN("A Storage instance with allocated memory")
     {
-        pw::internal::Storage2<int> storage(pw::allocator<int> {}, 5);
+        pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_fill is called with a value")
         {
@@ -29,13 +29,13 @@ SCENARIO("Storage2::uninitialized_fill() constructs objects with allocator_trait
     }
 }
 
-SCENARIO("Storage2::uninitialized_fill() provides exception safety", "[storage2]")
+SCENARIO("Storage::uninitialized_fill() provides exception safety", "[storage]")
 {
     using pw::test::ThrowingType;
 
-    GIVEN("A Storage2 instance with ThrowingType elements")
+    GIVEN("A Storage instance with ThrowingType elements")
     {
-        pw::internal::Storage2<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
+        pw::internal::Storage<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
         ThrowingType::reset();
 
         WHEN("ThrowingType throws after 2 constructions")
@@ -54,12 +54,12 @@ SCENARIO("Storage2::uninitialized_fill() provides exception safety", "[storage2]
     }
 }
 
-SCENARIO("Storage2::uninitialized_copy() copies objects using allocator_traits", "[storage2]")
+SCENARIO("Storage::uninitialized_copy() copies objects using allocator_traits", "[storage]")
 {
-    GIVEN("Source data and target Storage2")
+    GIVEN("Source data and target Storage")
     {
         int                         source[] = { 1, 2, 3, 4, 5 };
-        pw::internal::Storage2<int> storage(pw::allocator<int> {}, 5);
+        pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_copy is called")
         {
@@ -77,16 +77,16 @@ SCENARIO("Storage2::uninitialized_copy() copies objects using allocator_traits",
     }
 }
 
-SCENARIO("Storage2::uninitialized_copy() provides exception safety", "[storage2]")
+SCENARIO("Storage::uninitialized_copy() provides exception safety", "[storage]")
 {
     using pw::test::ThrowingType;
 
-    GIVEN("Source ThrowingType array and target Storage2")
+    GIVEN("Source ThrowingType array and target Storage")
     {
         ThrowingType::reset();
         ThrowingType::throw_after_n = -1; // No exceptions for source creation
         ThrowingType source[4]      = { ThrowingType(1), ThrowingType(2), ThrowingType(3), ThrowingType(4) };
-        pw::internal::Storage2<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
+        pw::internal::Storage<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
         ThrowingType::reset();
 
         WHEN("ThrowingType throws after 2 constructions during copy")
@@ -103,12 +103,12 @@ SCENARIO("Storage2::uninitialized_copy() provides exception safety", "[storage2]
     }
 }
 
-SCENARIO("Storage2::uninitialized_default_construct() constructs objects using allocator_traits",
-         "[storage2]")
+SCENARIO("Storage::uninitialized_default_construct() constructs objects using allocator_traits",
+         "[storage]")
 {
-    GIVEN("A Storage2 instance with allocated memory")
+    GIVEN("A Storage instance with allocated memory")
     {
-        pw::internal::Storage2<int> storage(pw::allocator<int> {}, 5);
+        pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_default_construct is called")
         {
@@ -127,13 +127,13 @@ SCENARIO("Storage2::uninitialized_default_construct() constructs objects using a
     }
 }
 
-SCENARIO("Storage2::uninitialized_default_construct() provides exception safety", "[storage2]")
+SCENARIO("Storage::uninitialized_default_construct() provides exception safety", "[storage]")
 {
     using pw::test::ThrowingType;
 
-    GIVEN("A Storage2 instance with ThrowingType elements")
+    GIVEN("A Storage instance with ThrowingType elements")
     {
-        pw::internal::Storage2<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
+        pw::internal::Storage<ThrowingType> storage(pw::allocator<ThrowingType> {}, 5);
         ThrowingType::reset();
 
         WHEN("ThrowingType throws after 2 constructions")
@@ -150,15 +150,15 @@ SCENARIO("Storage2::uninitialized_default_construct() provides exception safety"
     }
 }
 
-SCENARIO("Storage2::uninitialized_move() moves objects using allocator_traits", "[storage2]")
+SCENARIO("Storage::uninitialized_move() moves objects using allocator_traits", "[storage]")
 {
-    GIVEN("Source Storage2 and target Storage2")
+    GIVEN("Source Storage and target Storage")
     {
-        pw::internal::Storage2<int> source_storage(pw::allocator<int> {}, 3);
+        pw::internal::Storage<int> source_storage(pw::allocator<int> {}, 3);
         source_storage.uninitialized_fill(source_storage.begin(), source_storage.begin() + 3, 42);
         source_storage.set_size(3);
 
-        pw::internal::Storage2<int> target_storage(pw::allocator<int> {}, 5);
+        pw::internal::Storage<int> target_storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_move is called")
         {
@@ -178,19 +178,19 @@ SCENARIO("Storage2::uninitialized_move() moves objects using allocator_traits", 
     }
 }
 
-SCENARIO("Storage2::uninitialized_move() provides exception safety", "[storage2]")
+SCENARIO("Storage::uninitialized_move() provides exception safety", "[storage]")
 {
     using pw::test::ThrowingType;
 
-    GIVEN("Source ThrowingType Storage2 and target Storage2")
+    GIVEN("Source ThrowingType Storage and target Storage")
     {
         ThrowingType::reset();
         ThrowingType::throw_after_n = -1; // No exceptions for source creation
-        pw::internal::Storage2<ThrowingType> source_storage(pw::allocator<ThrowingType> {}, 4);
+        pw::internal::Storage<ThrowingType> source_storage(pw::allocator<ThrowingType> {}, 4);
         source_storage.uninitialized_default_construct(source_storage.begin(), source_storage.begin() + 4);
         source_storage.set_size(4);
 
-        pw::internal::Storage2<ThrowingType> target_storage(pw::allocator<ThrowingType> {}, 5);
+        pw::internal::Storage<ThrowingType> target_storage(pw::allocator<ThrowingType> {}, 5);
         ThrowingType::reset();
 
         WHEN("ThrowingType throws after 2 constructions during move")
@@ -208,12 +208,12 @@ SCENARIO("Storage2::uninitialized_move() provides exception safety", "[storage2]
     }
 }
 
-SCENARIO("Storage2::copy() copies objects to initialized memory", "[storage2]")
+SCENARIO("Storage::copy() copies objects to initialized memory", "[storage]")
 {
-    GIVEN("Source data and initialized target Storage2")
+    GIVEN("Source data and initialized target Storage")
     {
         int                         source[] = { 10, 20, 30 };
-        pw::internal::Storage2<int> storage(pw::allocator<int> {}, 5);
+        pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
         // Initialize with different values first
         storage.uninitialized_fill(storage.begin(), storage.begin() + 5, 0);
         storage.set_size(5);
@@ -235,9 +235,9 @@ SCENARIO("Storage2::copy() copies objects to initialized memory", "[storage2]")
     }
 }
 
-SCENARIO("Storage2 member functions work with OpTracker for operation counting", "[storage2]")
+SCENARIO("Storage member functions work with OpTracker for operation counting", "[storage]")
 {
-    GIVEN("A Storage2 instance with OpTracker elements")
+    GIVEN("A Storage instance with OpTracker elements")
     {
         struct TestOpTracker : public OpTracker
         {
@@ -270,7 +270,7 @@ SCENARIO("Storage2 member functions work with OpTracker for operation counting",
         };
 
         OpCounter                             counter;
-        pw::internal::Storage2<TestOpTracker> storage(pw::allocator<TestOpTracker> {}, 5);
+        pw::internal::Storage<TestOpTracker> storage(pw::allocator<TestOpTracker> {}, 5);
 
         WHEN("uninitialized_fill is called")
         {

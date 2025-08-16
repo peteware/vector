@@ -7,7 +7,7 @@
 #include <pw/impl/iterator_traits.h>
 #include <pw/impl/reverse_iterator.h>
 
-#include <pw/internal/storage2.h>
+#include <pw/internal/storage.h>
 
 namespace pw {
 
@@ -107,7 +107,7 @@ public:
     constexpr iterator emplace(const_iterator position, Args&&... args);
 
 private:
-    using Storage = internal::Storage2<Type, Allocator>;
+    using Storage = internal::Storage<Type, Allocator>;
 
     Storage m_storage;
 };

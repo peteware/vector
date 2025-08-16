@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_INTERNAL_STORAGE2_H
-#define INCLUDED_PW_INTERNAL_STORAGE2_H
+#ifndef INCLUDED_PW_INTERNAL_STORAGE_H
+#define INCLUDED_PW_INTERNAL_STORAGE_H
 
 #include <functional>
 #include <pw/impl/addressof.h>
@@ -14,7 +14,7 @@
 namespace pw::internal {
 
 /**
- * The Storage2 struct is an internal implementation that
+ * The Storage struct is an internal implementation that
  * helps insure any allocated memory is deallocated.
  *
  * @verbatim
@@ -30,7 +30,7 @@ namespace pw::internal {
  */
 
 template<class Type, class Allocator = allocator<Type>>
-struct Storage2
+struct Storage
 {
     using value_type      = Type;
     using allocator_type  = Allocator;
@@ -43,9 +43,9 @@ struct Storage2
     using iterator        = pointer;
     using const_iterator  = const_pointer;
 
-    constexpr explicit Storage2(allocator_type const& alloc);
-    constexpr Storage2(allocator_type const& alloc, size_type count);
-    constexpr ~Storage2();
+    constexpr explicit Storage(allocator_type const& alloc);
+    constexpr Storage(allocator_type const& alloc, size_type count);
+    constexpr ~Storage();
 
     constexpr void                    reset();
     [[nodiscard]] constexpr bool      empty() const noexcept;
@@ -53,14 +53,14 @@ struct Storage2
     constexpr const_pointer           begin() const noexcept;
     constexpr pointer                 end() noexcept;
     constexpr const_pointer           end() const noexcept;
-    constexpr Storage2&               set_size(size_type size) noexcept;
+    constexpr Storage&               set_size(size_type size) noexcept;
     constexpr size_type               size() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
     [[nodiscard]] constexpr size_type max_size() const noexcept;
     constexpr size_type               allocated() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
-    constexpr void                    swap(Storage2& other, bool swap_allocator)
+    constexpr void                    swap(Storage& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
 
@@ -87,7 +87,7 @@ private:
 };
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
+constexpr Storage<Type, Allocator>::Storage(allocator_type const& alloc)
     : m_alloc(alloc)
     , m_begin(nullptr)
     , m_size(0)
@@ -96,7 +96,7 @@ constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc)
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc, size_type count)
+constexpr Storage<Type, Allocator>::Storage(allocator_type const& alloc, size_type count)
     : m_alloc(alloc)
     , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
     , m_size(0)
@@ -105,7 +105,7 @@ constexpr Storage2<Type, Allocator>::Storage2(allocator_type const& alloc, size_
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::~Storage2()
+constexpr Storage<Type, Allocator>::~Storage()
 {
     pw::destroy(m_begin, m_begin + m_size);
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
@@ -113,7 +113,7 @@ constexpr Storage2<Type, Allocator>::~Storage2()
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::reset()
+Storage<Type, Allocator>::reset()
 {
     if (m_begin)
     {
@@ -127,50 +127,50 @@ Storage2<Type, Allocator>::reset()
 
 template<class Type, class Allocator>
 constexpr bool
-Storage2<Type, Allocator>::empty() const noexcept
+Storage<Type, Allocator>::empty() const noexcept
 {
     return m_size == 0;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::pointer
-Storage2<Type, Allocator>::begin() noexcept
+constexpr Storage<Type, Allocator>::pointer
+Storage<Type, Allocator>::begin() noexcept
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::const_pointer
-Storage2<Type, Allocator>::begin() const noexcept
+constexpr Storage<Type, Allocator>::const_pointer
+Storage<Type, Allocator>::begin() const noexcept
 {
     return m_begin;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::pointer
-Storage2<Type, Allocator>::end() noexcept
+constexpr Storage<Type, Allocator>::pointer
+Storage<Type, Allocator>::end() noexcept
 {
     return m_begin + m_size;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::const_pointer
-Storage2<Type, Allocator>::end() const noexcept
+constexpr Storage<Type, Allocator>::const_pointer
+Storage<Type, Allocator>::end() const noexcept
 {
     return m_begin + m_size;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>&
-Storage2<Type, Allocator>::set_size(size_type size) noexcept
+constexpr Storage<Type, Allocator>&
+Storage<Type, Allocator>::set_size(size_type size) noexcept
 {
     m_size = size;
     return *this;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::size() const noexcept
+constexpr Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::size() const noexcept
 {
     return m_size;
 }
@@ -181,43 +181,43 @@ Storage2<Type, Allocator>::size() const noexcept
  * @return The next size to allocate (always >= 1).
  */
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::calc_size() const noexcept
+constexpr Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::calc_size() const noexcept
 {
     return max(static_cast<size_type>(1), 2 * m_allocated);
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::max_size() const noexcept
+constexpr Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::max_size() const noexcept
 {
     return allocator_traits<allocator_type>::max_size(m_alloc);
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::size_type
-Storage2<Type, Allocator>::allocated() const noexcept
+constexpr Storage<Type, Allocator>::size_type
+Storage<Type, Allocator>::allocated() const noexcept
 {
     return m_allocated;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::allocator_type&
-Storage2<Type, Allocator>::allocator() noexcept
+constexpr Storage<Type, Allocator>::allocator_type&
+Storage<Type, Allocator>::allocator() noexcept
 {
     return m_alloc;
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::allocator_type
-Storage2<Type, Allocator>::copy_allocator() const
+constexpr Storage<Type, Allocator>::allocator_type
+Storage<Type, Allocator>::copy_allocator() const
 {
     return m_alloc;
 }
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
+Storage<Type, Allocator>::swap(Storage& other, bool swap_allocator)
     noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
              allocator_traits<allocator_type>::is_always_equal::value)
 {
@@ -234,14 +234,14 @@ Storage2<Type, Allocator>::swap(Storage2& other, bool swap_allocator)
 template<class Type, class Allocator>
 template<class... Args>
 constexpr void
-Storage2<Type, Allocator>::construct(iterator where, Args&&... args)
+Storage<Type, Allocator>::construct(iterator where, Args&&... args)
 {
     allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*where), pw::forward<Args>(args)...);
 }
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
+Storage<Type, Allocator>::destroy(iterator begin, iterator end)
 {
     while (begin != end)
     {
@@ -251,9 +251,9 @@ Storage2<Type, Allocator>::destroy(iterator begin, iterator end)
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
+constexpr Storage<Type, Allocator>::iterator
 // ReSharper disable once CppMemberFunctionMayBeStatic
-Storage2<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterator dest)
+Storage<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterator dest)
 {
     while (begin != end)
     {
@@ -265,8 +265,8 @@ Storage2<Type, Allocator>::copy(const_iterator begin, const_iterator end, iterat
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::move(iterator begin, iterator end, iterator dest)
+constexpr Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::move(iterator begin, iterator end, iterator dest)
 {
     while (begin != end)
     {
@@ -276,8 +276,8 @@ Storage2<Type, Allocator>::move(iterator begin, iterator end, iterator dest)
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::move_backward(iterator begin, iterator end, iterator dest)
+constexpr Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::move_backward(iterator begin, iterator end, iterator dest)
 {
     while (begin != end)
     {
@@ -289,8 +289,8 @@ Storage2<Type, Allocator>::move_backward(iterator begin, iterator end, iterator 
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::fill_n(iterator dest, size_type count, value_type const& value)
+constexpr Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::fill_n(iterator dest, size_type count, value_type const& value)
 {
     iterator current = dest;
     try
@@ -312,7 +312,7 @@ Storage2<Type, Allocator>::fill_n(iterator dest, size_type count, value_type con
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
+Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
 {
     iterator current = begin;
     try
@@ -332,7 +332,7 @@ Storage2<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, valu
 
 template<class Type, class Allocator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
+Storage<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
 {
     iterator current = begin;
     try
@@ -351,8 +351,8 @@ Storage2<Type, Allocator>::uninitialized_default_construct(iterator begin, itera
 }
 
 template<class Type, class Allocator>
-constexpr Storage2<Type, Allocator>::iterator
-Storage2<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
+constexpr Storage<Type, Allocator>::iterator
+Storage<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
 {
     iterator current = dest;
     try
@@ -375,7 +375,7 @@ Storage2<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iter
 template<class Type, class Allocator>
 template<class InputIterator>
 constexpr void
-Storage2<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
+Storage<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
 {
     iterator current = dest;
     try
@@ -395,4 +395,4 @@ Storage2<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator
 }
 
 } // namespace pw::internal
-#endif /* INCLUDED_PW_INTERNAL_STORAGE2_H */
+#endif /* INCLUDED_PW_INTERNAL_STORAGE_H */
