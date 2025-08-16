@@ -16,7 +16,7 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
 
         WHEN("emplace_back() one element")
         {
-            value_type val;
+            value_type val {};
             v.emplace_back(val);
             THEN("size() == 1")
             {
