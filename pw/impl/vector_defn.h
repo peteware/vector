@@ -182,21 +182,6 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
 }
 
 /**
- * @brief Swaps the contents of this vector with another vector.
- * @param other The vector to swap with
- * @return None
- * @exception None (conditionally noexcept based on allocator traits)
- */
-template<class Type, class Allocator>
-constexpr void
-vector<Type, Allocator>::swap(vector& other)
-    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-             allocator_traits<allocator_type>::is_always_equal::value)
-{
-    m_storage.swap(other.m_storage, allocator_traits<allocator_type>::propagate_on_container_swap::value);
-}
-
-/**
  * @brief Copy assignment operator. Assigns contents from another vector.
  * @param other The vector to copy from
  * @return Reference to this vector
@@ -300,6 +285,21 @@ vector<Type, Allocator>::operator=(vector&& other)
         m_storage.set_size(other.size());
     }
     return *this;
+}
+
+/**
+ * @brief Swaps the contents of this vector with another vector.
+ * @param other The vector to swap with
+ * @return None
+ * @exception None (conditionally noexcept based on allocator traits)
+ */
+template<class Type, class Allocator>
+constexpr void
+vector<Type, Allocator>::swap(vector& other)
+    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             allocator_traits<allocator_type>::is_always_equal::value)
+{
+    m_storage.swap(other.m_storage, allocator_traits<allocator_type>::propagate_on_container_swap::value);
 }
 
 /**
@@ -1028,30 +1028,6 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
 }
 
 /**
- * @brief Inserts elements from range [first, last) before position.
- * @param position Iterator before which the content will be inserted
- * @param first Iterator to the first element to insert
- * @param last Iterator to one past the last element to insert
- * @return Iterator pointing to the first inserted element
- * @exception std::bad_alloc if memory allocation fails
- */
-template<class Type, class Allocator>
-template<class Iterator>
-constexpr vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
-{
-    size_type offset = pw::distance(cbegin(), position);
-    iterator  dest   = m_storage.begin() + offset;
-
-    while (first != last)
-    {
-        dest = insert(dest, *first) + 1;
-        ++first;
-    }
-    return m_storage.begin() + offset;
-}
-
-/**
  * @brief Inserts elements from initializer list before position.
  * @param position Iterator before which the content will be inserted
  * @param init_list Initializer list to insert the values from
@@ -1086,6 +1062,30 @@ vector<Type, Allocator>::insert(const_iterator position, initializer_list<value_
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);
+    return m_storage.begin() + offset;
+}
+
+/**
+ * @brief Inserts elements from range [first, last) before position.
+ * @param position Iterator before which the content will be inserted
+ * @param first Iterator to the first element to insert
+ * @param last Iterator to one past the last element to insert
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
+template<class Type, class Allocator>
+template<class Iterator>
+constexpr vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterator last)
+{
+    size_type offset = pw::distance(cbegin(), position);
+    iterator  dest   = m_storage.begin() + offset;
+
+    while (first != last)
+    {
+        dest = insert(dest, *first) + 1;
+        ++first;
+    }
     return m_storage.begin() + offset;
 }
 
