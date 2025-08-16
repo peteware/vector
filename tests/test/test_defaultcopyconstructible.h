@@ -16,7 +16,7 @@ struct DefaultCopyConstructible : public OpTracker
     {
     }
 
-    DefaultCopyConstructible(int value)
+    DefaultCopyConstructible(int value) // NOLINT(*-explicit-constructor)
         : OpTracker(s_opCounter, value)
     {
     }

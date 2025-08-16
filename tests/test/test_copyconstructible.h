@@ -29,6 +29,7 @@ struct CopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     CopyConstructible(value_type const& value);
     CopyConstructible(CopyConstructible const& copy);
     CopyConstructible(CopyConstructible&& move) noexcept;
