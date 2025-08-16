@@ -1,5 +1,5 @@
-#ifndef  INCLUDED_PW_IMPL_FILL_H_
-#define  INCLUDED_PW_IMPL_FILL_H_
+#ifndef INCLUDED_PW_IMPL_FILL_H_
+#define INCLUDED_PW_IMPL_FILL_H_
 
 namespace pw {
 

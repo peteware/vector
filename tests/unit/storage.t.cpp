@@ -58,7 +58,7 @@ SCENARIO("Storage::uninitialized_copy() copies objects using allocator_traits", 
 {
     GIVEN("Source data and target Storage")
     {
-        int                         source[] = { 1, 2, 3, 4, 5 };
+        int                        source[] = { 1, 2, 3, 4, 5 };
         pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_copy is called")
@@ -103,8 +103,7 @@ SCENARIO("Storage::uninitialized_copy() provides exception safety", "[storage]")
     }
 }
 
-SCENARIO("Storage::uninitialized_default_construct() constructs objects using allocator_traits",
-         "[storage]")
+SCENARIO("Storage::uninitialized_default_construct() constructs objects using allocator_traits", "[storage]")
 {
     GIVEN("A Storage instance with allocated memory")
     {
@@ -212,7 +211,7 @@ SCENARIO("Storage::copy() copies objects to initialized memory", "[storage]")
 {
     GIVEN("Source data and initialized target Storage")
     {
-        int                         source[] = { 10, 20, 30 };
+        int                        source[] = { 10, 20, 30 };
         pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
         // Initialize with different values first
         storage.uninitialized_fill(storage.begin(), storage.begin() + 5, 0);
@@ -269,7 +268,7 @@ SCENARIO("Storage member functions work with OpTracker for operation counting", 
             }
         };
 
-        OpCounter                             counter;
+        OpCounter                            counter;
         pw::internal::Storage<TestOpTracker> storage(pw::allocator<TestOpTracker> {}, 5);
 
         WHEN("uninitialized_fill is called")
