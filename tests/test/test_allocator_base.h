@@ -37,14 +37,14 @@ template<class Type>
 Type*
 allocator_base<Type>::allocate(size_type count)
 {
-    return static_cast<Type*>(::operator new(count * sizeof(Type)));
+    return static_cast<Type*>(operator new(count * sizeof(Type)));
 }
 
 template<class Type>
 void
 allocator_base<Type>::deallocate(Type* ptr, size_type count)
 {
-    return ::operator delete(static_cast<void*>(ptr));
+    return operator delete(static_cast<void*>(ptr));
 }
 
 template<class Type1, class Type2>

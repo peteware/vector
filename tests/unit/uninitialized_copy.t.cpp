@@ -14,7 +14,7 @@ SCENARIO("uninitialized_copy() handles exceptions", "[uninitialized_copy]")
             ThrowingType(1), ThrowingType(2), ThrowingType(3), ThrowingType(4), ThrowingType(5)
         };
         alignas(ThrowingType) unsigned char dest_buf[sizeof(ThrowingType) * 5] = {};
-        ThrowingType*                       dest = reinterpret_cast<ThrowingType*>(dest_buf);
+        auto*                               dest = reinterpret_cast<ThrowingType*>(dest_buf);
         ThrowingType::reset();
         WHEN("ThrowingType raises exception after 2 constructions")
         {

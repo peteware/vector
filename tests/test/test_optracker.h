@@ -11,12 +11,12 @@ namespace pw::test {
 struct OpTracker
 {
     using value_type = int;
+    OpTracker()      = delete;
     value_type value() const;
     OpTracker& setValue(value_type const& value);
 
 protected:
-    OpTracker() = delete;
-    OpTracker(OpCounter& opCounter); // default constructor for derived classes
+    explicit OpTracker(OpCounter& opCounter); // default constructor for derived classes
     OpTracker(OpCounter& opCounter, value_type const& value);
     OpTracker(OpTracker const& copy);
     OpTracker(OpTracker&& move) noexcept;

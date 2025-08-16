@@ -20,11 +20,10 @@ namespace pw::test {
  */
 struct MoveConstructible : public OpTracker
 {
-    using value_type = OpTracker::value_type;
     static OpCounter getCounter();
 
     MoveConstructible();
-    MoveConstructible(value_type const& value);
+    explicit MoveConstructible(value_type const& value);
     MoveConstructible(MoveConstructible const& copy);
     MoveConstructible(MoveConstructible&& move);
 

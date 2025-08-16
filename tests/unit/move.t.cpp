@@ -35,7 +35,7 @@ TEMPLATE_LIST_TEST_CASE("move", "[move]", pw::test::Phase2TestTypeList)
 
         WHEN("It is copied")
         {
-            pw::test::CopyConstructible m2(m);
+            pw::test::CopyConstructible m2(m); // NOLINT(*-unnecessary-copy-initialization)
             pw::test::OpCounter         counter = m2.getCounter() - init;
             THEN("copy constructor is called")
             {

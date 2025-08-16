@@ -27,10 +27,7 @@ compare(Iter1 begin1, Iter1 end1, Iter2 begin2, Iter2 end2)
     {
         return -1;
     }
-    else
-    {
-        return 1;
-    }
+    return 1;
 }
 
 } // namespace pw::internal

@@ -40,7 +40,7 @@ SCENARIO("Storage2::uninitialized_fill() provides exception safety", "[storage2]
 
         WHEN("ThrowingType throws after 2 constructions")
         {
-            ThrowingType value(99);
+            ThrowingType const value(99);
             ThrowingType::reset();           // Reset count after creating value
             ThrowingType::throw_after_n = 2; // Set throw limit after reset
 
@@ -241,7 +241,7 @@ SCENARIO("Storage2 member functions work with OpTracker for operation counting",
     {
         struct TestOpTracker : public OpTracker
         {
-            TestOpTracker(OpCounter& opCounter)
+            explicit TestOpTracker(OpCounter& opCounter)
                 : OpTracker(opCounter)
             {
             }
@@ -262,7 +262,7 @@ SCENARIO("Storage2 member functions work with OpTracker for operation counting",
                 OpTracker::operator=(other);
                 return *this;
             }
-            TestOpTracker& operator=(TestOpTracker&& other)
+            TestOpTracker& operator=(TestOpTracker&& other) noexcept
             {
                 OpTracker::operator=(std::move(other));
                 return *this;

@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 // Helper class that throws on construction after N instances
 class ThrowingType
@@ -22,5 +22,5 @@ public:
     static void reset();
 };
 
-}} // namespace pw::test
+} // namespace pw::test
 #endif

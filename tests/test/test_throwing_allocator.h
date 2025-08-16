@@ -4,7 +4,7 @@
 #include <cstddef>
 #include <new>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 // Allocator that can throw on allocation
 template<typename T>
@@ -29,7 +29,7 @@ public:
         {
             throw std::bad_alloc();
         }
-        return static_cast<T*>(::operator new(n * sizeof(T)));
+        return static_cast<T*>(operator new(n * sizeof(T)));
     }
 
     void        deallocate(T* p, std::size_t) noexcept { ::operator delete(p); }
@@ -52,6 +52,6 @@ inline int ThrowingAllocator<T>::allocate_count = 0;
 template<typename T>
 inline int ThrowingAllocator<T>::throw_after_n_allocations = -1;
 
-}} // namespace pw::test
+} // namespace pw::test
 
 #endif // PW_TEST_THROWING_ALLOCATOR_H

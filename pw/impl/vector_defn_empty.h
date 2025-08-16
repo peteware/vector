@@ -127,7 +127,7 @@ constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
  * @exception std::bad_alloc if memory allocation fails
  */
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(pw::initializer_list<value_type> init, allocator_type const& alloc)
+constexpr vector<Type, Allocator>::vector(initializer_list<value_type> init, allocator_type const& alloc)
 {
     (void)init;
     (void)alloc;
@@ -159,8 +159,8 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
 template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::swap(vector& other)
-    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-             pw::allocator_traits<allocator_type>::is_always_equal::value)
+    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
 }
@@ -187,7 +187,7 @@ vector<Type, Allocator>::operator=(const vector& other)
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
+vector<Type, Allocator>::operator=(initializer_list<value_type> init_list)
 {
     (void)init_list;
     return *this;
@@ -202,8 +202,8 @@ vector<Type, Allocator>::operator=(pw::initializer_list<value_type> init_list)
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
 vector<Type, Allocator>::operator=(vector&& other)
-    noexcept(pw::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
-             pw::allocator_traits<allocator_type>::is_always_equal::value)
+    noexcept(allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
+             allocator_traits<allocator_type>::is_always_equal::value)
 {
     (void)other;
     return *this;
@@ -248,7 +248,7 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
  */
 template<class Type, class Allocator>
 constexpr void
-vector<Type, Allocator>::assign(pw::initializer_list<value_type> init_list)
+vector<Type, Allocator>::assign(initializer_list<value_type> init_list)
 {
     (void)init_list;
 }
@@ -854,7 +854,7 @@ swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexce
  */
 template<class Type, class Allocator>
 constexpr bool
-operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
+operator==(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
 {
     if (op1.size() != op2.size())
     {
@@ -872,7 +872,7 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
  */
 template<class Type, class Allocator>
 constexpr auto
-operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
+operator<=>(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
     -> decltype(op1[0] <=> op2[0])
 {
     return op1[0] <=> op2[0];

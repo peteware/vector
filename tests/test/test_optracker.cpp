@@ -102,10 +102,7 @@ OpTracker::operator<=>(OpTracker const& op2) const
     {
         return std::strong_ordering::greater;
     }
-    else
-    {
-        return std::strong_ordering::equal;
-    }
+    return std::strong_ordering::equal;
 }
 
 bool

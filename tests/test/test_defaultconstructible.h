@@ -26,7 +26,7 @@ struct DefaultConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
-    DefaultConstructible(int value = 0)
+    explicit DefaultConstructible(int value = 0)
         : OpTracker(s_opCounter, value)
     {
     }

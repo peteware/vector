@@ -1,6 +1,6 @@
 #include <test_throwingtype.h>
 
-namespace pw { namespace test {
+namespace pw::test {
 
 int ThrowingType::construction_count;
 int ThrowingType::throw_after_n;
@@ -48,4 +48,4 @@ ThrowingType::reset()
     construction_count = 0;
     throw_after_n      = -1;
 }
-}}; // namespace pw::test
+}; // namespace pw::test

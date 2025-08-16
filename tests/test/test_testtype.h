@@ -16,21 +16,21 @@ namespace pw::test {
 //using TestTypeList = std::tuple<std::vector<int>>;
 
 // I use this for testing a type that can take an allocator
-using TestTypeList = std::tuple<pw::vector<int>, pw::vector<std::string>, std::vector<int>>;
+using TestTypeList = std::tuple<vector<int>, vector<std::string>, std::vector<int>>;
 
 // This just for pw::vector implementation
-using TestTypeListInt = std::tuple<pw::vector<int>, std::vector<int>>;
+using TestTypeListInt = std::tuple<vector<int>, std::vector<int>>;
 
 // Phase 1 test type list - using int with pw::vector and std::vector for comparison
-using Phase1TestTypeList = std::tuple<pw::vector<int>, std::vector<int>>;
+using Phase1TestTypeList = std::tuple<vector<int>, std::vector<int>>;
 // Phase 2 test type list - Adds test::allocator_base to track its usage
 using Phase2TestTypeList =
-    std::tuple<pw::vector<int, allocator_base<int>>, std::vector<int, allocator_base<int>>>;
+    std::tuple<vector<int, allocator_base<int>>, std::vector<int, allocator_base<int>>>;
 // vector<int> but using allocator_base
 using TestTypeListAllocatorBase =
-    std::tuple<pw::vector<int, allocator_base<int>>, std::vector<int, allocator_base<int>>>;
+    std::tuple<vector<int, allocator_base<int>>, std::vector<int, allocator_base<int>>>;
 
-using TestTypeListThrowing = std::tuple<pw::vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
+using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
                                         std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
 
 template<typename Type>

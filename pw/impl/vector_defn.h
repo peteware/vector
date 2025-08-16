@@ -1175,7 +1175,7 @@ swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexce
  */
 template<class Type, class Allocator>
 constexpr bool
-operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
+operator==(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
 {
     if (op1.size() != op2.size())
     {
@@ -1193,7 +1193,7 @@ operator==(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Alloca
  */
 template<class Type, class Allocator>
 constexpr auto
-operator<=>(const pw::vector<Type, Allocator>& op1, const pw::vector<Type, Allocator>& op2)
+operator<=>(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
     -> decltype(op1[0] <=> op2[0])
 {
     for (size_t i = 0; i < min(op1.size(), op2.size()); ++i)

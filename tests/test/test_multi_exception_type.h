@@ -4,8 +4,7 @@
 #include <new>
 #include <stdexcept>
 
-namespace pw {
-namespace test {
+namespace pw::test {
 
 class MultiExceptionType
 {
@@ -44,7 +43,6 @@ inline int  MultiExceptionType::construction_count  = 0;
 inline bool MultiExceptionType::throw_bad_alloc     = false;
 inline bool MultiExceptionType::throw_runtime_error = false;
 
-} // namespace test
-} // namespace pw
+} // namespace pw::test
 
 #endif // PW_TEST_MULTI_EXCEPTION_TYPE_H

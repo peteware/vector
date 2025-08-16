@@ -21,7 +21,7 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
         }
         WHEN("difference is negative")
         {
-            pw::ptrdiff_t d = pw::distance(e, s);
+            pw::ptrdiff_t const d = pw::distance(e, s);
             THEN("distance is -4")
             {
                 REQUIRE(-4 == d);
@@ -29,8 +29,8 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
         }
         WHEN("nullptr are used")
         {
-            char*         a = nullptr;
-            pw::ptrdiff_t d = pw::distance(a, a);
+            char*               a = nullptr;
+            pw::ptrdiff_t const d = pw::distance(a, a);
             THEN("distances is 0")
             {
                 REQUIRE(0 == d);
