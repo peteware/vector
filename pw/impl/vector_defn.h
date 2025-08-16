@@ -83,7 +83,8 @@ constexpr vector<Type, Allocator>::vector(size_type count, allocator_type const&
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy)
-    : m_storage(allocator_type(), copy.size())
+    : m_storage(allocator_traits<allocator_type>::select_on_container_copy_construction(copy.get_allocator()),
+                copy.size())
 {
     m_storage.uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
     m_storage.set_size(copy.size());
@@ -193,9 +194,6 @@ vector<Type, Allocator>::operator=(const vector& other)
 {
     if constexpr (allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
     {
-        // TODO: Check if same allocator.  If so, we should still
-        //       copy the allocator however we do not need to reallocate
-        //       the storage if there is enough space.
         Storage tmp { other.get_allocator(), other.size() };
 
         tmp.uninitialized_copy(other.begin(), other.end(), tmp.begin());
@@ -265,14 +263,14 @@ vector<Type, Allocator>::operator=(vector&& other)
     if constexpr (allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
     {
         Storage storage { other.get_allocator(), other.size() };
-        storage.uninitialized_copy(other.begin(), other.end(), storage.begin());
+        storage.uninitialized_move(other.begin(), other.end(), storage.begin());
         storage.set_size(other.size());
         m_storage.swap(storage, true);
     }
     else
     {
         size_type init_size = min(m_storage.size(), other.size());
-        move(other.begin(), other.begin() + init_size, m_storage.begin());
+        m_storage.move(other.begin(), other.begin() + init_size, m_storage.begin());
         if (size() < other.size())
         {
             m_storage.uninitialized_move(

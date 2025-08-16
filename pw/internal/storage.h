@@ -53,7 +53,7 @@ struct Storage
     constexpr const_pointer           begin() const noexcept;
     constexpr pointer                 end() noexcept;
     constexpr const_pointer           end() const noexcept;
-    constexpr Storage&               set_size(size_type size) noexcept;
+    constexpr Storage&                set_size(size_type size) noexcept;
     constexpr size_type               size() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
     [[nodiscard]] constexpr size_type max_size() const noexcept;
