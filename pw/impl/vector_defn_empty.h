@@ -151,21 +151,6 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
 }
 
 /**
- * @brief Swaps the contents of this vector with another vector.
- * @param other The vector to swap with
- * @return None
- * @exception None (conditionally noexcept based on allocator traits)
- */
-template<class Type, class Allocator>
-constexpr void
-vector<Type, Allocator>::swap(vector& other)
-    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-             allocator_traits<allocator_type>::is_always_equal::value)
-{
-    (void)other;
-}
-
-/**
  * @brief Copy assignment operator. Assigns contents from another vector.
  * @param other The vector to copy from
  * @return Reference to this vector
@@ -207,6 +192,21 @@ vector<Type, Allocator>::operator=(vector&& other)
 {
     (void)other;
     return *this;
+}
+
+/**
+ * @brief Swaps the contents of this vector with another vector.
+ * @param other The vector to swap with
+ * @return None
+ * @exception None (conditionally noexcept based on allocator traits)
+ */
+template<class Type, class Allocator>
+constexpr void
+vector<Type, Allocator>::swap(vector& other)
+    noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+             allocator_traits<allocator_type>::is_always_equal::value)
+{
+    (void)other;
 }
 
 /**
@@ -764,6 +764,22 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
 }
 
 /**
+ * @brief Inserts elements from initializer list before position.
+ * @param position Iterator before which the content will be inserted
+ * @param init_list Initializer list to insert the values from
+ * @return Iterator pointing to the first inserted element
+ * @exception std::bad_alloc if memory allocation fails
+ */
+template<class Type, class Allocator>
+constexpr vector<Type, Allocator>::iterator
+vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
+{
+    (void)position;
+    (void)init_list;
+    return &makeReference<value_type>();
+}
+
+/**
  * @brief Inserts elements from range [first, last) before position.
  * @param position Iterator before which the content will be inserted
  * @param first Iterator to the first element to insert
@@ -779,22 +795,6 @@ vector<Type, Allocator>::insert(const_iterator position, Iterator first, Iterato
     (void)position;
     (void)first;
     (void)last;
-    return &makeReference<value_type>();
-}
-
-/**
- * @brief Inserts elements from initializer list before position.
- * @param position Iterator before which the content will be inserted
- * @param init_list Initializer list to insert the values from
- * @return Iterator pointing to the first inserted element
- * @exception std::bad_alloc if memory allocation fails
- */
-template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
-{
-    (void)position;
-    (void)init_list;
     return &makeReference<value_type>();
 }
 
