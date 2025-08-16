@@ -112,7 +112,7 @@ constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type con
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
-    : m_storage(allocator_type(), copy.size())
+    : m_storage(copy.get_allocator(), copy.size())
 {
     m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin());
     m_storage.set_size(copy.size());
