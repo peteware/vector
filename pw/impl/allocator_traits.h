@@ -19,7 +19,7 @@ namespace pw {
  * and static member functions that work with any allocator type, providing
  * defaults when the allocator doesn't define certain members.
  *
- * @tparam Alloc The allocator type to provide traits for
+ * @tparam Alloc The allocator to provide traits for
  */
 template<class Alloc>
 struct allocator_traits
@@ -49,14 +49,15 @@ struct allocator_traits
         alloc.deallocate(p, count);
     }
 
+    // ReSharper disable once CppDoxygenUnresolvedReference
     /**
      * @brief Constructs an object in allocated uninitialized storage.
      *
-     * Constructs an object of type Type at the location pointed to by p using
+     * Constructs a Type object at the location pointed to by p using
      * the provided arguments. This function provides a uniform interface for
      * object construction that works with any allocator type.
      *
-     * The construction is performed using placement new with perfect forwarding
+     * The construction is performed using placement `new` with perfect forwarding
      * of the provided arguments to the Type constructor. The allocator parameter
      * is ignored in the default implementation but may be used by specialized
      * allocator types that override this behavior.
@@ -66,13 +67,13 @@ struct allocator_traits
      *
      * @param alloc The allocator instance (unused in default implementation).
      * @param p Pointer to uninitialized memory where the object will be constructed.
-     *          Must point to storage suitable for an object of type Type.
+     *          Must point to storage suitable for an object of type `Type`.
      * @param args Arguments to forward to the Type constructor.
      *
      * @throws Any exception thrown by the Type constructor.
      *
      * @pre p must point to uninitialized memory of sufficient size and alignment for Type.
-     * @post An object of type Type is constructed at location p.
+     * @post An object of type `Type` is constructed at the location p.
      *
      * @complexity Constant, plus the complexity of the Type constructor.
      *
@@ -84,7 +85,7 @@ struct allocator_traits
     template<class Type, class... Args>
     static constexpr void construct(allocator_type&, Type* p, Args&&... args)
     {
-        pw::construct_at(p, forward<Args>(args)...);
+        pw::construct_at(p, pw::forward<Args>(args)...);
     }
 
     template<class Type>
