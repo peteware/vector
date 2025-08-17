@@ -4,6 +4,9 @@
 #include <test_opcounter.h>
 #include <test_throwingtype.h>
 
+// ReSharper disable once CppUnusedIncludeDirective
+#include <pw/internal/rsize_fix.h>
+
 #include <catch2/catch_test_macros.hpp>
 
 SCENARIO("check unitialized_move()", "[uninitialized_move]")

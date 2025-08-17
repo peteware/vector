@@ -1,10 +1,12 @@
-#include <catch2/catch_test_macros.hpp>
 #include <pw/impl/allocator.h>
 #include <pw/internal/storage.h>
 #include <tests/test/test_opcounter.h>
 #include <tests/test/test_optracker.h>
 #include <tests/test/test_throwingtype.h>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <pw/internal/rsize_fix.h>
 
+#include <catch2/catch_test_macros.hpp>
 using namespace pw::test;
 
 SCENARIO("Storage::uninitialized_fill() constructs objects with allocator_traits", "[storage]")

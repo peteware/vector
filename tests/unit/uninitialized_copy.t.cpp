@@ -1,7 +1,8 @@
-#include <catch2/catch_test_macros.hpp>
-#include <pw/impl/destroy.h>
 #include <pw/impl/uninitialized_copy.h>
+#include <pw/internal/rsize_fix.h>
 #include <tests/test/test_throwingtype.h>
+
+#include <catch2/catch_test_macros.hpp>
 
 SCENARIO("uninitialized_copy() handles exceptions", "[uninitialized_copy]")
 {

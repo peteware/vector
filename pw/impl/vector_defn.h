@@ -3,18 +3,18 @@
 
 #include <pw/impl/vector_decl.h>
 
-#include <pw/impl/copy.h>
-#include <pw/impl/destroy.h>
+//#include <pw/impl/copy.h>
+//#include <pw/impl/destroy.h>
 #include <pw/impl/distance.h>
-#include <pw/impl/fill_n.h>
+//#include <pw/impl/fill_n.h>
 #include <pw/impl/is_base_of.h>
 #include <pw/impl/min.h>
 #include <pw/impl/move_alg.h>
-#include <pw/impl/move_backward.h>
+//#include <pw/impl/move_backward.h>
 #include <pw/impl/uninitialized_copy.h>
-#include <pw/impl/uninitialized_default_construct.h>
-#include <pw/impl/uninitialized_fill.h>
-#include <pw/impl/uninitialized_move.h>
+//#include <pw/impl/uninitialized_default_construct.h>
+//#include <pw/impl/uninitialized_fill.h>
+//#include <pw/impl/uninitialized_move.h>
 #include <pw/internal/unimplemented.h>
 
 namespace pw {
@@ -1101,14 +1101,14 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
     size_type const total = size() + 1;
     if (total <= capacity())
     {
-        m_storage.construct(m_storage.begin() + total - 1, forward<Args>(args)...);
+        m_storage.construct(m_storage.begin() + total - 1, pw::forward<Args>(args)...);
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), m_storage.calc_size());
 
         tmp.uninitialized_move(m_storage.begin(), m_storage.end(), tmp.begin());
-        tmp.construct(tmp.begin() + total - 1, forward<Args>(args)...);
+        tmp.construct(tmp.begin() + total - 1, pw::forward<Args>(args)...);
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);

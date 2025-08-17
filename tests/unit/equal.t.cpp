@@ -1,5 +1,8 @@
-#include <catch2/catch_test_macros.hpp>
 #include <pw/impl/equal.h>
+// ReSharper disable once CppUnusedIncludeDirective
+#include <pw/internal/rsize_fix.h>
+
+#include <catch2/catch_test_macros.hpp>
 
 SCENARIO("pw::equal() compares integer arrays", "[equal]")
 {

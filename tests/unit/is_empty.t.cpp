@@ -1,5 +1,8 @@
 #include <pw/impl/is_empty.h>
 
+// ReSharper disable once CppUnusedIncludeDirective
+#include <pw/internal/rsize_fix.h>
+
 #include <catch2/catch_test_macros.hpp>
 
 SCENARIO("is_empty", "[type_traits]")
