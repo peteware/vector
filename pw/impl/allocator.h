@@ -5,11 +5,6 @@
 #include <pw/impl/is_constant_evaluated.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
-// Define rsize_t if not available
-#ifndef _RSIZE_T_DEFINED
-#define _RSIZE_T_DEFINED
-using rsize_t = pw::size_t;
-#endif
 
 namespace pw {
 

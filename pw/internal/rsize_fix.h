@@ -7,12 +7,17 @@
 
 #ifndef PW_INTERNAL_RSIZE_FIX_H
 #define PW_INTERNAL_RSIZE_FIX_H
+
 #include <pw/impl/size.h>
 
+#if __has_include(<sys/_types/_rsize_t.h>)
+#include <sys/_types/_rsize_t.h>
+#else
 // Define rsize_t if not available
-#ifndef _RSIZE_T_DEFINED // NOLINT(*-reserved-identifier)
+#if !defined(RSIZE_T_DEFINED) // NOLINT(*-reserved-identifier)
 #define _RSIZE_T_DEFINED
 using rsize_t = pw::size_t;
+#endif
 #endif
 
 #endif //PW_INTERNAL_RSIZE_FIX_H
