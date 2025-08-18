@@ -339,6 +339,32 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
             }
         }
     }
+    GIVEN("Copy constructor with allocator")
+    {
+        // See phase2 tests where allocators are used more extensively.
+        WHEN("Copying an empty vector with allocator")
+        {
+            Vector source {};
+            Vector copy(source, source.get_allocator());
+
+            THEN("the copy is also empty")
+            {
+                Vector expected {};
+                REQUIRE(copy.empty() == true);
+            }
+        }
+        WHEN("Copying a vector with elements and allocator")
+        {
+            Vector source { 10, 20, 30 };
+            Vector copy(source, source.get_allocator());
+
+            THEN("the copy has the same elements")
+            {
+                Vector expected { 10, 20, 30 };
+                REQUIRE(copy == expected);
+            }
+        }
+    }
     GIVEN("Move constructor")
     {
         WHEN("moving an empty vector")
@@ -369,6 +395,31 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
                 REQUIRE(moved.empty() == false);
                 REQUIRE(moved == expected);
                 REQUIRE(moved == original_copy);
+            }
+        }
+    }
+    GIVEN("Move constructor with allocator")
+    {
+        // See phase2 tests where allocators are used more extensively.
+        WHEN("Moving an empty vector with allocator")
+        {
+            Vector source {};
+            Vector moved(std::move(source), source.get_allocator());
+
+            THEN("the moved vector is also empty")
+            {
+                REQUIRE(moved.empty() == true);
+            }
+        }
+        WHEN("Moving a vector with elements and allocator")
+        {
+            Vector source { 10, 20, 30 };
+            Vector moved(std::move(source), source.get_allocator());
+
+            THEN("the moved vector has the original content")
+            {
+                Vector expected { 10, 20, 30 };
+                REQUIRE(moved == expected);
             }
         }
     }

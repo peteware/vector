@@ -96,8 +96,6 @@ constexpr vector<Type, Allocator>::vector(vector const& copy)
  * @param alloc The allocator to use for memory allocation
  * @return A vector that is a copy of the given vector using the specified allocator
  * @exception std::bad_alloc if memory allocation fails
- * *
- * TODO: need unit tests for copy constructor with allocator
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
