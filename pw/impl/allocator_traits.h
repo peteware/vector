@@ -93,6 +93,7 @@ struct allocator_traits
     {
         destroy_impl(a, p);
     }
+    // TODO: need unit test for select_on_container_copy_construction()
     static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
     {
         return select_on_container_copy_construction_impl(alloc);

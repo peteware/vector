@@ -35,6 +35,8 @@ constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
  * @param alloc The allocator to use for memory allocation
  * @return A vector with no elements using the specified allocator
  * @exception None (noexcept)
+ *
+ * TODO: Need unit tests for constructor with allocator
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
@@ -96,6 +98,8 @@ constexpr vector<Type, Allocator>::vector(vector const& copy)
  * @param alloc The allocator to use for memory allocation
  * @return A vector that is a copy of the given vector using the specified allocator
  * @exception std::bad_alloc if memory allocation fails
+ * *
+ * TODO: need unit tests for copy constructor with allocator
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
@@ -382,6 +386,8 @@ vector<Type, Allocator>::get_allocator() const
  * @param position The position of the element to return
  * @return Reference to the requested element
  * @exception std::out_of_range if position >= size()
+ *
+ * TODO: Unit test for at() in stage1
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
@@ -399,6 +405,8 @@ vector<Type, Allocator>::at(size_type position)
  * @param position The position of the element to return
  * @return Const reference to the requested element
  * @exception std::out_of_range if position >= size()
+ *
+ * TODO: Need unit test for at() const in stage1
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::const_reference
@@ -441,6 +449,8 @@ vector<Type, Allocator>::operator[](size_type position) const
  * @brief Returns a reference to the first element.
  * @return Reference to the first element
  * @exception None (undefined behavior if empty())
+ *
+ * TODO: unit tests for front() in stage1
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::reference
@@ -761,6 +771,8 @@ vector<Type, Allocator>::clear() noexcept
  * @param value The value to append
  * @return None
  * @exception std::bad_alloc if memory allocation fails
+ *
+ * TODO: The stage1 unit tests should not use push_back()
  */
 template<class Type, class Allocator>
 constexpr void
