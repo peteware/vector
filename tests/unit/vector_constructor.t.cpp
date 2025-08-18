@@ -91,6 +91,26 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
             }
         }
     }
+    GIVEN("Construct with allocator")
+    {
+        typename Vector::allocator_type alloc;
+        Vector                          valloc(alloc);
+
+        /*
+         * The phase2 tests are better for as they use the allocator
+         * to allocate memory and check that the allocator is used.
+         * This effectively just checks the constructor exists.
+         */
+        THEN("the vector is empty")
+        {
+            REQUIRE(valloc.empty() == true);
+            REQUIRE(valloc.begin() == valloc.end());
+        }
+        THEN("the allocator is the same as provided")
+        {
+            REQUIRE(valloc.get_allocator() == alloc);
+        }
+    }
     GIVEN("Construct with count")
     {
         WHEN("constructed with count 0")

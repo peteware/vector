@@ -35,8 +35,6 @@ constexpr vector<Type, Allocator>::vector() noexcept(noexcept(allocator_type()))
  * @param alloc The allocator to use for memory allocation
  * @return A vector with no elements using the specified allocator
  * @exception None (noexcept)
- *
- * TODO: Need unit tests for constructor with allocator
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(allocator_type const& alloc) noexcept
