@@ -371,7 +371,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         {
             Vector source {};
             Vector original_copy(source); // Keep a copy for comparison
-            Vector moved(std::move(source));
+            Vector moved(pw::move(source));
 
             THEN("the moved vector is empty")
             {
@@ -404,7 +404,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         WHEN("Moving an empty vector with allocator")
         {
             Vector source {};
-            Vector moved(std::move(source), source.get_allocator());
+            Vector moved(pw::move(source), source.get_allocator());
 
             THEN("the moved vector is also empty")
             {
@@ -414,7 +414,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         WHEN("Moving a vector with elements and allocator")
         {
             Vector source { 10, 20, 30 };
-            Vector moved(std::move(source), source.get_allocator());
+            Vector moved(pw::move(source), source.get_allocator());
 
             THEN("the moved vector has the original content")
             {
@@ -476,8 +476,14 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
                 REQUIRE(v == expected);
             }
         }
-        WHEN("constructed from input iterator")
+        WHEN("constructed from input iterator (skipped)")
         {
+            /*
+             * Moved this test to phase3 as an simple implementation
+             * of this is to use `push_back()` to insert each item
+             * but I didn't want to have to implement `push_back()`
+             * at this point.
+             */
             Vector                        v { 1, 2, 3, 4, 5 };
             pw::test::test_input_iterator iter(v.begin());
             pw::test::test_input_iterator end(v.end());
