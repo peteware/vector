@@ -8,6 +8,7 @@ add_library(pwtest
         test_optracker.cpp
         test_permute.cpp
         test_throwingtype.cpp
+        test_allocator_is_always_equal.h
 )
 target_sources(pwtest PUBLIC
         test_allocator_copy_assignment.h
