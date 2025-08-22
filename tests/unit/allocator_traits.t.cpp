@@ -1,9 +1,46 @@
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 
+#include <test_allocator_base.h>
 #include <test_emplacemoveconstructible.h>
 
 #include <catch2/catch_test_macros.hpp>
+
+namespace pw::test {
+
+// Test allocator that provides select_on_container_copy_construction
+template<class Type>
+struct allocator_with_select : public allocator_base<Type>
+{
+    using base = allocator_base<Type>;
+
+    explicit allocator_with_select(int instance = 1)
+        : base(instance)
+    {
+    }
+
+    // Custom select_on_container_copy_construction that returns instance + 100
+    allocator_with_select select_on_container_copy_construction() const
+    {
+        return allocator_with_select(base::m_instance + 100);
+    }
+};
+
+// Test allocator that does NOT provide select_on_container_copy_construction
+template<class Type>
+struct allocator_without_select : public allocator_base<Type>
+{
+    using base = allocator_base<Type>;
+
+    explicit allocator_without_select(int instance = 1)
+        : base(instance)
+    {
+    }
+
+    // Intentionally no select_on_container_copy_construction method
+};
+
+} // namespace pw::test
 
 SCENARIO("Allocator traits", "[allocator_traits]")
 {
@@ -34,6 +71,101 @@ SCENARIO("Allocator traits", "[allocator_traits]")
             {
                 REQUIRE(6 == x.value());
                 REQUIRE(8 == x.value2());
+            }
+        }
+    }
+}
+
+SCENARIO("select_on_container_copy_construction", "[allocator_traits][select_on_container_copy_construction]")
+{
+    GIVEN("An allocator that provides select_on_container_copy_construction")
+    {
+        pw::test::allocator_with_select<int> alloc(42);
+
+        WHEN("select_on_container_copy_construction is called")
+        {
+            auto result = pw::allocator_traits<
+                pw::test::allocator_with_select<int>>::select_on_container_copy_construction(alloc);
+
+            THEN("the allocator's custom method is used")
+            {
+                REQUIRE(result.m_instance == 142); // 42 + 100
+                REQUIRE(alloc.m_instance == 42);   // original unchanged
+            }
+        }
+    }
+
+    GIVEN("An allocator that does NOT provide select_on_container_copy_construction")
+    {
+        pw::test::allocator_without_select<int> alloc(55);
+
+        WHEN("select_on_container_copy_construction is called")
+        {
+            auto result = pw::allocator_traits<
+                pw::test::allocator_without_select<int>>::select_on_container_copy_construction(alloc);
+
+            THEN("a copy of the allocator is returned")
+            {
+                REQUIRE(result.m_instance == 55); // same as original
+                REQUIRE(alloc.m_instance == 55);  // original unchanged
+            }
+        }
+    }
+
+    GIVEN("The standard pw::allocator")
+    {
+        pw::allocator<int> alloc;
+
+        WHEN("select_on_container_copy_construction is called")
+        {
+            auto result = pw::allocator_traits<pw::allocator<int>>::select_on_container_copy_construction(
+                alloc);
+
+            THEN("a copy is returned (standard allocator has no custom method)")
+            {
+                // Both allocators should be equivalent (standard allocator is stateless)
+                REQUIRE(result == alloc);
+            }
+        }
+    }
+
+    GIVEN("Different allocator instances with select_on_container_copy_construction")
+    {
+        pw::test::allocator_with_select<double> alloc1(10);
+        pw::test::allocator_with_select<double> alloc2(20);
+
+        WHEN("select_on_container_copy_construction is called on both")
+        {
+            auto result1 = pw::allocator_traits<
+                pw::test::allocator_with_select<double>>::select_on_container_copy_construction(alloc1);
+            auto result2 = pw::allocator_traits<
+                pw::test::allocator_with_select<double>>::select_on_container_copy_construction(alloc2);
+
+            THEN("each gets the correct transformed instance")
+            {
+                REQUIRE(result1.m_instance == 110); // 10 + 100
+                REQUIRE(result2.m_instance == 120); // 20 + 100
+                REQUIRE(result1.m_instance != result2.m_instance);
+            }
+        }
+    }
+
+    GIVEN("Different value types with the same allocator template")
+    {
+        pw::test::allocator_with_select<int>    int_alloc(30);
+        pw::test::allocator_with_select<double> double_alloc(30);
+
+        WHEN("select_on_container_copy_construction is called on both")
+        {
+            auto int_result = pw::allocator_traits<
+                pw::test::allocator_with_select<int>>::select_on_container_copy_construction(int_alloc);
+            auto double_result = pw::allocator_traits<
+                pw::test::allocator_with_select<double>>::select_on_container_copy_construction(double_alloc);
+
+            THEN("both work correctly with their respective types")
+            {
+                REQUIRE(int_result.m_instance == 130);    // 30 + 100
+                REQUIRE(double_result.m_instance == 130); // 30 + 100
             }
         }
     }

@@ -93,10 +93,9 @@ struct allocator_traits
     {
         destroy_impl(a, p);
     }
-    // TODO: need unit test for select_on_container_copy_construction()
     static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
     {
-        return select_on_container_copy_construction_impl(alloc);
+        return select_on_container_copy_construction_impl(alloc, 0);
     }
 
     static constexpr size_type max_size(const Alloc& alloc) { return max_size_impl(alloc); }
@@ -113,14 +112,17 @@ private:
         return std::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
-    template<class Type>
-    static auto select_on_container_copy_construction_impl(const Type& alloc)
+    template<class AllocType>
+    static auto select_on_container_copy_construction_impl(const AllocType& alloc, int)
         -> decltype(alloc.select_on_container_copy_construction())
     {
         return alloc.select_on_container_copy_construction();
     }
 
-    static Alloc select_on_container_copy_construction_impl(const Alloc& alloc) { return alloc; }
+    static constexpr Alloc select_on_container_copy_construction_impl(const Alloc& alloc, ...)
+    {
+        return alloc;
+    }
 
     template<typename A, typename T>
     static auto destroy_impl(A& a, // NOLINT(runtime/references)
