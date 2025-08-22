@@ -98,18 +98,19 @@ struct allocator_traits
         return select_on_container_copy_construction_impl(alloc, 0);
     }
 
-    static constexpr size_type max_size(const Alloc& alloc) { return max_size_impl(alloc); }
+    static constexpr size_type max_size(const Alloc& alloc) { return max_size_impl(alloc, 0); }
 
 private:
-    template<class Type>
-    static auto max_size_impl(const Type& alloc) -> decltype(alloc.max_size())
+    template<class T>
+    static auto max_size_impl(const T& alloc, int) -> decltype(alloc.max_size())
     {
         return alloc.max_size();
     }
 
-    static constexpr size_t max_size_impl(const Alloc& alloc)
+    template<class T>
+    static constexpr size_t max_size_impl(const T&, ...)
     {
-        return std::numeric_limits<size_type>::max() / sizeof(value_type);
+        return pw::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
     template<class AllocType>

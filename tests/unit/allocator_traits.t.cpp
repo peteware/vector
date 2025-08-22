@@ -5,6 +5,7 @@
 #include <test_emplacemoveconstructible.h>
 
 #include <catch2/catch_test_macros.hpp>
+#include <limits>
 
 namespace pw::test {
 
@@ -38,6 +39,21 @@ struct allocator_without_select : public allocator_base<Type>
     }
 
     // Intentionally no select_on_container_copy_construction method
+};
+
+// Test allocator that provides max_size
+template<class Type>
+struct allocator_with_max_size : public allocator_base<Type>
+{
+    using base      = allocator_base<Type>;
+    using size_type = typename base::size_type;
+
+    explicit allocator_with_max_size(int instance = 1)
+        : base(instance)
+    {
+    }
+
+    size_type max_size() const { return 12345; }
 };
 
 } // namespace pw::test
@@ -166,6 +182,37 @@ SCENARIO("select_on_container_copy_construction", "[allocator_traits][select_on_
             {
                 REQUIRE(int_result.m_instance == 130);    // 30 + 100
                 REQUIRE(double_result.m_instance == 130); // 30 + 100
+            }
+        }
+    }
+}
+
+SCENARIO("max_size", "[allocator_traits][max_size]")
+{
+    GIVEN("An allocator that provides max_size()")
+    {
+        pw::test::allocator_with_max_size<int> alloc;
+
+        WHEN("max_size is called on traits")
+        {
+            auto s = pw::allocator_traits<pw::test::allocator_with_max_size<int>>::max_size(alloc);
+            THEN("it is the allocator's max_size")
+            {
+                REQUIRE(s == 12345);
+            }
+        }
+    }
+    GIVEN("An allocator that does not provide max_size()")
+    {
+        pw::test::allocator_base<int> alloc;
+        using traits = pw::allocator_traits<pw::test::allocator_base<int>>;
+
+        WHEN("max_size is called on traits")
+        {
+            auto s = traits::max_size(alloc);
+            THEN("it is the default")
+            {
+                REQUIRE(s == std::numeric_limits<traits::size_type>::max() / sizeof(int));
             }
         }
     }
