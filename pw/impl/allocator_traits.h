@@ -37,107 +37,163 @@ struct allocator_traits
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
     using is_always_equal                        = is_empty<Alloc>::type;
 
-    static pointer allocate(allocator_type& alloc, size_type n)
-    {
-        if (n == 0)
-            return nullptr;
-        return alloc.allocate(n);
-    }
+    static pointer             allocate(allocator_type& alloc, size_type n);
+    static constexpr void      deallocate(allocator_type& alloc, pointer p, size_type count);
+    static constexpr Alloc     select_on_container_copy_construction(const Alloc& alloc);
+    static constexpr size_type max_size(const Alloc& alloc);
 
-    static constexpr void deallocate(allocator_type& alloc, pointer p, size_type count)
-    {
-        alloc.deallocate(p, count);
-    }
-
-    // ReSharper disable once CppDoxygenUnresolvedReference
-    /**
-     * @brief Constructs an object in allocated uninitialized storage.
-     *
-     * Constructs a Type object at the location pointed to by p using
-     * the provided arguments. This function provides a uniform interface for
-     * object construction that works with any allocator type.
-     *
-     * The construction is performed using placement `new` with perfect forwarding
-     * of the provided arguments to the Type constructor. The allocator parameter
-     * is ignored in the default implementation but may be used by specialized
-     * allocator types that override this behavior.
-     *
-     * @tparam Type The type of object to construct. Must be constructible from Args.
-     * @tparam Args The types of the constructor arguments (deduced).
-     *
-     * @param alloc The allocator instance (unused in default implementation).
-     * @param p Pointer to uninitialized memory where the object will be constructed.
-     *          Must point to storage suitable for an object of type `Type`.
-     * @param args Arguments to forward to the Type constructor.
-     *
-     * @throws Any exception thrown by the Type constructor.
-     *
-     * @pre p must point to uninitialized memory of sufficient size and alignment for Type.
-     * @post An object of type `Type` is constructed at the location p.
-     *
-     * @complexity Constant, plus the complexity of the Type constructor.
-     *
-     * @note This function uses perfect forwarding to preserve value categories
-     *       of the constructor arguments.
-     * @note The memory pointed to by p must have been allocated but not yet
-     *       contain a constructed object.
-     */
     template<class Type, class... Args>
-    static constexpr void construct(allocator_type&, Type* p, Args&&... args)
-    {
-        pw::construct_at(p, pw::forward<Args>(args)...);
-    }
+    static constexpr void construct(allocator_type&, Type* p, Args&&... args);
 
     template<class Type>
-    static void destroy(Alloc& a, Type* p)
-    {
-        destroy_impl(a, p);
-    }
-    static constexpr Alloc select_on_container_copy_construction(const Alloc& alloc)
-    {
-        return select_on_container_copy_construction_impl(alloc, 0);
-    }
-
-    static constexpr size_type max_size(const Alloc& alloc) { return max_size_impl(alloc, 0); }
+    static void destroy(Alloc& a, Type* p);
 
 private:
     template<class T>
-    static auto max_size_impl(const T& alloc, int) -> decltype(alloc.max_size())
-    {
-        return alloc.max_size();
-    }
-
+    static auto max_size_impl(const T& alloc, int) -> decltype(alloc.max_size());
     template<class T>
-    static constexpr size_t max_size_impl(const T&, ...)
-    {
-        return pw::numeric_limits<size_type>::max() / sizeof(value_type);
-    }
+    static constexpr size_t max_size_impl(const T&, ...);
 
     template<class AllocType>
     static auto select_on_container_copy_construction_impl(const AllocType& alloc, int)
-        -> decltype(alloc.select_on_container_copy_construction())
-    {
-        return alloc.select_on_container_copy_construction();
-    }
-
-    static constexpr Alloc select_on_container_copy_construction_impl(const Alloc& alloc, ...)
-    {
-        return alloc;
-    }
-
+        -> decltype(alloc.select_on_container_copy_construction());
+    static constexpr Alloc select_on_container_copy_construction_impl(const Alloc& alloc, ...);
     template<typename A, typename T>
-    static auto destroy_impl(A& a, // NOLINT(runtime/references)
-                             T* p) -> decltype(a.destroy(p))
-    {
-        return a.destroy(p);
-    }
 
+    static auto destroy_impl(A& a, // NOLINT(runtime/references)
+                             T* p) -> decltype(a.destroy(p));
     template<typename T>
-    static void destroy_impl(Alloc&, T* p)
-    {
-        p->~T();
-    }
+    static void destroy_impl(Alloc&, T* p);
 };
+
+// Implementation section
+template<class Alloc>
+allocator_traits<Alloc>::pointer
+allocator_traits<Alloc>::allocate(allocator_type& alloc, size_type n)
+{
+    if (n == 0)
+        return nullptr;
+    return alloc.allocate(n);
+}
+
+template<class Alloc>
+constexpr void
+allocator_traits<Alloc>::deallocate(allocator_type& alloc, pointer p, size_type count)
+{
+    alloc.deallocate(p, count);
+}
+
+// ReSharper disable once CppDoxygenUnresolvedReference
+/**
+ * @brief Constructs an object in allocated uninitialized storage.
+ *
+ * Constructs a Type object at the location pointed to by p using
+ * the provided arguments. This function provides a uniform interface for
+ * object construction that works with any allocator type.
+ *
+ * The construction is performed using placement `new` with perfect forwarding
+ * of the provided arguments to the Type constructor. The allocator parameter
+ * is ignored in the default implementation but may be used by specialized
+ * allocator types that override this behavior.
+ *
+ * @tparam Type The type of object to construct. Must be constructible from Args.
+ * @tparam Args The types of the constructor arguments (deduced).
+ *
+ * @param alloc The allocator instance (unused in default implementation).
+ * @param p Pointer to uninitialized memory where the object will be constructed.
+ *          Must point to storage suitable for an object of type `Type`.
+ * @param args Arguments to forward to the Type constructor.
+ *
+ * @throws Any exception thrown by the Type constructor.
+ *
+ * @pre p must point to uninitialized memory of sufficient size and alignment for Type.
+ * @post An object of type `Type` is constructed at the location p.
+ *
+ * @complexity Constant, plus the complexity of the Type constructor.
+ *
+ * @note This function uses perfect forwarding to preserve value categories
+ *       of the constructor arguments.
+ * @note The memory pointed to by p must have been allocated but not yet
+ *       contain a constructed object.
+ */
+template<class Alloc>
+template<class Type, class... Args>
+constexpr void
+allocator_traits<Alloc>::construct(allocator_type&, Type* p, Args&&... args)
+{
+    pw::construct_at(p, pw::forward<Args>(args)...);
+}
+
+template<class Alloc>
+template<class Type>
+void
+allocator_traits<Alloc>::destroy(Alloc& a, Type* p)
+{
+    destroy_impl(a, p);
+}
+
+template<class Alloc>
+constexpr Alloc
+allocator_traits<Alloc>::select_on_container_copy_construction(const Alloc& alloc)
+{
+    return select_on_container_copy_construction_impl(alloc, 0);
+}
+
+template<class Alloc>
+constexpr allocator_traits<Alloc>::size_type
+allocator_traits<Alloc>::max_size(const Alloc& alloc)
+{
+    return max_size_impl(alloc, 0);
+}
+
+template<class Alloc>
+template<class T>
+auto
+allocator_traits<Alloc>::max_size_impl(const T& alloc, int) -> decltype(alloc.max_size())
+{
+    return alloc.max_size();
+}
+
+template<class Alloc>
+template<class T>
+constexpr size_t
+allocator_traits<Alloc>::max_size_impl(const T&, ...)
+{
+    return pw::numeric_limits<size_type>::max() / sizeof(value_type);
+}
+
+template<class Alloc>
+template<class AllocType>
+auto
+allocator_traits<Alloc>::select_on_container_copy_construction_impl(const AllocType& alloc, int)
+    -> decltype(alloc.select_on_container_copy_construction())
+{
+    return alloc.select_on_container_copy_construction();
+}
+
+template<class Alloc>
+constexpr Alloc
+allocator_traits<Alloc>::select_on_container_copy_construction_impl(const Alloc& alloc, ...)
+{
+    return alloc;
+}
+
+template<class Alloc>
+template<typename A, typename T>
+auto
+allocator_traits<Alloc>::destroy_impl(A& a, // NOLINT(runtime/references)
+                                      T* p) -> decltype(a.destroy(p))
+{
+    return a.destroy(p);
+}
+
+template<class Alloc>
+template<typename T>
+void
+allocator_traits<Alloc>::destroy_impl(Alloc&, T* p)
+{
+    p->~T();
+}
 
 } // namespace pw
 #endif /*  INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H */

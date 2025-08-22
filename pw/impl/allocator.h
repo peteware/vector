@@ -21,6 +21,14 @@ struct allocator
     constexpr void                deallocate(Type* ptr, size_type count);
 };
 
+// Non-member operator declarations
+template<class Type1, class Type2>
+bool operator==(allocator<Type1> const& op1, allocator<Type2> const& op2);
+
+template<class Type1, class Type2>
+bool operator!=(allocator<Type1> const& op1, allocator<Type2> const& op2);
+
+// Implementation section
 template<class Type>
 constexpr Type*
 // ReSharper disable once CppMemberFunctionMayBeStatic

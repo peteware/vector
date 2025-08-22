@@ -15,6 +15,7 @@ add_executable(unittest
         distance.t.cpp
         equal.t.cpp
         exchange.t.cpp
+        is_constant_evaluated.t.cpp
         is_constructible.t.cpp
         is_empty.t.cpp
         memory.t.cpp
