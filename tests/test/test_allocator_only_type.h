@@ -15,7 +15,7 @@ struct AllocatorOnlyType : public OpTracker
     static OpCounter getCounter();
 
     AllocatorOnlyType() = delete;
-    explicit AllocatorOnlyType(std::allocator_arg_t, const Alloc& alloc);
+    explicit AllocatorOnlyType(const allocator_type& alloc = allocator_type {});
 
 private:
     static OpCounter s_opCounter;
@@ -33,7 +33,7 @@ AllocatorOnlyType<Alloc>::getCounter()
 }
 
 template<typename Alloc>
-AllocatorOnlyType<Alloc>::AllocatorOnlyType(std::allocator_arg_t, const Alloc& alloc)
+AllocatorOnlyType<Alloc>::AllocatorOnlyType(const Alloc& alloc)
     : OpTracker(s_opCounter)
     , m_allocator(alloc)
 {

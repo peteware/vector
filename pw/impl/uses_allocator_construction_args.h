@@ -44,7 +44,6 @@ template<class Type, class Alloc, class... Args>
 constexpr auto
 uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
     -> std::enable_if_t<std::uses_allocator_v<Type, Alloc> &&
-                            !std::is_constructible_v<Type, std::allocator_arg_t, const Alloc&, Args...> &&
                             std::is_constructible_v<Type, Args..., const Alloc&>,
                         std::tuple<Args&&..., const Alloc&>>
 {
