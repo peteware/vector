@@ -910,11 +910,11 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
     {
         WHEN("constructing with count constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 3;
-            Vector v(count);
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 3;
+            Vector              v(count);
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is not passed to value_type constructor")
             {
@@ -928,12 +928,12 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
 
         WHEN("constructing with count and value constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 2;
-            constexpr int initial_value = 42;
-            Vector v(count, value_type(initial_value));
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 2;
+            constexpr int       initial_value  = 42;
+            Vector              v(count, value_type(initial_value));
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is not passed to value_type constructor")
             {
@@ -959,11 +959,11 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
     {
         WHEN("constructing with count constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 3;
-            Vector v(count);
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 3;
+            Vector              v(count);
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
@@ -977,12 +977,13 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
 
         WHEN("constructing with count and value constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 2;
-            constexpr int initial_value = 42;
-            Vector v(count, value_type(std::allocator_arg, typename value_type::allocator_type{}, initial_value));
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 2;
+            constexpr int       initial_value  = 42;
+            Vector              v(count,
+                     value_type(std::allocator_arg, typename value_type::allocator_type {}, initial_value));
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
@@ -1008,11 +1009,11 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorLastType",
     {
         WHEN("constructing with count constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 3;
-            Vector v(count);
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 3;
+            Vector              v(count);
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as last argument to value_type constructor")
             {
@@ -1026,12 +1027,12 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorLastType",
 
         WHEN("constructing with count and value constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 2;
-            constexpr int initial_value = 42;
-            Vector v(count, value_type(initial_value, typename value_type::allocator_type{}));
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 2;
+            constexpr int       initial_value  = 42;
+            Vector              v(count, value_type(initial_value, typename value_type::allocator_type {}));
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as last argument to value_type constructor")
             {
@@ -1057,11 +1058,11 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
     {
         WHEN("constructing with count constructor")
         {
-            auto counter_before = value_type::getCounter();
-            constexpr size_type count = 3;
-            Vector v(count);
-            auto counter_after = value_type::getCounter();
-            auto diff = counter_after - counter_before;
+            auto                counter_before = value_type::getCounter();
+            constexpr size_type count          = 3;
+            Vector              v(count);
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {

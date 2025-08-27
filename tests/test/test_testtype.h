@@ -39,12 +39,12 @@ using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<T
                                         std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
 using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::NoAllocatorType>, std::vector<pw::test::NoAllocatorType>>;
-using TestTypeListAllocatorOnly =
-    std::tuple<vector<pw::test::AllocatorOnlyType<allocator<int>>>, std::vector<pw::test::AllocatorOnlyType<allocator<int>>>>;
-using TestTypeListAllocatorFirst =
-    std::tuple<vector<pw::test::AllocatorFirstType<allocator<int>>>, std::vector<pw::test::AllocatorFirstType<allocator<int>>>>;
-using TestTypeListAllocatorLast =
-    std::tuple<vector<pw::test::AllocatorLastType<allocator<int>>>, std::vector<pw::test::AllocatorLastType<allocator<int>>>>;
+using TestTypeListAllocatorOnly  = std::tuple<vector<pw::test::AllocatorOnlyType<allocator<int>>>,
+                                              std::vector<pw::test::AllocatorOnlyType<allocator<int>>>>;
+using TestTypeListAllocatorFirst = std::tuple<vector<pw::test::AllocatorFirstType<allocator<int>>>,
+                                              std::vector<pw::test::AllocatorFirstType<allocator<int>>>>;
+using TestTypeListAllocatorLast  = std::tuple<vector<pw::test::AllocatorLastType<allocator<int>>>,
+                                              std::vector<pw::test::AllocatorLastType<allocator<int>>>>;
 
 template<typename Type>
 void
