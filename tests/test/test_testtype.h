@@ -1,6 +1,11 @@
 #ifndef INCLUDED_PW_TEST_TESTTYPE_H
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
+#include "test_allocator_first_type.h"
+#include "test_allocator_last_type.h"
+#include "test_allocator_only_type.h"
+#include "test_no_allocator_type.h"
+
 #include <pw/vector>
 #include <test_allocator_base.h>
 #include <test_permute.h>
@@ -32,6 +37,14 @@ using TestTypeListAllocatorBase =
 
 using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
                                         std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
+using TestTypeListNoAllocator =
+    std::tuple<vector<pw::test::NoAllocatorType>, std::vector<pw::test::NoAllocatorType>>;
+using TestTypeListAllocatorOnly =
+    std::tuple<vector<pw::test::AllocatorOnlyType<allocator<int>>>, std::vector<pw::test::AllocatorOnlyType<allocator<int>>>>;
+using TestTypeListAllocatorFirst =
+    std::tuple<vector<pw::test::AllocatorFirstType<allocator<int>>>, std::vector<pw::test::AllocatorFirstType<allocator<int>>>>;
+using TestTypeListAllocatorLast =
+    std::tuple<vector<pw::test::AllocatorLastType<allocator<int>>>, std::vector<pw::test::AllocatorLastType<allocator<int>>>>;
 
 template<typename Type>
 void

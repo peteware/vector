@@ -59,6 +59,7 @@ TEMPLATE_LIST_TEST_CASE("emplace()", "[vector][func][emplace]", pw::test::TestTy
         WHEN("emplace() at begin()")
         {
             v.emplace(v.begin(), val);
+
             THEN("size() == 1")
             {
                 REQUIRE(v.size() == 1);

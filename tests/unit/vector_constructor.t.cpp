@@ -897,3 +897,180 @@ TEMPLATE_LIST_TEST_CASE("Constructors with allocator_base<int>",
         }
     }
 }
+
+TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
+                        "[phase3][vector][constructor]",
+                        pw::test::TestTypeListNoAllocator)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    using size_type  = typename Vector::size_type;
+
+    GIVEN("vector constructed with NoAllocatorType elements")
+    {
+        WHEN("constructing with count constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 3;
+            Vector v(count);
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is not passed to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getNoAllocator() == static_cast<int>(count));
+                REQUIRE(diff.getAllocatorFirst() == 0);
+                REQUIRE(diff.getAllocatorLast() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+
+        WHEN("constructing with count and value constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 2;
+            constexpr int initial_value = 42;
+            Vector v(count, value_type(initial_value));
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is not passed to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getNoAllocator() >= static_cast<int>(count));
+                REQUIRE(diff.getAllocatorFirst() == 0);
+                REQUIRE(diff.getAllocatorLast() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
+                        "[phase3][vector][constructor]",
+                        pw::test::TestTypeListAllocatorFirst)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    using size_type  = typename Vector::size_type;
+
+    GIVEN("vector constructed with AllocatorFirstType elements")
+    {
+        WHEN("constructing with count constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 3;
+            Vector v(count);
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is passed as first argument to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getAllocatorFirst() == static_cast<int>(count));
+                REQUIRE(diff.getNoAllocator() == 0);
+                REQUIRE(diff.getAllocatorLast() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+
+        WHEN("constructing with count and value constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 2;
+            constexpr int initial_value = 42;
+            Vector v(count, value_type(std::allocator_arg, typename value_type::allocator_type{}, initial_value));
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is passed as first argument to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getAllocatorFirst() >= static_cast<int>(count));
+                REQUIRE(diff.getNoAllocator() == 0);
+                REQUIRE(diff.getAllocatorLast() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorLastType",
+                        "[phase3][vector][constructor]",
+                        pw::test::TestTypeListAllocatorLast)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    using size_type  = typename Vector::size_type;
+
+    GIVEN("vector constructed with AllocatorLastType elements")
+    {
+        WHEN("constructing with count constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 3;
+            Vector v(count);
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is passed as last argument to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getAllocatorLast() == static_cast<int>(count));
+                REQUIRE(diff.getNoAllocator() == 0);
+                REQUIRE(diff.getAllocatorFirst() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+
+        WHEN("constructing with count and value constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 2;
+            constexpr int initial_value = 42;
+            Vector v(count, value_type(initial_value, typename value_type::allocator_type{}));
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is passed as last argument to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getAllocatorLast() >= static_cast<int>(count));
+                REQUIRE(diff.getNoAllocator() == 0);
+                REQUIRE(diff.getAllocatorFirst() == 0);
+                REQUIRE(diff.getAllocatorOnly() == 0);
+            }
+        }
+    }
+}
+
+TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
+                        "[phase3][vector][constructor]",
+                        pw::test::TestTypeListAllocatorOnly)
+{
+    using Vector     = TestType;
+    using value_type = typename Vector::value_type;
+    using size_type  = typename Vector::size_type;
+
+    GIVEN("vector constructed with AllocatorOnlyType elements")
+    {
+        WHEN("constructing with count constructor")
+        {
+            auto counter_before = value_type::getCounter();
+            constexpr size_type count = 3;
+            Vector v(count);
+            auto counter_after = value_type::getCounter();
+            auto diff = counter_after - counter_before;
+
+            THEN("allocator is passed as first argument to value_type constructor")
+            {
+                REQUIRE(v.size() == count);
+                REQUIRE(diff.getAllocatorFirst() == static_cast<int>(count));
+                REQUIRE(diff.getNoAllocator() == 0);
+                REQUIRE(diff.getAllocatorLast() == 0);
+                REQUIRE(diff.getAllocatorOnly() == static_cast<int>(count));
+            }
+        }
+    }
+}

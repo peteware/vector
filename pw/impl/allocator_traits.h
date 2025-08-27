@@ -7,6 +7,7 @@
 #include <pw/impl/make_unsigned.h>
 #include <pw/impl/numeric_limits.h>
 #include <pw/impl/pointer_traits.h>
+#include <pw/impl/uninitialized_construct_using_allocator.h>
 #include <pw/internal/detect_prop.h>
 
 namespace pw {
@@ -121,7 +122,7 @@ template<class Type, class... Args>
 constexpr void
 allocator_traits<Alloc>::construct(allocator_type& alloc, Type* p, Args&&... args)
 {
-    pw::construct_at(p, pw::forward<Args>(args)...);
+    pw::uninitialized_construct_using_allocator(p, alloc, pw::forward<Args>(args)...);
 }
 
 template<class Alloc>

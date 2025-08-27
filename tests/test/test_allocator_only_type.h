@@ -2,17 +2,19 @@
 #define INCLUDED_PW_TEST_ALLOCATOR_ONLY_TYPE_H
 
 #include <memory>
+#include <pw/impl/allocator.h>
 #include <test_optracker.h>
 
 namespace pw::test {
 
-template<typename Alloc>
+template<class Alloc = allocator<int>>
 struct AllocatorOnlyType : public OpTracker
 {
     using allocator_type = Alloc;
 
     static OpCounter getCounter();
 
+    AllocatorOnlyType() = delete;
     explicit AllocatorOnlyType(std::allocator_arg_t, const Alloc& alloc);
 
 private:
