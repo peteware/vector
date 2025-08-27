@@ -61,6 +61,15 @@ public:
     OpCounter&    addMinus();
     int           getMinus() const;
 
+    OpCounter&    addAllocatorFirst();
+    int           getAllocatorFirst() const;
+    OpCounter&    addAllocatorLast();
+    int           getAllocatorLast() const;
+    OpCounter&    addAllocatorOnly();
+    int           getAllocatorOnly() const;
+    OpCounter&    addNoAllocator();
+    int           getNoAllocator() const;
+
     std::ostream& print(std::ostream& out) const;
 
 private:
@@ -82,6 +91,10 @@ private:
     int m_equal           = 0; ///< Calls to operator==()
     int m_notEqual        = 0; ///< Calls to operator!=()
     int m_lt              = 0; ///< Calls to operator<()
+    int m_allocatorFirst  = 0; ///< Allocator passed as first argument
+    int m_allocatorLast   = 0; ///< Allocator passed as last argument
+    int m_allocatorOnly   = 0; ///< Only allocator passed
+    int m_noAllocator     = 0; ///< No allocator passed
 };
 
 std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);

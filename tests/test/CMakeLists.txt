@@ -4,6 +4,7 @@ add_library(pwtest
         test_defaultcopyconstructible.cpp
         test_emplacemoveconstructible.cpp
         test_moveconstructible.cpp
+        test_no_allocator_type.cpp
         test_opcounter.cpp
         test_optracker.cpp
         test_permute.cpp
@@ -15,12 +16,16 @@ target_sources(pwtest PUBLIC
         test_allocator_move_assignment.h
         test_allocator_swapable.h
         test_allocator_base.h
+        test_allocator_first_type.h
+        test_allocator_last_type.h
+        test_allocator_only_type.h
         test_copyconstructible.h
         test_defaultconstructible.h
         test_defaultcopyconstructible.h
         test_emplacemoveconstructible.h
         test_input_iterator.h
         test_moveconstructible.h
+        test_no_allocator_type.h
         test_opcounter.h
         test_optracker.h
         test_permute.h

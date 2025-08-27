@@ -25,6 +25,7 @@ add_executable(unittest
         swap.t.cpp
         uninitialized_copy.t.cpp
         uninitialized_move.t.cpp
+        uses_allocator_construction_args.t.cpp
         vector_1.t.cpp
         vector_access.t.cpp
         vector_assign.t.cpp

@@ -1,7 +1,9 @@
 add_library(pw-impl INTERFACE
         numeric_limits.h
         is_base_of.h
-        is_constant_evaluated.h)
+        is_constant_evaluated.h
+        uninitialized_construct_using_allocator.h
+        uses_allocator_construction_args.h)
 
 target_include_directories(
         pw-impl

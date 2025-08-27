@@ -296,6 +296,58 @@ OpCounter::getLt() const
     return m_lt;
 }
 
+OpCounter&
+OpCounter::addAllocatorFirst()
+{
+    ++m_allocatorFirst;
+    return *this;
+}
+
+int
+OpCounter::getAllocatorFirst() const
+{
+    return m_allocatorFirst;
+}
+
+OpCounter&
+OpCounter::addAllocatorLast()
+{
+    ++m_allocatorLast;
+    return *this;
+}
+
+int
+OpCounter::getAllocatorLast() const
+{
+    return m_allocatorLast;
+}
+
+OpCounter&
+OpCounter::addAllocatorOnly()
+{
+    ++m_allocatorOnly;
+    return *this;
+}
+
+int
+OpCounter::getAllocatorOnly() const
+{
+    return m_allocatorOnly;
+}
+
+OpCounter&
+OpCounter::addNoAllocator()
+{
+    ++m_noAllocator;
+    return *this;
+}
+
+int
+OpCounter::getNoAllocator() const
+{
+    return m_noAllocator;
+}
+
 std::ostream&
 OpCounter::print(std::ostream& out) const
 {
@@ -335,6 +387,14 @@ OpCounter::print(std::ostream& out) const
         out << " notequal = " << m_notEqual;
     if (m_lt)
         out << " lt = " << m_lt;
+    if (m_allocatorFirst)
+        out << " allocatorFirst = " << m_allocatorFirst;
+    if (m_allocatorLast)
+        out << " allocatorLast = " << m_allocatorLast;
+    if (m_allocatorOnly)
+        out << " allocatorOnly = " << m_allocatorOnly;
+    if (m_noAllocator)
+        out << " noAllocator = " << m_noAllocator;
 
     return out;
 }
@@ -360,6 +420,10 @@ OpCounter::operator-=(OpCounter const& op2)
     m_equal -= op2.m_equal;
     m_notEqual -= op2.m_notEqual;
     m_lt -= op2.m_lt;
+    m_allocatorFirst -= op2.m_allocatorFirst;
+    m_allocatorLast -= op2.m_allocatorLast;
+    m_allocatorOnly -= op2.m_allocatorOnly;
+    m_noAllocator -= op2.m_noAllocator;
 
     return *this;
 }
