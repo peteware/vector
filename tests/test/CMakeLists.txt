@@ -10,6 +10,7 @@ add_library(pwtest
         test_permute.cpp
         test_throwingtype.cpp
         test_allocator_is_always_equal.h
+        test_allocator_only_type.cpp
 )
 target_sources(pwtest PUBLIC
         test_allocator_copy_assignment.h

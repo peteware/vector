@@ -146,7 +146,7 @@ SCENARIO("uses_allocator_construction_args for allocator-only types",
 {
     GIVEN("A type that only accepts an allocator")
     {
-        using Type = pw::test::AllocatorOnlyType<TestAllocator>;
+        using Type = pw::test::AllocatorOnlyType;
         TestAllocator alloc;
 
         WHEN("called with no additional arguments")

@@ -7,35 +7,21 @@
 
 namespace pw::test {
 
-template<class Alloc = allocator<int>>
 struct AllocatorOnlyType : public OpTracker
 {
-    using allocator_type = Alloc;
-
     static OpCounter getCounter();
 
     AllocatorOnlyType() = delete;
-    explicit AllocatorOnlyType(const allocator_type& alloc = allocator_type {});
+    template<class Alloc>
+    explicit AllocatorOnlyType(const Alloc& alloc);
 
 private:
     static OpCounter s_opCounter;
-    allocator_type   m_allocator;
 };
 
 template<typename Alloc>
-OpCounter AllocatorOnlyType<Alloc>::s_opCounter;
-
-template<typename Alloc>
-OpCounter
-AllocatorOnlyType<Alloc>::getCounter()
-{
-    return s_opCounter;
-}
-
-template<typename Alloc>
-AllocatorOnlyType<Alloc>::AllocatorOnlyType(const Alloc& alloc)
+AllocatorOnlyType::AllocatorOnlyType(const Alloc&)
     : OpTracker(s_opCounter)
-    , m_allocator(alloc)
 {
     s_opCounter.addOtherConstructor().addAllocatorOnly();
 }
@@ -43,8 +29,8 @@ AllocatorOnlyType<Alloc>::AllocatorOnlyType(const Alloc& alloc)
 } // namespace pw::test
 
 namespace std {
-template<typename Alloc>
-struct uses_allocator<pw::test::AllocatorOnlyType<Alloc>, Alloc> : std::true_type
+template<class Alloc>
+struct uses_allocator<pw::test::AllocatorOnlyType, Alloc> : std::true_type
 {
 };
 } // namespace std

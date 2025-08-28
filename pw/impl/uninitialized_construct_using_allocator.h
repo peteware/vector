@@ -13,8 +13,9 @@ template<class Type, class Alloc, class... Args>
 constexpr Type*
 uninitialized_construct_using_allocator(Type* p, const Alloc& alloc, Args&&... args)
 {
-    return std::apply([&]<class... Xs>(Xs&&... xs) { return pw::construct_at(p, pw::forward<Xs>(xs)...); },
-                      pw::uses_allocator_construction_args<Type>(alloc, pw::forward<Args>(args)...));
+    auto func = [&]<class... Xs>(Xs&&... xs) { return pw::construct_at(p, pw::forward<Xs>(xs)...); };
+
+    return std::apply(func, pw::uses_allocator_construction_args<Type>(alloc, pw::forward<Args>(args)...));
 }
 } // namespace pw
 #endif //PW_UNINITIALIZED_CONSTRUCT_USING_ALLOCATOR_H
