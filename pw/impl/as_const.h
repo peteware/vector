@@ -13,7 +13,7 @@ as_const(Type& value) noexcept
 }
 
 template<class Type>
-void as_const(const Type&&) = delete;
+void as_const(Type const&&) = delete;
 } // namespace pw
 
 #endif /* INCLUDED_AS_CONST_H */

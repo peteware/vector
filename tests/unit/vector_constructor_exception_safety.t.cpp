@@ -171,7 +171,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor Exception Safety",
             Vector v(5, alloc); // Should throw after constructing 2 elements
             FAIL("Expected exception was not thrown");
         }
-        catch (const std::runtime_error&)
+        catch (std::runtime_error const&)
         {
             // Exception expected - verify cleanup
             REQUIRE(value_type::construction_count == 0);
@@ -191,7 +191,7 @@ TEST_CASE("Constructor Exception Safety - Resource Cleanup", "[vector][construct
             pw::vector<pw::test::ThrowingType> v(10); // Should throw after 3 constructions
             FAIL("Expected exception");
         }
-        catch (const std::runtime_error&)
+        catch (std::runtime_error const&)
         {
             // All objects should be destroyed
             REQUIRE(pw::test::ThrowingType::construction_count == 0);
@@ -226,7 +226,7 @@ TEST_CASE("Constructor Exception Safety - Resource Cleanup", "[vector][construct
                 v.reserve(1000); // Third allocation should fail
                 FAIL("Expected exception");
             }
-            catch (const std::bad_alloc&)
+            catch (std::bad_alloc const&)
             {
                 // Expected
             }

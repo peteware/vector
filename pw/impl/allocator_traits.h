@@ -28,9 +28,9 @@ struct allocator_traits
     using allocator_type                         = Alloc;
     using value_type                             = Alloc::value_type;
     using pointer                                = pointer_traits<value_type*>::pointer;
-    using const_pointer                          = pointer_traits<pointer>::template rebind<const value_type>;
+    using const_pointer                          = pointer_traits<pointer>::template rebind<value_type const>;
     using void_pointer                           = pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer                     = pointer_traits<pointer>::template rebind<const void>;
+    using const_void_pointer                     = pointer_traits<pointer>::template rebind<void const>;
     using difference_type                        = pointer_traits<pointer>::difference_type;
     using size_type                              = make_unsigned<difference_type>::type;
     using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
@@ -40,8 +40,8 @@ struct allocator_traits
 
     static pointer             allocate(allocator_type& alloc, size_type n);
     static constexpr void      deallocate(allocator_type& alloc, pointer p, size_type count);
-    static constexpr Alloc     select_on_container_copy_construction(const Alloc& alloc);
-    static constexpr size_type max_size(const Alloc& alloc);
+    static constexpr Alloc     select_on_container_copy_construction(Alloc const& alloc);
+    static constexpr size_type max_size(Alloc const& alloc);
 
     template<class Type, class... Args>
     static constexpr void construct(allocator_type&, Type* p, Args&&... args);
@@ -51,14 +51,14 @@ struct allocator_traits
 
 private:
     template<class T>
-    static auto max_size_impl(const T& alloc, int) -> decltype(alloc.max_size());
+    static auto max_size_impl(T const& alloc, int) -> decltype(alloc.max_size());
     template<class T>
-    static constexpr size_t max_size_impl(const T&, ...);
+    static constexpr size_t max_size_impl(T const&, ...);
 
     template<class AllocType>
-    static auto select_on_container_copy_construction_impl(const AllocType& alloc, int)
+    static auto select_on_container_copy_construction_impl(AllocType const& alloc, int)
         -> decltype(alloc.select_on_container_copy_construction());
-    static constexpr Alloc select_on_container_copy_construction_impl(const Alloc& alloc, ...);
+    static constexpr Alloc select_on_container_copy_construction_impl(Alloc const& alloc, ...);
     template<typename A, typename T>
 
     static auto destroy_impl(A& a, // NOLINT(runtime/references)
@@ -135,14 +135,14 @@ allocator_traits<Alloc>::destroy(allocator_type& a, Type* p)
 
 template<class Alloc>
 constexpr allocator_traits<Alloc>::allocator_type
-allocator_traits<Alloc>::select_on_container_copy_construction(const allocator_type& alloc)
+allocator_traits<Alloc>::select_on_container_copy_construction(allocator_type const& alloc)
 {
     return select_on_container_copy_construction_impl(alloc, 0);
 }
 
 template<class Alloc>
 constexpr allocator_traits<Alloc>::size_type
-allocator_traits<Alloc>::max_size(const Alloc& alloc)
+allocator_traits<Alloc>::max_size(Alloc const& alloc)
 {
     return max_size_impl(alloc, 0);
 }
@@ -150,7 +150,7 @@ allocator_traits<Alloc>::max_size(const Alloc& alloc)
 template<class Alloc>
 template<class Type>
 auto
-allocator_traits<Alloc>::max_size_impl(const Type& alloc, int) -> decltype(alloc.max_size())
+allocator_traits<Alloc>::max_size_impl(Type const& alloc, int) -> decltype(alloc.max_size())
 {
     return alloc.max_size();
 }
@@ -158,7 +158,7 @@ allocator_traits<Alloc>::max_size_impl(const Type& alloc, int) -> decltype(alloc
 template<class Alloc>
 template<class T>
 constexpr size_t
-allocator_traits<Alloc>::max_size_impl(const T&, ...)
+allocator_traits<Alloc>::max_size_impl(T const&, ...)
 {
     return pw::numeric_limits<size_type>::max() / sizeof(value_type);
 }
@@ -166,7 +166,7 @@ allocator_traits<Alloc>::max_size_impl(const T&, ...)
 template<class Alloc>
 template<class AllocType>
 auto
-allocator_traits<Alloc>::select_on_container_copy_construction_impl(const AllocType& alloc, int)
+allocator_traits<Alloc>::select_on_container_copy_construction_impl(AllocType const& alloc, int)
     -> decltype(alloc.select_on_container_copy_construction())
 {
     return alloc.select_on_container_copy_construction();
@@ -174,7 +174,7 @@ allocator_traits<Alloc>::select_on_container_copy_construction_impl(const AllocT
 
 template<class Alloc>
 constexpr allocator_traits<Alloc>::allocator_type
-allocator_traits<Alloc>::select_on_container_copy_construction_impl(const allocator_type& alloc, ...)
+allocator_traits<Alloc>::select_on_container_copy_construction_impl(allocator_type const& alloc, ...)
 {
     return alloc;
 }

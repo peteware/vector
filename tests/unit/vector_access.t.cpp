@@ -206,7 +206,7 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
         }
         WHEN("const operator[] is used on single element vector")
         {
-            const Vector v = { 42 };
+            Vector const v = { 42 };
 
             THEN("element can be accessed")
             {
@@ -237,7 +237,7 @@ TEST_CASE("operator[] methods", "[vector][operator][access]")
         }
         WHEN("const operator[] is used on multi-element vector")
         {
-            const Vector v = { 10, 20, 30, 40, 50 };
+            Vector const v = { 10, 20, 30, 40, 50 };
 
             THEN("all elements can be accessed")
             {
@@ -335,7 +335,7 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
         }
         WHEN("const front() and back() are used on single element vector")
         {
-            const Vector v = { 42 };
+            Vector const v = { 42 };
 
             THEN("both methods return same value")
             {
@@ -376,7 +376,7 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
         }
         WHEN("const front() and back() are used on multi-element vector")
         {
-            const Vector v = { 10, 20, 30, 40, 50 };
+            Vector const v = { 10, 20, 30, 40, 50 };
 
             THEN("methods return correct elements")
             {
@@ -409,9 +409,9 @@ TEST_CASE("front() and back() methods", "[vector][front][back][access]")
             }
             THEN("const references work")
             {
-                const Vector& cv              = v;
-                const int&    const_front_ref = cv.front();
-                const int&    const_back_ref  = cv.back();
+                Vector const& cv              = v;
+                int const&    const_front_ref = cv.front();
+                int const&    const_back_ref  = cv.back();
 
                 REQUIRE(const_front_ref == 1000);
                 REQUIRE(const_back_ref == 2000);
@@ -487,7 +487,7 @@ TEST_CASE("data() method", "[vector][data][access]")
             }
             THEN("const data() returns nullptr")
             {
-                const Vector& cv = v;
+                Vector const& cv = v;
                 REQUIRE(cv.data() == nullptr);
             }
         }
@@ -517,8 +517,8 @@ TEST_CASE("data() method", "[vector][data][access]")
         }
         WHEN("const data() is called on single element vector")
         {
-            const Vector v   = { 42 };
-            const int*   ptr = v.data();
+            Vector const v   = { 42 };
+            int const*   ptr = v.data();
 
             THEN("const data() returns valid pointer")
             {
@@ -560,8 +560,8 @@ TEST_CASE("data() method", "[vector][data][access]")
         }
         WHEN("const data() is called on multi-element vector")
         {
-            const Vector v   = { 10, 20, 30, 40, 50 };
-            const int*   ptr = v.data();
+            Vector const v   = { 10, 20, 30, 40, 50 };
+            int const*   ptr = v.data();
 
             THEN("const data() returns valid pointer")
             {
@@ -668,17 +668,17 @@ TEST_CASE("data() method", "[vector][data][access]")
         WHEN("data() return type verification is performed")
         {
             Vector        v  = { 100, 200 };
-            const Vector& cv = v;
+            Vector const& cv = v;
 
             THEN("return types are correct")
             {
                 static_assert(std::is_same_v<decltype(v.data()), int*>);
-                static_assert(std::is_same_v<decltype(cv.data()), const int*>);
+                static_assert(std::is_same_v<decltype(cv.data()), int const*>);
             }
             THEN("pointers point to same location")
             {
                 int*       mutable_ptr = v.data();
-                const int* const_ptr   = cv.data();
+                int const* const_ptr   = cv.data();
 
                 REQUIRE(mutable_ptr == const_ptr);
                 REQUIRE(*mutable_ptr == *const_ptr);

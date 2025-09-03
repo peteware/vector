@@ -12,7 +12,7 @@ namespace pw {
  */
 template<class Type, class Alloc, class... Args>
 constexpr auto
-uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
+uses_allocator_construction_args(Alloc const& alloc, Args&&... args) noexcept
     -> std::enable_if_t<!std::uses_allocator_v<Type, Alloc> && std::is_constructible_v<Type, Args...>,
                         std::tuple<Args&&...>>
 {
@@ -26,12 +26,12 @@ uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
  */
 template<class Type, class Alloc, class... Args>
 constexpr auto
-uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
+uses_allocator_construction_args(Alloc const& alloc, Args&&... args) noexcept
     -> std::enable_if_t<std::uses_allocator_v<Type, Alloc> &&
-                            std::is_constructible_v<Type, std::allocator_arg_t, const Alloc&, Args...>,
-                        std::tuple<std::allocator_arg_t, const Alloc&, Args&&...>>
+                            std::is_constructible_v<Type, std::allocator_arg_t, Alloc const&, Args...>,
+                        std::tuple<std::allocator_arg_t, Alloc const&, Args&&...>>
 {
-    return std::tuple<std::allocator_arg_t, const Alloc&, Args&&...>(
+    return std::tuple<std::allocator_arg_t, Alloc const&, Args&&...>(
         std::allocator_arg, alloc, std::forward<Args>(args)...);
 }
 
@@ -42,12 +42,12 @@ uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
  */
 template<class Type, class Alloc, class... Args>
 constexpr auto
-uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
+uses_allocator_construction_args(Alloc const& alloc, Args&&... args) noexcept
     -> std::enable_if_t<std::uses_allocator_v<Type, Alloc> &&
-                            std::is_constructible_v<Type, Args..., const Alloc&>,
-                        std::tuple<Args&&..., const Alloc&>>
+                            std::is_constructible_v<Type, Args..., Alloc const&>,
+                        std::tuple<Args&&..., Alloc const&>>
 {
-    return std::tuple<Args&&..., const Alloc&>(std::forward<Args>(args)..., alloc);
+    return std::tuple<Args&&..., Alloc const&>(std::forward<Args>(args)..., alloc);
 }
 
 } // namespace pw

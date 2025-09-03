@@ -15,7 +15,7 @@ ThrowingType::ThrowingType(int value)
     }
 }
 
-ThrowingType::ThrowingType(const ThrowingType& other)
+ThrowingType::ThrowingType(ThrowingType const& other)
     : value(other.value)
 {
     if (++construction_count > throw_after_n && throw_after_n > 0)

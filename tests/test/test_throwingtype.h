@@ -15,7 +15,7 @@ public:
     int        value;
 
     explicit ThrowingType(int v = 0);
-    ThrowingType(const ThrowingType& other);
+    ThrowingType(ThrowingType const& other);
     ThrowingType(ThrowingType&& other) noexcept(false);
 
     ~ThrowingType();

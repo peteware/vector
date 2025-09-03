@@ -19,11 +19,11 @@ struct test_input_iterator
 
     test_input_iterator()   = default;
     explicit test_input_iterator(Iterator iterator);
-    test_input_iterator(const test_input_iterator& copy);
+    test_input_iterator(test_input_iterator const& copy);
     test_input_iterator(test_input_iterator&& other) noexcept;
     ~test_input_iterator() = default;
 
-    test_input_iterator& operator=(const test_input_iterator& other);
+    test_input_iterator& operator=(test_input_iterator const& other);
     test_input_iterator& operator=(test_input_iterator&& other) noexcept;
     reference            operator*() const;
     pointer              operator->() const;
@@ -50,7 +50,7 @@ test_input_iterator<Iterator>::test_input_iterator(Iterator iterator)
 }
 
 template<class Iterator>
-test_input_iterator<Iterator>::test_input_iterator(const test_input_iterator& copy)
+test_input_iterator<Iterator>::test_input_iterator(test_input_iterator const& copy)
     : m_underlying_iterator(copy.m_underlying_iterator)
 {
 }
@@ -63,7 +63,7 @@ test_input_iterator<Iterator>::test_input_iterator(test_input_iterator&& other) 
 
 template<class Iterator>
 test_input_iterator<Iterator>&
-test_input_iterator<Iterator>::operator=(const test_input_iterator& other)
+test_input_iterator<Iterator>::operator=(test_input_iterator const& other)
 {
     if (this != &other)
     {

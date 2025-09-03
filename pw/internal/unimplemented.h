@@ -10,7 +10,7 @@ namespace pw::internal {
 class Unimplemented final : public std::runtime_error
 {
 public:
-    explicit Unimplemented(const char* msg)
+    explicit Unimplemented(char const* msg)
         : std::runtime_error(msg)
     {
     }

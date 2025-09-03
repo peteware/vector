@@ -11,7 +11,7 @@ namespace pw {
 
 template<class Type, class Alloc, class... Args>
 constexpr Type*
-uninitialized_construct_using_allocator(Type* p, const Alloc& alloc, Args&&... args)
+uninitialized_construct_using_allocator(Type* p, Alloc const& alloc, Args&&... args)
 {
     auto func = [&]<class... Xs>(Xs&&... xs) { return pw::construct_at(p, pw::forward<Xs>(xs)...); };
 

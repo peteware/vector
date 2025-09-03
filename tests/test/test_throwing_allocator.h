@@ -34,7 +34,7 @@ public:
 
     void        deallocate(T* p, std::size_t) noexcept { ::operator delete(p); }
 
-    bool        operator==(const ThrowingAllocator&) const { return true; }
+    bool        operator==(ThrowingAllocator const&) const { return true; }
 
     static void reset()
     {

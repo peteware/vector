@@ -16,7 +16,7 @@ SCENARIO("validate distance() algorithm", "[distance][algorithm]")
         char const*    e     = &str[4];
         WHEN("get the distance")
         {
-            const pw::ptrdiff_t d = pw::distance(s, e);
+            pw::ptrdiff_t const d = pw::distance(s, e);
             THEN("distance is 4")
             {
                 REQUIRE(4 == d);

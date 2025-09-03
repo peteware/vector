@@ -127,7 +127,7 @@ constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
  * @exception std::bad_alloc if memory allocation fails
  */
 template<class Type, class Allocator>
-constexpr vector<Type, Allocator>::vector(vector&& copy, const Allocator& alloc)
+constexpr vector<Type, Allocator>::vector(vector&& copy, Allocator const& alloc)
     : m_storage(alloc, copy.size())
 {
     m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin());
@@ -190,7 +190,7 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>&
-vector<Type, Allocator>::operator=(const vector& other)
+vector<Type, Allocator>::operator=(vector const& other)
 {
     if constexpr (allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
     {
@@ -1181,7 +1181,7 @@ swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2) noexcept(noexce
  */
 template<class Type, class Allocator>
 constexpr bool
-operator==(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
+operator==(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& op2)
 {
     if (op1.size() != op2.size())
     {
@@ -1199,7 +1199,7 @@ operator==(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op
  */
 template<class Type, class Allocator>
 constexpr auto
-operator<=>(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
+operator<=>(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& op2)
     -> decltype(op1[0] <=> op2[0])
 {
     for (size_t i = 0; i < min(op1.size(), op2.size()); ++i)

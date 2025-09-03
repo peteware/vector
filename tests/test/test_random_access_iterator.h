@@ -25,7 +25,7 @@ struct random_access_iterator
         s_opCounter.addDefaultConstructor();
     }
 
-    random_access_iterator(const random_access_iterator& copy)
+    random_access_iterator(random_access_iterator const& copy)
         : m_iterator(copy.m_iterator)
     {
         s_opCounter.addCopyConstructor();

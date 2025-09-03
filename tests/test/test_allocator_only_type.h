@@ -13,14 +13,14 @@ struct AllocatorOnlyType : public OpTracker
 
     AllocatorOnlyType() = delete;
     template<class Alloc>
-    explicit AllocatorOnlyType(const Alloc& alloc);
+    explicit AllocatorOnlyType(Alloc const& alloc);
 
 private:
     static OpCounter s_opCounter;
 };
 
 template<typename Alloc>
-AllocatorOnlyType::AllocatorOnlyType(const Alloc&)
+AllocatorOnlyType::AllocatorOnlyType(Alloc const&)
     : OpTracker(s_opCounter)
 {
     s_opCounter.addOtherConstructor().addAllocatorOnly();

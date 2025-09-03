@@ -4,7 +4,7 @@
 namespace pw {
 template<class Iterator, class Size, class Type>
 constexpr Iterator
-fill_n(Iterator first, Size count, const Type& value)
+fill_n(Iterator first, Size count, Type const& value)
 {
     for (Size i = 0; i < count; ++i)
     {

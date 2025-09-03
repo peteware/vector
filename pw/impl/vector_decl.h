@@ -45,7 +45,7 @@ public:
 
     constexpr ~vector() = default;
 
-    constexpr vector& operator=(const vector& other);
+    constexpr vector& operator=(vector const& other);
     constexpr vector& operator=(initializer_list<value_type> init_list);
     constexpr vector& operator=(vector&& other)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_move_assignment::value ||
@@ -117,10 +117,10 @@ void constexpr swap(vector<Type, Allocator>& op1, vector<Type, Allocator>& op2)
     noexcept(noexcept(op1.swap(op2)));
 
 template<class Type, class Allocator>
-constexpr bool operator==(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2);
+constexpr bool operator==(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& op2);
 
 template<class Type, class Allocator>
-constexpr auto operator<=>(const vector<Type, Allocator>& op1, const vector<Type, Allocator>& op2)
+constexpr auto operator<=>(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& op2)
     -> decltype(op1[0] <=> op2[0]);
 
 } // namespace pw

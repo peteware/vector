@@ -6,7 +6,7 @@ namespace pw {
 template<class Type>
 struct add_const
 {
-    typedef const Type type;
+    typedef Type const type;
 };
 
 template<class Type>

@@ -92,7 +92,7 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
             THEN("returns (alloc)")
             {
                 INFO(typeid(decltype(args)).name());
-                INFO((std::is_constructible_v<Type, const TestAllocator&>));
+                INFO((std::is_constructible_v<Type, TestAllocator const&>));
                 REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, decltype(alloc)>);
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
                 REQUIRE(false);
