@@ -4,28 +4,37 @@
 
 namespace pw::test {
 
-OpCounter::OpCounter()
-{
-}
-
+/**
+ * @return true if no constructors called (constructorCount() == 0)
+ */
 bool
 OpCounter::zero() const
 {
     return constructorCount() == 0;
 }
 
+/**
+ * @return constructorCount() + destructor + assignment count
+ */
 int
 OpCounter::allCount() const
 {
     return constructorCount() + destructorCount() + assignmentCount();
 }
 
+/**
+ * @brief
+ * @return default + copy + move + default_alloc + copy_alloc + other constructor counts
+ */
 int
 OpCounter::constructorCount() const
 {
-    return m_default + m_copy + m_move + m_defaultalloc + m_copyalloc + m_other;
+    return m_default + m_copy + m_move + m_default_alloc + m_copy_alloc + m_other;
 }
 
+/**
+ * @return destructor calls
+ */
 int
 OpCounter::destructorCount() const
 {
@@ -35,19 +44,19 @@ OpCounter::destructorCount() const
 int
 OpCounter::assignmentCount() const
 {
-    return m_assignment + m_moveassignment;
+    return m_assignment + m_move_assignment;
 }
 
 int
 OpCounter::additionCount() const
 {
-    return m_plusassignment + m_plus + m_increment;
+    return m_plus_assignment + m_plus + m_increment;
 }
 
 int
 OpCounter::subtractionCount() const
 {
-    return m_minusassignment + m_minus + m_decrement;
+    return m_minus_assignment + m_minus + m_decrement;
 }
 
 int
@@ -104,26 +113,26 @@ OpCounter::addMoveConstructor()
 int
 OpCounter::getDefaultConstructorAlloc() const
 {
-    return m_defaultalloc;
+    return m_default_alloc;
 }
 
 OpCounter&
 OpCounter::addDefaultConstructorAlloc()
 {
-    ++m_defaultalloc;
+    ++m_default_alloc;
     return *this;
 }
 
 int
 OpCounter::getCopyConstructorAlloc() const
 {
-    return m_copyalloc;
+    return m_copy_alloc;
 }
 
 OpCounter&
 OpCounter::addCopyConstructorAlloc()
 {
-    ++m_copyalloc;
+    ++m_copy_alloc;
     return *this;
 }
 
@@ -169,40 +178,40 @@ OpCounter::getAssignment() const
 OpCounter&
 OpCounter::addMoveAssignment()
 {
-    ++m_moveassignment;
+    ++m_move_assignment;
     return *this;
 }
 
 int
 OpCounter::getMoveAssignment() const
 {
-    return m_moveassignment;
+    return m_move_assignment;
 }
 
 OpCounter&
 OpCounter::addPlusAssignment()
 {
-    ++m_plusassignment;
+    ++m_plus_assignment;
     return *this;
 }
 
 int
 OpCounter::getPlusAssignment() const
 {
-    return m_plusassignment;
+    return m_plus_assignment;
 }
 
 OpCounter&
 OpCounter::addMinusAssignment()
 {
-    ++m_minusassignment;
+    ++m_minus_assignment;
     return *this;
 }
 
 int
 OpCounter::getMinusAssignment() const
 {
-    return m_minusassignment;
+    return m_minus_assignment;
 }
 
 OpCounter&
@@ -357,22 +366,22 @@ OpCounter::print(std::ostream& out) const
         out << " copy = " << m_copy;
     if (m_move)
         out << " move = " << m_move;
-    if (m_defaultalloc)
-        out << " defaultalloc = " << m_defaultalloc;
-    if (m_copyalloc)
-        out << " copyalloc = " << m_copyalloc;
+    if (m_default_alloc)
+        out << " defaultalloc = " << m_default_alloc;
+    if (m_copy_alloc)
+        out << " copyalloc = " << m_copy_alloc;
     if (m_other)
         out << " other = " << m_other;
     if (m_destructor)
         out << " destructor = " << m_destructor;
     if (m_assignment)
         out << " assignment = " << m_assignment;
-    if (m_moveassignment)
-        out << " moveassignment = " << m_moveassignment;
-    if (m_plusassignment)
-        out << " plusassignment = " << m_plusassignment;
-    if (m_minusassignment)
-        out << " minusassignment = " << m_minusassignment;
+    if (m_move_assignment)
+        out << " moveassignment = " << m_move_assignment;
+    if (m_plus_assignment)
+        out << " plusassignment = " << m_plus_assignment;
+    if (m_minus_assignment)
+        out << " minusassignment = " << m_minus_assignment;
     if (m_increment)
         out << " increment = " << m_increment;
     if (m_decrement)
@@ -380,11 +389,11 @@ OpCounter::print(std::ostream& out) const
     if (m_plus)
         out << " plus = " << m_plus;
     if (m_minus)
-        out << " mimnus = " << m_minus;
+        out << " minus = " << m_minus;
     if (m_equal)
         out << " equal = " << m_equal;
     if (m_notEqual)
-        out << " notequal = " << m_notEqual;
+        out << " notEqual = " << m_notEqual;
     if (m_lt)
         out << " lt = " << m_lt;
     if (m_allocatorFirst)
@@ -405,14 +414,14 @@ OpCounter::operator-=(OpCounter const& op2)
     m_default -= op2.m_default;
     m_copy -= op2.m_copy;
     m_move -= op2.m_move;
-    m_defaultalloc -= op2.m_defaultalloc;
-    m_copyalloc -= op2.m_copyalloc;
+    m_default_alloc -= op2.m_default_alloc;
+    m_copy_alloc -= op2.m_copy_alloc;
     m_other -= op2.m_other;
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
-    m_moveassignment -= op2.m_moveassignment;
-    m_plusassignment -= op2.m_plusassignment;
-    m_minusassignment -= op2.m_minusassignment;
+    m_move_assignment -= op2.m_move_assignment;
+    m_plus_assignment -= op2.m_plus_assignment;
+    m_minus_assignment -= op2.m_minus_assignment;
     m_increment -= op2.m_increment;
     m_decrement -= op2.m_decrement;
     m_plus -= op2.m_plus;

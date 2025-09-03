@@ -41,6 +41,7 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None
 PenaltyReturnTypeOnItsOwnLine: 0
 PenaltyBreakAssignment: 50
+QualifierAlignment: Right
 ReflowComments: Never
 SortIncludes: true
 SpaceAfterTemplateKeyword: false

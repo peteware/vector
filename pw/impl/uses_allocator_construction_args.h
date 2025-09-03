@@ -37,7 +37,7 @@ uses_allocator_construction_args(const Alloc& alloc, Args&&... args) noexcept
 
 /**
  * @brief If Type uses an allocator and can be constructed with allocator in
- * last position then return (allocator_arg_t, Args..., Alloc)
+ * last position then return (Args..., Alloc)
  * as a tuple
  */
 template<class Type, class Alloc, class... Args>

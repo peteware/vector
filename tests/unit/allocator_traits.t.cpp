@@ -2,6 +2,7 @@
 #include <pw/impl/allocator_traits.h>
 
 #include <test_allocator_base.h>
+#include <test_allocator_first_type.h>
 #include <test_emplacemoveconstructible.h>
 
 #include <catch2/catch_test_macros.hpp>
@@ -57,6 +58,14 @@ struct allocator_with_max_size : public allocator_base<Type>
 };
 
 } // namespace pw::test
+SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
+{
+    using Alloc = pw::allocator<int>;
+    Alloc                               alloc;
+    pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+
+    REQUIRE(obj.value() == (20 + 5));
+}
 
 SCENARIO("Allocator traits", "[allocator_traits]")
 {

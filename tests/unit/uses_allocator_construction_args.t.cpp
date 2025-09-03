@@ -7,7 +7,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <memory>
 
-using TestAllocator = std::allocator<int>;
+using TestAllocator = pw::allocator<int>;
 
 SCENARIO("uses_allocator_construction_args for non-allocator-aware types",
          "[memory][uses_allocator_construction_args]")
@@ -81,6 +81,21 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
             {
                 REQUIRE(std::tuple_size_v<decltype(args)> == 3);
                 REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
+            }
+        }
+
+        WHEN("default constructor (with alloc argument)")
+        {
+            auto counter_before = Type::getCounter();
+            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+
+            THEN("returns (alloc)")
+            {
+                INFO(typeid(decltype(args)).name());
+                INFO((std::is_constructible_v<Type, const TestAllocator&>));
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, decltype(alloc)>);
+                REQUIRE(std::tuple_size_v<decltype(args)> == 1);
+                REQUIRE(false);
             }
         }
 

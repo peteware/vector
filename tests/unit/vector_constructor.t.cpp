@@ -968,6 +968,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
             THEN("allocator is passed as first argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
+                INFO(diff);
                 REQUIRE(diff.getAllocatorFirst() == static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
@@ -977,17 +978,19 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
 
         WHEN("constructing with count and value constructor")
         {
-            auto                counter_before = value_type::getCounter();
-            constexpr size_type count          = 2;
+            constexpr size_type count          = 5;
             constexpr int       initial_value  = 42;
-            Vector              v(count,
-                     value_type(std::allocator_arg, typename value_type::allocator_type {}, initial_value));
+            auto const          alloc          = typename value_type::allocator_type {};
+            auto const          value          = value_type(std::allocator_arg, alloc, initial_value);
+            auto                counter_before = value_type::getCounter();
+            Vector              v(count, value);
             auto                counter_after = value_type::getCounter();
             auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
+                INFO(diff);
                 REQUIRE(diff.getAllocatorFirst() >= static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
@@ -1018,6 +1021,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorLastType",
             THEN("allocator is passed as last argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
+                INFO(diff);
                 REQUIRE(diff.getAllocatorLast() == static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorFirst() == 0);
@@ -1037,6 +1041,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorLastType",
             THEN("allocator is passed as last argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
+                INFO(diff);
                 REQUIRE(diff.getAllocatorLast() >= static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorFirst() == 0);
