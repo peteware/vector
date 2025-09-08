@@ -56,8 +56,7 @@ constexpr vector<Type, Allocator>::vector(size_type             count,
                                           allocator_type const& alloc)
     : m_storage(alloc, count)
 {
-    m_storage.uninitialized_fill(m_storage.begin(), m_storage.begin() + count, value);
-    m_storage.set_size(count);
+    m_storage.uninitialized_fill(m_storage.begin(), m_storage.begin() + count, value).set_size(count);
 }
 
 /**
@@ -71,8 +70,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(size_type count, allocator_type const& alloc)
     : m_storage(alloc, count)
 {
-    m_storage.uninitialized_default_construct(m_storage.begin(), m_storage.begin() + count);
-    m_storage.set_size(count);
+    m_storage.uninitialized_default_construct(m_storage.begin(), m_storage.begin() + count).set_size(count);
 }
 
 /**
@@ -86,8 +84,7 @@ constexpr vector<Type, Allocator>::vector(vector const& copy)
     : m_storage(allocator_traits<allocator_type>::select_on_container_copy_construction(copy.get_allocator()),
                 copy.size())
 {
-    m_storage.uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    m_storage.uninitialized_copy(copy.begin(), copy.end(), m_storage.begin()).set_size(copy.size());
 }
 
 /**
@@ -101,8 +98,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector const& copy, allocator_type const& alloc)
     : m_storage(alloc, copy.size())
 {
-    m_storage.uninitialized_copy(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    m_storage.uninitialized_copy(copy.begin(), copy.end(), m_storage.begin()).set_size(copy.size());
 }
 
 /**
@@ -115,8 +111,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
     : m_storage(copy.get_allocator(), copy.size())
 {
-    m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin()).set_size(copy.size());
 }
 
 /**
@@ -130,8 +125,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy, Allocator const& alloc)
     : m_storage(alloc, copy.size())
 {
-    m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin());
-    m_storage.set_size(copy.size());
+    m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin()).set_size(copy.size());
 }
 
 /**
@@ -145,8 +139,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(initializer_list<value_type> init, allocator_type const& alloc)
     : m_storage(alloc, init.size())
 {
-    m_storage.uninitialized_copy(init.begin(), init.end(), m_storage.begin());
-    m_storage.set_size(init.size());
+    m_storage.uninitialized_copy(init.begin(), init.end(), m_storage.begin()).set_size(init.size());
 }
 
 /**
@@ -242,8 +235,7 @@ vector<Type, Allocator>::operator=(initializer_list<value_type> init_list)
 {
     Storage tmp { allocator_type(), init_list.size() };
 
-    tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin());
-    tmp.set_size(init_list.size());
+    tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin()).set_size(init_list.size());
     m_storage.swap(tmp, false);
     return *this;
 }
@@ -263,8 +255,7 @@ vector<Type, Allocator>::operator=(vector&& other)
     if constexpr (allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
     {
         Storage storage { other.get_allocator(), other.size() };
-        storage.uninitialized_move(other.begin(), other.end(), storage.begin());
-        storage.set_size(other.size());
+        storage.uninitialized_move(other.begin(), other.end(), storage.begin()).set_size(other.size());
         m_storage.swap(storage, true);
     }
     else
@@ -317,8 +308,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
         size_type count = distance(begin, end);
         Storage   tmp { allocator_type(), count };
 
-        tmp.uninitialized_copy(begin, end, tmp.begin());
-        tmp.set_size(count);
+        tmp.uninitialized_copy(begin, end, tmp.begin()).set_size(count);
         m_storage.swap(tmp, false);
     }
     else
@@ -344,8 +334,7 @@ constexpr void
 vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
     Storage tmp { allocator_type(), count };
-    tmp.uninitialized_fill(tmp.begin(), tmp.begin() + count, value);
-    tmp.set_size(count);
+    tmp.uninitialized_fill(tmp.begin(), tmp.begin() + count, value).set_size(count);
     m_storage.swap(tmp, false);
 }
 
@@ -360,8 +349,7 @@ constexpr void
 vector<Type, Allocator>::assign(initializer_list<value_type> init_list)
 {
     Storage tmp { allocator_type(), init_list.size() };
-    tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin());
-    tmp.set_size(init_list.size());
+    tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin()).set_size(init_list.size());
     m_storage.swap(tmp, false);
 }
 
@@ -725,8 +713,7 @@ vector<Type, Allocator>::shrink_to_fit()
         return;
     }
     Storage tmp(m_storage.copy_allocator(), m_storage.size());
-    tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
-    tmp.set_size(m_storage.size());
+    tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin()).set_size(m_storage.size());
     m_storage.swap(tmp, false);
 }
 
@@ -743,8 +730,7 @@ vector<Type, Allocator>::reserve(size_type count)
     if (count <= m_storage.allocated())
         return;
     Storage tmp(m_storage.copy_allocator(), count);
-    tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
-    tmp.set_size(m_storage.size());
+    tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin()).set_size(m_storage.size());
     m_storage.swap(tmp, false);
 }
 

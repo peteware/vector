@@ -66,15 +66,15 @@ struct Storage
     constexpr iterator                move_backward(iterator begin, iterator end, iterator dest);
     constexpr iterator                fill_n(iterator dest, size_type count, value_type const& value);
     constexpr Storage&                uninitialized_fill(iterator begin, iterator end, value_type const& val);
-    constexpr void                    uninitialized_default_construct(iterator begin, iterator end);
-    constexpr iterator                uninitialized_move(iterator begin, iterator end, iterator dest);
+    constexpr Storage&                uninitialized_default_construct(iterator begin, iterator end);
+    constexpr Storage&                uninitialized_move(iterator begin, iterator end, iterator dest);
     constexpr void                    swap(Storage& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
     template<class... Args>
     constexpr void construct(iterator where, Args&&... args);
     template<class InputIterator>
-    constexpr void uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
+    constexpr Storage& uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
 
 private:
     allocator_type m_alloc;
@@ -331,7 +331,7 @@ Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value
 }
 
 template<class Type, class Allocator>
-constexpr void
+constexpr Storage<Type, Allocator>&
 Storage<Type, Allocator>::uninitialized_default_construct(iterator begin, iterator end)
 {
     iterator current = begin;
@@ -348,10 +348,11 @@ Storage<Type, Allocator>::uninitialized_default_construct(iterator begin, iterat
         destroy(begin, current);
         throw;
     }
+    return *this;
 }
 
 template<class Type, class Allocator>
-constexpr Storage<Type, Allocator>::iterator
+constexpr Storage<Type, Allocator>&
 Storage<Type, Allocator>::uninitialized_move(iterator begin, iterator end, iterator dest)
 {
     iterator current = dest;
@@ -369,12 +370,12 @@ Storage<Type, Allocator>::uninitialized_move(iterator begin, iterator end, itera
         destroy(dest, current);
         throw;
     }
-    return current;
+    return *this;
 }
 
 template<class Type, class Allocator>
 template<class InputIterator>
-constexpr void
+constexpr Storage<Type, Allocator>&
 Storage<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator end, iterator dest)
 {
     iterator current = dest;
@@ -392,6 +393,7 @@ Storage<Type, Allocator>::uninitialized_copy(InputIterator begin, InputIterator 
         destroy(dest, current);
         throw;
     }
+    return *this;
 }
 
 } // namespace pw::internal

@@ -167,9 +167,8 @@ SCENARIO("Storage::uninitialized_move() moves objects using allocator_traits", "
                 source_storage.begin(), source_storage.end(), target_storage.begin());
             target_storage.set_size(3);
 
-            THEN("elements are properly moved and iterator is returned")
+            THEN("elements are properly moved")
             {
-                REQUIRE(result == target_storage.begin() + 3);
                 REQUIRE(target_storage.size() == 3);
                 REQUIRE(target_storage.begin()[0] == 42);
                 REQUIRE(target_storage.begin()[1] == 42);
