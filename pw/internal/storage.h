@@ -65,7 +65,7 @@ struct Storage
     constexpr iterator                move(iterator begin, iterator end, iterator dest);
     constexpr iterator                move_backward(iterator begin, iterator end, iterator dest);
     constexpr iterator                fill_n(iterator dest, size_type count, value_type const& value);
-    constexpr void                    uninitialized_fill(iterator begin, iterator end, value_type const& val);
+    constexpr Storage&                uninitialized_fill(iterator begin, iterator end, value_type const& val);
     constexpr void                    uninitialized_default_construct(iterator begin, iterator end);
     constexpr iterator                uninitialized_move(iterator begin, iterator end, iterator dest);
     constexpr void                    swap(Storage& other, bool swap_allocator)
@@ -310,7 +310,7 @@ Storage<Type, Allocator>::fill_n(iterator dest, size_type count, value_type cons
 }
 
 template<class Type, class Allocator>
-constexpr void
+constexpr Storage<Type, Allocator>&
 Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& val)
 {
     iterator current = begin;
@@ -327,6 +327,7 @@ Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value
         destroy(begin, current);
         throw;
     }
+    return *this;
 }
 
 template<class Type, class Allocator>

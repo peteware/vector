@@ -14,9 +14,9 @@ struct AllocatorLastType : public OpTracker
     static OpCounter getCounter();
 
     AllocatorLastType();
-    explicit AllocatorLastType(Alloc const& alloc);
-    AllocatorLastType(value_type const& value, Alloc const& alloc);
-    AllocatorLastType(value_type const& value, int extra, Alloc const& alloc);
+    explicit AllocatorLastType(allocator_type const& alloc);
+    AllocatorLastType(value_type const& value, allocator_type const& alloc);
+    AllocatorLastType(value_type const& value, int extra, allocator_type const& alloc);
 
 private:
     static OpCounter s_opCounter;
@@ -42,7 +42,7 @@ AllocatorLastType<Alloc>::AllocatorLastType()
 }
 
 template<typename Alloc>
-AllocatorLastType<Alloc>::AllocatorLastType(Alloc const& alloc)
+AllocatorLastType<Alloc>::AllocatorLastType(allocator_type const& alloc)
     : OpTracker(s_opCounter)
     , m_allocator(alloc)
 {
@@ -50,7 +50,7 @@ AllocatorLastType<Alloc>::AllocatorLastType(Alloc const& alloc)
 }
 
 template<typename Alloc>
-AllocatorLastType<Alloc>::AllocatorLastType(value_type const& value, Alloc const& alloc)
+AllocatorLastType<Alloc>::AllocatorLastType(value_type const& value, allocator_type const& alloc)
     : OpTracker(s_opCounter, value)
     , m_allocator(alloc)
 {
@@ -58,7 +58,7 @@ AllocatorLastType<Alloc>::AllocatorLastType(value_type const& value, Alloc const
 }
 
 template<typename Alloc>
-AllocatorLastType<Alloc>::AllocatorLastType(value_type const& value, int extra, Alloc const& alloc)
+AllocatorLastType<Alloc>::AllocatorLastType(value_type const& value, int extra, allocator_type const& alloc)
     : OpTracker(s_opCounter, value + extra)
     , m_allocator(alloc)
 {

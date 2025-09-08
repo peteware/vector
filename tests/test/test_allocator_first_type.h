@@ -8,35 +8,33 @@
 
 namespace pw::test {
 
-template<typename Alloc = pw::allocator<int>>
+template<typename Alloc>
 struct AllocatorFirstType : public OpTracker
 {
     using allocator_type = Alloc;
 
     static OpCounter getCounter();
 
-    //AllocatorFirstType() = default;
-    explicit AllocatorFirstType(allocator_type const& alloc = allocator_type())
+    AllocatorFirstType()
+        : OpTracker(s_opCounter)
+        , m_allocator()
+    {
+    }
+    explicit AllocatorFirstType(allocator_type const& alloc)
         : OpTracker(s_opCounter)
         , m_allocator(alloc)
     {
         s_opCounter.addCopyConstructorAlloc();
     }
 
-    AllocatorFirstType(AllocatorFirstType const& other)
-        : OpTracker(s_opCounter)
-        , m_allocator()
-    {
-    }
-
-    AllocatorFirstType(value_type const& value, Alloc const& alloc)
+    AllocatorFirstType(value_type const& value, allocator_type const& alloc)
         : OpTracker(s_opCounter, value)
         , m_allocator(alloc)
     {
         s_opCounter.addOtherConstructor().addAllocatorFirst();
     }
 
-    AllocatorFirstType(value_type const& value, int extra, Alloc const& alloc)
+    AllocatorFirstType(value_type const& value, int extra, allocator_type const& alloc)
         : OpTracker(s_opCounter, value + extra)
         , m_allocator(alloc)
     {
@@ -61,8 +59,8 @@ AllocatorFirstType<Alloc>::getCounter()
 } // namespace pw::test
 
 namespace std {
-template<typename Alloc1, typename Alloc2>
-struct uses_allocator<pw::test::AllocatorFirstType<Alloc1>, Alloc2> : std::true_type
+template<typename Alloc>
+struct uses_allocator<pw::test::AllocatorFirstType<Alloc>, Alloc> : std::true_type
 {
 };
 } // namespace std
