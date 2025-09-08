@@ -60,20 +60,19 @@ struct Storage
     constexpr size_type               allocated() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
+    constexpr void                    destroy(iterator begin, iterator end);
+    constexpr iterator                copy(const_iterator begin, const_iterator end, iterator dest);
+    constexpr iterator                move(iterator begin, iterator end, iterator dest);
+    constexpr iterator                move_backward(iterator begin, iterator end, iterator dest);
+    constexpr iterator                fill_n(iterator dest, size_type count, value_type const& value);
+    constexpr void                    uninitialized_fill(iterator begin, iterator end, value_type const& val);
+    constexpr void                    uninitialized_default_construct(iterator begin, iterator end);
+    constexpr iterator                uninitialized_move(iterator begin, iterator end, iterator dest);
     constexpr void                    swap(Storage& other, bool swap_allocator)
         noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
                  allocator_traits<allocator_type>::is_always_equal::value);
-
     template<class... Args>
-    constexpr void     construct(iterator where, Args&&... args);
-    constexpr void     destroy(iterator begin, iterator end);
-    constexpr iterator copy(const_iterator begin, const_iterator end, iterator dest);
-    constexpr iterator move(iterator begin, iterator end, iterator dest);
-    constexpr iterator move_backward(iterator begin, iterator end, iterator dest);
-    constexpr iterator fill_n(iterator dest, size_type count, value_type const& value);
-    constexpr void     uninitialized_fill(iterator begin, iterator end, value_type const& value);
-    constexpr void     uninitialized_default_construct(iterator begin, iterator end);
-    constexpr iterator uninitialized_move(iterator begin, iterator end, iterator dest);
+    constexpr void construct(iterator where, Args&&... args);
     template<class InputIterator>
     constexpr void uninitialized_copy(InputIterator begin, InputIterator end, iterator dest);
 
@@ -312,14 +311,14 @@ Storage<Type, Allocator>::fill_n(iterator dest, size_type count, value_type cons
 
 template<class Type, class Allocator>
 constexpr void
-Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& value)
+Storage<Type, Allocator>::uninitialized_fill(iterator begin, iterator end, value_type const& val)
 {
     iterator current = begin;
     try
     {
         while (current != end)
         {
-            construct(current, value);
+            construct(current, val);
             ++current;
         }
     }

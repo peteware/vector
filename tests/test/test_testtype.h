@@ -41,9 +41,9 @@ using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::NoAllocatorType>, std::vector<pw::test::NoAllocatorType>>;
 using TestTypeListAllocatorOnly =
     std::tuple<vector<pw::test::AllocatorOnlyType>, std::vector<pw::test::AllocatorOnlyType>>;
-using TestTypeListAllocatorFirst = std::tuple<vector<pw::test::AllocatorFirstType<allocator<int>>>,
+using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::AllocatorFirstType<allocator<int>>>,
                                               std::vector<pw::test::AllocatorFirstType<allocator<int>>>>;
-using TestTypeListAllocatorLast  = std::tuple<vector<pw::test::AllocatorLastType<allocator<int>>>,
+using TestTypeListAllocatorLast  = std::tuple<pw::vector<pw::test::AllocatorLastType<allocator<int>>>,
                                               std::vector<pw::test::AllocatorLastType<allocator<int>>>>;
 
 template<typename Type>

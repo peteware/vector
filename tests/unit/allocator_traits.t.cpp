@@ -61,8 +61,9 @@ struct allocator_with_max_size : public allocator_base<Type>
 SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
 {
     using Alloc = pw::allocator<int>;
-    Alloc                               alloc;
-    pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+    Alloc alloc;
+    //pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+    pw::test::AllocatorFirstType<Alloc> obj { 5, 20, alloc };
 
     REQUIRE(obj.value() == (20 + 5));
 }

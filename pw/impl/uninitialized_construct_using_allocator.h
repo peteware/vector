@@ -15,7 +15,7 @@ uninitialized_construct_using_allocator(Type* p, Alloc const& alloc, Args&&... a
 {
     auto func = [&]<class... Xs>(Xs&&... xs) { return pw::construct_at(p, pw::forward<Xs>(xs)...); };
 
-    return std::apply(func, std::uses_allocator_construction_args<Type>(alloc, pw::forward<Args>(args)...));
+    return std::apply(func, pw::uses_allocator_construction_args<Type>(alloc, pw::forward<Args>(args)...));
 }
 } // namespace pw
 #endif //PW_UNINITIALIZED_CONSTRUCT_USING_ALLOCATOR_H
