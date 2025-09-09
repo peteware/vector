@@ -74,7 +74,7 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                                  << " Arg0Type = " << typeid(Arg0Type).name()
                                  << " Type::allocator_type = " << typeid(Type::allocator_type).name());
                 REQUIRE(typeid(std::tuple_element_t<0, decltype(args)>) == typeid(Type::allocator_type));
-                REQUIRE(pw::is_same_v<std::tuple_element_t<0, decltype(args)>, Type::allocator_type&>);
+                REQUIRE(pw::is_same_v<std::tuple_element_t<0, decltype(args)>, Type::allocator_type const&>);
             }
         }
 
@@ -99,9 +99,8 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
             {
                 INFO(typeid(decltype(args)).name());
                 INFO(typeid(std::tuple_element_t<0, decltype(args)>).name());
-                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, decltype(alloc)>);
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, decltype(alloc) const&>);
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
-                REQUIRE(false);
             }
         }
 
