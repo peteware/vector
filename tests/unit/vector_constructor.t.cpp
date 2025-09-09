@@ -978,15 +978,14 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
 
         WHEN("constructing with count and value constructor")
         {
-            constexpr size_type count         = 5;
-            constexpr int       initial_value = 42;
-            auto const          alloc         = typename value_type::allocator_type {};
-            // auto const          value          = value_type(std::allocator_arg, alloc, initial_value);
-            auto const value          = value_type(initial_value, alloc);
-            auto       counter_before = value_type::getCounter();
-            Vector     v(count, value);
-            auto       counter_after = value_type::getCounter();
-            auto       diff          = counter_after - counter_before;
+            constexpr size_type count          = 5;
+            constexpr int       initial_value  = 42;
+            auto const          alloc          = typename value_type::allocator_type {};
+            auto const          value          = value_type(std::allocator_arg, alloc, initial_value);
+            auto                counter_before = value_type::getCounter();
+            Vector              v(count, value);
+            auto                counter_after = value_type::getCounter();
+            auto                diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {

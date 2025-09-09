@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_TEST_ALLOCATOR_FIRST_TYPE_H
 #define INCLUDED_PW_TEST_ALLOCATOR_FIRST_TYPE_H
 
-#include <pw/impl/allocator.h>
+//#include <pw/impl/allocator.h>
 
 #include <memory>
 #include <test_optracker.h>
@@ -27,14 +27,14 @@ struct AllocatorFirstType : public OpTracker
         s_opCounter.addCopyConstructorAlloc();
     }
 
-    AllocatorFirstType(value_type const& value, allocator_type const& alloc)
+    AllocatorFirstType(std::allocator_arg_t, allocator_type const& alloc, value_type const& value)
         : OpTracker(s_opCounter, value)
         , m_allocator(alloc)
     {
         s_opCounter.addOtherConstructor().addAllocatorFirst();
     }
 
-    AllocatorFirstType(value_type const& value, int extra, allocator_type const& alloc)
+    AllocatorFirstType(std::allocator_arg_t, allocator_type const& alloc, value_type const& value, int extra)
         : OpTracker(s_opCounter, value + extra)
         , m_allocator(alloc)
     {

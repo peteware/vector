@@ -3,7 +3,8 @@ add_library(pw-impl INTERFACE
         is_base_of.h
         is_constant_evaluated.h
         uninitialized_construct_using_allocator.h
-        uses_allocator_construction_args.h)
+        uses_allocator_construction_args.h
+        remove_cv.h)
 
 target_include_directories(
         pw-impl
