@@ -937,6 +937,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
 
             THEN("allocator is not passed to value_type constructor")
             {
+                INFO("diff = " << diff);
                 REQUIRE(v.size() == count);
                 REQUIRE(diff.getNoAllocator() >= static_cast<int>(count));
                 REQUIRE(diff.getAllocatorFirst() == 0);
@@ -963,13 +964,13 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
             constexpr size_type count          = 3;
             Vector              v(count);
             auto                counter_after = value_type::getCounter();
-            auto                diff          = counter_after - counter_before;
+            pw::test::OpCounter diff          = counter_after - counter_before;
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
-                INFO(diff);
-                REQUIRE(diff.getAllocatorFirst() == static_cast<int>(count));
+                INFO("diff: " << diff);
+                REQUIRE(diff.getCopyConstructorAlloc() == static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
                 REQUIRE(diff.getAllocatorOnly() == 0);
@@ -991,7 +992,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
             {
                 REQUIRE(v.size() == count);
                 INFO(diff);
-                REQUIRE(diff.getAllocatorFirst() >= static_cast<int>(count));
+                REQUIRE(diff.getCopyConstructorAlloc() >= static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
                 REQUIRE(diff.getAllocatorOnly() == 0);
@@ -1061,7 +1062,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
 
     GIVEN("vector constructed with AllocatorOnlyType elements")
     {
-        REQUIRE(std::is_constructible_v<value_type>);
+        REQUIRE(std::is_constructible_v<value_type, typename Vector::allocator_type>);
         REQUIRE(std::uses_allocator_v<value_type, typename Vector::allocator_type>);
         // WHEN("constructing with count constructor")
         // {

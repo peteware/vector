@@ -19,6 +19,7 @@ struct AllocatorFirstType : public OpTracker
         : OpTracker(s_opCounter)
         , m_allocator()
     {
+        s_opCounter.addDefaultConstructor();
     }
     explicit AllocatorFirstType(allocator_type const& alloc)
         : OpTracker(s_opCounter)

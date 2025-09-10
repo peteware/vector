@@ -60,11 +60,48 @@ struct allocator_with_max_size : public allocator_base<Type>
 } // namespace pw::test
 SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
 {
-    using Alloc = pw::allocator<int>;
-    Alloc                               alloc;
-    pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+    GIVEN("An allocator and AllocatorFirstType as Type")
+    {
+        using Alloc = pw::allocator<int>;
+        using Type  = pw::test::AllocatorFirstType<Alloc>;
+        Alloc alloc;
+        WHEN("Pass alloc as first argument")
+        {
+            pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+            THEN("obj is initialized")
+            {
+                REQUIRE(obj.value() == 5 + 20);
+            }
+        }
+        WHEN("Use allocator_traits<>::construct() to construct")
+        {
+            std::aligned_storage<sizeof(Type), alignof(Type)> storage;
+            Type&                                             obj   = reinterpret_cast<Type&>(storage);
+            pw::test::OpCounter                               start = Type::getCounter();
 
-    REQUIRE(obj.value() == (20 + 5));
+            pw::allocator_traits<Alloc>::construct(alloc, &obj);
+            THEN("we called the copy constructor with alloc")
+            {
+                pw::test::OpCounter diff = Type::getCounter() - start;
+                INFO(diff);
+                REQUIRE(diff.getCopyConstructorAlloc() == 1);
+            }
+        }
+        WHEN("Pass empty args to allocator_traits<>::construct()")
+        {
+            std::aligned_storage<sizeof(Type), alignof(Type)> storage;
+            Type&                                             obj   = reinterpret_cast<Type&>(storage);
+            pw::test::OpCounter                               start = Type::getCounter();
+
+            pw::allocator_traits<Alloc>::construct(alloc, &obj);
+            THEN("we called the copy constructor with alloc")
+            {
+                pw::test::OpCounter diff = Type::getCounter() - start;
+                INFO(diff);
+                REQUIRE(diff.getCopyConstructorAlloc() == 1);
+            }
+        }
+    }
 }
 
 SCENARIO("Allocator traits", "[allocator_traits]")

@@ -9,14 +9,14 @@ OpTracker::OpTracker(OpCounter& opCounter)
     : m_opCounter(opCounter)
     , m_value(-1)
 {
-    m_opCounter.addDefaultConstructor();
+    // m_opCounter.addDefaultConstructor();
 }
 
 OpTracker::OpTracker(OpCounter& opCounter, value_type const& value)
     : m_opCounter(opCounter)
     , m_value(value)
 {
-    m_opCounter.addOtherConstructor();
+    // m_opCounter.addOtherConstructor();
 }
 
 OpTracker::OpTracker(OpTracker const& copy)
