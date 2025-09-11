@@ -58,7 +58,9 @@ OpTrackerAllocatorLast<Alloc>::OpTrackerAllocatorLast(value_type const& value, a
 }
 
 template<typename Alloc>
-OpTrackerAllocatorLast<Alloc>::OpTrackerAllocatorLast(value_type const& value, int extra, allocator_type const& alloc)
+OpTrackerAllocatorLast<Alloc>::OpTrackerAllocatorLast(value_type const&     value,
+                                                      int                   extra,
+                                                      allocator_type const& alloc)
     : OpTracker(s_opCounter, value + extra)
     , m_allocator(alloc)
 {

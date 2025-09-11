@@ -15,6 +15,7 @@ struct OpTracker
     value_type value() const;
     OpTracker& setValue(value_type const& value);
     OpCounter  opCounter() const;
+    OpTracker& reset();
 
 protected:
     explicit OpTracker(OpCounter& opCounter); // default constructor for derived classes

@@ -52,6 +52,13 @@ OpTracker::setValue(value_type const& value)
     return *this;
 }
 
+OpTracker&
+OpTracker::reset()
+{
+    m_opCounter = OpCounter {};
+    return *this;
+}
+
 OpCounter
 OpTracker::opCounter() const
 {

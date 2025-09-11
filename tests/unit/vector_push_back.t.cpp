@@ -64,9 +64,9 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
     }
     GIVEN("A vector with 5 elements")
     {
-        constexpr size_t                 count = 5;
+        constexpr size_t         count = 5;
         pw::test::Values<Vector> generate(count);
-        Vector&                          v = generate.values;
+        Vector&                  v = generate.values;
 
         WHEN("push_back() const_ref is called to exceed capacity")
         {
@@ -104,22 +104,22 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 
         WHEN("push_back() is called")
         {
-            counter = pw::test::DefaultCopyConstructible::getCounter();
+            counter = value_type::getCounter();
             v.push_back(copyObject);
             THEN("Copy construct called once")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+                counter = value_type::getCounter() - counter;
                 REQUIRE(1 == counter.constructorCount());
                 REQUIRE(counter.constructorCount() == counter.allCount());
             }
         }
         WHEN("push_back(move) is called")
         {
-            counter = pw::test::DefaultCopyConstructible::getCounter();
+            counter = value_type::getCounter();
             v.push_back(pw::move(copyObject));
             THEN("Copy construct called once")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+                counter = value_type::getCounter() - counter;
                 REQUIRE(1 == counter.getMoveConstructor());
                 REQUIRE(counter.getMoveConstructor() == counter.allCount());
             }
@@ -143,8 +143,8 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             }
         }
     }
-    auto result = pw::test::DefaultCopyConstructible::getCounter();
-    counter     = pw::test::DefaultCopyConstructible::getCounter() - init;
+    auto result = value_type::getCounter();
+    counter     = value_type::getCounter() - init;
     INFO("result: " << result << " counter: " << counter << " init: " << init);
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

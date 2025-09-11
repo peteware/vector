@@ -370,8 +370,8 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(
-                    generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
@@ -388,8 +388,8 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(
-                    generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
@@ -406,8 +406,8 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(
-                    generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
@@ -425,8 +425,8 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, count, value)", "[vector][insert]", pw
             THEN("items are the same")
             {
                 REQUIRE(pw::test::same(where, where + added, value));
-                REQUIRE(pw::equal(
-                    generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
+                REQUIRE(
+                    pw::equal(generate.values.begin(), generate.values.begin() + offset, v.begin(), where));
                 REQUIRE(pw::equal(
                     generate.values.begin() + offset, generate.values.end(), where + added, v.end()));
             }
