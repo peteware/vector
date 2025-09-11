@@ -155,6 +155,7 @@ SCENARIO("Storage::uninitialized_move() moves objects using allocator_traits", "
 {
     GIVEN("Source Storage and target Storage")
     {
+        FAIL("Crashing in Storage::~Storage()");
         pw::internal::Storage<int> source_storage(pw::allocator<int> {}, 3);
         source_storage.uninitialized_fill(source_storage.begin(), source_storage.begin() + 3, 42);
         source_storage.set_size(3);

@@ -7,12 +7,6 @@ namespace pw::test {
 
 OpCounter DefaultCopyConstructible::s_opCounter;
 
-OpCounter
-DefaultCopyConstructible::getCounter()
-{
-    return s_opCounter;
-}
-
 std::strong_ordering
 DefaultCopyConstructible::operator<=>(DefaultCopyConstructible const& op2) const
 {

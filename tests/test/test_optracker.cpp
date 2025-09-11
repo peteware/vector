@@ -52,6 +52,12 @@ OpTracker::setValue(value_type const& value)
     return *this;
 }
 
+OpCounter
+OpTracker::opCounter() const
+{
+    return m_opCounter;
+}
+
 OpTracker&
 OpTracker::operator=(OpTracker const& copy)
 {

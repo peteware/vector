@@ -123,7 +123,7 @@ SCENARIO("uses_allocator_construction_args for allocator-last types",
 {
     GIVEN("A type that uses allocators with allocator in last position")
     {
-        using Type = pw::test::AllocatorLastType<TestAllocator>;
+        using Type = pw::test::OpTrackerAllocatorLast<TestAllocator>;
         TestAllocator alloc;
 
         WHEN("called with no additional arguments")
@@ -174,10 +174,12 @@ SCENARIO("uses_allocator_construction_args for allocator-only types",
             auto counter_before = Type::getCounter();
             auto args           = pw::uses_allocator_construction_args<Type>(alloc);
 
-            THEN("returns (allocator_arg, alloc)")
+            THEN("returns (alloc)")
             {
-                REQUIRE(std::tuple_size_v<decltype(args)> == 2);
-                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
+                REQUIRE(std::tuple_size_v<decltype(args)> == 1);
+                INFO("tuple0 = " << typeid(std::tuple_element_t<0, decltype(args)>).name()
+                                 << " TestAllocator = " << typeid(TestAllocator).name());
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, TestAllocator const&>);
             }
         }
     }

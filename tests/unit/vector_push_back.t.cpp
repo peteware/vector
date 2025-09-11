@@ -64,9 +64,9 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
     }
     GIVEN("A vector with 5 elements")
     {
-        constexpr size_t         count = 5;
+        constexpr size_t                 count = 5;
         pw::test::Values<Vector> generate(count);
-        Vector&                  v = generate.values;
+        Vector&                          v = generate.values;
 
         WHEN("push_back() const_ref is called to exceed capacity")
         {
@@ -93,13 +93,14 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
     using Vector                   = pw::vector<pw::test::DefaultCopyConstructible>;
-    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
+    using value_type               = Vector::value_type;
+    pw::test::OpCounter const init = value_type::getCounter();
     pw::test::OpCounter       counter;
 
     GIVEN("An empty vector")
     {
-        Vector                             v;
-        pw::test::DefaultCopyConstructible copyObject(11);
+        Vector     v;
+        value_type copyObject(11);
 
         WHEN("push_back() is called")
         {
@@ -130,11 +131,11 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         pw::test::DefaultCopyConstructible copyObject(12);
 
         generate.values.shrink_to_fit();
-        counter = pw::test::DefaultCopyConstructible::getCounter();
+        counter = copyObject.opCounter();
         WHEN("push_back() is called")
         {
             generate.values.push_back(copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = copyObject.opCounter() - counter;
             THEN("Copy constructed existing items and new item")
             {
                 INFO("counter: " << counter);
@@ -142,7 +143,9 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             }
         }
     }
-    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    auto result = pw::test::DefaultCopyConstructible::getCounter();
+    counter     = pw::test::DefaultCopyConstructible::getCounter() - init;
+    INFO("result: " << result << " counter: " << counter << " init: " << init);
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 
