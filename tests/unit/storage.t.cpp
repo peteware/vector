@@ -11,16 +11,16 @@ using namespace pw::test;
 
 SCENARIO("Storage constructor sets up capacity", "[storage]")
 {
-    GIVEN("A Storage instance with allocated memory")
+    GIVEN("A Storage instance with capacity memory")
     {
         pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
         WHEN("The size() is 0")
         {
-            REQUIRE(storage.empty() == 0);
-            THEN("the allocated size is correct")
+            REQUIRE(storage.empty());
+            THEN("the capacity size is correct")
             {
-                REQUIRE(storage.allocated() == 5);
+                REQUIRE(storage.capacity() == 5);
                 REQUIRE(storage.end() == storage.begin());
                 REQUIRE(storage.capacity_begin() == storage.begin());
                 REQUIRE(storage.capacity_end() == storage.begin() + 5);
@@ -30,7 +30,7 @@ SCENARIO("Storage constructor sets up capacity", "[storage]")
         {
             storage.uninitialized_default_construct(storage.capacity_begin(), storage.capacity_begin() + 1)
                 .set_size(1);
-            THEN("the allocated size is correct")
+            THEN("the capacity size is correct")
             {
                 REQUIRE(storage.capacity_begin() == storage.begin() + 1);
                 REQUIRE(storage.capacity_end() == storage.begin() + 5);
@@ -40,7 +40,7 @@ SCENARIO("Storage constructor sets up capacity", "[storage]")
 }
 SCENARIO("Storage::uninitialized_fill() constructs objects with allocator_traits", "[storage]")
 {
-    GIVEN("A Storage instance with allocated memory")
+    GIVEN("A Storage instance with capacity memory")
     {
         pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 
@@ -136,7 +136,7 @@ SCENARIO("Storage::uninitialized_copy() provides exception safety", "[storage]")
 
 SCENARIO("Storage::uninitialized_default_construct() constructs objects using allocator_traits", "[storage]")
 {
-    GIVEN("A Storage instance with allocated memory")
+    GIVEN("A Storage instance with capacity memory")
     {
         pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
 

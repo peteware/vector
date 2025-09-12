@@ -169,7 +169,7 @@ TEST_CASE("Move Assignment use allocator", "[assignment][allocator][move]")
     // - op1.size() < op2.size()
     // - op1.size() == op2.size()
     // - op1.size() > op2.size()
-    // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
+    // - op1.size() < op2.size() && op1.capacity() > op2.capacity()
     GIVEN("A vector with propagate_on_move_assignment = true")
     {
         using Allocator = pw::test::allocator_move_assignment<int>;
@@ -216,7 +216,7 @@ TEST_CASE("Assignment with initializer_List use allocator", "[assignment][alloca
     // - op1.size() < op2.size()
     // - op1.size() == op2.size()
     // - op1.size() > op2.size()
-    // - op1.size() < op2.size() && op1.allocated() > op2.allocated()
+    // - op1.size() < op2.size() && op1.capacity() > op2.capacity()
     GIVEN("A vector with propagate_on_move_assignment = true")
     {
         using Allocator = pw::test::allocator_move_assignment<int>;
@@ -239,7 +239,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
     REQUIRE(!pw::allocator_traits<Vector::allocator_type>::propagate_on_container_move_assignment::value);
     GIVEN("A vector with allocator move assignment false")
     {
-        WHEN("operator=(const_ref) lhs.size() < rhs.size() but less allocated")
+        WHEN("operator=(const_ref) lhs.size() < rhs.size() but less capacity")
         {
             Vector lhs { 1, 2 };
             Vector rhs { 1, 2, 3 };
@@ -250,7 +250,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
                 REQUIRE(lhs == rhs);
             }
         }
-        WHEN("operator=(const_ref) lhs.size() < rhs.size() but lhs allocated")
+        WHEN("operator=(const_ref) lhs.size() < rhs.size() but lhs capacity")
         {
             Vector lhs { 1, 2 };
             Vector rhs { 1, 2, 3 };
@@ -261,7 +261,7 @@ SCENARIO("Assignment operator", "[vector][operator=]")
                 REQUIRE(lhs == rhs);
             }
         }
-        WHEN("operator=(move) lhs.size() < rhs.size() but lhs allocated")
+        WHEN("operator=(move) lhs.size() < rhs.size() but lhs capacity")
         {
             Vector lhs { 1, 2 };
             Vector rhs { 1, 2, 3 };

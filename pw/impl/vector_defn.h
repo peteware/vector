@@ -195,7 +195,7 @@ vector<Type, Allocator>::operator=(vector const& other)
     }
     else if (m_storage.size() < other.size())
     {
-        if (m_storage.allocated() >= other.size())
+        if (m_storage.capacity() >= other.size())
         {
             m_storage.copy(other.begin(), other.begin() + m_storage.size(), m_storage.begin());
             m_storage.uninitialized_copy(other.begin() + m_storage.size(), other.end(), m_storage.end());
@@ -696,7 +696,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::size_type
 vector<Type, Allocator>::capacity() const noexcept
 {
-    return m_storage.allocated();
+    return m_storage.capacity();
 }
 
 /**
@@ -708,7 +708,7 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::shrink_to_fit()
 {
-    if (m_storage.allocated() == m_storage.size())
+    if (m_storage.capacity() == m_storage.size())
     {
         return;
     }
@@ -727,7 +727,7 @@ template<class Type, class Allocator>
 constexpr void
 vector<Type, Allocator>::reserve(size_type count)
 {
-    if (count <= m_storage.allocated())
+    if (count <= m_storage.capacity())
         return;
     Storage tmp(m_storage.copy_allocator(), count);
     tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin()).set_size(m_storage.size());
@@ -763,7 +763,7 @@ vector<Type, Allocator>::push_back(const_reference value)
     constexpr size_type count = 1;
     size_type const     total = m_storage.size() + count;
 
-    if (total <= m_storage.allocated())
+    if (total <= m_storage.capacity())
     {
         m_storage.construct(m_storage.end(), value);
     }
@@ -791,7 +791,7 @@ vector<Type, Allocator>::push_back(value_type&& value)
     constexpr size_type count = 1;
     size_type const     total = m_storage.size() + count;
 
-    if (total <= m_storage.allocated())
+    if (total <= m_storage.capacity())
     {
         m_storage.construct(m_storage.end(), pw::move(value));
     }
@@ -824,7 +824,7 @@ vector<Type, Allocator>::resize(size_type total)
     {
         m_storage.destroy(m_storage.begin() + total, m_storage.end());
     }
-    else if (total <= m_storage.allocated())
+    else if (total <= m_storage.capacity())
     {
         m_storage.uninitialized_default_construct(m_storage.end(), m_storage.end() + total - size());
     }
@@ -858,7 +858,7 @@ vector<Type, Allocator>::resize(size_type total, const_reference value)
     {
         m_storage.destroy(m_storage.begin() + total, m_storage.end());
     }
-    else if (total <= m_storage.allocated())
+    else if (total <= m_storage.capacity())
     {
         m_storage.uninitialized_fill(m_storage.end(), m_storage.end() + total - size(), value);
     }
@@ -951,7 +951,7 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
     size_type const     offset = pw::distance(cbegin(), position);
     size_type const     total  = size() + count;
 
-    if (total <= m_storage.allocated())
+    if (total <= m_storage.capacity())
     {
         if (position == cend())
         {
@@ -992,7 +992,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
     size_type const offset = pw::distance(cbegin(), position);
     size_type const total  = size() + count;
 
-    if (total < m_storage.allocated())
+    if (total < m_storage.capacity())
     {
         if (position == cend())
         {
@@ -1033,7 +1033,7 @@ vector<Type, Allocator>::insert(const_iterator position, initializer_list<value_
     size_type       offset = pw::distance(cbegin(), position);
     size_type const total  = size() + init_list.size();
 
-    if (total <= m_storage.allocated())
+    if (total <= m_storage.capacity())
     {
         m_storage.uninitialized_move(m_storage.end() - init_list.size(), m_storage.end(), m_storage.end());
         m_storage.move_backward(

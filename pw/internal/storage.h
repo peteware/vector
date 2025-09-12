@@ -15,7 +15,7 @@ namespace pw::internal {
 
 /**
  * The Storage struct is an internal implementation that
- * helps insure any allocated memory is deallocated.
+ * helps insure any capacity memory is deallocated.
  *
  * @verbatim
  *    ┌────┬────┬────┬────┬────┬────┬────┐
@@ -64,7 +64,7 @@ struct Storage
     constexpr size_type               size() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
     [[nodiscard]] constexpr size_type max_size() const noexcept;
-    constexpr size_type               allocated() const noexcept;
+    constexpr size_type               capacity() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
     constexpr void                    destroy(iterator begin, iterator end);
@@ -196,7 +196,7 @@ Storage<Type, Allocator>::size() const noexcept
 }
 
 /**
- * Doubles the existing value for allocated()
+ * Doubles the existing value for capacity()
  *
  * @return The next size to allocate (always >= 1).
  */
@@ -216,7 +216,7 @@ Storage<Type, Allocator>::max_size() const noexcept
 
 template<class Type, class Allocator>
 constexpr Storage<Type, Allocator>::size_type
-Storage<Type, Allocator>::allocated() const noexcept
+Storage<Type, Allocator>::capacity() const noexcept
 {
     return m_allocated;
 }
