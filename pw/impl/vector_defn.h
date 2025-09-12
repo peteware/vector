@@ -793,7 +793,7 @@ vector<Type, Allocator>::push_back(value_type&& value)
 
     if (total <= m_storage.capacity())
     {
-        m_storage.construct(m_storage.end(), pw::move(value));
+        m_storage.construct(m_storage.capacity_begin(), pw::move(value));
     }
     else
     {
@@ -826,14 +826,16 @@ vector<Type, Allocator>::resize(size_type total)
     }
     else if (total <= m_storage.capacity())
     {
-        m_storage.uninitialized_default_construct(m_storage.end(), m_storage.end() + total - size());
+        m_storage.uninitialized_default_construct(m_storage.capacity_begin(),
+                                                  m_storage.capacity_begin() + total - size());
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), total);
 
-        tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
-        tmp.uninitialized_default_construct(tmp.begin() + m_storage.size(), tmp.begin() + total);
+        tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.capacity_begin())
+            .set_size(m_storage.size());
+        tmp.uninitialized_default_construct(tmp.capacity_begin(), tmp.begin() + total);
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);
@@ -860,14 +862,16 @@ vector<Type, Allocator>::resize(size_type total, const_reference value)
     }
     else if (total <= m_storage.capacity())
     {
-        m_storage.uninitialized_fill(m_storage.end(), m_storage.end() + total - size(), value);
+        m_storage.uninitialized_fill(
+            m_storage.capacity_begin(), m_storage.capacity_begin() + total - size(), value);
     }
     else
     {
         Storage tmp(m_storage.copy_allocator(), total);
 
-        tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
-        tmp.uninitialized_fill(tmp.begin() + m_storage.size(), tmp.begin() + total, value);
+        tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.capacity_begin())
+            .set_size(m_storage.size());
+        tmp.uninitialized_fill(tmp.capacity_begin(), tmp.begin() + total, value);
         m_storage.swap(tmp, false);
     }
     m_storage.set_size(total);
@@ -955,7 +959,8 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
     {
         if (position == cend())
         {
-            m_storage.uninitialized_fill(m_storage.end(), m_storage.end() + count, pw::move(value));
+            m_storage.uninitialized_fill(
+                m_storage.capacity_begin(), m_storage.capacity_begin() + count, pw::move(value));
         }
         else
         {
