@@ -1,4 +1,4 @@
-#include <test_emplacemoveconstructible.h>
+#include <test_optracker_emplacemoveconstructible.h>
 #include <test_testtype.h>
 #include <test_values.h>
 
@@ -64,16 +64,16 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
 }
 
 // using TestIntList = std::tuple<pw::vector<int>, std::vector<int>>;
-// // using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>,
-// //                                    std::vector<pw::test::EmplaceMoveConstructible>>;
-// using TestEmplaceList = std::tuple<pw::vector<pw::test::EmplaceMoveConstructible>>;
+// // using TestEmplaceList = std::tuple<pw::vector<pw::test::OpTrackerEmplaceMoveConstructible>,
+// //                                    std::vector<pw::test::OpTrackerEmplaceMoveConstructible>>;
+// using TestEmplaceList = std::tuple<pw::vector<pw::test::OpTrackerEmplaceMoveConstructible>>;
 
 // /*
 //  * Type requirements:
 //  * - emplace_back(): MoveInsertable and EmplaceConstructible
 //  * - emplace(): MoveAssignable, MoveInsertable and EmplaceConstructible
 //  */
-// TEMPLATE_LIST_TEST_CASE("emplace_back() with EmplaceMoveConstructible",
+// TEMPLATE_LIST_TEST_CASE("emplace_back() with OpTrackerEmplaceMoveConstructible",
 //                         "[vector][emplace_back]",
 //                         TestEmplaceList)
 // {
@@ -83,13 +83,13 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
 //     GIVEN("An empty vector")
 //     {
 //         Vector              v;
-//         pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
+//         pw::test::OpCounter init = pw::test::OpTrackerEmplaceMoveConstructible::getCounter();
 //         pw::test::OpCounter counter;
 
 //         WHEN("emplace-back() an element")
 //         {
 //             v.emplace_back(3, 4);
-//             counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
+//             counter = pw::test::OpTrackerEmplaceMoveConstructible::getCounter() - init;
 //             THEN("size() is 1") { REQUIRE(1 == v.size()); }
 //             THEN("element has correct values")
 //             {
@@ -106,14 +106,14 @@ TEMPLATE_LIST_TEST_CASE("emplace_back()", "[vector][func][emplace_back]", pw::te
 //     GIVEN("A vector with elements")
 //     {
 //         Vector              v    = { { 1, 2 }, { 3, 4 }, { 4, 5 } };
-//         pw::test::OpCounter init = pw::test::EmplaceMoveConstructible::getCounter();
+//         pw::test::OpCounter init = pw::test::OpTrackerEmplaceMoveConstructible::getCounter();
 //         pw::test::OpCounter counter;
 
 //         REQUIRE(3 == v.size());
 //         WHEN("emplace-back() an element")
 //         {
 //             v.emplace_back(13, 14);
-//             counter = pw::test::EmplaceMoveConstructible::getCounter() - init;
+//             counter = pw::test::OpTrackerEmplaceMoveConstructible::getCounter() - init;
 //             THEN("size() is 4") { REQUIRE(4 == v.size()); }
 //             THEN("element has correct values")
 //             {

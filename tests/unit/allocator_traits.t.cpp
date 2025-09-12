@@ -2,8 +2,8 @@
 #include <pw/impl/allocator_traits.h>
 
 #include <test_allocator_base.h>
-#include <test_emplacemoveconstructible.h>
 #include <test_optracker_allocator_first.h>
+#include <test_optracker_emplacemoveconstructible.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstddef>
@@ -122,14 +122,14 @@ SCENARIO("Allocator traits", "[allocator_traits]")
             }
         }
     }
-    GIVEN("An allocator of EmplaceMoveConstructible")
+    GIVEN("An allocator of OpTrackerEmplaceMoveConstructible")
     {
-        pw::allocator<pw::test::EmplaceMoveConstructible> alloc;
-        pw::test::EmplaceMoveConstructible                x(4, 5);
+        pw::allocator<pw::test::OpTrackerEmplaceMoveConstructible> alloc;
+        pw::test::OpTrackerEmplaceMoveConstructible                x(4, 5);
 
         WHEN("construct")
         {
-            pw::allocator_traits<pw::allocator<pw::test::EmplaceMoveConstructible>>::construct(
+            pw::allocator_traits<pw::allocator<pw::test::OpTrackerEmplaceMoveConstructible>>::construct(
                 alloc, &x, 6, 8);
             THEN("value is set")
             {
