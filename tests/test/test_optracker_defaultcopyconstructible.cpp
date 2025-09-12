@@ -1,20 +1,20 @@
-#include <test_defaultcopyconstructible.h>
+#include <test_optracker_defaultcopyconstructible.h>
 #include <test_permute.h>
 
 #include <iostream>
 
 namespace pw::test {
 
-OpCounter DefaultCopyConstructible::s_opCounter;
+OpCounter OpTrackerDefaultCopyConstructible::s_opCounter;
 
 std::strong_ordering
-DefaultCopyConstructible::operator<=>(DefaultCopyConstructible const& op2) const
+OpTrackerDefaultCopyConstructible::operator<=>(OpTrackerDefaultCopyConstructible const& op2) const
 {
     return OpTracker::operator<=>(op2);
 }
 
 bool
-permute(DefaultCopyConstructible& value, int depth)
+permute(OpTrackerDefaultCopyConstructible& value, int depth)
 {
     if (int val = value.value(); permute(val, depth))
     {

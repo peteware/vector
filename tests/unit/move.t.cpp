@@ -1,9 +1,9 @@
 #include <pw/impl/move.h>
 
 #include <test_copyconstructible.h>
-#include <test_defaultcopyconstructible.h>
 #include <test_moveconstructible.h>
 #include <test_opcounter.h>
+#include <test_optracker_defaultcopyconstructible.h>
 #include <test_testtype.h>
 
 #include <catch2/catch_template_test_macros.hpp>

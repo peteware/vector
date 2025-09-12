@@ -1,6 +1,6 @@
 #include <test_allocator_move_assignment.h>
 #include <test_copyconstructible.h>
-#include <test_defaultcopyconstructible.h>
+#include <test_optracker_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_testtype.h>
 
@@ -312,10 +312,10 @@ TEMPLATE_LIST_TEST_CASE("Test resize() edge cases", "[vector][resize][edge]", pw
 }
 SCENARIO("resize() op counts", "[vector][resize][optracker]")
 {
-    using Vector = pw::vector<pw::test::DefaultCopyConstructible>;
+    using Vector = pw::vector<pw::test::OpTrackerDefaultCopyConstructible>;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init = pw::test::DefaultCopyConstructible::getCounter();
+    pw::test::OpCounter const init = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
 
     GIVEN("An empty vector")
     {
@@ -324,10 +324,10 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
         WHEN("resize() is called")
         {
             size_t count = 5;
-            counter      = pw::test::DefaultCopyConstructible::getCounter();
+            counter      = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
 
             v.resize(count);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
             THEN("default constructed count times")
             {
                 INFO("counter: " << counter);
@@ -344,9 +344,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() increases size")
         {
-            counter = pw::test::DefaultCopyConstructible::getCounter();
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
             v.resize(v.size() + 2);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
             THEN("new elements are default constructed and original copy constructed")
             {
                 // Expect copy construction so exceptions leave unchanged
@@ -359,9 +359,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() decreases size")
         {
-            pw::test::OpCounter before = pw::test::DefaultCopyConstructible::getCounter();
+            pw::test::OpCounter before = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
             v.resize(1);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - before;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - before;
             THEN("excess elements are destructed")
             {
                 INFO("counter: " << counter);
@@ -372,9 +372,9 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
 
         WHEN("resize() to 0")
         {
-            pw::test::OpCounter before = pw::test::DefaultCopyConstructible::getCounter();
+            pw::test::OpCounter before = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
             v.resize(0);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - before;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - before;
             THEN("all elements are destructed")
             {
                 INFO("counter: " << counter);
@@ -383,7 +383,7 @@ SCENARIO("resize() op counts", "[vector][resize][optracker]")
             }
         }
     }
-    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - init;
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 

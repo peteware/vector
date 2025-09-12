@@ -1,7 +1,7 @@
 
 #include <pw/algorithm>
-#include <test_defaultcopyconstructible.h>
 #include <test_input_iterator.h>
+#include <test_optracker_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_same.h>
 #include <test_testtype.h>
@@ -643,37 +643,37 @@ SCENARIO("insert(pos, init_list)", "[vector][insert][init_list]")
 }
 SCENARIO("insert() op counts", "[vector][insert][optracker]")
 {
-    using Vector = pw::vector<pw::test::DefaultCopyConstructible>;
+    using Vector = pw::vector<pw::test::OpTrackerDefaultCopyConstructible>;
 
     pw::test::OpCounter       counter;
-    pw::test::OpCounter const init  = pw::test::DefaultCopyConstructible::getCounter();
+    pw::test::OpCounter const init  = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
     size_t                    count = 5;
     GIVEN("An empty vector")
     {
         Vector v;
         WHEN("insert(count) at begin")
         {
-            pw::test::DefaultCopyConstructible copyObject;
-            counter = pw::test::DefaultCopyConstructible::getCounter();
+            pw::test::OpTrackerDefaultCopyConstructible copyObject;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
             v.insert(v.begin(), count, copyObject);
             THEN("Copy constructor called count times")
             {
-                counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+                counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
                 REQUIRE(count == counter.constructorCount());
             }
         }
     }
     GIVEN("A vector with 5 elements")
     {
-        pw::test::Values<Vector>           generate(5);
-        pw::test::DefaultCopyConstructible copyObject;
+        pw::test::Values<Vector>                    generate(5);
+        pw::test::OpTrackerDefaultCopyConstructible copyObject;
 
         generate.values.shrink_to_fit();
-        counter = pw::test::DefaultCopyConstructible::getCounter();
+        counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter();
         WHEN("insert() at begin")
         {
             generate.values.insert(generate.values.begin(), copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -686,7 +686,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() at end")
         {
             generate.values.insert(generate.values.end(), copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -699,7 +699,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
         WHEN("insert() in middle")
         {
             generate.values.insert(generate.values.begin() + generate.count - 2, copyObject);
-            counter = pw::test::DefaultCopyConstructible::getCounter() - counter;
+            counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - counter;
             THEN("Move constructed existing items for more space")
             {
                 REQUIRE(generate.count == counter.getMoveConstructor());
@@ -710,7 +710,7 @@ SCENARIO("insert() op counts", "[vector][insert][optracker]")
             }
         }
     }
-    counter = pw::test::DefaultCopyConstructible::getCounter() - init;
+    counter = pw::test::OpTrackerDefaultCopyConstructible::getCounter() - init;
     INFO("init: " << init << " counter: " << counter);
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }

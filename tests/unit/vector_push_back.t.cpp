@@ -1,6 +1,6 @@
 #include <test_allocator_move_assignment.h>
 #include <test_copyconstructible.h>
-#include <test_defaultcopyconstructible.h>
+#include <test_optracker_defaultcopyconstructible.h>
 #include <test_permute.h>
 #include <test_testtype.h>
 #include <test_values.h>
@@ -92,7 +92,7 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
-    using Vector                   = pw::vector<pw::test::DefaultCopyConstructible>;
+    using Vector                   = pw::vector<pw::test::OpTrackerDefaultCopyConstructible>;
     using value_type               = Vector::value_type;
     pw::test::OpCounter const init = value_type::getCounter();
     pw::test::OpCounter       counter;
