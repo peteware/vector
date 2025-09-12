@@ -1,10 +1,10 @@
 #ifndef INCLUDED_PW_TEST_TESTTYPE_H
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
-#include "test_allocator_first_type.h"
 #include "test_allocator_only_type.h"
 #include "test_no_allocator_type.h"
-#include "test_op_tracker_allocator_last.h"
+#include "test_optracker_allocator_first.h"
+#include "test_optracker_allocator_last.h"
 
 #include <pw/vector>
 #include <test_allocator_base.h>
@@ -41,8 +41,8 @@ using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::NoAllocatorType>, std::vector<pw::test::NoAllocatorType>>;
 using TestTypeListAllocatorOnly =
     std::tuple<vector<pw::test::AllocatorOnlyType>, std::vector<pw::test::AllocatorOnlyType>>;
-using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::AllocatorFirstType<allocator<int>>>,
-                                              std::vector<pw::test::AllocatorFirstType<allocator<int>>>>;
+using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>,
+                                              std::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>>;
 using TestTypeListAllocatorLast  = std::tuple<pw::vector<pw::test::OpTrackerAllocatorLast<allocator<int>>>,
                                               std::vector<pw::test::OpTrackerAllocatorLast<allocator<int>>>>;
 

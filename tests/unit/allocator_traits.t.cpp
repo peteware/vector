@@ -2,8 +2,8 @@
 #include <pw/impl/allocator_traits.h>
 
 #include <test_allocator_base.h>
-#include <test_allocator_first_type.h>
 #include <test_emplacemoveconstructible.h>
+#include <test_optracker_allocator_first.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstddef>
@@ -62,14 +62,14 @@ struct allocator_with_max_size : public allocator_base<Type>
 } // namespace pw::test
 SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
 {
-    GIVEN("An allocator and AllocatorFirstType as Type")
+    GIVEN("An allocator and OpTrackerAllocatorFirst as Type")
     {
         using Alloc = pw::allocator<int>;
-        using Type  = pw::test::AllocatorFirstType<Alloc>;
+        using Type  = pw::test::OpTrackerAllocatorFirst<Alloc>;
         Alloc alloc;
         WHEN("Pass alloc as first argument")
         {
-            pw::test::AllocatorFirstType<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
+            pw::test::OpTrackerAllocatorFirst<Alloc> obj { std::allocator_arg, alloc, 5, 20 };
             THEN("obj is initialized")
             {
                 REQUIRE(obj.value() == 5 + 20);

@@ -17,8 +17,8 @@ target_sources(pwtest PUBLIC
         test_allocator_move_assignment.h
         test_allocator_swapable.h
         test_allocator_base.h
-        test_allocator_first_type.h
-        test_op_tracker_allocator_last.h
+        test_optracker_allocator_first.h
+        test_optracker_allocator_last.h
         test_allocator_only_type.h
         test_copyconstructible.h
         test_defaultconstructible.h

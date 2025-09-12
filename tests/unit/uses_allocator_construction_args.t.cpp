@@ -1,9 +1,9 @@
 #include <pw/impl/is_same.h>
 #include <pw/memory>
-#include <test_allocator_first_type.h>
 #include <test_allocator_only_type.h>
 #include <test_no_allocator_type.h>
-#include <test_op_tracker_allocator_last.h>
+#include <test_optracker_allocator_first.h>
+#include <test_optracker_allocator_last.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <memory>
@@ -58,7 +58,7 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
 {
     GIVEN("A type that uses allocators with allocator_arg_t in first position")
     {
-        using Type = pw::test::AllocatorFirstType<TestAllocator>;
+        using Type = pw::test::OpTrackerAllocatorFirst<TestAllocator>;
         Type::allocator_type alloc;
 
         WHEN("called with no additional arguments")
@@ -208,9 +208,9 @@ SCENARIO("uses_allocator_construction_args behavior verification with OpTracker"
             }
         }
 
-        WHEN("constructing AllocatorFirstType with arguments")
+        WHEN("constructing OpTrackerAllocatorFirst with arguments")
         {
-            using Type          = pw::test::AllocatorFirstType<TestAllocator>;
+            using Type          = pw::test::OpTrackerAllocatorFirst<TestAllocator>;
             auto counter_before = Type::getCounter();
             auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42, 10);
             auto counter_after  = Type::getCounter();
