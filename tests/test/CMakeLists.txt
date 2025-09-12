@@ -10,7 +10,7 @@ add_library(pwtest
         test_permute.cpp
         test_throwingtype.cpp
         test_allocator_is_always_equal.h
-        test_allocator_only_type.cpp
+        test_optracker_allocatoronly.cpp
 )
 target_sources(pwtest PUBLIC
         test_allocator_copy_assignment.h
@@ -19,7 +19,7 @@ target_sources(pwtest PUBLIC
         test_allocator_base.h
         test_optracker_allocator_first.h
         test_optracker_allocator_last.h
-        test_allocator_only_type.h
+        test_optracker_allocatoronly.h
         test_optracker_copyconstructible.h
         test_defaultconstructible.h
         test_optracker_defaultcopyconstructible.h

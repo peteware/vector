@@ -1,9 +1,9 @@
 #ifndef INCLUDED_PW_TEST_TESTTYPE_H
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
-#include "test_allocator_only_type.h"
 #include "test_optracker_allocator_first.h"
 #include "test_optracker_allocator_last.h"
+#include "test_optracker_allocatoronly.h"
 #include "test_optracker_noallocator.h"
 
 #include <pw/vector>
@@ -40,7 +40,7 @@ using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<T
 using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::OpTrackerNoAllocator>, std::vector<pw::test::OpTrackerNoAllocator>>;
 using TestTypeListAllocatorOnly =
-    std::tuple<vector<pw::test::AllocatorOnlyType>, std::vector<pw::test::AllocatorOnlyType>>;
+    std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, std::vector<pw::test::OpTrackerAllocatorOnly>>;
 using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>,
                                               std::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>>;
 using TestTypeListAllocatorLast  = std::tuple<pw::vector<pw::test::OpTrackerAllocatorLast<allocator<int>>>,

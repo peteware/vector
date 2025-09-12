@@ -1,8 +1,8 @@
 #include <pw/impl/is_same.h>
 #include <pw/memory>
-#include <test_allocator_only_type.h>
 #include <test_optracker_allocator_first.h>
 #include <test_optracker_allocator_last.h>
+#include <test_optracker_allocatoronly.h>
 #include <test_optracker_noallocator.h>
 
 #include <catch2/catch_test_macros.hpp>
@@ -166,7 +166,7 @@ SCENARIO("uses_allocator_construction_args for allocator-only types",
 {
     GIVEN("A type that only accepts an allocator")
     {
-        using Type = pw::test::AllocatorOnlyType;
+        using Type = pw::test::OpTrackerAllocatorOnly;
         TestAllocator alloc;
 
         WHEN("called with no additional arguments")
