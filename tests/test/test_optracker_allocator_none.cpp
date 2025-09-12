@@ -4,7 +4,7 @@ namespace pw::test {
 
 OpCounter OpTrackerAllocatorNone::s_opCounter;
 
-OpCounter
+OpCounter&
 OpTrackerAllocatorNone::getCounter()
 {
     return s_opCounter;

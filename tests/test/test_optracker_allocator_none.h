@@ -7,7 +7,7 @@ namespace pw::test {
 
 struct OpTrackerAllocatorNone : public OpTracker
 {
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     OpTrackerAllocatorNone();
     explicit OpTrackerAllocatorNone(value_type const& value);

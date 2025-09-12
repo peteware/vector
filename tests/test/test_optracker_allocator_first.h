@@ -13,7 +13,7 @@ struct OpTrackerAllocatorFirst : public OpTracker
 {
     using allocator_type = Alloc;
 
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     OpTrackerAllocatorFirst();
     explicit OpTrackerAllocatorFirst(allocator_type const& alloc);
@@ -32,7 +32,7 @@ template<typename Alloc>
 OpCounter OpTrackerAllocatorFirst<Alloc>::s_opCounter;
 
 template<typename Alloc>
-OpCounter
+OpCounter&
 OpTrackerAllocatorFirst<Alloc>::getCounter()
 {
     return s_opCounter;

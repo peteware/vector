@@ -9,7 +9,7 @@ namespace pw::test {
 
 struct OpTrackerAllocatorOnly : public OpTracker
 {
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     OpTrackerAllocatorOnly() = delete;
     template<class Alloc>

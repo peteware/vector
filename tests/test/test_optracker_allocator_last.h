@@ -11,7 +11,7 @@ struct OpTrackerAllocatorLast : public OpTracker
 {
     using allocator_type = Alloc;
 
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     OpTrackerAllocatorLast();
     explicit OpTrackerAllocatorLast(allocator_type const& alloc);
@@ -27,7 +27,7 @@ template<typename Alloc>
 OpCounter OpTrackerAllocatorLast<Alloc>::s_opCounter;
 
 template<typename Alloc>
-OpCounter
+OpCounter&
 OpTrackerAllocatorLast<Alloc>::getCounter()
 {
     return s_opCounter;
