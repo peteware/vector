@@ -9,6 +9,35 @@
 #include <catch2/catch_test_macros.hpp>
 using namespace pw::test;
 
+SCENARIO("Storage constructor sets up capacity", "[storage]")
+{
+    GIVEN("A Storage instance with allocated memory")
+    {
+        pw::internal::Storage<int> storage(pw::allocator<int> {}, 5);
+
+        WHEN("The size() is 0")
+        {
+            REQUIRE(storage.empty() == 0);
+            THEN("the allocated size is correct")
+            {
+                REQUIRE(storage.allocated() == 5);
+                REQUIRE(storage.end() == storage.begin());
+                REQUIRE(storage.capacity_begin() == storage.begin());
+                REQUIRE(storage.capacity_end() == storage.begin() + 5);
+            }
+        }
+        WHEN("This size is 1")
+        {
+            storage.uninitialized_default_construct(storage.capacity_begin(), storage.capacity_begin() + 1)
+                .set_size(1);
+            THEN("the allocated size is correct")
+            {
+                REQUIRE(storage.capacity_begin() == storage.begin() + 1);
+                REQUIRE(storage.capacity_end() == storage.begin() + 5);
+            }
+        }
+    }
+}
 SCENARIO("Storage::uninitialized_fill() constructs objects with allocator_traits", "[storage]")
 {
     GIVEN("A Storage instance with allocated memory")
@@ -155,18 +184,16 @@ SCENARIO("Storage::uninitialized_move() moves objects using allocator_traits", "
 {
     GIVEN("Source Storage and target Storage")
     {
-        FAIL("Crashing in Storage::~Storage()");
         pw::internal::Storage<int> source_storage(pw::allocator<int> {}, 3);
-        source_storage.uninitialized_fill(source_storage.begin(), source_storage.begin() + 3, 42);
-        source_storage.set_size(3);
+        source_storage.uninitialized_fill(source_storage.begin(), source_storage.begin() + 3, 42).set_size(3);
 
         pw::internal::Storage<int> target_storage(pw::allocator<int> {}, 5);
 
         WHEN("uninitialized_move is called")
         {
-            auto result = target_storage.uninitialized_move(
-                source_storage.begin(), source_storage.end(), target_storage.begin());
-            target_storage.set_size(3);
+            target_storage
+                .uninitialized_move(source_storage.begin(), source_storage.end(), target_storage.begin())
+                .set_size(3);
 
             THEN("elements are properly moved")
             {

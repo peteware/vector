@@ -32,17 +32,22 @@ namespace pw::internal {
 template<class Type, class Allocator = allocator<Type>>
 struct Storage
 {
-    using value_type      = Type;
-    using allocator_type  = Allocator;
-    using size_type       = allocator_traits<Allocator>::size_type;
-    using difference_type = allocator_traits<Allocator>::difference_type;
-    using reference       = value_type&;
-    using const_reference = value_type const&;
-    using pointer         = allocator_traits<Allocator>::pointer;
-    using const_pointer   = allocator_traits<Allocator>::const_pointer;
-    using iterator        = pointer;
-    using const_iterator  = const_pointer;
+    using value_type                   = Type;
+    using allocator_type               = Allocator;
+    using size_type                    = allocator_traits<Allocator>::size_type;
+    using difference_type              = allocator_traits<Allocator>::difference_type;
+    using reference                    = value_type&;
+    using const_reference              = value_type const&;
+    using pointer                      = allocator_traits<Allocator>::pointer;
+    using const_pointer                = allocator_traits<Allocator>::const_pointer;
+    using iterator                     = pointer;
+    using const_iterator               = const_pointer;
 
+    Storage()                          = delete; // Require allocator to be provided
+    Storage(Storage const&)            = delete; // Not intended to be copied
+    Storage(Storage&&)                 = delete; // Not intended to be moved
+    Storage& operator=(Storage const&) = delete;
+    Storage& operator=(Storage&&)      = delete;
     constexpr explicit Storage(allocator_type const& alloc);
     constexpr Storage(allocator_type const& alloc, size_type count);
     constexpr ~Storage();
@@ -53,6 +58,8 @@ struct Storage
     constexpr const_pointer           begin() const noexcept;
     constexpr pointer                 end() noexcept;
     constexpr const_pointer           end() const noexcept;
+    constexpr pointer                 capacity_begin() noexcept;
+    constexpr pointer                 capacity_end() noexcept;
     constexpr Storage&                set_size(size_type size) noexcept;
     constexpr size_type               size() const noexcept;
     [[nodiscard]] constexpr size_type calc_size() const noexcept;
@@ -157,6 +164,20 @@ constexpr Storage<Type, Allocator>::const_pointer
 Storage<Type, Allocator>::end() const noexcept
 {
     return m_begin + m_size;
+}
+
+template<class Type, class Allocator>
+constexpr Storage<Type, Allocator>::pointer
+Storage<Type, Allocator>::capacity_begin() noexcept
+{
+    return m_begin + m_size;
+}
+
+template<class Type, class Allocator>
+constexpr Storage<Type, Allocator>::pointer
+Storage<Type, Allocator>::capacity_end() noexcept
+{
+    return m_begin + m_allocated;
 }
 
 template<class Type, class Allocator>
