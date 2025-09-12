@@ -1,6 +1,8 @@
 add_library(pw-internal INTERFACE
         unimplemented.h
-        rsize_fix.h)
+        rsize_fix.h
+        memory_resource_new_delete.cpp
+        memory_resource_new_delete.h)
 
 target_include_directories(
         pw-internal

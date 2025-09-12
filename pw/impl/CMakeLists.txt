@@ -5,7 +5,9 @@ add_library(pw-impl INTERFACE
         uninitialized_construct_using_allocator.h
         uses_allocator_construction_args.h
         remove_cv.h
-        pmr_memory_resource.h)
+        pmr_memory_resource.h
+        byte.cpp
+        byte.h)
 
 target_include_directories(
         pw-impl
