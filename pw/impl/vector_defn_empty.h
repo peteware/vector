@@ -202,6 +202,7 @@ vector<Type, Allocator>::operator=(vector&& other)
  */
 template<class Type, class Allocator>
 constexpr void
+// ReSharper disable once CppParameterMayBeConstPtrOrRef
 vector<Type, Allocator>::swap(vector& other)
     noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
              allocator_traits<allocator_type>::is_always_equal::value)

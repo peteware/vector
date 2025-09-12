@@ -16,8 +16,7 @@ DefaultCopyConstructible::operator<=>(DefaultCopyConstructible const& op2) const
 bool
 permute(DefaultCopyConstructible& value, int depth)
 {
-    int val = value.value();
-    if (permute(val, depth))
+    if (int val = value.value(); permute(val, depth))
     {
         value.setValue(val);
         return true;

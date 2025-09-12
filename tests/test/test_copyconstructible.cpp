@@ -55,8 +55,7 @@ CopyConstructible::operator<=>(CopyConstructible const& op2) const
 bool
 permute(CopyConstructible& value, int depth)
 {
-    int val = value.value();
-    if (permute(val, depth))
+    if (int val = value.value(); permute(val, depth))
     {
         value.setValue(val);
         return true;

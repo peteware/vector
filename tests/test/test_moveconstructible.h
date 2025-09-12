@@ -9,14 +9,14 @@ namespace pw::test {
 /**
  * Given
  * - @c rv, and rvalue expression of type T
- * - @c u, an abritray identifier
+ * - @c u, an arbitrary identifier
  * Then
  * @code
  * T u = rv;
  * T u(rv);
  * @endcode
  *
- * Note: copy constructible also satisifies this
+ * Note: copy constructible also satisfies this
  */
 struct MoveConstructible : public OpTracker
 {
