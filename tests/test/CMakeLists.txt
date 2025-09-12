@@ -2,7 +2,7 @@ add_library(pwtest
         test_opcounter.cpp
         test_optracker.cpp
         test_optracker_allocator_none.cpp
-        test_optracker_allocatoronly.cpp
+        test_optracker_allocator_only.cpp
         test_optracker_copyconstructible.cpp
         test_optracker_defaultconstructible.cpp
         test_optracker_defaultcopyconstructible.cpp
