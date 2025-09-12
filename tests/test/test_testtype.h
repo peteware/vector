@@ -2,9 +2,9 @@
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
 #include "test_allocator_first_type.h"
-#include "test_allocator_last_type.h"
 #include "test_allocator_only_type.h"
 #include "test_no_allocator_type.h"
+#include "test_op_tracker_allocator_last.h"
 
 #include <pw/vector>
 #include <test_allocator_base.h>

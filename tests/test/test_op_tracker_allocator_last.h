@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_TEST_ALLOCATOR_LAST_TYPE_H
-#define INCLUDED_PW_TEST_ALLOCATOR_LAST_TYPE_H
+#ifndef INCLUDED_PW_TEST_OP_TRACKER_ALLOCATOR_LAST_H
+#define INCLUDED_PW_TEST_OP_TRACKER_ALLOCATOR_LAST_H
 
 #include <memory>
 #include <test_optracker.h>
@@ -76,4 +76,4 @@ struct uses_allocator<pw::test::OpTrackerAllocatorLast<Alloc>, Alloc> : std::tru
 };
 } // namespace std
 
-#endif /* INCLUDED_PW_TEST_ALLOCATOR_LAST_TYPE_H */
+#endif /* INCLUDED_PW_TEST_OP_TRACKER_ALLOCATOR_LAST_H */

@@ -1,9 +1,9 @@
 #include <pw/impl/is_same.h>
 #include <pw/memory>
 #include <test_allocator_first_type.h>
-#include <test_allocator_last_type.h>
 #include <test_allocator_only_type.h>
 #include <test_no_allocator_type.h>
+#include <test_op_tracker_allocator_last.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <memory>
