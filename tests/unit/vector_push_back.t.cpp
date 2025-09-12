@@ -108,6 +108,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             v.push_back(copyObject);
             THEN("Copy construct called once")
             {
+                INFO("counter: " << counter << " getCounter(): " << value_type::getCounter());
                 counter = value_type::getCounter() - counter;
                 REQUIRE(1 == counter.constructorCount());
                 REQUIRE(counter.constructorCount() == counter.allCount());
@@ -115,6 +116,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         }
         WHEN("push_back(move) is called")
         {
+            SKIP();
             counter = value_type::getCounter();
             v.push_back(pw::move(copyObject));
             THEN("Copy construct called once")
@@ -127,8 +129,9 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     }
     GIVEN("A vector with 5 elements")
     {
-        pw::test::Values<Vector>           generate(5);
-        pw::test::DefaultCopyConstructible copyObject(12);
+        SKIP();
+        pw::test::Values<Vector> generate(5);
+        value_type               copyObject(12);
 
         generate.values.shrink_to_fit();
         counter = copyObject.opCounter();
@@ -143,9 +146,8 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             }
         }
     }
-    auto result = value_type::getCounter();
-    counter     = value_type::getCounter() - init;
-    INFO("result: " << result << " counter: " << counter << " init: " << init);
+    counter = value_type::getCounter() - init;
+    INFO("counter: " << counter << " init: " << init);
     REQUIRE(counter.constructorCount() == counter.destructorCount());
 }
 

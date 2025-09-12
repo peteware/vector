@@ -73,28 +73,28 @@ public:
     std::ostream&      print(std::ostream& out) const;
 
 private:
-    int m_default          = 0; ///< Default constructor
-    int m_copy             = 0; ///< Copy constructor
-    int m_move             = 0; ///< Move constructor
-    int m_default_alloc    = 0; ///< Default constructor with allocator
-    int m_copy_alloc       = 0; ///< Copy constructor with allocator
-    int m_other            = 0; ///< Any other constructor
-    int m_destructor       = 0; ///< destructors
-    int m_assignment       = 0; ///< Calls to operator=()
-    int m_move_assignment  = 0; ///< Calls to operator=()
-    int m_plus_assignment  = 0; ///< Calls to operator+=()
-    int m_minus_assignment = 0; ///< Calls to operator-=()
-    int m_increment        = 0; ///< Calls to operator++()
-    int m_decrement        = 0; ///< Calls to operator--()
-    int m_plus             = 0; ///< Calls to operator+()
-    int m_minus            = 0; ///< Calls to operator-()
-    int m_equal            = 0; ///< Calls to operator==()
-    int m_notEqual         = 0; ///< Calls to operator!=()
-    int m_lt               = 0; ///< Calls to operator<()
-    int m_allocatorFirst   = 0; ///< Allocator passed as first argument
-    int m_allocatorLast    = 0; ///< Allocator passed as last argument
-    int m_allocatorOnly    = 0; ///< Only allocator passed
-    int m_noAllocator      = 0; ///< No allocator passed
+    int m_default_constructor       = 0; ///< Default constructor
+    int m_copy_constructor          = 0; ///< Copy constructor
+    int m_move_constructor          = 0; ///< Move constructor
+    int m_default_constructor_alloc = 0; ///< Default constructor with allocator
+    int m_copy_constructor_alloc    = 0; ///< Copy constructor with allocator
+    int m_other_constructor         = 0; ///< Any other constructor
+    int m_destructor                = 0; ///< destructors
+    int m_assignment                = 0; ///< Calls to operator=()
+    int m_move_assignment           = 0; ///< Calls to operator=()
+    int m_plus_assignment           = 0; ///< Calls to operator+=()
+    int m_minus_assignment          = 0; ///< Calls to operator-=()
+    int m_increment                 = 0; ///< Calls to operator++()
+    int m_decrement                 = 0; ///< Calls to operator--()
+    int m_plus                      = 0; ///< Calls to operator+()
+    int m_minus                     = 0; ///< Calls to operator-()
+    int m_equal                     = 0; ///< Calls to operator==()
+    int m_notEqual                  = 0; ///< Calls to operator!=()
+    int m_lt                        = 0; ///< Calls to operator<()
+    int m_allocatorFirst            = 0; ///< Allocator passed as first argument
+    int m_allocatorLast             = 0; ///< Allocator passed as last argument
+    int m_allocatorOnly             = 0; ///< Only allocator passed
+    int m_noAllocator               = 0; ///< No allocator passed
 };
 
 std::ostream& operator<<(std::ostream& out, OpCounter const& opCounter);

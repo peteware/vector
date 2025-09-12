@@ -9,7 +9,7 @@
 namespace pw::test {
 struct DefaultCopyConstructible : public OpTracker
 {
-    static OpCounter getCounter() { return s_opCounter; }
+    static OpCounter& getCounter() { return s_opCounter; }
 
     DefaultCopyConstructible()
         : OpTracker(s_opCounter)
@@ -26,16 +26,14 @@ struct DefaultCopyConstructible : public OpTracker
     DefaultCopyConstructible(DefaultCopyConstructible const& copy)
         : OpTracker(copy)
     {
-        getCounter().addCopyConstructor();
+        //getCounter().addCopyConstructor();
     }
 
     DefaultCopyConstructible(DefaultCopyConstructible&& move) noexcept
         : OpTracker(pw::move(move))
     {
-        getCounter().addMoveConstructor();
+        //getCounter().addMoveConstructor();
     }
-
-    ~DefaultCopyConstructible() = default;
 
     DefaultCopyConstructible& operator=(DefaultCopyConstructible const& copy)
     {

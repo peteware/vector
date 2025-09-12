@@ -29,7 +29,8 @@ OpCounter::allCount() const
 int
 OpCounter::constructorCount() const
 {
-    return m_default + m_copy + m_move + m_default_alloc + m_copy_alloc + m_other;
+    return m_default_constructor + m_copy_constructor + m_move_constructor + m_default_constructor_alloc +
+        m_copy_constructor_alloc + m_other_constructor;
 }
 
 /**
@@ -74,78 +75,78 @@ OpCounter::comparisonCount() const
 int
 OpCounter::getDefaultConstructor() const
 {
-    return m_default;
+    return m_default_constructor;
 }
 
 OpCounter&
 OpCounter::addDefaultConstructor()
 {
-    ++m_default;
+    ++m_default_constructor;
     return *this;
 }
 
 int
 OpCounter::getCopyConstructor() const
 {
-    return m_copy;
+    return m_copy_constructor;
 }
 
 OpCounter&
 OpCounter::addCopyConstructor()
 {
-    ++m_copy;
+    ++m_copy_constructor;
     return *this;
 }
 
 int
 OpCounter::getMoveConstructor() const
 {
-    return m_move;
+    return m_move_constructor;
 }
 
 OpCounter&
 OpCounter::addMoveConstructor()
 {
-    ++m_move;
+    ++m_move_constructor;
     return *this;
 }
 
 int
 OpCounter::getDefaultConstructorAlloc() const
 {
-    return m_default_alloc;
+    return m_default_constructor_alloc;
 }
 
 OpCounter&
 OpCounter::addDefaultConstructorAlloc()
 {
-    ++m_default_alloc;
+    ++m_default_constructor_alloc;
     return *this;
 }
 
 int
 OpCounter::getCopyConstructorAlloc() const
 {
-    return m_copy_alloc;
+    return m_copy_constructor_alloc;
 }
 
 OpCounter&
 OpCounter::addCopyConstructorAlloc()
 {
-    ++m_copy_alloc;
+    ++m_copy_constructor_alloc;
     return *this;
 }
 
 int
 OpCounter::getOtherConstructor() const
 {
-    return m_other;
+    return m_other_constructor;
 }
 
 OpCounter&
 OpCounter::addOtherConstructor()
 {
-    ++m_other;
+    ++m_other_constructor;
     return *this;
 }
 
@@ -360,18 +361,18 @@ OpCounter::getNoAllocator() const
 std::ostream&
 OpCounter::print(std::ostream& out) const
 {
-    if (m_default)
-        out << " default = " << m_default;
-    if (m_copy)
-        out << " copy = " << m_copy;
-    if (m_move)
-        out << " move = " << m_move;
-    if (m_default_alloc)
-        out << " defaultalloc = " << m_default_alloc;
-    if (m_copy_alloc)
-        out << " copyalloc = " << m_copy_alloc;
-    if (m_other)
-        out << " other = " << m_other;
+    if (m_default_constructor)
+        out << " default = " << m_default_constructor;
+    if (m_copy_constructor)
+        out << " copy = " << m_copy_constructor;
+    if (m_move_constructor)
+        out << " move = " << m_move_constructor;
+    if (m_default_constructor_alloc)
+        out << " defaultalloc = " << m_default_constructor_alloc;
+    if (m_copy_constructor_alloc)
+        out << " copyalloc = " << m_copy_constructor_alloc;
+    if (m_other_constructor)
+        out << " other = " << m_other_constructor;
     if (m_destructor)
         out << " destructor = " << m_destructor;
     if (m_assignment)
@@ -411,12 +412,12 @@ OpCounter::print(std::ostream& out) const
 OpCounter&
 OpCounter::operator-=(OpCounter const& op2)
 {
-    m_default -= op2.m_default;
-    m_copy -= op2.m_copy;
-    m_move -= op2.m_move;
-    m_default_alloc -= op2.m_default_alloc;
-    m_copy_alloc -= op2.m_copy_alloc;
-    m_other -= op2.m_other;
+    m_default_constructor -= op2.m_default_constructor;
+    m_copy_constructor -= op2.m_copy_constructor;
+    m_move_constructor -= op2.m_move_constructor;
+    m_default_constructor_alloc -= op2.m_default_constructor_alloc;
+    m_copy_constructor_alloc -= op2.m_copy_constructor_alloc;
+    m_other_constructor -= op2.m_other_constructor;
     m_destructor -= op2.m_destructor;
     m_assignment -= op2.m_assignment;
     m_move_assignment -= op2.m_move_assignment;
