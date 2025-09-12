@@ -1,34 +1,34 @@
 add_library(pwtest
+        test_opcounter.cpp
+        test_optracker.cpp
+        test_optracker_allocator_none.cpp
+        test_optracker_allocatoronly.cpp
         test_optracker_copyconstructible.cpp
         test_optracker_defaultconstructible.cpp
         test_optracker_defaultcopyconstructible.cpp
         test_optracker_emplacemoveconstructible.cpp
         test_optracker_moveconstructible.cpp
-        test_optracker_noallocator.cpp
-        test_opcounter.cpp
-        test_optracker.cpp
         test_permute.cpp
         test_throwingtype.cpp
-        test_allocator_is_always_equal.h
-        test_optracker_allocatoronly.cpp
 )
 target_sources(pwtest PUBLIC
+        test_allocator_base.h
         test_allocator_copy_assignment.h
+        test_allocator_is_always_equal.h
         test_allocator_move_assignment.h
         test_allocator_swapable.h
-        test_allocator_base.h
+        test_input_iterator.h
+        test_opcounter.h
+        test_optracker.h
         test_optracker_allocator_first.h
         test_optracker_allocator_last.h
-        test_optracker_allocatoronly.h
+        test_optracker_allocator_none.h
+        test_optracker_allocator_only.h
         test_optracker_copyconstructible.h
         test_optracker_defaultconstructible.h
         test_optracker_defaultcopyconstructible.h
         test_optracker_emplacemoveconstructible.h
-        test_input_iterator.h
         test_optracker_moveconstructible.h
-        test_optracker_noallocator.h
-        test_opcounter.h
-        test_optracker.h
         test_permute.h
         test_random_access_iterator.h
         test_same.h

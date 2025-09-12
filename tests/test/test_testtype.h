@@ -3,8 +3,8 @@
 
 #include "test_optracker_allocator_first.h"
 #include "test_optracker_allocator_last.h"
-#include "test_optracker_allocatoronly.h"
-#include "test_optracker_noallocator.h"
+#include "test_optracker_allocator_none.h"
+#include "test_optracker_allocator_only.h"
 
 #include <pw/vector>
 #include <test_allocator_base.h>
@@ -38,7 +38,7 @@ using TestTypeListAllocatorBase =
 using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
                                         std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
 using TestTypeListNoAllocator =
-    std::tuple<vector<pw::test::OpTrackerNoAllocator>, std::vector<pw::test::OpTrackerNoAllocator>>;
+    std::tuple<vector<pw::test::OpTrackerAllocatorNone>, std::vector<pw::test::OpTrackerAllocatorNone>>;
 using TestTypeListAllocatorOnly =
     std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, std::vector<pw::test::OpTrackerAllocatorOnly>>;
 using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>,

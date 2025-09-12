@@ -25,6 +25,9 @@ struct allocator_base
     explicit allocator_base(int instance = 1);
     Type* allocate(size_type count);
     void  deallocate(Type* ptr, size_type count);
+
+    template<class T, class... Args>
+    void construct(T* p, Args&&... args);
 };
 
 template<class Type>
@@ -45,6 +48,14 @@ void
 allocator_base<Type>::deallocate(Type* ptr, size_type)
 {
     return operator delete(static_cast<void*>(ptr));
+}
+
+template<class Type>
+template<class U, class... Args>
+void
+allocator_base<Type>::construct(U* obj, Args&&... args)
+{
+    uninitialized_construct_using_allocator(obj, *this, std::forward<Args>(args)...);
 }
 
 template<class Type1, class Type2>

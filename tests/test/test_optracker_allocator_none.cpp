@@ -1,28 +1,28 @@
-#include <test_optracker_noallocator.h>
+#include <test_optracker_allocator_none.h>
 
 namespace pw::test {
 
-OpCounter OpTrackerNoAllocator::s_opCounter;
+OpCounter OpTrackerAllocatorNone::s_opCounter;
 
 OpCounter
-OpTrackerNoAllocator::getCounter()
+OpTrackerAllocatorNone::getCounter()
 {
     return s_opCounter;
 }
 
-OpTrackerNoAllocator::OpTrackerNoAllocator()
+OpTrackerAllocatorNone::OpTrackerAllocatorNone()
     : OpTracker(s_opCounter)
 {
     s_opCounter.addDefaultConstructor().addNoAllocator();
 }
 
-OpTrackerNoAllocator::OpTrackerNoAllocator(value_type const& value)
+OpTrackerAllocatorNone::OpTrackerAllocatorNone(value_type const& value)
     : OpTracker(s_opCounter, value)
 {
     s_opCounter.addOtherConstructor().addNoAllocator();
 }
 
-OpTrackerNoAllocator::OpTrackerNoAllocator(value_type const& value, int extra)
+OpTrackerAllocatorNone::OpTrackerAllocatorNone(value_type const& value, int extra)
     : OpTracker(s_opCounter, value + extra)
 {
     s_opCounter.addOtherConstructor().addNoAllocator();
