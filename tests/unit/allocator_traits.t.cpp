@@ -78,7 +78,7 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
         WHEN("Use allocator_traits<>::construct() to construct")
         {
             alignas(Type) std::byte storage[sizeof(Type)];
-            Type&                   obj   = reinterpret_cast<Type&>(storage);
+            auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
             SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
@@ -92,7 +92,7 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
         WHEN("Pass empty args to allocator_traits<>::construct()")
         {
             alignas(Type) std::byte storage[sizeof(Type)];
-            Type&                   obj   = reinterpret_cast<Type&>(storage);
+            auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
             SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
