@@ -3,7 +3,7 @@
 namespace pw::test {
 OpCounter OpTrackerEmplaceMoveConstructible::s_opCounter;
 
-OpCounter
+OpCounter&
 OpTrackerEmplaceMoveConstructible::getCounter()
 {
     return s_opCounter;

@@ -24,7 +24,7 @@ namespace pw::test {
 
 struct OpTrackerDefaultConstructible : public OpTracker
 {
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     explicit OpTrackerDefaultConstructible(int value = 0)
         : OpTracker(s_opCounter, value)

@@ -4,7 +4,7 @@ namespace pw::test {
 
 OpCounter OpTrackerDefaultConstructible::s_opCounter;
 
-OpCounter
+OpCounter&
 OpTrackerDefaultConstructible::getCounter()
 {
     return s_opCounter;

@@ -20,7 +20,7 @@ namespace pw::test {
  */
 struct OpTrackerMoveConstructible : public OpTracker
 {
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     OpTrackerMoveConstructible();
     explicit OpTrackerMoveConstructible(value_type const& value);

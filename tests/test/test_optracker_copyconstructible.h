@@ -27,10 +27,10 @@ namespace pw::test {
  */
 struct OpTrackerCopyConstructible : public OpTracker
 {
-    static OpCounter getCounter();
+    static OpCounter& getCounter();
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    OpTrackerCopyConstructible(value_type const& value);
+    OpTrackerCopyConstructible(value_type const& value); // NOLINT(*-explicit-constructor)
     OpTrackerCopyConstructible(OpTrackerCopyConstructible const& copy);
     OpTrackerCopyConstructible(OpTrackerCopyConstructible&& move) noexcept;
     ~OpTrackerCopyConstructible();

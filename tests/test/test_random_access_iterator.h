@@ -15,7 +15,7 @@ struct random_access_iterator
     using pointer           = iterator_traits<Iterator>::pointer;
     using reference         = iterator_traits<Iterator>::reference;
 
-    static OpCounter getCounter() { return s_opCounter; }
+    static OpCounter& getCounter() { return s_opCounter; }
 
     random_access_iterator() { s_opCounter.addDefaultConstructor(); }
 

@@ -7,7 +7,7 @@ namespace pw::test {
 
 OpCounter OpTrackerCopyConstructible::s_opCounter;
 
-OpCounter
+OpCounter&
 OpTrackerCopyConstructible::getCounter()
 {
     return s_opCounter;
