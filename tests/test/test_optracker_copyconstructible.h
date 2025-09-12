@@ -7,7 +7,7 @@
 namespace pw::test {
 /**
  * The type T satisfies @c CopyConstructible if
- * The type T satisfies MoveConstructible, and
+ * The type T satisfies OpTrackerMoveConstructible, and
  * Given:
  * - @c v, an lvalue expression of type T or const T or an rvalue expression of type const T
  * - @c u, an arbitrary identifier

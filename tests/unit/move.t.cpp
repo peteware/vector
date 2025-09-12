@@ -1,9 +1,9 @@
 #include <pw/impl/move.h>
 
-#include <test_moveconstructible.h>
 #include <test_opcounter.h>
 #include <test_optracker_copyconstructible.h>
 #include <test_optracker_defaultcopyconstructible.h>
+#include <test_optracker_moveconstructible.h>
 #include <test_testtype.h>
 
 #include <catch2/catch_template_test_macros.hpp>
@@ -11,15 +11,15 @@
 
 TEMPLATE_LIST_TEST_CASE("move", "[move]", pw::test::Phase2TestTypeList)
 {
-    GIVEN("A MoveConstructible object")
+    GIVEN("A OpTrackerMoveConstructible object")
     {
-        pw::test::MoveConstructible m;
-        pw::test::OpCounter         init = pw::test::MoveConstructible::getCounter();
+        pw::test::OpTrackerMoveConstructible m;
+        pw::test::OpCounter                  init = pw::test::OpTrackerMoveConstructible::getCounter();
 
         WHEN("An lvalue is move()")
         {
-            pw::test::MoveConstructible m2      = pw::move(m);
-            pw::test::OpCounter         counter = m2.getCounter() - init;
+            pw::test::OpTrackerMoveConstructible m2      = pw::move(m);
+            pw::test::OpCounter                  counter = m2.getCounter() - init;
             THEN("move construct is called")
             {
                 INFO("counter: " << counter);
