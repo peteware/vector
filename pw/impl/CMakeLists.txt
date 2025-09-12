@@ -4,7 +4,8 @@ add_library(pw-impl INTERFACE
         is_constant_evaluated.h
         uninitialized_construct_using_allocator.h
         uses_allocator_construction_args.h
-        remove_cv.h)
+        remove_cv.h
+        pmr_memory_resource.h)
 
 target_include_directories(
         pw-impl
@@ -50,6 +51,7 @@ target_sources(pw-impl INTERFACE
         move_alg.h
         move_backward.h
         next.h
+        pmr_memory_resource.cpp
         pmr_polymorphic_allocator.h
         pointer_traits.h
         prev.h
