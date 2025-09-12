@@ -1,9 +1,9 @@
 #include <pw/impl/is_same.h>
 #include <pw/memory>
 #include <test_allocator_only_type.h>
-#include <test_no_allocator_type.h>
 #include <test_optracker_allocator_first.h>
 #include <test_optracker_allocator_last.h>
+#include <test_optracker_noallocator.h>
 
 #include <catch2/catch_test_macros.hpp>
 #include <memory>
@@ -15,7 +15,7 @@ SCENARIO("uses_allocator_construction_args for non-allocator-aware types",
 {
     GIVEN("A type that doesn't use allocators")
     {
-        using Type = pw::test::NoAllocatorType;
+        using Type = pw::test::OpTrackerNoAllocator;
         TestAllocator alloc;
 
         WHEN("called with no additional arguments")
@@ -192,11 +192,11 @@ SCENARIO("uses_allocator_construction_args behavior verification with OpTracker"
     {
         TestAllocator alloc;
 
-        WHEN("constructing NoAllocatorType with arguments")
+        WHEN("constructing OpTrackerNoAllocator with arguments")
         {
-            auto counter_before = pw::test::NoAllocatorType::getCounter();
-            auto args = pw::uses_allocator_construction_args<pw::test::NoAllocatorType>(alloc, 42, 10);
-            auto counter_after = pw::test::NoAllocatorType::getCounter();
+            auto counter_before = pw::test::OpTrackerNoAllocator::getCounter();
+            auto args = pw::uses_allocator_construction_args<pw::test::OpTrackerNoAllocator>(alloc, 42, 10);
+            auto counter_after = pw::test::OpTrackerNoAllocator::getCounter();
             auto diff          = counter_after - counter_before;
 
             THEN("no allocator style operations are tracked yet")

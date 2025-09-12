@@ -4,7 +4,7 @@ add_library(pwtest
         test_optracker_defaultcopyconstructible.cpp
         test_optracker_emplacemoveconstructible.cpp
         test_optracker_moveconstructible.cpp
-        test_no_allocator_type.cpp
+        test_optracker_noallocator.cpp
         test_opcounter.cpp
         test_optracker.cpp
         test_permute.cpp
@@ -26,7 +26,7 @@ target_sources(pwtest PUBLIC
         test_optracker_emplacemoveconstructible.h
         test_input_iterator.h
         test_optracker_moveconstructible.h
-        test_no_allocator_type.h
+        test_optracker_noallocator.h
         test_opcounter.h
         test_optracker.h
         test_permute.h

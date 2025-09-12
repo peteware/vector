@@ -27,11 +27,11 @@ struct OpTrackerMoveConstructible : public OpTracker
     OpTrackerMoveConstructible(OpTrackerMoveConstructible const& copy);
     OpTrackerMoveConstructible(OpTrackerMoveConstructible&& move) noexcept;
 
-    OpTrackerMoveConstructible&   operator=(OpTrackerMoveConstructible&& move) noexcept;
-    OpTrackerMoveConstructible&   operator=(OpTrackerMoveConstructible const& copy);
-    bool                 operator==(OpTrackerMoveConstructible const& op2) const;
-    bool                 operator!=(OpTrackerMoveConstructible const& op2) const;
-    std::strong_ordering operator<=>(OpTrackerMoveConstructible const& op2) const;
+    OpTrackerMoveConstructible& operator=(OpTrackerMoveConstructible&& move) noexcept;
+    OpTrackerMoveConstructible& operator=(OpTrackerMoveConstructible const& copy);
+    bool                        operator==(OpTrackerMoveConstructible const& op2) const;
+    bool                        operator!=(OpTrackerMoveConstructible const& op2) const;
+    std::strong_ordering        operator<=>(OpTrackerMoveConstructible const& op2) const;
 
 private:
     static OpCounter s_opCounter;
