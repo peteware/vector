@@ -1,5 +1,5 @@
-#ifndef INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H
-#define INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H
+#ifndef INCLUDED_PW_TEST_OPTRACKER_COPYCONSTRUCTIBLE_H
+#define INCLUDED_PW_TEST_OPTRACKER_COPYCONSTRUCTIBLE_H
 
 #include <compare>
 #include <test_optracker.h>
@@ -25,20 +25,20 @@ namespace pw::test {
  *
  * The value of v is unchanged.
  */
-struct CopyConstructible : public OpTracker
+struct OpTrackerCopyConstructible : public OpTracker
 {
     static OpCounter getCounter();
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    CopyConstructible(value_type const& value);
-    CopyConstructible(CopyConstructible const& copy);
-    CopyConstructible(CopyConstructible&& move) noexcept;
-    ~CopyConstructible();
+    OpTrackerCopyConstructible(value_type const& value);
+    OpTrackerCopyConstructible(OpTrackerCopyConstructible const& copy);
+    OpTrackerCopyConstructible(OpTrackerCopyConstructible&& move) noexcept;
+    ~OpTrackerCopyConstructible();
 
-    CopyConstructible& operator=(CopyConstructible const& copy);
-    CopyConstructible& operator=(CopyConstructible&& move) noexcept;
+    OpTrackerCopyConstructible& operator=(OpTrackerCopyConstructible const& copy);
+    OpTrackerCopyConstructible& operator=(OpTrackerCopyConstructible&& move) noexcept;
     using OpTracker::operator==;
-    std::strong_ordering operator<=>(CopyConstructible const& op2) const;
+    std::strong_ordering operator<=>(OpTrackerCopyConstructible const& op2) const;
     // using OpTracker::operator!=;
     // using OpTracker::operator<;
 
@@ -46,7 +46,7 @@ private:
     static OpCounter s_opCounter;
 };
 
-bool permute(CopyConstructible& value, int depth);
+bool permute(OpTrackerCopyConstructible& value, int depth);
 } // namespace pw::test
 
-#endif /*  INCLUDED_PW_TEST_COPYCONSTRUCTIBLE_H */
+#endif /*  INCLUDED_PW_TEST_OPTRACKER_COPYCONSTRUCTIBLE_H */
