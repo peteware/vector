@@ -15,35 +15,13 @@ struct OpTrackerAllocatorFirst : public OpTracker
 
     static OpCounter getCounter();
 
-    OpTrackerAllocatorFirst()
-        : OpTracker(s_opCounter)
-        , m_allocator()
-    {
-        s_opCounter.addDefaultConstructor();
-    }
-    explicit OpTrackerAllocatorFirst(allocator_type const& alloc)
-        : OpTracker(s_opCounter)
-        , m_allocator(alloc)
-    {
-        s_opCounter.addCopyConstructorAlloc();
-    }
-
-    OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, value_type const& value)
-        : OpTracker(s_opCounter, value)
-        , m_allocator(alloc)
-    {
-        s_opCounter.addOtherConstructor().addAllocatorFirst();
-    }
-
+    OpTrackerAllocatorFirst();
+    explicit OpTrackerAllocatorFirst(allocator_type const& alloc);
+    OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, value_type const& value);
     OpTrackerAllocatorFirst(std::allocator_arg_t,
                             allocator_type const& alloc,
                             value_type const&     value,
-                            int                   extra)
-        : OpTracker(s_opCounter, value + extra)
-        , m_allocator(alloc)
-    {
-        s_opCounter.addOtherConstructor().addAllocatorFirst();
-    }
+                            int                   extra);
 
 private:
     static OpCounter s_opCounter;
@@ -58,6 +36,43 @@ OpCounter
 OpTrackerAllocatorFirst<Alloc>::getCounter()
 {
     return s_opCounter;
+}
+
+template<typename Alloc>
+OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst()
+    : OpTracker(s_opCounter)
+    , m_allocator()
+{
+    s_opCounter.addDefaultConstructor();
+}
+
+template<typename Alloc>
+OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst(allocator_type const& alloc)
+    : OpTracker(s_opCounter)
+    , m_allocator(alloc)
+{
+    s_opCounter.addCopyConstructorAlloc();
+}
+
+template<typename Alloc>
+OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst(std::allocator_arg_t,
+                                                        allocator_type const& alloc,
+                                                        value_type const&     value)
+    : OpTracker(s_opCounter, value)
+    , m_allocator(alloc)
+{
+    s_opCounter.addOtherConstructor().addAllocatorFirst();
+}
+
+template<typename Alloc>
+OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst(std::allocator_arg_t,
+                                                        allocator_type const& alloc,
+                                                        value_type const&     value,
+                                                        int                   extra)
+    : OpTracker(s_opCounter, value + extra)
+    , m_allocator(alloc)
+{
+    s_opCounter.addOtherConstructor().addAllocatorFirst();
 }
 
 } // namespace pw::test
