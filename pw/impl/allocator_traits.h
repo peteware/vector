@@ -200,7 +200,7 @@ allocator_traits<Alloc>::construct_impl(A& a, // NOLINT(runtime/references)
 template<class Alloc>
 template<typename T, typename... Args>
 void
-allocator_traits<Alloc>::construct_impl(Alloc& alloc, T* p, Args&&... args)
+allocator_traits<Alloc>::construct_impl(Alloc&, T* p, Args&&... args)
 {
     pw::construct_at(p, pw::forward<Args>(args)...);
 }

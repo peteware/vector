@@ -40,7 +40,7 @@ allocator<Type>::allocate(size_type count)
 template<class Type>
 constexpr void
 // ReSharper disable once CppMemberFunctionMayBeStatic
-allocator<Type>::deallocate(Type* ptr, size_type count)
+allocator<Type>::deallocate(Type* ptr, size_type)
 {
     if (is_constant_evaluated())
     {
@@ -53,14 +53,14 @@ allocator<Type>::deallocate(Type* ptr, size_type count)
 
 template<class Type1, class Type2>
 bool
-operator==(allocator<Type1> const& op1, allocator<Type2> const& op2)
+operator==(allocator<Type1> const&, allocator<Type2> const&)
 {
     return true;
 }
 
 template<class Type1, class Type2>
 bool
-operator!=(allocator<Type1> const& op1, allocator<Type2> const& op2)
+operator!=(allocator<Type1> const&, allocator<Type2> const&)
 {
     return false;
 }

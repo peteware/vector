@@ -6,6 +6,7 @@
 #include <test_emplacemoveconstructible.h>
 
 #include <catch2/catch_test_macros.hpp>
+#include <cstddef>
 #include <limits>
 
 namespace pw::test {
@@ -22,7 +23,7 @@ struct allocator_with_select : public allocator_base<Type>
     }
 
     // Custom select_on_container_copy_construction that returns instance + 100
-    allocator_with_select select_on_container_copy_construction() const
+    [[nodiscard]] allocator_with_select select_on_container_copy_construction() const
     {
         return allocator_with_select(base::m_instance + 100);
     }
@@ -47,14 +48,15 @@ template<class Type>
 struct allocator_with_max_size : public allocator_base<Type>
 {
     using base      = allocator_base<Type>;
-    using size_type = typename base::size_type;
+    using size_type = base::size_type;
 
     explicit allocator_with_max_size(int instance = 1)
         : base(instance)
     {
     }
 
-    size_type max_size() const { return 12345; }
+    // ReSharper disable once CppMemberFunctionMayBeStatic
+    [[nodiscard]] size_type max_size() const { return 12345; }
 };
 
 } // namespace pw::test
@@ -75,9 +77,9 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
         }
         WHEN("Use allocator_traits<>::construct() to construct")
         {
-            std::aligned_storage<sizeof(Type), alignof(Type)> storage;
-            Type&                                             obj   = reinterpret_cast<Type&>(storage);
-            pw::test::OpCounter                               start = Type::getCounter();
+            alignas(Type) std::byte storage[sizeof(Type)];
+            Type&                   obj   = reinterpret_cast<Type&>(storage);
+            pw::test::OpCounter     start = Type::getCounter();
             SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
@@ -89,9 +91,9 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
         }
         WHEN("Pass empty args to allocator_traits<>::construct()")
         {
-            std::aligned_storage<sizeof(Type), alignof(Type)> storage;
-            Type&                                             obj   = reinterpret_cast<Type&>(storage);
-            pw::test::OpCounter                               start = Type::getCounter();
+            alignas(Type) std::byte storage[sizeof(Type)];
+            Type&                   obj   = reinterpret_cast<Type&>(storage);
+            pw::test::OpCounter     start = Type::getCounter();
             SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
@@ -382,6 +384,7 @@ SCENARIO("allocator deallocate with is_constant_evaluated", "[allocator][dealloc
         WHEN("constexpr lambda calls deallocate")
         {
             // Test that shows the difference between compile-time and runtime
+            // ReSharper disable once CppDFAConstantFunctionResult
             auto test_context_sensitivity = []() constexpr {
                 pw::allocator<int> ctx_alloc;
 

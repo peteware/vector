@@ -742,6 +742,8 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
 {
+    (void)position;
+    (void)value;
     return &makeReference<value_type>();
 }
 

@@ -36,7 +36,7 @@ struct CopyConstructible : public OpTracker
     ~CopyConstructible();
 
     CopyConstructible& operator=(CopyConstructible const& copy);
-    CopyConstructible& operator=(CopyConstructible&& move);
+    CopyConstructible& operator=(CopyConstructible&& move) noexcept;
     using OpTracker::operator==;
     std::strong_ordering operator<=>(CopyConstructible const& op2) const;
     // using OpTracker::operator!=;

@@ -27,13 +27,13 @@ MoveConstructible::MoveConstructible(MoveConstructible const& copy)
 {
 }
 
-MoveConstructible::MoveConstructible(MoveConstructible&& move)
+MoveConstructible::MoveConstructible(MoveConstructible&& move) noexcept
     : OpTracker(pw::move(move))
 {
 }
 
 MoveConstructible&
-MoveConstructible::operator=(MoveConstructible&& move)
+MoveConstructible::operator=(MoveConstructible&& move) noexcept
 {
     OpTracker::operator=(pw::move(move));
     return *this;

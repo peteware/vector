@@ -14,7 +14,7 @@ public:
 
     int        value;
 
-    explicit ThrowingType(int v = 0);
+    explicit ThrowingType(int value = 0);
     ThrowingType(ThrowingType const& other);
     ThrowingType(ThrowingType&& other) noexcept(false);
 

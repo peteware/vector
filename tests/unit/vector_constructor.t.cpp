@@ -1063,7 +1063,6 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
 {
     using Vector     = TestType;
     using value_type = typename Vector::value_type;
-    using size_type  = typename Vector::size_type;
 
     GIVEN("vector constructed with AllocatorOnlyType elements")
     {

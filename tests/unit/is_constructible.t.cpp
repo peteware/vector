@@ -46,7 +46,7 @@ SCENARIO("is_constructible", "[type_traits]")
     {
         struct Example2
         {
-            explicit Example2(float v)
+            explicit Example2(float)
                 : a(3)
             {
             }

@@ -31,7 +31,7 @@ struct random_access_iterator
         s_opCounter.addCopyConstructor();
     }
 
-    random_access_iterator(random_access_iterator&& op2)
+    random_access_iterator(random_access_iterator&& op2) noexcept
         : m_iterator(op2.m_iterator)
     {
         s_opCounter.addMoveConstructor();

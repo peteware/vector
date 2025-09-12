@@ -24,7 +24,7 @@ struct EmplaceMoveConstructible : public OpTracker
     {
     }
 
-    EmplaceMoveConstructible(EmplaceMoveConstructible&& move)
+    EmplaceMoveConstructible(EmplaceMoveConstructible&& move) noexcept
         : OpTracker(pw::move(move))
         , m_value2(pw::move(move.m_value2))
     {

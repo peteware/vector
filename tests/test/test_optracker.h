@@ -25,7 +25,7 @@ protected:
     ~OpTracker();
 
     OpTracker&           operator=(OpTracker const& copy);
-    OpTracker&           operator=(OpTracker&& move);
+    OpTracker&           operator=(OpTracker&& move) noexcept;
     bool                 operator==(OpTracker const& op2) const;
     bool                 operator!=(OpTracker const& op2) const;
     bool                 operator<(OpTracker const& op2) const;

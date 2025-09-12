@@ -40,7 +40,7 @@ CopyConstructible::operator=(CopyConstructible const& copy)
 }
 
 CopyConstructible&
-CopyConstructible::operator=(CopyConstructible&& move)
+CopyConstructible::operator=(CopyConstructible&& move) noexcept
 {
     OpTracker::operator=(pw::move(move));
     return *this;

@@ -41,7 +41,7 @@ struct DefaultCopyConstructible : public OpTracker
         return *this;
     }
 
-    DefaultCopyConstructible& operator=(DefaultCopyConstructible&& move)
+    DefaultCopyConstructible& operator=(DefaultCopyConstructible&& move) noexcept
     {
         OpTracker::operator=(pw::move(move));
         return *this;

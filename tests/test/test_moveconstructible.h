@@ -25,9 +25,9 @@ struct MoveConstructible : public OpTracker
     MoveConstructible();
     explicit MoveConstructible(value_type const& value);
     MoveConstructible(MoveConstructible const& copy);
-    MoveConstructible(MoveConstructible&& move);
+    MoveConstructible(MoveConstructible&& move) noexcept;
 
-    MoveConstructible&   operator=(MoveConstructible&& move);
+    MoveConstructible&   operator=(MoveConstructible&& move) noexcept;
     MoveConstructible&   operator=(MoveConstructible const& copy);
     bool                 operator==(MoveConstructible const& op2) const;
     bool                 operator!=(MoveConstructible const& op2) const;

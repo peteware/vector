@@ -74,7 +74,7 @@ OpTracker::operator=(OpTracker const& copy)
 }
 
 OpTracker&
-OpTracker::operator=(OpTracker&& move)
+OpTracker::operator=(OpTracker&& move) noexcept
 {
     m_value      = move.m_value;
     move.m_value = -1;

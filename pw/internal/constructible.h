@@ -6,7 +6,7 @@
 #include <pw/impl/void.h>
 
 namespace pw::internal {
-template<class, class Type, class... Args>
+template<class, class, class...>
 struct constructible : false_type
 {
 };

@@ -2,7 +2,7 @@
 #define INCLUDED_PW_IMPL_CONDITIONAL_H
 
 namespace pw {
-template<bool B, class TrueType, class FalseType>
+template<bool, class TrueType, class>
 struct conditional
 {
     using type = TrueType;

@@ -42,7 +42,7 @@ allocator_base<Type>::allocate(size_type count)
 
 template<class Type>
 void
-allocator_base<Type>::deallocate(Type* ptr, size_type count)
+allocator_base<Type>::deallocate(Type* ptr, size_type)
 {
     return operator delete(static_cast<void*>(ptr));
 }
