@@ -5,6 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/initializer_list.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/impl/reverse_iterator.h>
 
 #include <pw/internal/storage.h>
@@ -123,5 +124,9 @@ template<class Type, class Allocator>
 constexpr auto operator<=>(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& op2)
     -> decltype(op1[0] <=> op2[0]);
 
+namespace pmr {
+template<class Type>
+using vector = pw::vector<Type, polymorphic_allocator<Type>>;
+}
 } // namespace pw
 #endif /* INCLUDED_PW_IMPL_VECTOR_DECL_H */

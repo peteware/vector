@@ -7,7 +7,8 @@ add_library(pw-impl INTERFACE
         remove_cv.h
         pmr_memory_resource.h
         byte.cpp
-        byte.h)
+        byte.h
+        max_align.h)
 
 target_include_directories(
         pw-impl

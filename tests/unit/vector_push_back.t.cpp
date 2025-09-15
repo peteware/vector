@@ -1,3 +1,5 @@
+#include "pw/impl/pmr_polymorphic_allocator.h"
+
 #include <test_allocator_move_assignment.h>
 #include <test_optracker_copyconstructible.h>
 #include <test_optracker_defaultcopyconstructible.h>
@@ -92,7 +94,7 @@ TEMPLATE_LIST_TEST_CASE("push_back()", "[vector][push_back]", pw::test::TestType
 
 SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
 {
-    using Vector                   = pw::vector<pw::test::OpTrackerDefaultCopyConstructible>;
+    using Vector                   = pw::pmr::vector<pw::test::OpTrackerDefaultCopyConstructible>;
     using value_type               = Vector::value_type;
     pw::test::OpCounter const init = value_type::getCounter();
     pw::test::OpCounter       counter;

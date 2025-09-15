@@ -7,7 +7,6 @@ namespace pw::internal {
 template<class Alloc>
 auto detect_prop_on_copy(int) -> Alloc::propagate_on_container_copy_assignment;
 template<class Alloc>
-
 auto detect_prop_on_copy(long) -> false_type;
 
 template<class Alloc>

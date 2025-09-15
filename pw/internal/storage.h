@@ -244,7 +244,8 @@ Storage<Type, Allocator>::swap(Storage& other, bool swap_allocator)
     using pw::swap;
     if (swap_allocator)
     {
-        pw::swap(m_alloc, other.m_alloc);
+        m_alloc = allocator_traits<allocator_type>::select_on_container_copy_construction(other.allocator());
+        //pw::swap(m_alloc, other.m_alloc);
     }
     pw::swap(m_begin, other.m_begin);
     pw::swap(m_size, other.m_size);
