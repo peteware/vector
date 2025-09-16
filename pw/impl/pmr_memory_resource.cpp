@@ -1,12 +1,7 @@
-//
-// Created by Ware, Pete on 9/12/25.
-//
-
+#include "pmr_memory_resource.h"
 #include "exchange.h"
-
-#include <pw/impl/pmr_memory_resource.h>
-#include <pw/internal/memory_resource_new_delete.h>
-#include <pw/internal/memory_resource_null.h>
+#include "memory_resource_new_delete.h"
+#include "memory_resource_null.h"
 #include <utility>
 
 namespace pw::pmr {

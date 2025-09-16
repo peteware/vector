@@ -1,4 +1,8 @@
 add_library(${PROJECT_NAME}
+        impl/byte.cpp
+        impl/memory_resource_new_delete.cpp
+        impl/memory_resource_null.cpp
+        impl/pmr_memory_resource.cpp
         pw.cpp
 
         algorithm
@@ -11,11 +15,103 @@ add_library(${PROJECT_NAME}
         vector
 )
 
-add_subdirectory(internal)
-add_subdirectory(impl)
-
 target_include_directories(${PROJECT_NAME} PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/pw>)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE pw-impl pw-internal)
+install(TARGETS ${PROJECT_NAME}
+        DESTINATION lib)
+install(FILES
+        algorithm
+        allocator
+        cstddef
+        iterator
+        memory
+        memory_resource
+        type_traits
+        utility
+        vector
+        DESTINATION include/pw)
+install(FILES
+        impl/add_const.h
+        impl/add_rvalue_reference.h
+        impl/addressof.h
+        impl/advance.h
+        impl/allocator.h
+        impl/allocator_traits.h
+        impl/as_const.h
+        impl/back_insert_iterator.h
+        impl/back_inserter.h
+        impl/bool_type.h
+        impl/byte.h
+        impl/conditional.h
+        impl/construct_at.h
+        impl/copy.h
+        impl/declval.h
+        impl/destroy.h
+        impl/destroy_at.h
+        impl/distance.h
+        impl/equal.h
+        impl/exchange.h
+        impl/fill.h
+        impl/fill_n.h
+        impl/for_each.h
+        impl/forward.h
+        impl/initializer_list.h
+        impl/integral_constant.h
+        impl/is_base_of.h
+        impl/is_class.h
+        impl/is_constant_evaluated.h
+        impl/is_constructible.h
+        impl/is_convertible.h
+        impl/is_empty.h
+        impl/is_move_constructible.h
+        impl/is_same.h
+        impl/is_union.h
+        impl/iterator_tag.h
+        impl/iterator_traits.h
+        impl/lexicographical_compare.h
+        impl/make_unsigned.h
+        impl/max.h
+        impl/max_align.h
+        impl/memory_resource_new_delete.h
+        impl/memory_resource_null.h
+        impl/min.h
+        impl/move.h
+        impl/move_alg.h
+        impl/move_backward.h
+        impl/next.h
+        impl/numeric_limits.h
+        impl/pmr_memory_resource.h
+        impl/pmr_polymorphic_allocator.h
+        impl/pointer_traits.h
+        impl/prev.h
+        impl/ptrdiff.h
+        impl/remove_cv.h
+        impl/remove_reference.h
+        impl/reverse_iterator.h
+        impl/size.h
+        impl/swap.h
+        impl/uninitialized_construct_using_allocator.h
+        impl/uninitialized_copy.h
+        impl/uninitialized_default_construct.h
+        impl/uninitialized_fill.h
+        impl/uninitialized_move.h
+        impl/uninitialized_value_construct.h
+        impl/uses_allocator_construction_args.h
+        impl/vector_decl.h
+        impl/vector_defn.h
+        impl/vector_defn_empty.h
+        impl/void.h
+        DESTINATION include/pw/impl)
+install(FILES
+        internal/compare.h
+        internal/constructible.h
+        internal/detect_prop.h
+        internal/extract_or.h
+        internal/is_supported.h
+        internal/meta.h
+        internal/rsize_fix.h
+        internal/storage.h
+        internal/unimplemented.h
+        DESTINATION include/pw/internal)
