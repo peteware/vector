@@ -1,10 +1,7 @@
-add_library(pw-internal INTERFACE
-        unimplemented.h
-        rsize_fix.h
+add_library(pw-internal
         memory_resource_new_delete.cpp
-        memory_resource_new_delete.h
         memory_resource_null.cpp
-        memory_resource_null.h)
+)
 
 target_include_directories(
         pw-internal
@@ -17,7 +14,11 @@ target_sources(pw-internal INTERFACE
         detect_prop.h
         extract_or.h
         is_supported.h
+        memory_resource_new_delete.h
+        memory_resource_null.h
         meta.h
+        rsize_fix.h
         storage.h
+        unimplemented.h
 )
 target_link_libraries(pw-internal INTERFACE pw-impl)

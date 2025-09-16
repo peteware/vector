@@ -1,14 +1,6 @@
 add_library(pw-impl INTERFACE
-        numeric_limits.h
-        is_base_of.h
-        is_constant_evaluated.h
-        uninitialized_construct_using_allocator.h
-        uses_allocator_construction_args.h
-        remove_cv.h
-        pmr_memory_resource.h
         byte.cpp
-        byte.h
-        max_align.h)
+)
 
 target_include_directories(
         pw-impl
@@ -25,6 +17,7 @@ target_sources(pw-impl INTERFACE
         back_insert_iterator.h
         back_inserter.h
         bool_type.h
+        byte.h
         construct_at.h
         copy.h
         declval.h
@@ -39,7 +32,9 @@ target_sources(pw-impl INTERFACE
         forward.h
         initializer_list.h
         integral_constant.h
+        is_base_of.h
         is_class.h
+        is_constant_evaluated.h
         is_constructible.h
         is_convertible.h
         is_empty.h
@@ -49,25 +44,31 @@ target_sources(pw-impl INTERFACE
         lexicographical_compare.h
         make_unsigned.h
         max.h
+        max_align.h
         min.h
         move.h
         move_alg.h
         move_backward.h
         next.h
+        numeric_limits.h
         pmr_memory_resource.cpp
+        pmr_memory_resource.h
         pmr_polymorphic_allocator.h
         pointer_traits.h
         prev.h
         ptrdiff.h
+        remove_cv.h
         remove_reference.h
         reverse_iterator.h
         size.h
         swap.h
+        uninitialized_construct_using_allocator.h
         uninitialized_copy.h
         uninitialized_default_construct.h
         uninitialized_fill.h
         uninitialized_move.h
         uninitialized_value_construct.h
+        uses_allocator_construction_args.h
         vector_decl.h
         vector_defn.h
         void.h

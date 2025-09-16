@@ -16,7 +16,7 @@ namespace pw::internal {
 class memory_resource_new_delete : public pw::pmr::memory_resource
 {
 public:
-    ~memory_resource_new_delete() noexcept override = default;
+    ~memory_resource_new_delete() noexcept override;
 
 private:
     void* do_allocate(size_t bytes, size_t alignment) override;

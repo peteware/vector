@@ -5,6 +5,10 @@
 
 namespace pw::internal {
 
+memory_resource_null::~memory_resource_null() noexcept
+{
+}
+
 void*
 memory_resource_null::do_allocate(size_t bytes, size_t alignment)
 {

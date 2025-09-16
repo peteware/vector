@@ -67,7 +67,9 @@ struct Storage
     constexpr size_type               capacity() const noexcept;
     constexpr allocator_type&         allocator() noexcept;
     constexpr allocator_type          copy_allocator() const;
+    constexpr void                    swap_allocator(Storage& other);
     constexpr void                    destroy(iterator begin, iterator end);
+    constexpr Storage&                reserve(size_type count);
     constexpr iterator                copy(const_iterator begin, const_iterator end, iterator dest);
     constexpr iterator                move(iterator begin, iterator end, iterator dest);
     constexpr iterator                move_backward(iterator begin, iterator end, iterator dest);
@@ -75,9 +77,9 @@ struct Storage
     constexpr Storage&                uninitialized_fill(iterator begin, iterator end, value_type const& val);
     constexpr Storage&                uninitialized_default_construct(iterator begin, iterator end);
     constexpr Storage&                uninitialized_move(iterator begin, iterator end, iterator dest);
-    constexpr void                    swap(Storage& other, bool swap_allocator)
-        noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
-                 allocator_traits<allocator_type>::is_always_equal::value);
+    constexpr void
+    swap(Storage& other) noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+                                  allocator_traits<allocator_type>::is_always_equal::value);
     template<class... Args>
     constexpr void construct(iterator where, Args&&... args);
     template<class InputIterator>
@@ -234,19 +236,20 @@ Storage<Type, Allocator>::copy_allocator() const
 {
     return m_alloc;
 }
+template<class Type, class Allocator>
+constexpr void
+Storage<Type, Allocator>::swap_allocator(Storage& other)
+{
+    pw::swap(other.m_alloc, other.m_alloc);
+}
 
 template<class Type, class Allocator>
 constexpr void
-Storage<Type, Allocator>::swap(Storage& other, bool swap_allocator)
+Storage<Type, Allocator>::swap(Storage& other)
     noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
              allocator_traits<allocator_type>::is_always_equal::value)
 {
     using pw::swap;
-    if (swap_allocator)
-    {
-        m_alloc = allocator_traits<allocator_type>::select_on_container_copy_construction(other.allocator());
-        //pw::swap(m_alloc, other.m_alloc);
-    }
     pw::swap(m_begin, other.m_begin);
     pw::swap(m_size, other.m_size);
     pw::swap(m_allocated, other.m_allocated);
@@ -269,6 +272,30 @@ Storage<Type, Allocator>::destroy(iterator begin, iterator end)
         allocator_traits<Allocator>::destroy(m_alloc, pw::addressof(*begin));
         ++begin;
     }
+}
+
+/**
+ * Reserves memory for at least count elements.
+ * Invalidates all iterators and references.
+ *
+ * @param count The number of elements to reserve space for
+ * @return Reference to this storage
+ * @exception std::bad_alloc if memory allocation fails
+ */
+template<class Type, class Allocator>
+constexpr Storage<Type, Allocator>&
+Storage<Type, Allocator>::reserve(size_type count)
+{
+    pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
+    if (m_begin)
+    {
+        destroy(begin(), end());
+        allocator_traits<Allocator>::deallocate(m_alloc, begin(), m_allocated);
+    }
+    m_begin     = p;
+    m_size      = 0;
+    m_allocated = count;
+    return *this;
 }
 
 template<class Type, class Allocator>

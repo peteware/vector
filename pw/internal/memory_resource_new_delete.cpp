@@ -2,6 +2,10 @@
 
 namespace pw::internal {
 
+memory_resource_new_delete::~memory_resource_new_delete() noexcept
+{
+}
+
 void*
 memory_resource_new_delete::do_allocate(size_t bytes, size_t alignment)
 {

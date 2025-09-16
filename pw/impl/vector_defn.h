@@ -159,10 +159,8 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
                              typename iterator_traits<Iterator>::iterator_category>::value)
     {
         size_type count = distance(first, last);
-        Storage   tmp { alloc, count };
-        tmp.uninitialized_copy(first, last, tmp.begin());
-        tmp.set_size(count);
-        m_storage.swap(tmp, false);
+        m_storage.reserve(count);
+        m_storage.uninitialized_copy(first, last, m_storage.begin()).set_size(count);
     }
     else
     {
@@ -191,7 +189,8 @@ vector<Type, Allocator>::operator=(vector const& other)
 
         tmp.uninitialized_copy(other.begin(), other.end(), tmp.begin());
         tmp.set_size(other.size());
-        m_storage.swap(tmp, true);
+        m_storage.swap(tmp);
+        m_storage.swap_allocator(tmp);
     }
     else if (m_storage.size() < other.size())
     {
@@ -206,7 +205,7 @@ vector<Type, Allocator>::operator=(vector const& other)
             Storage tmp { allocator_type(), other.size() };
             tmp.uninitialized_copy(other.begin(), other.end(), tmp.begin());
             tmp.set_size(other.size());
-            m_storage.swap(tmp, false);
+            m_storage.swap(tmp);
         }
         m_storage.set_size(other.size());
     }
@@ -236,7 +235,7 @@ vector<Type, Allocator>::operator=(initializer_list<value_type> init_list)
     Storage tmp { allocator_type(), init_list.size() };
 
     tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin()).set_size(init_list.size());
-    m_storage.swap(tmp, false);
+    m_storage.swap(tmp);
     return *this;
 }
 
@@ -256,7 +255,8 @@ vector<Type, Allocator>::operator=(vector&& other)
     {
         Storage storage { other.get_allocator(), other.size() };
         storage.uninitialized_move(other.begin(), other.end(), storage.begin()).set_size(other.size());
-        m_storage.swap(storage, true);
+        m_storage.swap(storage);
+        m_storage.swap_allocator(storage);
     }
     else
     {
@@ -288,7 +288,11 @@ vector<Type, Allocator>::swap(vector& other)
     noexcept(allocator_traits<allocator_type>::propagate_on_container_swap::value ||
              allocator_traits<allocator_type>::is_always_equal::value)
 {
-    m_storage.swap(other.m_storage, allocator_traits<allocator_type>::propagate_on_container_swap::value);
+    m_storage.swap(other.m_storage);
+    if constexpr (allocator_traits<allocator_type>::propagate_on_container_swap::value)
+    {
+        m_storage.swap_allocator(other.m_storage);
+    }
 }
 
 /**
@@ -309,7 +313,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
         Storage   tmp { allocator_type(), count };
 
         tmp.uninitialized_copy(begin, end, tmp.begin()).set_size(count);
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     else
     {
@@ -335,7 +339,7 @@ vector<Type, Allocator>::assign(size_type count, value_type const& value)
 {
     Storage tmp { allocator_type(), count };
     tmp.uninitialized_fill(tmp.begin(), tmp.begin() + count, value).set_size(count);
-    m_storage.swap(tmp, false);
+    m_storage.swap(tmp);
 }
 
 /**
@@ -350,7 +354,7 @@ vector<Type, Allocator>::assign(initializer_list<value_type> init_list)
 {
     Storage tmp { allocator_type(), init_list.size() };
     tmp.uninitialized_copy(init_list.begin(), init_list.end(), tmp.begin()).set_size(init_list.size());
-    m_storage.swap(tmp, false);
+    m_storage.swap(tmp);
 }
 
 /**
@@ -714,7 +718,7 @@ vector<Type, Allocator>::shrink_to_fit()
     }
     Storage tmp(m_storage.copy_allocator(), m_storage.size());
     tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin()).set_size(m_storage.size());
-    m_storage.swap(tmp, false);
+    m_storage.swap(tmp);
 }
 
 /**
@@ -731,7 +735,7 @@ vector<Type, Allocator>::reserve(size_type count)
         return;
     Storage tmp(m_storage.copy_allocator(), count);
     tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin()).set_size(m_storage.size());
-    m_storage.swap(tmp, false);
+    m_storage.swap(tmp);
 }
 
 /**
@@ -773,7 +777,7 @@ vector<Type, Allocator>::push_back(const_reference value)
 
         tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.begin());
         tmp.construct(tmp.begin() + total - count, value);
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
 }
@@ -801,7 +805,7 @@ vector<Type, Allocator>::push_back(value_type&& value)
 
         tmp.uninitialized_move(m_storage.begin(), m_storage.end(), tmp.begin());
         tmp.construct(tmp.begin() + total - 1, pw::move(value));
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
 }
@@ -836,7 +840,7 @@ vector<Type, Allocator>::resize(size_type total)
         tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.capacity_begin())
             .set_size(m_storage.size());
         tmp.uninitialized_default_construct(tmp.capacity_begin(), tmp.begin() + total);
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
 }
@@ -872,7 +876,7 @@ vector<Type, Allocator>::resize(size_type total, const_reference value)
         tmp.uninitialized_copy(m_storage.begin(), m_storage.end(), tmp.capacity_begin())
             .set_size(m_storage.size());
         tmp.uninitialized_fill(tmp.capacity_begin(), tmp.begin() + total, value);
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
 }
@@ -976,7 +980,7 @@ vector<Type, Allocator>::insert(const_iterator position, value_type&& value)
         tmp.uninitialized_move(m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + count);
         tmp.construct(tmp.begin() + offset, value);
         tmp.uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
     return m_storage.begin() + offset;
@@ -1018,7 +1022,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
         tmp.uninitialized_move(m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + count);
         tmp.uninitialized_fill(tmp.begin() + offset, tmp.begin() + offset + count, value);
         tmp.uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
     return m_storage.begin() + offset;
@@ -1056,7 +1060,7 @@ vector<Type, Allocator>::insert(const_iterator position, initializer_list<value_
             tmp.uninitialized_move(
                 m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + init_list.size());
         }
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
     return m_storage.begin() + offset;
@@ -1108,7 +1112,7 @@ vector<Type, Allocator>::emplace_back(Args&&... args)
 
         tmp.uninitialized_move(m_storage.begin(), m_storage.end(), tmp.begin());
         tmp.construct(tmp.begin() + total - 1, pw::forward<Args>(args)...);
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
     return back();
@@ -1143,7 +1147,7 @@ vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
         tmp.uninitialized_move(m_storage.begin() + offset, m_storage.end(), tmp.begin() + offset + count);
         tmp.construct(tmp.begin() + offset, pw::forward<Args>(args)...);
         tmp.uninitialized_move(m_storage.begin(), m_storage.begin() + offset, tmp.begin());
-        m_storage.swap(tmp, false);
+        m_storage.swap(tmp);
     }
     m_storage.set_size(total);
     return m_storage.begin() + offset;
