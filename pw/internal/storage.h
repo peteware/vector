@@ -240,7 +240,7 @@ template<class Type, class Allocator>
 constexpr void
 Storage<Type, Allocator>::swap_allocator(Storage& other)
 {
-    pw::swap(other.m_alloc, other.m_alloc);
+    pw::swap(m_alloc, other.m_alloc);
 }
 
 template<class Type, class Allocator>
