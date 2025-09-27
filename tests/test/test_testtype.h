@@ -1,14 +1,13 @@
 #ifndef INCLUDED_PW_TEST_TESTTYPE_H
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
-#include "test_optracker_allocator_first.h"
-#include "test_optracker_allocator_last.h"
-#include "test_optracker_allocator_none.h"
-#include "test_optracker_allocator_only.h"
-
 #include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/vector>
 #include <test_allocator_base.h>
+#include <test_optracker_allocator_first.h>
+#include <test_optracker_allocator_last.h>
+#include <test_optracker_allocator_none.h>
+#include <test_optracker_allocator_only.h>
 #include <test_permute.h>
 #include <test_throwing_allocator.h>
 #include <test_throwingtype.h>
