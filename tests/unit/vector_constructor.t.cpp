@@ -992,7 +992,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
-                SKIP("Need to use allocator with construct()");
+                // SKIP("Need to use allocator with construct()");
                 REQUIRE(v.size() == count);
                 INFO(diff);
                 REQUIRE(diff.getCopyConstructorAlloc() >= static_cast<int>(count));

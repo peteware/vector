@@ -12,6 +12,17 @@
 
 namespace pw {
 
+template<class, class Alloc, class... Args>
+inline bool constexpr has_construct_impl = false;
+
+template<class Alloc, class... Args>
+inline bool constexpr has_construct_impl<decltype((void)std::declval<Alloc>().construct(
+                                             std::declval<Args>()...)),
+                                         Alloc,
+                                         Args...> = true;
+template<class Alloc, class... Args>
+inline bool constexpr has_construct_v = has_construct_impl<void, Alloc, Args...>;
+
 /**
  * @brief Provides a uniform interface to allocator types.
  *
@@ -59,13 +70,6 @@ private:
     static auto select_on_container_copy_construction_impl(AllocType const& alloc, int)
         -> decltype(alloc.select_on_container_copy_construction());
     static constexpr Alloc select_on_container_copy_construction_impl(Alloc const& alloc, ...);
-
-    template<typename A, typename T, typename... Args>
-    static auto construct_impl(A& a, // NOLINT(runtime/references)
-                               T* p,
-                               Args&&... args) -> decltype(a.construct(p, pw::forward<Args>(args)...));
-    template<typename T, typename... Args>
-    static void construct_impl(Alloc&, T* p, Args&&... args);
 
     template<typename A, typename T>
     static auto destroy_impl(A& a, // NOLINT(runtime/references)
@@ -129,7 +133,14 @@ template<class Type, class... Args>
 constexpr void
 allocator_traits<Alloc>::construct(allocator_type& alloc, Type* p, Args&&... args)
 {
-    construct_impl(alloc, p, pw::forward<Args>(args)...);
+    if constexpr (has_construct_v<allocator_type, Type*, Args...>)
+    {
+        alloc.construct(p, std::forward<Args>(args)...);
+    }
+    else
+    {
+        pw::construct_at(p, pw::forward<Args>(args)...);
+    }
 }
 
 template<class Alloc>
@@ -184,25 +195,6 @@ constexpr allocator_traits<Alloc>::allocator_type
 allocator_traits<Alloc>::select_on_container_copy_construction_impl(allocator_type const& alloc, ...)
 {
     return alloc;
-}
-
-template<class Alloc>
-template<typename A, typename T, typename... Args>
-auto
-allocator_traits<Alloc>::construct_impl(A& a, // NOLINT(runtime/references)
-                                        T* p,
-                                        Args&&... args)
-    -> decltype(a.construct(p, pw::forward<Args>(args)...))
-{
-    return a.construct(p, pw::forward<Args>(args)...);
-}
-
-template<class Alloc>
-template<typename T, typename... Args>
-void
-allocator_traits<Alloc>::construct_impl(Alloc&, T* p, Args&&... args)
-{
-    pw::construct_at(p, pw::forward<Args>(args)...);
 }
 
 template<class Alloc>

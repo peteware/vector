@@ -118,7 +118,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
         }
         WHEN("push_back(move) is called")
         {
-            SKIP();
+            //SKIP();
             counter = value_type::getCounter();
             v.push_back(pw::move(copyObject));
             THEN("Copy construct called once")
@@ -131,7 +131,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
     }
     GIVEN("A vector with 5 elements")
     {
-        SKIP();
+        //SKIP();
         pw::test::Values<Vector> generate(5);
         value_type               copyObject(12);
 

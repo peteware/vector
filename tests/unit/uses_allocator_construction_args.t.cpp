@@ -1,3 +1,5 @@
+#include "pw/impl/pmr_polymorphic_allocator.h"
+
 #include <pw/impl/is_same.h>
 #include <pw/memory>
 #include <test_optracker_allocator_first.h>
@@ -59,6 +61,66 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
     GIVEN("A type that uses allocators with allocator_arg_t in first position")
     {
         using Type = pw::test::OpTrackerAllocatorFirst<TestAllocator>;
+        Type::allocator_type alloc;
+
+        WHEN("called with no additional arguments")
+        {
+            auto counter_before = Type::getCounter();
+            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+
+            THEN("returns (allocator_arg, alloc)")
+            {
+                REQUIRE(std::tuple_size_v<decltype(args)> == 1);
+                using Arg0Type = std::tuple_element_t<0, decltype(args)>;
+                INFO("tuple0 = " << typeid(std::tuple_element_t<0, decltype(args)>).name()
+                                 << " Arg0Type = " << typeid(Arg0Type).name()
+                                 << " Type::allocator_type = " << typeid(Type::allocator_type).name());
+                REQUIRE(typeid(std::tuple_element_t<0, decltype(args)>) == typeid(Type::allocator_type));
+                REQUIRE(pw::is_same_v<std::tuple_element_t<0, decltype(args)>, Type::allocator_type const&>);
+            }
+        }
+
+        WHEN("called with value argument")
+        {
+            auto counter_before = Type::getCounter();
+            auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42);
+
+            THEN("returns (allocator_arg, alloc, value)")
+            {
+                REQUIRE(std::tuple_size_v<decltype(args)> == 3);
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
+            }
+        }
+
+        WHEN("default constructor (with alloc argument)")
+        {
+            auto counter_before = Type::getCounter();
+            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+
+            THEN("returns (alloc)")
+            {
+                INFO(typeid(decltype(args)).name());
+                INFO(typeid(std::tuple_element_t<0, decltype(args)>).name());
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, decltype(alloc) const&>);
+                REQUIRE(std::tuple_size_v<decltype(args)> == 1);
+            }
+        }
+
+        WHEN("called with multiple arguments")
+        {
+            auto counter_before = Type::getCounter();
+            auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42, 10);
+
+            THEN("returns (allocator_arg, alloc, value, extra)")
+            {
+                REQUIRE(std::tuple_size_v<decltype(args)> == 4);
+                REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
+            }
+        }
+    }
+    GIVEN("A type that uses allocators with allocator_arg_t in first position")
+    {
+        using Type = pw::test::OpTrackerAllocatorFirst<pw::pmr::polymorphic_allocator<>>;
         Type::allocator_type alloc;
 
         WHEN("called with no additional arguments")

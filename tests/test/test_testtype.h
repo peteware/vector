@@ -6,6 +6,7 @@
 #include "test_optracker_allocator_none.h"
 #include "test_optracker_allocator_only.h"
 
+#include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/vector>
 #include <test_allocator_base.h>
 #include <test_permute.h>
@@ -41,10 +42,13 @@ using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::OpTrackerAllocatorNone>, std::vector<pw::test::OpTrackerAllocatorNone>>;
 using TestTypeListAllocatorOnly =
     std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, std::vector<pw::test::OpTrackerAllocatorOnly>>;
-using TestTypeListAllocatorFirst = std::tuple<pw::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>,
-                                              std::vector<pw::test::OpTrackerAllocatorFirst<allocator<int>>>>;
-using TestTypeListAllocatorLast  = std::tuple<pw::vector<pw::test::OpTrackerAllocatorLast<allocator<int>>>,
-                                              std::vector<pw::test::OpTrackerAllocatorLast<allocator<int>>>>;
+using PmrAllocator = pw::pmr::polymorphic_allocator<>;
+using TestTypeListAllocatorFirst =
+    std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>,
+               std::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
+using TestTypeListAllocatorLast =
+    std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>,
+               std::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>>;
 
 template<typename Type>
 void

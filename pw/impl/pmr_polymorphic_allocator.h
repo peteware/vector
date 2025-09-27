@@ -5,6 +5,7 @@
 #include <pw/impl/forward.h>
 #include <pw/impl/max_align.h>
 #include <pw/impl/pmr_memory_resource.h>
+#include <pw/impl/uninitialized_construct_using_allocator.h>
 
 namespace pw::pmr {
 

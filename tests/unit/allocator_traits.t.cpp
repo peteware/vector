@@ -1,3 +1,5 @@
+#include "pw/impl/pmr_polymorphic_allocator.h"
+
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
 
@@ -60,11 +62,13 @@ struct allocator_with_max_size : public allocator_base<Type>
 };
 
 } // namespace pw::test
+
 SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
 {
     GIVEN("An allocator and OpTrackerAllocatorFirst as Type")
     {
-        using Alloc = pw::allocator<int>;
+        //using Alloc = pw::test::allocator_base<int>;
+        using Alloc = pw::pmr::polymorphic_allocator<>;
         using Type  = pw::test::OpTrackerAllocatorFirst<Alloc>;
         Alloc alloc;
         WHEN("Pass alloc as first argument")
@@ -80,7 +84,7 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
             alignas(Type) std::byte storage[sizeof(Type)];
             auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
-            SKIP("Need to add construct() to allocator");
+            //SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
             {
@@ -94,7 +98,7 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
             alignas(Type) std::byte storage[sizeof(Type)];
             auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
-            SKIP("Need to add construct() to allocator");
+            //SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
             {
@@ -431,6 +435,34 @@ SCENARIO("allocator deallocate with is_constant_evaluated", "[allocator][dealloc
             THEN("allocation cycle works in constexpr context")
             {
                 REQUIRE(cycle_result == 300);
+            }
+        }
+    }
+}
+
+SCENARIO("allocator_traits::construct() calls allocator::construct()", "[traits][construct_called]")
+{
+    GIVEN("An allocator")
+    {
+        using Alloc = pw::test::allocator_base<int>;
+        using Type  = int;
+        Alloc                   alloc(33);
+        alignas(Type) std::byte storage[sizeof(Type)];
+        auto&                   obj = reinterpret_cast<Type&>(storage);
+        WHEN("Use allocator_traits<>::construct() to construct")
+        {
+            pw::allocator_traits<Alloc>::construct(alloc, &obj, 3);
+            THEN("we called the copy constructor with alloc")
+            {
+                REQUIRE(alloc.m_construct_calls == 1);
+            }
+        }
+        WHEN("allocator_base is called")
+        {
+            alloc.construct(&obj);
+            THEN("construct is called")
+            {
+                REQUIRE(alloc.m_construct_calls == 1);
             }
         }
     }

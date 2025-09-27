@@ -25,13 +25,12 @@ uses_allocator_construction_args(Alloc const& alloc, Args&&... args) noexcept
                        std::is_constructible_v<Type, std::allocator_arg_t, Alloc const&, Args...>)
     {
         return std::tuple<std::allocator_arg_t, Alloc const&, Args&&...>(
-            std::allocator_arg, alloc, std::forward<Args>(args)...);
+            std::allocator_arg, alloc, pw::forward<Args>(args)...);
     }
     else if constexpr (std::uses_allocator_v<remove_cv_t<Type>, Alloc> &&
                        std::is_constructible_v<Type, Args..., Alloc const&>)
     {
-        //return std::tuple<Args&&..., Alloc const&>(std::forward<Args>(args)..., alloc);
-        return std::forward_as_tuple(std::forward<Args>(args)..., alloc);
+        return std::forward_as_tuple(pw::forward<Args>(args)..., alloc);
     }
     else if constexpr (std::uses_allocator_v<Type, Alloc>)
     {

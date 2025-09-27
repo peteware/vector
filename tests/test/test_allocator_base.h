@@ -4,6 +4,7 @@
 #include <pw/impl/bool_type.h>
 #include <pw/impl/ptrdiff.h>
 #include <pw/impl/size.h>
+#include <pw/impl/uninitialized_construct_using_allocator.h>
 
 #include <iostream>
 
@@ -20,7 +21,8 @@ struct allocator_base
     using propagate_on_container_swap            = false_type;
     using is_always_equal                        = false_type;
 
-    int m_instance;
+    int m_instance                               = 0;
+    int m_construct_calls                        = 0;
 
     explicit allocator_base(int instance = 1);
     Type* allocate(size_type count);
@@ -55,7 +57,8 @@ template<class U, class... Args>
 void
 allocator_base<Type>::construct(U* obj, Args&&... args)
 {
-    uninitialized_construct_using_allocator(obj, *this, std::forward<Args>(args)...);
+    uninitialized_construct_using_allocator(obj, *this, pw::forward<Args>(args)...);
+    ++m_construct_calls;
 }
 
 template<class Type1, class Type2>
