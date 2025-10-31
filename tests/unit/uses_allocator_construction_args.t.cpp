@@ -21,30 +21,25 @@ SCENARIO("uses_allocator_construction_args for non-allocator-aware types",
 
         WHEN("called with no additional arguments")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc);
 
             THEN("returns args without allocator")
             {
                 REQUIRE(std::tuple_size_v<decltype(args)> == 0);
             }
         }
-
         WHEN("called with value argument")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc, 42);
 
             THEN("returns args with value")
             {
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
             }
         }
-
         WHEN("called with multiple arguments")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42, 10);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc, 42, 10);
 
             THEN("returns args with all arguments")
             {
@@ -64,8 +59,7 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
 
         WHEN("called with no additional arguments")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc);
 
             THEN("returns (allocator_arg, alloc)")
             {
@@ -78,11 +72,9 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(pw::is_same_v<std::tuple_element_t<0, decltype(args)>, Type::allocator_type const&>);
             }
         }
-
         WHEN("called with value argument")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc, 42);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc, 42);
 
             THEN("returns (allocator_arg, alloc, value)")
             {
@@ -90,11 +82,9 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
             }
         }
-
         WHEN("default constructor (with alloc argument)")
         {
-            auto counter_before = Type::getCounter();
-            auto args           = pw::uses_allocator_construction_args<Type>(alloc);
+            auto args = pw::uses_allocator_construction_args<Type>(alloc);
 
             THEN("returns (alloc)")
             {
@@ -104,7 +94,6 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
             }
         }
-
         WHEN("called with multiple arguments")
         {
             auto counter_before = Type::getCounter();
@@ -138,7 +127,6 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(pw::is_same_v<std::tuple_element_t<0, decltype(args)>, Type::allocator_type const&>);
             }
         }
-
         WHEN("called with value argument")
         {
             auto counter_before = Type::getCounter();
@@ -150,7 +138,6 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(std::is_same_v<std::tuple_element_t<0, decltype(args)>, std::allocator_arg_t>);
             }
         }
-
         WHEN("default constructor (with alloc argument)")
         {
             auto counter_before = Type::getCounter();
@@ -164,7 +151,6 @@ SCENARIO("uses_allocator_construction_args for allocator-first types",
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
             }
         }
-
         WHEN("called with multiple arguments")
         {
             auto counter_before = Type::getCounter();
@@ -197,7 +183,6 @@ SCENARIO("uses_allocator_construction_args for allocator-last types",
                 REQUIRE(std::tuple_size_v<decltype(args)> == 1);
             }
         }
-
         WHEN("called with value argument")
         {
             auto counter_before = Type::getCounter();
@@ -208,7 +193,6 @@ SCENARIO("uses_allocator_construction_args for allocator-last types",
                 REQUIRE(std::tuple_size_v<decltype(args)> == 2);
             }
         }
-
         WHEN("called with multiple arguments")
         {
             auto counter_before = Type::getCounter();
@@ -268,7 +252,6 @@ SCENARIO("uses_allocator_construction_args behavior verification with OpTracker"
                 REQUIRE(diff.getAllocatorOnly() == 0);
             }
         }
-
         WHEN("constructing OpTrackerAllocatorFirst with arguments")
         {
             using Type          = pw::test::OpTrackerAllocatorFirst<TestAllocator>;
