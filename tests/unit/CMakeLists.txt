@@ -33,7 +33,7 @@ add_executable(unittest
         vector_capacity.t.cpp
         vector_clear.t.cpp
         vector_compare.t.cpp
-        #        vector_constructor.t.cpp
+        vector_constructor.t.cpp
         vector_constructor_exception_safety.t.cpp
         vector_emplace.t.cpp
         vector_emplace_back.t.cpp

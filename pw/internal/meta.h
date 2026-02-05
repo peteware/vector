@@ -10,9 +10,9 @@
 
 namespace pw::internal {
 
-template<typename Type>
-using get_const_void_pointer = Type::const_void_pointer;
-
+// template<typename Type>
+// using get_const_void_pointer = Type::const_void_pointer;
+//
 template<typename Type>
 using get_difference_type = Type::difference_type;
 

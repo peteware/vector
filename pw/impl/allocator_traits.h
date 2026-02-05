@@ -8,7 +8,9 @@
 #include <pw/impl/numeric_limits.h>
 #include <pw/impl/pointer_traits.h>
 #include <pw/impl/uninitialized_construct_using_allocator.h>
+#include <pw/impl/void.h>
 #include <pw/internal/detect_prop.h>
+#include <pw/internal/meta.h>
 
 namespace pw {
 
@@ -53,6 +55,23 @@ struct allocator_traits
     static constexpr void      deallocate(allocator_type& alloc, pointer p, size_type count);
     static constexpr Alloc     select_on_container_copy_construction(Alloc const& alloc);
     static constexpr size_type max_size(Alloc const& alloc);
+
+    // template<typename U, typename = void>
+    // struct rebind_alloc_impl
+    // {
+    //     using type = internal::rebind_first_arg<Alloc, U>::type;
+    // };
+    //
+    // template<typename U>
+    // struct rebind_alloc_impl<U, void_t<typename Alloc::template rebind<U>::other>>
+    // {
+    //     using type = Alloc::template rebind<U>::other;
+    // };
+    //
+    // template<typename Type>
+    // using rebind_alloc = rebind_alloc_impl<Type>::type;
+    // template<typename Type>
+    // using rebind_traits = allocator_traits<rebind_alloc<Type>>;
 
     template<class Type, class... Args>
     static constexpr void construct(allocator_type&, Type* p, Args&&... args);

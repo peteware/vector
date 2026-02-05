@@ -15,6 +15,7 @@ struct OpTrackerAllocatorLast : public OpTracker
 
     OpTrackerAllocatorLast();
     explicit OpTrackerAllocatorLast(allocator_type const& alloc);
+    OpTrackerAllocatorLast(OpTrackerAllocatorLast const& other, allocator_type const& alloc);
     OpTrackerAllocatorLast(value_type const& value, allocator_type const& alloc);
     OpTrackerAllocatorLast(value_type const& value, int extra, allocator_type const& alloc);
 
@@ -47,6 +48,15 @@ OpTrackerAllocatorLast<Alloc>::OpTrackerAllocatorLast(allocator_type const& allo
     , m_allocator(alloc)
 {
     s_opCounter.addDefaultConstructor().addAllocatorLast();
+}
+
+template<typename Alloc>
+OpTrackerAllocatorLast<Alloc>::OpTrackerAllocatorLast(OpTrackerAllocatorLast const& other,
+                                                      allocator_type const&         alloc)
+    : OpTracker(other)
+    , m_allocator(alloc)
+{
+    s_opCounter.addCopyConstructorAlloc().addAllocatorLast();
 }
 
 template<typename Alloc>

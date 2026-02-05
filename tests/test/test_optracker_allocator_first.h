@@ -17,6 +17,7 @@ struct OpTrackerAllocatorFirst : public OpTracker
 
     OpTrackerAllocatorFirst();
     explicit OpTrackerAllocatorFirst(allocator_type const& alloc);
+    OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, OpTrackerAllocatorFirst const& other);
     OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, value_type const& value);
     OpTrackerAllocatorFirst(std::allocator_arg_t,
                             allocator_type const& alloc,
@@ -52,6 +53,16 @@ OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst(allocator_type const& al
     , m_allocator(alloc)
 {
     s_opCounter.addCopyConstructorAlloc();
+}
+
+template<typename Alloc>
+OpTrackerAllocatorFirst<Alloc>::OpTrackerAllocatorFirst(std::allocator_arg_t,
+                                                        allocator_type const&          alloc,
+                                                        OpTrackerAllocatorFirst const& other)
+    : OpTracker(other)
+    , m_allocator(alloc)
+{
+    s_opCounter.addCopyConstructorAlloc().addAllocatorFirst();
 }
 
 template<typename Alloc>

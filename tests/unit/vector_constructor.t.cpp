@@ -994,7 +994,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
             {
                 // SKIP("Need to use allocator with construct()");
                 REQUIRE(v.size() == count);
-                INFO(diff);
+                INFO("diff is = " << diff);
                 REQUIRE(diff.getCopyConstructorAlloc() >= static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
@@ -1047,7 +1047,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - OpTrackerAllocatorLast"
             {
                 SKIP("Need to use allocator with construct()");
                 REQUIRE(v.size() == count);
-                INFO(diff);
+                INFO("counter diff = " << diff);
                 REQUIRE(diff.getAllocatorLast() >= static_cast<int>(count));
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorFirst() == 0);
