@@ -479,8 +479,8 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         WHEN("constructed from input iterator (skipped)")
         {
             /*
-             * Moved this test to phase3 as an simple implementation
-             * of this is to use `push_back()` to insert each item
+             * Moved this test to phase3 as n simple implementation
+             * of this is to use `push_back()` to insert each item,
              * but I didn't want to have to implement `push_back()`
              * at this point.
              */
@@ -903,8 +903,8 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
                         pw::test::TestTypeListNoAllocator)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-    using size_type  = typename Vector::size_type;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
 
     GIVEN("vector constructed with NoAllocatorType elements")
     {
@@ -925,7 +925,6 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
                 REQUIRE(diff.getAllocatorOnly() == 0);
             }
         }
-
         WHEN("constructing with count and value constructor")
         {
             auto                counter_before = value_type::getCounter();
@@ -954,8 +953,8 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
                         pw::test::TestTypeListAllocatorFirst)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-    using size_type  = typename Vector::size_type;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
 
     GIVEN("vector constructed with AllocatorFirstType elements")
     {
@@ -978,7 +977,6 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
                 REQUIRE(diff.getAllocatorOnly() == 0);
             }
         }
-
         WHEN("constructing with count and value constructor")
         {
             constexpr size_type count          = 5;
@@ -1009,8 +1007,8 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - OpTrackerAllocatorLast"
                         pw::test::TestTypeListAllocatorLast)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
-    using size_type  = typename Vector::size_type;
+    using value_type = Vector::value_type;
+    using size_type  = Vector::size_type;
 
     GIVEN("vector constructed with OpTrackerAllocatorLast elements")
     {
@@ -1033,7 +1031,6 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - OpTrackerAllocatorLast"
                 REQUIRE(diff.getAllocatorOnly() == 0);
             }
         }
-
         WHEN("constructing with count and value constructor")
         {
             auto                counter_before = value_type::getCounter();
@@ -1062,7 +1059,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
                         pw::test::TestTypeListAllocatorOnly)
 {
     using Vector     = TestType;
-    using value_type = typename Vector::value_type;
+    using value_type = Vector::value_type;
 
     GIVEN("vector constructed with AllocatorOnlyType elements")
     {
