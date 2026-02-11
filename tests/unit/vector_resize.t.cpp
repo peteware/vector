@@ -632,6 +632,7 @@ TEST_CASE("resize() method", "[vector][resize][modifiers]")
     {
         WHEN("resize() is called")
         {
+            // TODO: Seems wrong place to use test::allocator_move_assignment
             using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 

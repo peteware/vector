@@ -10,6 +10,7 @@ struct OpTrackerAllocatorNone : public OpTracker
     static OpCounter& getCounter();
 
     OpTrackerAllocatorNone();
+    OpTrackerAllocatorNone(OpTrackerAllocatorNone const& copy);
     explicit OpTrackerAllocatorNone(value_type const& value);
     OpTrackerAllocatorNone(value_type const& value, int extra);
 

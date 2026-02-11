@@ -1,9 +1,7 @@
 #include <pw/impl/copy.h>
 
-#include <test_optracker_copyconstructible.h>
 #include <test_optracker_defaultcopyconstructible.h>
 // ReSharper disable once CppUnusedIncludeDirective
-#include <pw/internal/rsize_fix.h>
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -8,7 +8,6 @@
 #include <test_optracker_allocator_last.h>
 #include <test_optracker_allocator_none.h>
 #include <test_optracker_allocator_only.h>
-#include <test_permute.h>
 #include <test_throwing_allocator.h>
 #include <test_throwingtype.h>
 
@@ -40,14 +39,20 @@ using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<T
 using TestTypeListNoAllocator =
     std::tuple<vector<pw::test::OpTrackerAllocatorNone>, std::vector<pw::test::OpTrackerAllocatorNone>>;
 using TestTypeListAllocatorOnly =
-    std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, std::vector<pw::test::OpTrackerAllocatorOnly>>;
+    std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, vector<pw::test::OpTrackerAllocatorOnly>
+               // This was failing to compile on MacOS
+               // std::vector<pw::test::OpTrackerAllocatorOnly>
+               >;
 using PmrAllocator = pw::pmr::polymorphic_allocator<>;
 using TestTypeListAllocatorFirst =
     std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>,
-               std::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
-using TestTypeListAllocatorLast =
-    std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>,
-               std::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>>;
+               pw::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
+// MacOS has trouble with this:
+// std::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
+using TestTypeListAllocatorLast = std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>,
+                                             pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>>;
+// MacOS has trouble wiht this:
+// std::pmr::vector < pw::test::OpTrackerAllocatorLast < PmrAllocator >>> ;
 
 template<typename Type>
 void

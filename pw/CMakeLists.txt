@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME}
         type_traits
         utility
         vector
+        internal/has_member_function.h
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

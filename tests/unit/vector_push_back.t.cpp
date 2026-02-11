@@ -405,6 +405,7 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
         }
         WHEN("push_back() with different allocators")
         {
+            // TODO: Seems wrong place to be using test::allocator_move_assignment
             using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 

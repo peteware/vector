@@ -1,8 +1,6 @@
 #ifndef PW_TEST_THROWINGTYPE_H
 #define PW_TEST_THROWINGTYPE_H
 
-#include <stdexcept>
-
 namespace pw::test {
 
 // Helper class that throws on construction after N instances

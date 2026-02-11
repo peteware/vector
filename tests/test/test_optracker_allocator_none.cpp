@@ -16,6 +16,12 @@ OpTrackerAllocatorNone::OpTrackerAllocatorNone()
     s_opCounter.addDefaultConstructor().addNoAllocator();
 }
 
+OpTrackerAllocatorNone::OpTrackerAllocatorNone(OpTrackerAllocatorNone const& copy)
+    : OpTracker(s_opCounter)
+{
+    s_opCounter.addNoAllocator();
+}
+
 OpTrackerAllocatorNone::OpTrackerAllocatorNone(value_type const& value)
     : OpTracker(s_opCounter, value)
 {

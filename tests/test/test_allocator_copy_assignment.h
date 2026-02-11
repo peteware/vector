@@ -5,6 +5,15 @@
 #include <test_allocator_base.h>
 
 namespace pw::test {
+
+/**
+ * Same as `allocator_base` but sets `propogate_on_container_copy_assignment` to true
+ *
+ * You should initialize it with a value other than -2 (the default)
+ * and then check that m_instance is different
+ *
+ * @tparam Type What is being allocated
+ */
 template<class Type>
 struct allocator_copy_assignment : allocator_base<Type>
 {

@@ -1,5 +1,7 @@
 #include <test_throwingtype.h>
 
+#include <stdexcept> // Needed for std::runtime_error
+
 namespace pw::test {
 
 int ThrowingType::construction_count;

@@ -1,6 +1,7 @@
 /*
  * Add all of the includes as a sanity check
  */
+// ReSharper disable CppUnusedIncludeDirective
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/cstddef>

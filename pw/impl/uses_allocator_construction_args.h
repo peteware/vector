@@ -1,12 +1,10 @@
 #ifndef PW_USES_ALLOCATOR_CONSTRUCTION_ARGS_H
 #define PW_USES_ALLOCATOR_CONSTRUCTION_ARGS_H
 
-#include <iostream>
 #include <pw/impl/forward.h>
 #include <pw/impl/remove_cv.h>
 
 #include <memory>
-#include <ostream>
 
 namespace pw {
 

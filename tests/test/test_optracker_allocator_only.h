@@ -1,8 +1,7 @@
 #ifndef INCLUDED_PW_TEST_OPTRACKER_ALLOCATORONLY_H
 #define INCLUDED_PW_TEST_OPTRACKER_ALLOCATORONLY_H
 
-#include <memory>
-#include <pw/impl/allocator.h>
+#include <memory> // needed for std::uses_allocator
 #include <test_optracker.h>
 
 namespace pw::test {
@@ -14,6 +13,7 @@ struct OpTrackerAllocatorOnly : public OpTracker
     OpTrackerAllocatorOnly() = delete;
     template<class Alloc>
     explicit OpTrackerAllocatorOnly(Alloc const& alloc);
+    ~OpTrackerAllocatorOnly() = default;
 
 private:
     static OpCounter s_opCounter;

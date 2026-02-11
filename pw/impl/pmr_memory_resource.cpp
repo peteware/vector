@@ -3,8 +3,6 @@
 #include <pw/impl/memory_resource_null.h>
 #include <pw/impl/pmr_memory_resource.h>
 
-#include <utility>
-
 namespace pw::pmr {
 
 void*

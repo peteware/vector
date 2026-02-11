@@ -1,7 +1,6 @@
 #ifndef INCLUDED_PW_INTERNAL_STORAGE_H
 #define INCLUDED_PW_INTERNAL_STORAGE_H
 
-#include <functional>
 #include <pw/impl/addressof.h>
 #include <pw/impl/allocator.h>
 #include <pw/impl/allocator_traits.h>
@@ -9,7 +8,9 @@
 #include <pw/impl/max.h>
 #include <pw/impl/move.h>
 #include <pw/impl/swap.h>
-#include <pw/impl/uninitialized_move.h>
+#include <pw/impl/uninitialized_construct_using_allocator.h>
+
+#include <functional>
 
 namespace pw::internal {
 
@@ -260,7 +261,8 @@ template<class... Args>
 constexpr void
 Storage<Type, Allocator>::construct(iterator where, Args&&... args)
 {
-    allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*where), pw::forward<Args>(args)...);
+    pw::uninitialized_construct_using_allocator(pw::addressof(*where), m_alloc, std::forward<Args>(args)...);
+    //allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*where), pw::forward<Args>(args)...);
 }
 
 template<class Type, class Allocator>

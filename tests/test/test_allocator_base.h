@@ -10,6 +10,19 @@
 
 namespace pw::test {
 
+/**
+ * Simple allocator for testing
+ *
+ * Uses `operator new` and `operator delete` to allocate
+ * and has `m_instance` to differentiate 2 `allocator_base`
+ * and `m_construct_calls` to count how often `allocator_base::construct()`
+ * is called
+ *
+ * All the `propogate_on_container_*` are set to `false` and
+ * `is_always_equal` is false.
+ *
+ * @tparam Type What is being allocated
+ */
 template<class Type>
 struct allocator_base
 {
@@ -29,7 +42,7 @@ struct allocator_base
     void  deallocate(Type* ptr, size_type count);
 
     template<class T, class... Args>
-    void construct(T* p, Args&&... args);
+    void construct(T* obj, Args&&... args);
 };
 
 template<class Type>
@@ -53,9 +66,9 @@ allocator_base<Type>::deallocate(Type* ptr, size_type)
 }
 
 template<class Type>
-template<class U, class... Args>
+template<class T, class... Args>
 void
-allocator_base<Type>::construct(U* obj, Args&&... args)
+allocator_base<Type>::construct(T* obj, Args&&... args)
 {
     uninitialized_construct_using_allocator(obj, *this, pw::forward<Args>(args)...);
     ++m_construct_calls;
@@ -72,7 +85,8 @@ template<class Type>
 std::ostream&
 operator<<(std::ostream& out, allocator_base<Type> const& alloc)
 {
-    out << "allocator_base<" << typeid(Type).name() << "> instance " << alloc.m_instance;
+    out << "allocator_base<" << typeid(Type).name() << "> instance " << alloc.m_instance
+        << " construct = " << alloc.m_construct_calls << "; ";
     return out;
 }
 } // namespace pw::test

@@ -2,15 +2,13 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
 #include <pw/impl/construct_at.h>
+#include <pw/impl/declval.h>
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
 #include <pw/impl/numeric_limits.h>
 #include <pw/impl/pointer_traits.h>
-#include <pw/impl/uninitialized_construct_using_allocator.h>
-#include <pw/impl/void.h>
 #include <pw/internal/detect_prop.h>
-#include <pw/internal/meta.h>
 
 namespace pw {
 
@@ -18,8 +16,8 @@ template<class, class Alloc, class... Args>
 inline bool constexpr has_construct_impl = false;
 
 template<class Alloc, class... Args>
-inline bool constexpr has_construct_impl<decltype((void)std::declval<Alloc>().construct(
-                                             std::declval<Args>()...)),
+inline bool constexpr has_construct_impl<decltype((void)pw::declval<Alloc>().construct(
+                                             pw::declval<Args>()...)),
                                          Alloc,
                                          Args...> = true;
 template<class Alloc, class... Args>
@@ -154,7 +152,7 @@ allocator_traits<Alloc>::construct(allocator_type& alloc, Type* p, Args&&... arg
 {
     if constexpr (has_construct_v<allocator_type, Type*, Args...>)
     {
-        alloc.construct(p, std::forward<Args>(args)...);
+        alloc.construct(p, pw::forward<Args>(args)...);
     }
     else
     {

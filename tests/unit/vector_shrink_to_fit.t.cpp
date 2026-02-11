@@ -193,6 +193,7 @@ TEST_CASE("shrink_to_fit() method", "[vector][shrink_to_fit][capacity]")
     {
         WHEN("shrink_to_fit() is called")
         {
+            // TODO: Seems wrong place to use test::allocator_move_assignment
             using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 

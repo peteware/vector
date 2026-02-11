@@ -1,6 +1,6 @@
-#include <pw/algorithm>
 #include <pw/vector>
-#include <test_allocator_move_assignment.h>
+
+#include <pw/impl/equal.h>
 #include <test_testtype.h>
 #include <test_values.h>
 

@@ -8,6 +8,22 @@
 
 namespace pw::test {
 
+/**
+ * Base class for a value type that counts operations
+ *
+ * See OpCounter for the action operations but a sampling:
+ * - Default Constructor
+ * - Copy Constructor
+ * - Assignment operator
+ * - Destructor
+ * - Comparison operators
+ * - etc
+ *
+ * The derived classes are used to check that a container implementation
+ * is calling the correct operators the correct number of times.  For example,
+ * with N elements the assignment operator should call the destructor
+ * N times and the copy constructor M times.
+ */
 struct OpTracker
 {
     using value_type = int;

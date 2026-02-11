@@ -4,7 +4,6 @@
 #include <test_input_iterator.h>
 #include <test_testtype.h>
 
-#include <initializer_list>
 #include <tuple>
 #include <vector>
 
@@ -97,9 +96,9 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         Vector                          valloc(alloc);
 
         /*
-         * The phase2 tests are better for as they use the allocator
+         * The phase2 tests are better as they use the allocator
          * to allocate memory and check that the allocator is used.
-         * This effectively just checks the constructor exists.
+         * This just checks the constructor exists.
          */
         THEN("the vector is empty")
         {
@@ -936,7 +935,6 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - NoAllocatorType",
 
             THEN("allocator is not passed to value_type constructor")
             {
-                SKIP("need to use allocator with construct()");
                 INFO("diff = " << diff);
                 REQUIRE(v.size() == count);
                 REQUIRE(diff.getNoAllocator() >= static_cast<int>(count));
@@ -968,7 +966,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorFirstType",
 
             THEN("allocator is passed as first argument to value_type constructor")
             {
-                SKIP("need to use allocator with construct()");
+                // SKIP("need to use allocator with construct()");
                 REQUIRE(v.size() == count);
                 INFO("diff: " << diff);
                 REQUIRE(diff.getCopyConstructorAlloc() == static_cast<int>(count));
@@ -1022,7 +1020,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - OpTrackerAllocatorLast"
 
             THEN("allocator is passed as last argument to value_type constructor")
             {
-                SKIP("need to use allocator with construct()");
+                //SKIP("need to use allocator with construct()");
                 REQUIRE(v.size() == count);
                 INFO(diff);
                 REQUIRE(diff.getAllocatorLast() == static_cast<int>(count));
@@ -1042,7 +1040,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - OpTrackerAllocatorLast"
 
             THEN("allocator is passed as last argument to value_type constructor")
             {
-                SKIP("Need to use allocator with construct()");
+                //SKIP("Need to use allocator with construct()");
                 REQUIRE(v.size() == count);
                 INFO("counter diff = " << diff);
                 REQUIRE(diff.getAllocatorLast() >= static_cast<int>(count));
@@ -1076,7 +1074,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
             THEN("allocator is passed as first argument to value_type constructor")
             {
                 REQUIRE(v.size() == count);
-                REQUIRE(diff.getAllocatorFirst() == static_cast<int>(count));
+                REQUIRE(diff.getAllocatorFirst() == 0);
                 REQUIRE(diff.getNoAllocator() == 0);
                 REQUIRE(diff.getAllocatorLast() == 0);
                 REQUIRE(diff.getAllocatorOnly() == static_cast<int>(count));
@@ -1084,4 +1082,3 @@ TEMPLATE_LIST_TEST_CASE("Constructor allocator passing - AllocatorOnlyType",
         }
     }
 }
-

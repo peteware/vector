@@ -1,5 +1,5 @@
 #include <pw/impl/uninitialized_copy.h>
-#include <pw/internal/rsize_fix.h>
+
 #include <tests/test/test_throwingtype.h>
 
 #include <catch2/catch_test_macros.hpp>

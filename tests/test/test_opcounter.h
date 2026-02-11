@@ -7,6 +7,38 @@ namespace pw::test {
 
 /**
  * Collect calls to constructors
+ *
+ * You are responsible for incrementing/decrementing the
+ * OpCounter.
+ *
+ * To use this you'll want to share an instance of OpCounter
+ * across all the instances of a class.  The OpTracker base
+ * class uses a reference to the OpCounter. The classes
+ * derived from OpTracker have a static instances of
+ * OpCounter that is passed to the OpCounter constructor.
+ *
+ * - Default constructor
+ * - Copy constructor
+ * - Move constructor
+ * - Default constructor with allocator
+ * - Copy constructor with allocator
+ * - Any other constructor
+ * - destructors
+ * - Calls to operator=()
+ * - Calls to operator=()
+ * - Calls to operator+=()
+ * - Calls to operator-=()
+ * - Calls to operator++()
+ * - Calls to operator--()
+ * - Calls to operator+()
+ * - Calls to operator-()
+ * - Calls to operator==()
+ * - Calls to operator!=()
+ * - Calls to operator<()
+ * - Allocator passed as first argument
+ * - Allocator passed as last argument
+ * - Only allocator passed
+ * - No allocator passed
  */
 class OpCounter
 {

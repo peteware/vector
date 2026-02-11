@@ -16,8 +16,11 @@ struct OpTrackerAllocatorFirst : public OpTracker
     static OpCounter& getCounter();
 
     OpTrackerAllocatorFirst();
+    OpTrackerAllocatorFirst(OpTrackerAllocatorFirst const&) = delete;
     explicit OpTrackerAllocatorFirst(allocator_type const& alloc);
-    OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, OpTrackerAllocatorFirst const& other);
+    OpTrackerAllocatorFirst(std::allocator_arg_t,
+                            allocator_type const&          alloc,
+                            OpTrackerAllocatorFirst const& other);
     OpTrackerAllocatorFirst(std::allocator_arg_t, allocator_type const& alloc, value_type const& value);
     OpTrackerAllocatorFirst(std::allocator_arg_t,
                             allocator_type const& alloc,

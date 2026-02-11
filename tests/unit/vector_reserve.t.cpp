@@ -208,6 +208,7 @@ TEST_CASE("reserve() method", "[vector][reserve][capacity]")
     {
         WHEN("reserve() is called")
         {
+            // TODO: Seems wrong place to be using test::allocator move_assignment
             using Allocator = pw::test::allocator_move_assignment<int>;
             using Vector    = pw::vector<int, Allocator>;
 

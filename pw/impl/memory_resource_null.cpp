@@ -1,7 +1,6 @@
 #include <pw/impl/memory_resource_null.h>
 
 #include <new>
-#include <stdexcept>
 
 namespace pw::internal {
 

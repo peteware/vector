@@ -65,5 +65,4 @@ struct rebind_ptr<Type, U, void_t<typename Type::template rebind<U>>>
 };
 
 } // End of namespace pw::internal
-
 #endif /* INCLUDED_PW_INTERNAL_META_H */
