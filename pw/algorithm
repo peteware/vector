@@ -9,7 +9,7 @@
 #include <pw/impl/algorithm/lexicographical_compare.h>
 #include <pw/impl/algorithm/max.h>
 #include <pw/impl/algorithm/min.h>
-#include <pw/impl/algorithm/move_alg.h>
+#include <pw/impl/algorithm/move.h>
 #include <pw/impl/algorithm/move_backward.h>
 
 #endif /* INCLUDED_PW_ALGORITHM  */
