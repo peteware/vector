@@ -35,6 +35,9 @@ install(FILES
 install(FILES
         impl/algorithm/copy.h
         impl/algorithm/equal.h
+        impl/algorithm/fill.h
+        impl/algorithm/fill_n.h
+        impl/algorithm/for_each.h
         impl/algorithm/lexicographical_compare.h
         impl/algorithm/max.h
         impl/algorithm/min.h
@@ -46,9 +49,6 @@ install(FILES
         impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
-        impl/fill.h
-        impl/fill_n.h
-        impl/for_each.h
         impl/initializer_list.h
         impl/iterator/advance.h
         impl/iterator/back_insert_iterator.h
