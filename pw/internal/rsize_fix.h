@@ -8,7 +8,7 @@
 #ifndef PW_INTERNAL_RSIZE_FIX_H
 #define PW_INTERNAL_RSIZE_FIX_H
 
-#include <pw/impl/size.h>
+#include <pw/impl/cstddef/size.h>
 
 #if __has_include(<sys/_types/_rsize_t.h>)
 #include <sys/_types/_rsize_t.h>

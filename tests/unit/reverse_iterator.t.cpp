@@ -1,5 +1,5 @@
+#include <pw/impl/cstddef/size.h>
 #include <pw/impl/reverse_iterator.h>
-#include <pw/impl/size.h>
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <pw/internal/rsize_fix.h>

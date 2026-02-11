@@ -1,7 +1,7 @@
 #ifndef PW_PMR_MEMORY_RESOURCE_H
 #define PW_PMR_MEMORY_RESOURCE_H
 
-#include <pw/impl/size.h>
+#include <pw/impl/cstddef/size.h>
 namespace pw::pmr {
 
 class memory_resource

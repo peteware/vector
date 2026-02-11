@@ -86,11 +86,11 @@ install(FILES
         impl/pmr_polymorphic_allocator.h
         impl/pointer_traits.h
         impl/prev.h
-        impl/ptrdiff.h
+        impl/cstddef/ptrdiff.h
         impl/remove_cv.h
         impl/remove_reference.h
         impl/reverse_iterator.h
-        impl/size.h
+        impl/cstddef/size.h
         impl/swap.h
         impl/uninitialized_construct_using_allocator.h
         impl/uninitialized_copy.h

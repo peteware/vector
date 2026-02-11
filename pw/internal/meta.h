@@ -4,7 +4,7 @@
 // * Meta
 // ** Includes
 // *** pw includes
-#include <pw/impl/ptrdiff.h>
+#include <pw/impl/cstddef/ptrdiff.h>
 #include <pw/impl/void.h>
 #include <pw/internal/extract_or.h>
 

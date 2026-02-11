@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_CSTDDEF_H // -*- c++ -*-
 #define INCLUDED_PW_CSTDDEF_H
 
-#include <pw/impl/ptrdiff.h>
-#include <pw/impl/size.h>
+#include <pw/impl/cstddef/ptrdiff.h>
+#include <pw/impl/cstddef/size.h>
 
 #endif /*   INCLUDED_PW_CSTDDEF_H */

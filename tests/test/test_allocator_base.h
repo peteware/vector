@@ -2,8 +2,8 @@
 #define INCLUDED_PW_TEST_ALLOCATOR_BASE_H
 
 #include <pw/impl/bool_type.h>
-#include <pw/impl/ptrdiff.h>
-#include <pw/impl/size.h>
+#include <pw/impl/cstddef/ptrdiff.h>
+#include <pw/impl/cstddef/size.h>
 #include <pw/impl/uninitialized_construct_using_allocator.h>
 
 #include <iostream>

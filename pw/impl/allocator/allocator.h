@@ -2,9 +2,9 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_H
 
 #include <pw/impl/bool_type.h>
+#include <pw/impl/cstddef/ptrdiff.h>
+#include <pw/impl/cstddef/size.h>
 #include <pw/impl/is_constant_evaluated.h>
-#include <pw/impl/ptrdiff.h>
-#include <pw/impl/size.h>
 
 namespace pw {
 
