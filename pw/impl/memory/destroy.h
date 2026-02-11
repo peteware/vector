@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_IMPL_DESTROY_H
 #define INCLUDED_PW_IMPL_DESTROY_H
 
-#include <pw/impl/addressof.h>
-#include <pw/impl/destroy_at.h>
+#include <pw/impl/memory/addressof.h>
+#include <pw/impl/memory/destroy_at.h>
 
 namespace pw {
 

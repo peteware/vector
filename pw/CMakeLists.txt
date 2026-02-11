@@ -35,7 +35,7 @@ install(FILES
 install(FILES
         impl/add_const.h
         impl/add_rvalue_reference.h
-        impl/addressof.h
+        impl/memory/addressof.h
         impl/advance.h
         impl/allocator/allocator.h
         impl/allocator_traits.h
@@ -48,8 +48,8 @@ install(FILES
         impl/construct_at.h
         impl/algorithm/copy.h
         impl/declval.h
-        impl/destroy.h
-        impl/destroy_at.h
+        impl/memory/destroy.h
+        impl/memory/destroy_at.h
         impl/distance.h
         impl/algorithm/equal.h
         impl/exchange.h
@@ -84,7 +84,7 @@ install(FILES
         impl/numeric_limits.h
         impl/pmr_memory_resource.h
         impl/pmr_polymorphic_allocator.h
-        impl/pointer_traits.h
+        impl/memory/pointer_traits.h
         impl/prev.h
         impl/cstddef/ptrdiff.h
         impl/remove_cv.h
@@ -92,13 +92,13 @@ install(FILES
         impl/reverse_iterator.h
         impl/cstddef/size.h
         impl/swap.h
-        impl/uninitialized_construct_using_allocator.h
-        impl/uninitialized_copy.h
-        impl/uninitialized_default_construct.h
-        impl/uninitialized_fill.h
-        impl/uninitialized_move.h
-        impl/uninitialized_value_construct.h
-        impl/uses_allocator_construction_args.h
+        impl/memory/uninitialized_construct_using_allocator.h
+        impl/memory/uninitialized_copy.h
+        impl/memory/uninitialized_default_construct.h
+        impl/memory/uninitialized_fill.h
+        impl/memory/uninitialized_move.h
+        impl/memory/uninitialized_value_construct.h
+        impl/memory/uses_allocator_construction_args.h
         impl/vector_decl.h
         impl/vector_defn.h
         impl/vector_defn_empty.h

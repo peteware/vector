@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_IMPL_POINTER_TRAITS_H
 #define INCLUDED_PW_IMPL_POINTER_TRAITS_H
 
-#include <pw/impl/addressof.h>
 #include <pw/impl/cstddef/ptrdiff.h>
+#include <pw/impl/memory/addressof.h>
 #include <pw/internal/meta.h>
 
 namespace pw {

@@ -1,14 +1,14 @@
 #ifndef INCLUDED_PW_INTERNAL_STORAGE_H
 #define INCLUDED_PW_INTERNAL_STORAGE_H
 
-#include <pw/impl/addressof.h>
 #include <pw/impl/algorithm/max.h>
 #include <pw/impl/allocator/allocator.h>
 #include <pw/impl/allocator_traits.h>
-#include <pw/impl/destroy.h>
+#include <pw/impl/memory/addressof.h>
+#include <pw/impl/memory/destroy.h>
+#include <pw/impl/memory/uninitialized_construct_using_allocator.h>
 #include <pw/impl/move.h>
 #include <pw/impl/swap.h>
-#include <pw/impl/uninitialized_construct_using_allocator.h>
 
 #include <functional>
 

@@ -1,5 +1,5 @@
 #include <pw/impl/algorithm/equal.h>
-#include <pw/impl/uninitialized_move.h>
+#include <pw/impl/memory/uninitialized_move.h>
 #include <test_opcounter.h>
 #include <test_optracker_copyconstructible.h>
 #include <test_throwingtype.h>

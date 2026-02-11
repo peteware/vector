@@ -1,4 +1,4 @@
-#include <pw/impl/uninitialized_copy.h>
+#include <pw/impl/memory/uninitialized_copy.h>
 
 #include <tests/test/test_throwingtype.h>
 

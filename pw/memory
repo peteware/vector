@@ -3,10 +3,10 @@
 
 #include <pw/impl/allocator/allocator.h>
 #include <pw/impl/allocator_traits.h>
-#include <pw/impl/destroy.h>
-#include <pw/impl/destroy_at.h>
-#include <pw/impl/pointer_traits.h>
-#include <pw/impl/uninitialized_construct_using_allocator.h>
-#include <pw/impl/uses_allocator_construction_args.h>
+#include <pw/impl/memory/destroy.h>
+#include <pw/impl/memory/destroy_at.h>
+#include <pw/impl/memory/pointer_traits.h>
+#include <pw/impl/memory/uninitialized_construct_using_allocator.h>
+#include <pw/impl/memory/uses_allocator_construction_args.h>
 
 #endif /* INCLUDED_PW_MEMORY_H */

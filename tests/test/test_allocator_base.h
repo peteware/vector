@@ -4,7 +4,7 @@
 #include <pw/impl/bool_type.h>
 #include <pw/impl/cstddef/ptrdiff.h>
 #include <pw/impl/cstddef/size.h>
-#include <pw/impl/uninitialized_construct_using_allocator.h>
+#include <pw/impl/memory/uninitialized_construct_using_allocator.h>
 
 #include <iostream>
 

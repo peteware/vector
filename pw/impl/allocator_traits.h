@@ -6,8 +6,8 @@
 #include <pw/impl/forward.h>
 #include <pw/impl/is_empty.h>
 #include <pw/impl/make_unsigned.h>
+#include <pw/impl/memory/pointer_traits.h>
 #include <pw/impl/numeric_limits.h>
-#include <pw/impl/pointer_traits.h>
 #include <pw/internal/detect_prop.h>
 
 namespace pw {
