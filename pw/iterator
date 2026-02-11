@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_ITERATOR // -*- c++ -*-
 #define INCLUDED_PW_ITERATOR
 
-#include <pw/impl/back_insert_iterator.h>
-#include <pw/impl/back_inserter.h>
-#include <pw/impl/iterator_tag.h>
+#include <pw/impl/iterator/back_insert_iterator.h>
+#include <pw/impl/iterator/back_inserter.h>
+#include <pw/impl/iterator/iterator_tag.h>
 
 #endif /*  INCLUDED_PW_ITERATOR */

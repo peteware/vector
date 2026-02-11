@@ -2,7 +2,7 @@
 #define INCLUDED_PW_IMPL_ITERATOR_TRAITS_H
 
 #include <pw/impl/cstddef/ptrdiff.h>
-#include <pw/impl/iterator_tag.h>
+#include <pw/impl/iterator/iterator_tag.h>
 
 namespace pw {
 

@@ -40,8 +40,8 @@ install(FILES
         impl/allocator/allocator.h
         impl/allocator_traits.h
         impl/as_const.h
-        impl/back_insert_iterator.h
-        impl/back_inserter.h
+        impl/iterator/back_insert_iterator.h
+        impl/iterator/back_inserter.h
         impl/bool_type.h
         impl/byte.h
         impl/conditional.h
@@ -68,7 +68,7 @@ install(FILES
         impl/is_move_constructible.h
         impl/is_same.h
         impl/is_union.h
-        impl/iterator_tag.h
+        impl/iterator/iterator_tag.h
         impl/iterator_traits.h
         impl/algorithm/lexicographical_compare.h
         impl/make_unsigned.h

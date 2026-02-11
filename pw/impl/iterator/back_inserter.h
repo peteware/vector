@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_BACK_INSERTER_H
 #define INCLUDED_PW_IMPL_BACK_INSERTER_H
 
-#include <pw/impl/back_insert_iterator.h>
+#include <pw/impl/iterator/back_insert_iterator.h>
 
 namespace pw {
 

@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_ITERATOR_TAG_H
 #define INCLUDED_PW_IMPL_ITERATOR_TAG_H
 
-#include <iterator>
+#include <iterator> // Needed as various iterator tags must come for std::
 
 namespace pw {
 
