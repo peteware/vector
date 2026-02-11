@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_VECTOR_DECL_H // -*- c++ -*-
 #define INCLUDED_PW_IMPL_VECTOR_DECL_H
 
-#include <pw/impl/allocator.h>
+#include <pw/impl/allocator/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/initializer_list.h>
 #include <pw/impl/iterator_traits.h>

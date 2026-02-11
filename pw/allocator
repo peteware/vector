@@ -1,6 +1,6 @@
 #ifndef  INCLUDED_PW_ALLOCATOR_H // -*- c++ -*-
 #define  INCLUDED_PW_ALLOCATOR_H
 
-#include <pw/impl/allocator.h>
+#include <pw/impl/allocator/allocator.h>
 
 #endif /*   INCLUDED_PW_ALLOCATOR_H */

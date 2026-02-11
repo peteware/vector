@@ -37,7 +37,7 @@ install(FILES
         impl/add_rvalue_reference.h
         impl/addressof.h
         impl/advance.h
-        impl/allocator.h
+        impl/allocator/allocator.h
         impl/allocator_traits.h
         impl/as_const.h
         impl/back_insert_iterator.h

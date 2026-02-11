@@ -1,4 +1,4 @@
-#include <pw/impl/allocator.h>
+#include <../../pw/impl/allocator/allocator.h>
 #include <pw/internal/storage.h>
 #include <tests/test/test_opcounter.h>
 #include <tests/test/test_optracker.h>

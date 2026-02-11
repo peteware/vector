@@ -3,7 +3,7 @@
 
 #include <pw/impl/addressof.h>
 #include <pw/impl/algorithm/max.h>
-#include <pw/impl/allocator.h>
+#include <pw/impl/allocator/allocator.h>
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/destroy.h>
 #include <pw/impl/move.h>
