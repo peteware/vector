@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_MEMORY_RESOURCE_NEW_DELETE_H
 #define INCLUDED_PW_MEMORY_RESOURCE_NEW_DELETE_H
 
-#include <pw/impl/pmr_memory_resource.h>
+#include <pw/impl/memory_resource/pmr_memory_resource.h>
 
 namespace pw::internal {
 

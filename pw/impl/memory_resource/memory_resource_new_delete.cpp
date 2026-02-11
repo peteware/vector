@@ -1,4 +1,4 @@
-#include <pw/impl/memory_resource_new_delete.h>
+#include <pw/impl/memory_resource/memory_resource_new_delete.h>
 
 namespace pw::internal {
 

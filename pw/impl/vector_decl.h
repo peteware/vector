@@ -5,7 +5,7 @@
 #include <pw/impl/allocator_traits.h>
 #include <pw/impl/initializer_list.h>
 #include <pw/impl/iterator_traits.h>
-#include <pw/impl/pmr_polymorphic_allocator.h>
+#include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 #include <pw/impl/reverse_iterator.h>
 
 #include <pw/internal/storage.h>

@@ -1,8 +1,8 @@
 add_library(${PROJECT_NAME}
         impl/byte.cpp
-        impl/memory_resource_new_delete.cpp
-        impl/memory_resource_null.cpp
-        impl/pmr_memory_resource.cpp
+        impl/memory_resource/memory_resource_new_delete.cpp
+        impl/memory_resource/memory_resource_null.cpp
+        impl/memory_resource/pmr_memory_resource.cpp
         pw.cpp
 
         algorithm
@@ -74,16 +74,16 @@ install(FILES
         impl/make_unsigned.h
         impl/algorithm/max.h
         impl/max_align.h
-        impl/memory_resource_new_delete.h
-        impl/memory_resource_null.h
+        impl/memory_resource/memory_resource_new_delete.h
+        impl/memory_resource/memory_resource_null.h
         impl/algorithm/min.h
         impl/move.h
         impl/algorithm/move_alg.h
         impl/algorithm/move_backward.h
         impl/next.h
         impl/numeric_limits.h
-        impl/pmr_memory_resource.h
-        impl/pmr_polymorphic_allocator.h
+        impl/memory_resource/pmr_memory_resource.h
+        impl/memory_resource/pmr_polymorphic_allocator.h
         impl/memory/pointer_traits.h
         impl/prev.h
         impl/cstddef/ptrdiff.h

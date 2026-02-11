@@ -1,8 +1,10 @@
 #ifndef INCLUDED_PW_TEST_TESTTYPE_H
 #define INCLUDED_PW_TEST_TESTTYPE_H
 
-#include <pw/impl/pmr_polymorphic_allocator.h>
 #include <pw/vector>
+
+#include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
+
 #include <test_allocator_base.h>
 #include <test_optracker_allocator_first.h>
 #include <test_optracker_allocator_last.h>

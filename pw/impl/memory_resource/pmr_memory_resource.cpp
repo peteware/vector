@@ -1,7 +1,7 @@
 #include <pw/impl/exchange.h>
-#include <pw/impl/memory_resource_new_delete.h>
-#include <pw/impl/memory_resource_null.h>
-#include <pw/impl/pmr_memory_resource.h>
+#include <pw/impl/memory_resource/memory_resource_new_delete.h>
+#include <pw/impl/memory_resource/memory_resource_null.h>
+#include <pw/impl/memory_resource/pmr_memory_resource.h>
 
 namespace pw::pmr {
 
