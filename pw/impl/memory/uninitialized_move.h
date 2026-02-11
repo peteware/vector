@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_IMPL_UNINITIALIZED_MOVE_CONSTRUCT_H
 #define INCLUDED_PW_IMPL_UNINITIALIZED_MOVE_CONSTRUCT_H
 
-#include <pw/impl/construct_at.h>
 #include <pw/impl/memory/addressof.h>
+#include <pw/impl/memory/construct_at.h>
 #include <pw/impl/memory/destroy.h>
 #include <pw/impl/utility/move.h>
 

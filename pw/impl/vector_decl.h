@@ -2,10 +2,10 @@
 #define INCLUDED_PW_IMPL_VECTOR_DECL_H
 
 #include <pw/impl/allocator/allocator.h>
-#include <pw/impl/allocator_traits.h>
 #include <pw/impl/initializer_list.h>
 #include <pw/impl/iterator/iterator_traits.h>
 #include <pw/impl/iterator/reverse_iterator.h>
+#include <pw/impl/memory/allocator_traits.h>
 #include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 
 #include <pw/internal/storage.h>

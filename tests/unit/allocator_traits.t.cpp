@@ -1,5 +1,5 @@
 #include <pw/impl/allocator/allocator.h>
-#include <pw/impl/allocator_traits.h>
+#include <pw/impl/memory/allocator_traits.h>
 #include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 #include <test_allocator_base.h>
 #include <test_optracker_allocator_first.h>

@@ -1,9 +1,9 @@
 #ifndef INCLUDED_PW_IMPL_UNINITIALIZED_DEFAULT_CONSTRUCT_H
 #define INCLUDED_PW_IMPL_UNINITIALIZED_DEFAULT_CONSTRUCT_H
 
-#include <memory/destroy.h>
-#include <pw/impl/addressof.h>
-#include <pw/impl/construct_at.h>
+#include <pw/impl/memory/addressof.h>
+#include <pw/impl/memory/construct_at.h>
+#include <pw/impl/memory/destroy.h>
 
 namespace pw {
 

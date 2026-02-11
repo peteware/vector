@@ -2,7 +2,7 @@
 #define INCLUDED_PW_MEMORY_H
 
 #include <pw/impl/allocator/allocator.h>
-#include <pw/impl/allocator_traits.h>
+#include <pw/impl/memory/allocator_traits.h>
 #include <pw/impl/memory/destroy.h>
 #include <pw/impl/memory/destroy_at.h>
 #include <pw/impl/memory/pointer_traits.h>

@@ -44,9 +44,6 @@ install(FILES
         impl/algorithm/move_alg.h
         impl/algorithm/move_backward.h
         impl/allocator/allocator.h
-        impl/allocator_traits.h
-        impl/utility/as_const.h
-        impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
         impl/initializer_list.h
@@ -62,6 +59,8 @@ install(FILES
         impl/make_unsigned.h
         impl/max_align.h
         impl/memory/addressof.h
+        impl/memory/allocator_traits.h
+        impl/memory/construct_at.h
         impl/memory/destroy.h
         impl/memory/destroy_at.h
         impl/memory/pointer_traits.h
@@ -94,6 +93,7 @@ install(FILES
         impl/type_traits/remove_cv.h
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
+        impl/utility/as_const.h
         impl/utility/byte.h
         impl/utility/declval.h
         impl/utility/exchange.h
