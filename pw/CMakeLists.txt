@@ -46,7 +46,6 @@ install(FILES
         impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
-        impl/declval.h
         impl/fill.h
         impl/fill_n.h
         impl/for_each.h
@@ -96,6 +95,7 @@ install(FILES
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
         impl/utility/byte.h
+        impl/utility/declval.h
         impl/utility/exchange.h
         impl/utility/forward.h
         impl/utility/move.h
