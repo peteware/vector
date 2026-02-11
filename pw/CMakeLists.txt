@@ -57,7 +57,6 @@ install(FILES
         impl/iterator/next.h
         impl/iterator/prev.h
         impl/iterator/reverse_iterator.h
-        impl/make_unsigned.h
         impl/memory/addressof.h
         impl/memory/allocator_traits.h
         impl/memory/construct_at.h
@@ -90,6 +89,7 @@ install(FILES
         impl/type_traits/is_move_constructible.h
         impl/type_traits/is_same.h
         impl/type_traits/is_union.h
+        impl/type_traits/make_unsigned.h
         impl/type_traits/remove_cv.h
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
