@@ -1,5 +1,5 @@
 add_library(${PROJECT_NAME}
-        impl/byte.cpp
+        impl/utility/byte.cpp
         impl/memory_resource/memory_resource_new_delete.cpp
         impl/memory_resource/memory_resource_null.cpp
         impl/memory_resource/pmr_memory_resource.cpp
@@ -43,7 +43,6 @@ install(FILES
         impl/allocator/allocator.h
         impl/allocator_traits.h
         impl/as_const.h
-        impl/byte.h
         impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
@@ -96,6 +95,7 @@ install(FILES
         impl/type_traits/remove_cv.h
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
+        impl/utility/byte.h
         impl/utility/exchange.h
         impl/utility/forward.h
         impl/utility/move.h
