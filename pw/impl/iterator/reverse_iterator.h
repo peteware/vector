@@ -1,10 +1,10 @@
 #ifndef INCLUDED_PW_IMPL_REVERSE_ITERATOR_H
 #define INCLUDED_PW_IMPL_REVERSE_ITERATOR_H
 
-#include <pw/impl/advance.h>
-#include <pw/impl/iterator_traits.h>
-#include <pw/impl/next.h>
-#include <pw/impl/prev.h>
+#include <pw/impl/iterator/advance.h>
+#include <pw/impl/iterator/iterator_traits.h>
+#include <pw/impl/iterator/next.h>
+#include <pw/impl/iterator/prev.h>
 
 namespace pw {
 

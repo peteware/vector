@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_IMPL_NEXT_H
 #define INCLUDED_PW_IMPL_NEXT_H
 
-#include <pw/impl/advance.h>
-#include <pw/impl/iterator_traits.h>
+#include <pw/impl/iterator/advance.h>
+#include <pw/impl/iterator/iterator_traits.h>
 
 namespace pw {
 

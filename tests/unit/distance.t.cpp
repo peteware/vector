@@ -1,6 +1,4 @@
-#include <pw/impl/distance.h>
-
-// ReSharper disable once CppUnusedIncludeDirective
+#include <pw/impl/iterator/distance.h>
 
 #include <catch2/catch_test_macros.hpp>
 

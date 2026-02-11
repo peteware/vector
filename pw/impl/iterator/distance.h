@@ -1,8 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_DISTANCE_H
 #define INCLUDED_PW_IMPL_DISTANCE_H
 
-#include <pw/impl/iterator_traits.h>
-
+#include <pw/impl/iterator/iterator_traits.h>
 #include <pw/impl/type_traits/is_same.h>
 
 namespace pw {

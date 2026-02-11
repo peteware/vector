@@ -33,7 +33,6 @@ install(FILES
         vector
         DESTINATION include/pw)
 install(FILES
-        impl/advance.h
         impl/algorithm/copy.h
         impl/algorithm/equal.h
         impl/algorithm/lexicographical_compare.h
@@ -45,20 +44,23 @@ install(FILES
         impl/allocator_traits.h
         impl/as_const.h
         impl/byte.h
-        impl/type_traits/conditional.h
         impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
         impl/declval.h
-        impl/distance.h
         impl/fill.h
         impl/fill_n.h
         impl/for_each.h
         impl/initializer_list.h
+        impl/iterator/advance.h
         impl/iterator/back_insert_iterator.h
         impl/iterator/back_inserter.h
+        impl/iterator/distance.h
         impl/iterator/iterator_tag.h
-        impl/iterator_traits.h
+        impl/iterator/iterator_traits.h
+        impl/iterator/next.h
+        impl/iterator/prev.h
+        impl/iterator/reverse_iterator.h
         impl/make_unsigned.h
         impl/max_align.h
         impl/memory/addressof.h
@@ -76,13 +78,11 @@ install(FILES
         impl/memory_resource/memory_resource_null.h
         impl/memory_resource/pmr_memory_resource.h
         impl/memory_resource/pmr_polymorphic_allocator.h
-        impl/next.h
         impl/numeric_limits.h
-        impl/prev.h
-        impl/reverse_iterator.h
         impl/type_traits/add_const.h
         impl/type_traits/add_rvalue_reference.h
         impl/type_traits/bool_type.h
+        impl/type_traits/conditional.h
         impl/type_traits/integral_constant.h
         impl/type_traits/is_base_of.h
         impl/type_traits/is_class.h
