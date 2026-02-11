@@ -44,6 +44,7 @@ install(FILES
         impl/algorithm/move_alg.h
         impl/algorithm/move_backward.h
         impl/allocator/allocator.h
+        impl/cstddef/max_align.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
         impl/initializer_list.h
@@ -57,7 +58,6 @@ install(FILES
         impl/iterator/prev.h
         impl/iterator/reverse_iterator.h
         impl/make_unsigned.h
-        impl/max_align.h
         impl/memory/addressof.h
         impl/memory/allocator_traits.h
         impl/memory/construct_at.h
