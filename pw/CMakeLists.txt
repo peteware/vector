@@ -33,8 +33,6 @@ install(FILES
         vector
         DESTINATION include/pw)
 install(FILES
-        impl/add_const.h
-        impl/add_rvalue_reference.h
         impl/advance.h
         impl/algorithm/copy.h
         impl/algorithm/equal.h
@@ -46,9 +44,8 @@ install(FILES
         impl/allocator/allocator.h
         impl/allocator_traits.h
         impl/as_const.h
-        impl/bool_type.h
         impl/byte.h
-        impl/conditional.h
+        impl/type_traits/conditional.h
         impl/construct_at.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
@@ -83,6 +80,9 @@ install(FILES
         impl/numeric_limits.h
         impl/prev.h
         impl/reverse_iterator.h
+        impl/type_traits/add_const.h
+        impl/type_traits/add_rvalue_reference.h
+        impl/type_traits/bool_type.h
         impl/type_traits/integral_constant.h
         impl/type_traits/is_base_of.h
         impl/type_traits/is_class.h

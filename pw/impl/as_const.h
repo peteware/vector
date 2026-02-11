@@ -1,7 +1,7 @@
 #ifndef INCLUDED_AS_CONST_H
 #define INCLUDED_AS_CONST_H
 
-#include <pw/impl/add_const.h>
+#include <pw/impl/type_traits/add_const.h>
 
 namespace pw {
 

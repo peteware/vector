@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_IS_SAME_H
 #define INCLUDED_PW_IMPL_IS_SAME_H
 
-#include <pw/impl/bool_type.h>
+#include <pw/impl/type_traits/bool_type.h>
 
 namespace pw {
 

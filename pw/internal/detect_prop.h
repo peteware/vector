@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_INTERNAL_DETECT_PROP_H_
 #define INCLUDED_PW_INTERNAL_DETECT_PROP_H_
 
-#include <pw/impl/bool_type.h>
+#include <pw/impl/type_traits/bool_type.h>
 
 namespace pw::internal {
 template<class Alloc>

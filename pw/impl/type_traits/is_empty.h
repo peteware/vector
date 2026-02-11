@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_INTERNAL_IS_EMPTY_H
 #define INCLUDED_PW_INTERNAL_IS_EMPTY_H
 
-#include <pw/impl/bool_type.h>
+#include <pw/impl/type_traits/bool_type.h>
 #include <pw/impl/type_traits/integral_constant.h>
 #include <pw/impl/type_traits/is_class.h>
 

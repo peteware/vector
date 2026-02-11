@@ -1,10 +1,10 @@
 #ifndef INCLUDED_PW_TEST_ALLOCATOR_BASE_H
 #define INCLUDED_PW_TEST_ALLOCATOR_BASE_H
 
-#include <pw/impl/bool_type.h>
 #include <pw/impl/cstddef/ptrdiff.h>
 #include <pw/impl/cstddef/size.h>
 #include <pw/impl/memory/uninitialized_construct_using_allocator.h>
+#include <pw/impl/type_traits/bool_type.h>
 
 #include <iostream>
 

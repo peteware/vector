@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_TEST_ALLOCATOR_COPY_ASSIGNMENT_H
 #define INCLUDED_PW_TEST_ALLOCATOR_COPY_ASSIGNMENT_H
 
-#include <pw/impl/bool_type.h>
+#include <pw/impl/type_traits/bool_type.h>
 #include <test_allocator_base.h>
 
 namespace pw::test {

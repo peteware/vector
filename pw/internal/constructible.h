@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_INTERNAL_CONSTRUCTIBLE_H
 #define INCLUDED_PW_INTERNAL_CONSTRUCTIBLE_H
 
-#include <pw/impl/bool_type.h>
 #include <pw/impl/declval.h>
+#include <pw/impl/type_traits/bool_type.h>
 #include <pw/impl/type_traits/void.h>
 
 namespace pw::internal {
