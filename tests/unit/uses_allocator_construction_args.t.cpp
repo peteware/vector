@@ -1,6 +1,7 @@
+#include <pw/impl/allocator/allocator.h>
 #include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 #include <pw/impl/type_traits/is_same.h>
-#include <pw/memory>
+
 #include <test_optracker_allocator_first.h>
 #include <test_optracker_allocator_last.h>
 #include <test_optracker_allocator_none.h>

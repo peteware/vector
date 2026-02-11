@@ -1,11 +1,23 @@
-#ifndef INCLUDED_PW_TYPE_TRAITS_H // -*- c++ -*-
-#define INCLUDED_PW_TYPE_TRAITS_H
+#ifndef INCLUDED_PW_TYPE_TRAITS // -*- c++ -*-
+#define INCLUDED_PW_TYPE_TRAITS
 
+#include <pw/impl/type_traits/add_const.h>
+#include <pw/impl/type_traits/add_rvalue_reference.h>
 #include <pw/impl/type_traits/bool_type.h>
 #include <pw/impl/type_traits/conditional.h>
-#include <pw/impl/type_traits/is_constructible.h>
+#include <pw/impl/type_traits/integral_constant.h>
+#include <pw/impl/type_traits/is_base_of.h>
+#include <pw/impl/type_traits/is_class.h>
 #include <pw/impl/type_traits/is_constant_evaluated.h>
+#include <pw/impl/type_traits/is_constructible.h>
+#include <pw/impl/type_traits/is_convertible.h>
+#include <pw/impl/type_traits/is_empty.h>
+#include <pw/impl/type_traits/is_move_constructible.h>
 #include <pw/impl/type_traits/is_same.h>
+#include <pw/impl/type_traits/is_union.h>
+#include <pw/impl/type_traits/make_unsigned.h>
+#include <pw/impl/type_traits/remove_cv.h>
+#include <pw/impl/type_traits/remove_reference.h>
 #include <pw/impl/type_traits/void.h>
 
-#endif /*  INCLUDED_PW_TYPE_TRAITS_H */
+#endif /*  INCLUDED_PW_TYPE_TRAITS */

@@ -1,7 +1,12 @@
 #ifndef INCLUDED_PW_UTILITY /* -*- c++ -*- */
 #define INCLUDED_PW_UTILITY
 
+#include <pw/impl/utility/as_const.h>
+#include <pw/impl/utility/byte.cpp>
+#include <pw/impl/utility/byte.h>
+#include <pw/impl/utility/declval.h>
 #include <pw/impl/utility/exchange.h>
+#include <pw/impl/utility/forward.h>
 #include <pw/impl/utility/move.h>
 #include <pw/impl/utility/swap.h>
 

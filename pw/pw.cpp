@@ -5,6 +5,7 @@
 #include <pw/algorithm>
 #include <pw/allocator>
 #include <pw/cstddef>
+#include <pw/initializer_list>
 #include <pw/iterator>
 #include <pw/memory>
 #include <pw/memory_resource>

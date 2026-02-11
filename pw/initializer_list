@@ -1,0 +1,6 @@
+#ifndef PW_INITIALIZER_LIST /* -*- c++ -*- */
+#define PW_INITIALIZER_LIST
+
+#include <pw/impl/initializer_list.h>
+
+#endif //PW_INITIALIZER_LIST

@@ -1,7 +1,8 @@
-#ifndef INCLUDED_PW_CSTDDEF_H // -*- c++ -*-
-#define INCLUDED_PW_CSTDDEF_H
+#ifndef INCLUDED_PW_CSTDDEF // -*- c++ -*-
+#define INCLUDED_PW_CSTDDEF
 
+#include <pw/impl/cstddef/max_align.h>
 #include <pw/impl/cstddef/ptrdiff.h>
 #include <pw/impl/cstddef/size.h>
 
-#endif /*   INCLUDED_PW_CSTDDEF_H */
+#endif /*   INCLUDED_PW_CSTDDEF */

@@ -1,12 +1,18 @@
-#ifndef INCLUDED_PW_MEMORY_H // -*- c++ -*-
-#define INCLUDED_PW_MEMORY_H
+#ifndef INCLUDED_PW_MEMORY // -*- c++ -*-
+#define INCLUDED_PW_MEMORY
 
-#include <pw/impl/allocator/allocator.h>
+#include <pw/impl/memory/addressof.h>
 #include <pw/impl/memory/allocator_traits.h>
+#include <pw/impl/memory/construct_at.h>
 #include <pw/impl/memory/destroy.h>
 #include <pw/impl/memory/destroy_at.h>
 #include <pw/impl/memory/pointer_traits.h>
 #include <pw/impl/memory/uninitialized_construct_using_allocator.h>
+#include <pw/impl/memory/uninitialized_copy.h>
+#include <pw/impl/memory/uninitialized_default_construct.h>
+#include <pw/impl/memory/uninitialized_fill.h>
+#include <pw/impl/memory/uninitialized_move.h>
+#include <pw/impl/memory/uninitialized_value_construct.h>
 #include <pw/impl/memory/uses_allocator_construction_args.h>
 
-#endif /* INCLUDED_PW_MEMORY_H */
+#endif /* INCLUDED_PW_MEMORY */

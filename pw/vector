@@ -1,7 +1,7 @@
-#ifndef INCLUDED_PW_VECTOR_H // -*- c++ -*-
-#define INCLUDED_PW_VECTOR_H
+#ifndef INCLUDED_PW_VECTOR // -*- c++ -*-
+#define INCLUDED_PW_VECTOR
 
 #include <pw/impl/vector_decl.h>
 #include <pw/impl/vector_defn.h>
 
-#endif /*  INCLUDED_PW_VECTOR_H */
+#endif /*  INCLUDED_PW_VECTOR */

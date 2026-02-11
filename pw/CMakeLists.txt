@@ -13,6 +13,8 @@ add_library(${PROJECT_NAME}
         type_traits
         utility
         vector
+        initializer_list
+        numeric_limits
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -26,8 +28,11 @@ install(FILES
         allocator
         cstddef
         iterator
+        initializer_list
+        iterator
         memory
         memory_resource
+        numeric_limits
         type_traits
         utility
         vector
@@ -70,8 +75,11 @@ install(FILES
         impl/memory/uninitialized_move.h
         impl/memory/uninitialized_value_construct.h
         impl/memory/uses_allocator_construction_args.h
+        impl/memory_resource/memory_resource_new_delete.cpp
         impl/memory_resource/memory_resource_new_delete.h
+        impl/memory_resource/memory_resource_null.cpp
         impl/memory_resource/memory_resource_null.h
+        impl/memory_resource/pmr_memory_resource.cpp
         impl/memory_resource/pmr_memory_resource.h
         impl/memory_resource/pmr_polymorphic_allocator.h
         impl/numeric_limits.h
@@ -94,6 +102,7 @@ install(FILES
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
         impl/utility/as_const.h
+        impl/utility/byte.cpp
         impl/utility/byte.h
         impl/utility/declval.h
         impl/utility/exchange.h

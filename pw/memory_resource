@@ -1,7 +1,12 @@
-#ifndef INCLUDED_PW_MEMORY_RESOURCE_H // -*- c++ -*-
-#define INCLUDED_PW_MEMORY_RESOURCE_H
+#ifndef INCLUDED_PW_MEMORY_RESOURCE // -*- c++ -*-
+#define INCLUDED_PW_MEMORY_RESOURCE
 
-#include <pw/impl/memory/allocator_traits.h>
+#include <pw/impl/memory_resource/memory_resource_new_delete.cpp>
+#include <pw/impl/memory_resource/memory_resource_new_delete.h>
+#include <pw/impl/memory_resource/memory_resource_null.cpp>
+#include <pw/impl/memory_resource/memory_resource_null.h>
+#include <pw/impl/memory_resource/pmr_memory_resource.cpp>
+#include <pw/impl/memory_resource/pmr_memory_resource.h>
 #include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 
-#endif /*  INCLUDED_PW_MEMORY_RESOURCE_H */
+#endif /*  INCLUDED_PW_MEMORY_RESOURCE */
