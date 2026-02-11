@@ -4,7 +4,7 @@
 #include <pw/impl/cstddef/size.h>
 #include <pw/impl/memory/construct_at.h>
 #include <pw/impl/memory/pointer_traits.h>
-#include <pw/impl/numeric_limits.h>
+#include <pw/impl/numeric_limits/numeric_limits.h>
 #include <pw/impl/type_traits/is_empty.h>
 #include <pw/impl/type_traits/make_unsigned.h>
 #include <pw/impl/utility/declval.h>

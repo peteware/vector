@@ -52,7 +52,7 @@ install(FILES
         impl/cstddef/max_align.h
         impl/cstddef/ptrdiff.h
         impl/cstddef/size.h
-        impl/initializer_list.h
+        impl/initializer_list/initializer_list.h
         impl/iterator/advance.h
         impl/iterator/back_insert_iterator.h
         impl/iterator/back_inserter.h
@@ -82,7 +82,7 @@ install(FILES
         impl/memory_resource/pmr_memory_resource.cpp
         impl/memory_resource/pmr_memory_resource.h
         impl/memory_resource/pmr_polymorphic_allocator.h
-        impl/numeric_limits.h
+        impl/numeric_limits/numeric_limits.h
         impl/type_traits/add_const.h
         impl/type_traits/add_rvalue_reference.h
         impl/type_traits/bool_type.h
@@ -109,9 +109,9 @@ install(FILES
         impl/utility/forward.h
         impl/utility/move.h
         impl/utility/swap.h
-        impl/vector_decl.h
-        impl/vector_defn.h
-        impl/vector_defn_empty.h
+        impl/vector/vector_decl.h
+        impl/vector/vector_defn.h
+        impl/vector/vector_defn_empty.h
         DESTINATION include/pw/impl)
 install(FILES
         internal/compare.h

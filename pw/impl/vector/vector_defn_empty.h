@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_VECTOR_DEFN_H
 #define INCLUDED_PW_IMPL_VECTOR_DEFN_H
 
-#include <pw/impl/vector_decl.h>
+#include <pw/impl/vector/vector_decl.h>
 
 namespace pw {
 template<class Type>

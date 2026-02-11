@@ -1,6 +1,6 @@
 #ifndef PW_NUMERIC_LIMITS
 #define PW_NUMERIC_LIMITS
 
-#include <pw/impl/numeric_limits.h>
+#include <pw/impl/numeric_limits/numeric_limits.h>
 
 #endif //PW_NUMERIC_LIMITS
