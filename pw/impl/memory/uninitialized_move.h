@@ -4,7 +4,7 @@
 #include <pw/impl/construct_at.h>
 #include <pw/impl/memory/addressof.h>
 #include <pw/impl/memory/destroy.h>
-#include <pw/impl/move.h>
+#include <pw/impl/utility/move.h>
 
 namespace pw {
 

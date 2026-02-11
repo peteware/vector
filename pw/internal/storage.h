@@ -7,8 +7,8 @@
 #include <pw/impl/memory/addressof.h>
 #include <pw/impl/memory/destroy.h>
 #include <pw/impl/memory/uninitialized_construct_using_allocator.h>
-#include <pw/impl/move.h>
-#include <pw/impl/swap.h>
+#include <pw/impl/utility/move.h>
+#include <pw/impl/utility/swap.h>
 
 #include <functional>
 

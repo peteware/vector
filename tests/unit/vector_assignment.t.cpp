@@ -1,6 +1,6 @@
 #include <pw/vector>
 
-#include <pw/impl/move.h>
+#include <pw/impl/utility/move.h>
 #include <test_allocator_base.h>
 #include <test_allocator_copy_assignment.h>
 #include <test_allocator_move_assignment.h>

@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_UTILITY /* -*- c++ -*- */
 #define INCLUDED_PW_UTILITY
 
-#include <pw/impl/exchange.h>
-#include <pw/impl/move.h>
-#include <pw/impl/swap.h>
+#include <pw/impl/utility/exchange.h>
+#include <pw/impl/utility/move.h>
+#include <pw/impl/utility/swap.h>
 
 #endif /* INCLUDED_PW_UTILITY */

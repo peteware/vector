@@ -2,7 +2,7 @@
 #define INCLUDED_PW_TEST_OPTRACKER_EMPLACEMOVECONSTRUCTIBLE_H
 
 #include <compare>
-#include <pw/impl/move.h>
+#include <pw/impl/utility/move.h>
 #include <test_optracker.h>
 
 namespace pw::test {

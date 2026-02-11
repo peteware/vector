@@ -3,7 +3,7 @@
 
 #include <pw/impl/iterator/iterator_tag.h>
 #include <pw/impl/iterator_traits.h>
-#include <pw/impl/move.h>
+#include <pw/impl/utility/move.h>
 
 #include <memory> // Needed for std::shared_ptr
 

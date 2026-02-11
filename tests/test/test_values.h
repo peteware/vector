@@ -2,7 +2,7 @@
 #define INCLUDED_PW_TEST_VALUES_H
 
 #include <iostream>
-#include <pw/impl/forward.h>
+#include <pw/impl/utility/forward.h>
 #include <test_permute.h>
 
 namespace pw::test {

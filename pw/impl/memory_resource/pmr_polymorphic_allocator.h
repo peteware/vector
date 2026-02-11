@@ -2,10 +2,10 @@
 #define INCLUDED_PW_PMR_POLYMORPHIC_ALLOCATOR_H
 
 #include <pw/impl/byte.h>
-#include <pw/impl/forward.h>
 #include <pw/impl/max_align.h>
 #include <pw/impl/memory/uninitialized_construct_using_allocator.h>
 #include <pw/impl/memory_resource/pmr_memory_resource.h>
+#include <pw/impl/utility/forward.h>
 
 namespace pw::pmr {
 

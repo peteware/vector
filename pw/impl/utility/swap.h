@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_SWAP_H
 #define INCLUDED_PW_IMPL_SWAP_H
 
-#include <pw/impl/move.h>
+#include <pw/impl/utility/move.h>
 
 namespace pw {
 

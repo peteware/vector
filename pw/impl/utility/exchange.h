@@ -1,8 +1,8 @@
 #ifndef INCLUDED_PW_IMPL_EXCHANGE_H
 #define INCLUDED_PW_IMPL_EXCHANGE_H
 
-#include <pw/impl/forward.h>
-#include <pw/impl/move.h>
+#include <pw/impl/utility/forward.h>
+#include <pw/impl/utility/move.h>
 
 namespace pw {
 

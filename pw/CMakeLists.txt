@@ -54,11 +54,9 @@ install(FILES
         impl/cstddef/size.h
         impl/declval.h
         impl/distance.h
-        impl/exchange.h
         impl/fill.h
         impl/fill_n.h
         impl/for_each.h
-        impl/forward.h
         impl/initializer_list.h
         impl/iterator/back_insert_iterator.h
         impl/iterator/back_inserter.h
@@ -81,12 +79,10 @@ install(FILES
         impl/memory_resource/memory_resource_null.h
         impl/memory_resource/pmr_memory_resource.h
         impl/memory_resource/pmr_polymorphic_allocator.h
-        impl/move.h
         impl/next.h
         impl/numeric_limits.h
         impl/prev.h
         impl/reverse_iterator.h
-        impl/swap.h
         impl/type_traits/integral_constant.h
         impl/type_traits/is_base_of.h
         impl/type_traits/is_class.h
@@ -100,6 +96,10 @@ install(FILES
         impl/type_traits/remove_cv.h
         impl/type_traits/remove_reference.h
         impl/type_traits/void.h
+        impl/utility/exchange.h
+        impl/utility/forward.h
+        impl/utility/move.h
+        impl/utility/swap.h
         impl/vector_decl.h
         impl/vector_defn.h
         impl/vector_defn_empty.h
