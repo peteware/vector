@@ -3,9 +3,9 @@
 
 #include <pw/impl/bool_type.h>
 #include <pw/impl/conditional.h>
-#include <pw/impl/is_constructible.h>
-#include <pw/impl/is_constant_evaluated.h>
-#include <pw/impl/is_same.h>
-#include <pw/impl/void.h>
+#include <pw/impl/type_traits/is_constructible.h>
+#include <pw/impl/type_traits/is_constant_evaluated.h>
+#include <pw/impl/type_traits/is_same.h>
+#include <pw/impl/type_traits/void.h>
 
 #endif /*  INCLUDED_PW_TYPE_TRAITS_H */

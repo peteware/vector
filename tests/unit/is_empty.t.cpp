@@ -1,4 +1,4 @@
-#include <pw/impl/is_empty.h>
+#include <pw/impl/type_traits/is_empty.h>
 
 // ReSharper disable once CppUnusedIncludeDirective
 #include <pw/internal/rsize_fix.h>

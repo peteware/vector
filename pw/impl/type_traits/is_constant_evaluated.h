@@ -2,7 +2,7 @@
 #define INCLUDED_PW_IMPL_IS_CONSTANT_EVALUATED_H
 
 namespace pw {
-inline constexpr bool
+constexpr bool
 is_constant_evaluated() noexcept
 {
     return __builtin_is_constant_evaluated();

@@ -4,7 +4,7 @@
 #include <pw/impl/bool_type.h>
 #include <pw/impl/cstddef/ptrdiff.h>
 #include <pw/impl/cstddef/size.h>
-#include <pw/impl/is_constant_evaluated.h>
+#include <pw/impl/type_traits/is_constant_evaluated.h>
 
 namespace pw {
 

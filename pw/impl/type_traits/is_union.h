@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_IS_UNION_H
 #define INCLUDED_PW_IMPL_IS_UNION_H
 
-#include <pw/impl/integral_constant.h>
+#include <pw/impl/type_traits/integral_constant.h>
 
 namespace pw {
 /// is_union

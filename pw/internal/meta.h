@@ -5,7 +5,7 @@
 // ** Includes
 // *** pw includes
 #include <pw/impl/cstddef/ptrdiff.h>
-#include <pw/impl/void.h>
+#include <pw/impl/type_traits/void.h>
 #include <pw/internal/extract_or.h>
 
 namespace pw::internal {

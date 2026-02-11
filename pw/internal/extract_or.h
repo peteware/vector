@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_INTERNAL_EXTRACT_OR_H
 #define INCLUDED_PW_INTERNAL_EXTRACT_OR_H
 
-#include <pw/impl/void.h>
+#include <pw/impl/type_traits/void.h>
 
 namespace pw::internal {
 

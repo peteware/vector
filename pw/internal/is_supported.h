@@ -2,7 +2,7 @@
 #define INCLUDED_PW_INTERNAL_IS_SUPPORTED_H
 
 #include <pw/impl/bool_type.h>
-#include <pw/impl/void.h>
+#include <pw/impl/type_traits/void.h>
 
 namespace pw::internal {
 

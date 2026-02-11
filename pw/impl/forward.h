@@ -1,7 +1,7 @@
 #ifndef INCLUDED_PW_IMPL_FORWARD_H
 #define INCLUDED_PW_IMPL_FORWARD_H
 
-#include <pw/impl/remove_reference.h>
+#include <pw/impl/type_traits/remove_reference.h>
 
 namespace pw {
 

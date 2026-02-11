@@ -1,9 +1,9 @@
 #ifndef INCLUDED_PW_IMPL_ADVANCE_H
 #define INCLUDED_PW_IMPL_ADVANCE_H
 
-#include <pw/impl/is_same.h>
 #include <pw/impl/iterator/iterator_tag.h>
 #include <pw/impl/iterator_traits.h>
+#include <pw/impl/type_traits/is_same.h>
 
 namespace pw {
 template<class Iterator, class Distance>

@@ -2,7 +2,7 @@
 #define PW_USES_ALLOCATOR_CONSTRUCTION_ARGS_H
 
 #include <pw/impl/forward.h>
-#include <pw/impl/remove_cv.h>
+#include <pw/impl/type_traits/remove_cv.h>
 
 #include <memory>
 

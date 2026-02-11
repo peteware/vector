@@ -3,7 +3,7 @@
 
 #include <pw/impl/iterator_traits.h>
 
-#include <pw/impl/is_same.h>
+#include <pw/impl/type_traits/is_same.h>
 
 namespace pw {
 

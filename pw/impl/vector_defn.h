@@ -6,8 +6,8 @@
 #include <pw/impl/algorithm/min.h>
 #include <pw/impl/algorithm/move_alg.h>
 #include <pw/impl/distance.h>
-#include <pw/impl/is_base_of.h>
 #include <pw/impl/memory/uninitialized_copy.h>
+#include <pw/impl/type_traits/is_base_of.h>
 #include <pw/internal/unimplemented.h>
 
 namespace pw {

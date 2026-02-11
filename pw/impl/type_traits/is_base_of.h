@@ -1,10 +1,6 @@
-//
-// Created by Ware, Pete on 7/11/25.
-//
-
 #ifndef INCLUDED_PW_IMPL_IS_BASE_OF_H
 #define INCLUDED_PW_IMPL_IS_BASE_OF_H
-#include <type_traits>
+#include <type_traits> // Used for std::is_base_of
 
 namespace pw {
 template<class Base, class Derived>

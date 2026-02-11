@@ -35,63 +35,41 @@ install(FILES
 install(FILES
         impl/add_const.h
         impl/add_rvalue_reference.h
-        impl/memory/addressof.h
         impl/advance.h
+        impl/algorithm/copy.h
+        impl/algorithm/equal.h
+        impl/algorithm/lexicographical_compare.h
+        impl/algorithm/max.h
+        impl/algorithm/min.h
+        impl/algorithm/move_alg.h
+        impl/algorithm/move_backward.h
         impl/allocator/allocator.h
         impl/allocator_traits.h
         impl/as_const.h
-        impl/iterator/back_insert_iterator.h
-        impl/iterator/back_inserter.h
         impl/bool_type.h
         impl/byte.h
         impl/conditional.h
         impl/construct_at.h
-        impl/algorithm/copy.h
+        impl/cstddef/ptrdiff.h
+        impl/cstddef/size.h
         impl/declval.h
-        impl/memory/destroy.h
-        impl/memory/destroy_at.h
         impl/distance.h
-        impl/algorithm/equal.h
         impl/exchange.h
         impl/fill.h
         impl/fill_n.h
         impl/for_each.h
         impl/forward.h
         impl/initializer_list.h
-        impl/integral_constant.h
-        impl/is_base_of.h
-        impl/is_class.h
-        impl/is_constant_evaluated.h
-        impl/is_constructible.h
-        impl/is_convertible.h
-        impl/is_empty.h
-        impl/is_move_constructible.h
-        impl/is_same.h
-        impl/is_union.h
+        impl/iterator/back_insert_iterator.h
+        impl/iterator/back_inserter.h
         impl/iterator/iterator_tag.h
         impl/iterator_traits.h
-        impl/algorithm/lexicographical_compare.h
         impl/make_unsigned.h
-        impl/algorithm/max.h
         impl/max_align.h
-        impl/memory_resource/memory_resource_new_delete.h
-        impl/memory_resource/memory_resource_null.h
-        impl/algorithm/min.h
-        impl/move.h
-        impl/algorithm/move_alg.h
-        impl/algorithm/move_backward.h
-        impl/next.h
-        impl/numeric_limits.h
-        impl/memory_resource/pmr_memory_resource.h
-        impl/memory_resource/pmr_polymorphic_allocator.h
+        impl/memory/addressof.h
+        impl/memory/destroy.h
+        impl/memory/destroy_at.h
         impl/memory/pointer_traits.h
-        impl/prev.h
-        impl/cstddef/ptrdiff.h
-        impl/remove_cv.h
-        impl/remove_reference.h
-        impl/reverse_iterator.h
-        impl/cstddef/size.h
-        impl/swap.h
         impl/memory/uninitialized_construct_using_allocator.h
         impl/memory/uninitialized_copy.h
         impl/memory/uninitialized_default_construct.h
@@ -99,10 +77,32 @@ install(FILES
         impl/memory/uninitialized_move.h
         impl/memory/uninitialized_value_construct.h
         impl/memory/uses_allocator_construction_args.h
+        impl/memory_resource/memory_resource_new_delete.h
+        impl/memory_resource/memory_resource_null.h
+        impl/memory_resource/pmr_memory_resource.h
+        impl/memory_resource/pmr_polymorphic_allocator.h
+        impl/move.h
+        impl/next.h
+        impl/numeric_limits.h
+        impl/prev.h
+        impl/reverse_iterator.h
+        impl/swap.h
+        impl/type_traits/integral_constant.h
+        impl/type_traits/is_base_of.h
+        impl/type_traits/is_class.h
+        impl/type_traits/is_constant_evaluated.h
+        impl/type_traits/is_constructible.h
+        impl/type_traits/is_convertible.h
+        impl/type_traits/is_empty.h
+        impl/type_traits/is_move_constructible.h
+        impl/type_traits/is_same.h
+        impl/type_traits/is_union.h
+        impl/type_traits/remove_cv.h
+        impl/type_traits/remove_reference.h
+        impl/type_traits/void.h
         impl/vector_decl.h
         impl/vector_defn.h
         impl/vector_defn_empty.h
-        impl/void.h
         DESTINATION include/pw/impl)
 install(FILES
         internal/compare.h
