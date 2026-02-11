@@ -3,18 +3,11 @@
 
 #include <pw/impl/vector_decl.h>
 
-//#include <pw/impl/copy.h>
-//#include <pw/impl/destroy.h>
+#include <pw/impl/algorithm/min.h>
+#include <pw/impl/algorithm/move_alg.h>
 #include <pw/impl/distance.h>
-//#include <pw/impl/fill_n.h>
 #include <pw/impl/is_base_of.h>
-#include <pw/impl/min.h>
-#include <pw/impl/move_alg.h>
-//#include <pw/impl/move_backward.h>
 #include <pw/impl/uninitialized_copy.h>
-//#include <pw/impl/uninitialized_default_construct.h>
-//#include <pw/impl/uninitialized_fill.h>
-//#include <pw/impl/uninitialized_move.h>
 #include <pw/internal/unimplemented.h>
 
 namespace pw {

@@ -1,4 +1,4 @@
-#include <pw/impl/equal.h>
+#include <../../pw/impl/algorithm/equal.h>
 // ReSharper disable once CppUnusedIncludeDirective
 #include <pw/internal/rsize_fix.h>
 

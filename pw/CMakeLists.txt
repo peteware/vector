@@ -46,12 +46,12 @@ install(FILES
         impl/byte.h
         impl/conditional.h
         impl/construct_at.h
-        impl/copy.h
+        impl/algorithm/copy.h
         impl/declval.h
         impl/destroy.h
         impl/destroy_at.h
         impl/distance.h
-        impl/equal.h
+        impl/algorithm/equal.h
         impl/exchange.h
         impl/fill.h
         impl/fill_n.h
@@ -70,16 +70,16 @@ install(FILES
         impl/is_union.h
         impl/iterator_tag.h
         impl/iterator_traits.h
-        impl/lexicographical_compare.h
+        impl/algorithm/lexicographical_compare.h
         impl/make_unsigned.h
-        impl/max.h
+        impl/algorithm/max.h
         impl/max_align.h
         impl/memory_resource_new_delete.h
         impl/memory_resource_null.h
-        impl/min.h
+        impl/algorithm/min.h
         impl/move.h
-        impl/move_alg.h
-        impl/move_backward.h
+        impl/algorithm/move_alg.h
+        impl/algorithm/move_backward.h
         impl/next.h
         impl/numeric_limits.h
         impl/pmr_memory_resource.h

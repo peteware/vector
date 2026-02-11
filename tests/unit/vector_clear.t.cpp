@@ -1,6 +1,6 @@
 #include <pw/vector>
 
-#include <pw/impl/equal.h>
+#include <../../pw/impl/algorithm/equal.h>
 #include <test_testtype.h>
 #include <test_values.h>
 
