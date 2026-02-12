@@ -1202,7 +1202,7 @@ operator<=>(vector<Type, Allocator> const& op1, vector<Type, Allocator> const& o
     {
         return std::strong_ordering::less;
     }
-    else if (op1.size() > op2.size())
+    if (op1.size() > op2.size())
     {
         return std::strong_ordering::greater;
     }

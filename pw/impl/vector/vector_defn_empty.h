@@ -812,7 +812,7 @@ template<class... Args>
 constexpr vector<Type, Allocator>::reference
 vector<Type, Allocator>::emplace_back(Args&&... args)
 {
-    (void)args;
+    //(void)args;
     return makeReference<value_type>();
 }
 
@@ -829,7 +829,7 @@ constexpr vector<Type, Allocator>::iterator
 vector<Type, Allocator>::emplace(const_iterator position, Args&&... args)
 {
     (void)position;
-    (void)args;
+    //(void)args;
     return &makeReference<value_type>();
 }
 

@@ -421,11 +421,8 @@ SCENARIO("allocator deallocate with is_constant_evaluated", "[allocator][dealloc
                     cycle_alloc.deallocate(nullptr, 5);
                     return 300;
                 }
-                else
-                {
-                    // This branch won't execute in constexpr context
-                    return 400;
-                }
+                // This branch won't execute in constexpr context
+                return 400;
             };
 
             constexpr int cycle_result = test_allocation_cycle();

@@ -11,7 +11,7 @@ bool permute(float& value, int depth);
 bool permute(double& value, int depth);
 
 template<class Container>
-inline bool
+bool
 permute(Container& value, int depth)
 {
     if (value.size() >= depth)

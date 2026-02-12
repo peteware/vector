@@ -23,7 +23,7 @@ compare(Iter1 begin1, Iter1 end1, Iter2 begin2, Iter2 end2)
     {
         return 0;
     }
-    else if (begin1 == end1)
+    if (begin1 == end1)
     {
         return -1;
     }
