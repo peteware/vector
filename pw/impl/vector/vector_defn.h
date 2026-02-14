@@ -152,7 +152,7 @@ constexpr vector<Type, Allocator>::vector(Iterator first, Iterator last, allocat
                              typename iterator_traits<Iterator>::iterator_category>::value)
     {
         size_type count = distance(first, last);
-        m_storage.reserve(count);
+        m_storage.reset_to(count);
         m_storage.uninitialized_copy(first, last, m_storage.begin()).set_size(count);
     }
     else
@@ -310,7 +310,7 @@ vector<Type, Allocator>::assign(Iterator begin, Iterator end)
     }
     else
     {
-        m_storage.reset();
+        m_storage.reset_to(0);
         while (begin != end)
         {
             push_back(*begin);

@@ -2,6 +2,7 @@
 #define INCLUDED_PW_TEST_RANDOM_ACCESS_ITERATOR_H
 
 #include <pw/impl/iterator/iterator_tag.h>
+#include <pw/impl/iterator/iterator_traits.h>
 #include <tests/test/test_opcounter.h>
 
 namespace pw::test {

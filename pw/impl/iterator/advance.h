@@ -6,6 +6,15 @@
 #include <pw/impl/type_traits/is_same.h>
 
 namespace pw {
+
+/**
+ * Advance an iterator by distance
+ *
+ * @tparam Iterator The type of iterator
+ * @tparam Distance How far
+ * @param iterator The iterator to change
+ * @param n How far to move iterator
+ */
 template<class Iterator, class Distance>
 constexpr void
 advance(Iterator& iterator, Distance n)

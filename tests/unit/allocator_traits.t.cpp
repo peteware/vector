@@ -82,7 +82,6 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
             alignas(Type) std::byte storage[sizeof(Type)];
             auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
-            //SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
             {
@@ -96,7 +95,6 @@ SCENARIO("allocator_traits construct", "[allocator_traits][construct]")
             alignas(Type) std::byte storage[sizeof(Type)];
             auto&                   obj   = reinterpret_cast<Type&>(storage);
             pw::test::OpCounter     start = Type::getCounter();
-            //SKIP("Need to add construct() to allocator");
             pw::allocator_traits<Alloc>::construct(alloc, &obj);
             THEN("we called the copy constructor with alloc")
             {

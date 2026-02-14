@@ -29,7 +29,6 @@ namespace pw::internal {
  * └─── m_begin
  * @endverbatim
  */
-
 template<class Type, class Allocator = allocator<Type>>
 struct Storage
 {
@@ -53,7 +52,6 @@ struct Storage
     constexpr Storage(allocator_type const& alloc, size_type count);
     constexpr ~Storage();
 
-    constexpr void                    reset();
     [[nodiscard]] constexpr bool      empty() const noexcept;
     constexpr pointer                 begin() noexcept;
     constexpr const_pointer           begin() const noexcept;
@@ -70,7 +68,7 @@ struct Storage
     constexpr allocator_type          copy_allocator() const;
     constexpr void                    swap_allocator(Storage& other);
     constexpr void                    destroy(iterator begin, iterator end);
-    constexpr Storage&                reserve(size_type count);
+    constexpr Storage&                reset_to(size_type count);
     constexpr iterator                copy(const_iterator begin, const_iterator end, iterator dest);
     constexpr iterator                move(iterator begin, iterator end, iterator dest);
     constexpr iterator                move_backward(iterator begin, iterator end, iterator dest);
@@ -118,20 +116,6 @@ constexpr Storage<Type, Allocator>::~Storage()
 {
     pw::destroy(m_begin, m_begin + m_size);
     allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
-}
-
-template<class Type, class Allocator>
-constexpr void
-Storage<Type, Allocator>::reset()
-{
-    if (m_begin)
-    {
-        pw::destroy(m_begin, m_begin + m_size);
-        allocator_traits<Allocator>::deallocate(m_alloc, m_begin, m_allocated);
-    }
-    m_begin     = nullptr;
-    m_size      = 0;
-    m_allocated = 0;
 }
 
 template<class Type, class Allocator>
@@ -256,13 +240,22 @@ Storage<Type, Allocator>::swap(Storage& other)
     pw::swap(m_allocated, other.m_allocated);
 }
 
+/**
+ * Construct a Type in unitialized memory possible passing `get_allocator()`
+ *
+ * See `uninitialized_construct_using_allocator() which calls `allocator_traits::construct()`
+ * and passes along  the Allocator (if Type uses an Allocator).
+ *
+ * @tparam Args Argument types for Type's constructor
+ * @param where iterator to unitialized memory
+ * @param args Arguments to be passed to Type's constructor
+ */
 template<class Type, class Allocator>
 template<class... Args>
 constexpr void
 Storage<Type, Allocator>::construct(iterator where, Args&&... args)
 {
     pw::uninitialized_construct_using_allocator(pw::addressof(*where), m_alloc, std::forward<Args>(args)...);
-    //allocator_traits<Allocator>::construct(m_alloc, pw::addressof(*where), pw::forward<Args>(args)...);
 }
 
 template<class Type, class Allocator>
@@ -277,18 +270,29 @@ Storage<Type, Allocator>::destroy(iterator begin, iterator end)
 }
 
 /**
- * Reserves memory for at least count elements.
- * Invalidates all iterators and references.
+ * Reserves memory for at least count elements and size() is made 0.
  *
- * @param count The number of elements to reserve space for
+ * Invalidates all iterators and references.  Existing elements
+ * are destroyed.
+ *
+ * @param count The number of elements to reserve space for.  0 sets
+ *              m_begin to nullptr
  * @return Reference to this storage
  * @exception std::bad_alloc if memory allocation fails
  */
 template<class Type, class Allocator>
 constexpr Storage<Type, Allocator>&
-Storage<Type, Allocator>::reserve(size_type count)
+Storage<Type, Allocator>::reset_to(size_type count)
 {
-    pointer p = allocator_traits<Allocator>::allocate(m_alloc, count);
+    pointer p;
+    if (count > 0)
+    {
+        p = allocator_traits<Allocator>::allocate(m_alloc, count);
+    }
+    else
+    {
+        p = nullptr;
+    }
     if (m_begin)
     {
         destroy(begin(), end());

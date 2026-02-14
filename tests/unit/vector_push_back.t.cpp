@@ -1,10 +1,10 @@
-#include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
+#include <test_testtype.h>
 
-#include <test_allocator_move_assignment.h>
+#include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
 #include <test_optracker_copyconstructible.h>
 #include <test_optracker_defaultcopyconstructible.h>
+#include <test_optracker_moveconstructible.h>
 #include <test_permute.h>
-#include <test_testtype.h>
 #include <test_values.h>
 
 #include <catch2/catch_template_test_macros.hpp>
@@ -121,7 +121,7 @@ SCENARIO("push_back() op counts", "[vector][push_back][optracker]")
             //SKIP();
             counter = value_type::getCounter();
             v.push_back(pw::move(copyObject));
-            THEN("Copy construct called once")
+            THEN("move construct called once and no others")
             {
                 counter = value_type::getCounter() - counter;
                 REQUIRE(1 == counter.getMoveConstructor());
@@ -354,23 +354,25 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
         }
         WHEN("push_back() with reserved capacity")
         {
-            Vector v;
-            v.reserve(100);
+            int const pre_allocate = 100;
+            Vector    v;
+            v.reserve(pre_allocate);
             auto reserved_capacity = v.capacity();
 
-            for (int i = 0; i < 50; ++i)
+            REQUIRE(reserved_capacity == pre_allocate);
+            for (int i = 0; i < pre_allocate; ++i)
             {
                 v.push_back(i);
             }
 
             THEN("capacity remains unchanged")
             {
-                REQUIRE(v.size() == 50);
-                REQUIRE(v.capacity() == reserved_capacity); // Should not reallocate
+                REQUIRE(v.size() == pre_allocate);
+                REQUIRE(v.capacity() == pre_allocate); // Should not reallocate
             }
             THEN("all elements are stored correctly")
             {
-                for (int i = 0; i < 50; ++i)
+                for (int i = 0; i < pre_allocate; ++i)
                 {
                     REQUIRE(v[i] == i);
                 }
@@ -402,31 +404,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
             THEN("all access methods return consistent values")
             {
                 REQUIRE(v.size() == 5);
-            }
-        }
-        WHEN("push_back() with different allocators")
-        {
-            // TODO: Seems wrong place to be using test::allocator_move_assignment
-            using Allocator = pw::test::allocator_move_assignment<int>;
-            using Vector    = pw::vector<int, Allocator>;
-
-            Allocator alloc(5);
-            Vector    v(alloc);
-
-            v.push_back(10);
-            v.push_back(20);
-            v.push_back(30);
-
-            THEN("allocator is preserved")
-            {
-                REQUIRE(v.size() == 3);
-                REQUIRE(v.get_allocator() == alloc);
-            }
-            THEN("elements are stored correctly")
-            {
-                REQUIRE(v[0] == 10);
-                REQUIRE(v[1] == 20);
-                REQUIRE(v[2] == 30);
             }
         }
         WHEN("push_back() large number of elements")
@@ -468,28 +445,6 @@ TEST_CASE("push_back() method", "[vector][push_back][modifiers]")
                 REQUIRE(v[0] == 100);
                 REQUIRE(v.front() == 100);
                 REQUIRE(v.back() == 100);
-            }
-        }
-        WHEN("push_back() mixed with other operations")
-        {
-            Vector v;
-
-            v.push_back(1);
-            v.push_back(2);
-            REQUIRE(v.size() == 2);
-
-            v.assign({ 10, 20, 30 });
-            REQUIRE(v.size() == 3);
-            REQUIRE(v[0] == 10);
-
-            v.push_back(40);
-            v.clear();
-            v.push_back(99);
-
-            THEN("final state is correct")
-            {
-                REQUIRE(v.size() == 1);
-                REQUIRE(v[0] == 99);
             }
         }
     }

@@ -7,6 +7,10 @@
 namespace pw::test {
 
 /**
+ * A copy and move constructible OpTracker with OpCounter
+ *
+ * Also allows copy and move assignment
+ *
  * Given
  * - @c rv, and rvalue expression of type T
  * - @c u, an arbitrary identifier

@@ -2,6 +2,13 @@
 
 namespace pw::test {
 
+/**
+ * Increment value until it is >= depth
+ *
+ * @param value A reference
+ * @param depth Max that value should reach
+ * @return true while value can still be incremeneted
+ */
 bool
 permute(int& value, int depth)
 {
@@ -13,6 +20,13 @@ permute(int& value, int depth)
     return true;
 }
 
+/**
+ * Add a character value until it's size is >= depth
+ *
+ * @param value A reference
+ * @param depth Max size value should reach
+ * @return true if permute()'d a different value, false otherwise
+ */
 bool
 permute(std::string& value, int depth)
 {
@@ -20,14 +34,8 @@ permute(std::string& value, int depth)
     {
         return false;
     }
-    if (value.empty())
-    {
-        value.push_back('a');
-    }
-    else
-    {
-        value.push_back(value.back() + static_cast<char>(1));
-    }
+    char const ch = value.empty() ? 'a' : static_cast<char>('a' + ((value.back() - 'a') + 1) % 26);
+    value.push_back(ch);
     return true;
 }
 

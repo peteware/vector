@@ -10,6 +10,14 @@ bool permute(std::string& value, int depth);
 bool permute(float& value, int depth);
 bool permute(double& value, int depth);
 
+/**
+ * Add a value to the container
+ *
+ * @tparam Container A container that supports push_back()
+ * @param value Container to add value to
+ * @param depth Stop when container.size() >= depth
+ * @return true if permute()'d a different value, false otherwise
+ */
 template<class Container>
 bool
 permute(Container& value, int depth)
