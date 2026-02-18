@@ -19,7 +19,7 @@ memory_resource_null::do_deallocate(void* p, size_t bytes, size_t alignment)
 }
 
 bool
-memory_resource_null::do_is_equal(pw::pmr::memory_resource const& other) const noexcept
+memory_resource_null::do_is_equal(memory_resource const& other) const noexcept
 {
     return this == &other;
 }

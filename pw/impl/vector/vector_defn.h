@@ -104,6 +104,7 @@ template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::vector(vector&& copy) noexcept
     : m_storage(copy.get_allocator(), copy.size())
 {
+    // TODO: Move constructor should move Storage and allocator
     m_storage.uninitialized_move(copy.begin(), copy.end(), m_storage.begin()).set_size(copy.size());
 }
 

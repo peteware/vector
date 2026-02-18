@@ -7,7 +7,7 @@ namespace pw {
 
 /// is_class
 template<typename Type>
-struct is_class : public integral_constant<bool, __is_class(Type)>
+struct is_class : integral_constant<bool, __is_class(Type)>
 {
 };
 

@@ -775,7 +775,7 @@ vector<Type, Allocator>::insert(const_iterator position, size_type count, const_
  */
 template<class Type, class Allocator>
 constexpr vector<Type, Allocator>::iterator
-vector<Type, Allocator>::insert(const_iterator position, pw::initializer_list<value_type> init_list)
+vector<Type, Allocator>::insert(const_iterator position, initializer_list<value_type> init_list)
 {
     (void)position;
     (void)init_list;

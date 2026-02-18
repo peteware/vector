@@ -25,7 +25,7 @@ namespace pw::test {
  *
  * The value of v is unchanged.
  */
-struct OpTrackerCopyConstructible : public OpTracker
+struct OpTrackerCopyConstructible : OpTracker
 {
     static OpCounter& getCounter();
 

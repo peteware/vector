@@ -22,7 +22,7 @@ namespace pw::test {
  *   - CopyAssignable and CopyInsertable
  */
 
-struct OpTrackerDefaultConstructible : public OpTracker
+struct OpTrackerDefaultConstructible : OpTracker
 {
     static OpCounter& getCounter();
 

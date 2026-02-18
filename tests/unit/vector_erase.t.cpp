@@ -37,7 +37,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeListI
         WHEN("erase() at begin()")
         {
             Vector expected { 2, 3, 4, 5 };
-            auto   iter = v.erase(v.begin());
+            iter = v.erase(v.begin());
             THEN("one less value")
             {
                 REQUIRE(expected == v);
@@ -64,7 +64,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeListI
         WHEN("erase() last item")
         {
             Vector expected { 1, 2, 3, 4 };
-            auto   iter = v.erase(v.end() - 1);
+            iter = v.erase(v.end() - 1);
             THEN("one less value")
             {
                 REQUIRE(expected == v);
@@ -75,7 +75,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeListI
         }
         WHEN("erase(begin,end)")
         {
-            auto iter = v.erase(v.begin(), v.end());
+            iter = v.erase(v.begin(), v.end());
             THEN("empty")
             {
                 REQUIRE(v.end() == iter);
@@ -85,7 +85,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeListI
         WHEN("erase() at begin() to begin()+3")
         {
             Vector expected { 4, 5 };
-            auto   iter = v.erase(v.begin(), v.end() - 2);
+            iter = v.erase(v.begin(), v.end() - 2);
             THEN("there are 2 values")
             {
                 REQUIRE(expected == v);
@@ -95,7 +95,7 @@ TEMPLATE_LIST_TEST_CASE("Test erase", "[vector][erase]", pw::test::TestTypeListI
         WHEN("erase() at begin()+2 to end()")
         {
             Vector expected { 1, 2 };
-            auto   iter = v.erase(v.begin() + 2, v.end());
+            iter = v.erase(v.begin() + 2, v.end());
             THEN("there are 3 fewer values")
             {
                 REQUIRE(expected == v);

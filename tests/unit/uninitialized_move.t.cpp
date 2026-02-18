@@ -26,11 +26,11 @@ SCENARIO("check unitialized_move()", "[uninitialized_move]")
             pw::uninitialized_move(&array[0], &array[count], &dest[0]);
             THEN("move constructor called; destructor not")
             {
-                pw::test::OpCounter count = pw::test::OpTrackerCopyConstructible::getCounter() - init;
-                REQUIRE(3 == count.getMoveConstructor());
-                REQUIRE(0 == count.getCopyConstructor());
-                REQUIRE(count.constructorCount() == count.getMoveConstructor());
-                REQUIRE(0 == count.destructorCount());
+                pw::test::OpCounter counter = pw::test::OpTrackerCopyConstructible::getCounter() - init;
+                REQUIRE(3 == counter.getMoveConstructor());
+                REQUIRE(0 == counter.getCopyConstructor());
+                REQUIRE(counter.constructorCount() == counter.getMoveConstructor());
+                REQUIRE(0 == counter.destructorCount());
             }
             THEN("values are moved, too")
             {

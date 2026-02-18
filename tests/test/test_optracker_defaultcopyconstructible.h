@@ -7,7 +7,7 @@
 #include <test_optracker.h>
 
 namespace pw::test {
-struct OpTrackerDefaultCopyConstructible : public OpTracker
+struct OpTrackerDefaultCopyConstructible :  OpTracker
 {
     static OpCounter& getCounter() { return s_opCounter; }
 

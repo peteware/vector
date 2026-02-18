@@ -39,20 +39,19 @@ using TestTypeListAllocatorBase =
 using TestTypeListThrowing = std::tuple<vector<ThrowingType, ThrowingAllocator<ThrowingType>>,
                                         std::vector<ThrowingType, ThrowingAllocator<ThrowingType>>>;
 using TestTypeListNoAllocator =
-    std::tuple<vector<pw::test::OpTrackerAllocatorNone>, std::vector<pw::test::OpTrackerAllocatorNone>>;
+    std::tuple<vector<OpTrackerAllocatorNone>, std::vector<pw::test::OpTrackerAllocatorNone>>;
 using TestTypeListAllocatorOnly =
-    std::tuple<vector<pw::test::OpTrackerAllocatorOnly>, vector<pw::test::OpTrackerAllocatorOnly>
+    std::tuple<vector<OpTrackerAllocatorOnly>, vector<pw::test::OpTrackerAllocatorOnly>
                // This was failing to compile on MacOS
                // std::vector<pw::test::OpTrackerAllocatorOnly>
                >;
-using PmrAllocator = pw::pmr::polymorphic_allocator<>;
-using TestTypeListAllocatorFirst =
-    std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>,
-               pw::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
+using PmrAllocator               = pmr::polymorphic_allocator<>;
+using TestTypeListAllocatorFirst = std::tuple<pmr::vector<OpTrackerAllocatorFirst<PmrAllocator>>,
+                                              pmr::vector<OpTrackerAllocatorFirst<PmrAllocator>>>;
 // MacOS has trouble with this:
 // std::pmr::vector<pw::test::OpTrackerAllocatorFirst<PmrAllocator>>>;
-using TestTypeListAllocatorLast = std::tuple<pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>,
-                                             pw::pmr::vector<pw::test::OpTrackerAllocatorLast<PmrAllocator>>>;
+using TestTypeListAllocatorLast = std::tuple<pmr::vector<OpTrackerAllocatorLast<PmrAllocator>>,
+                                             pmr::vector<OpTrackerAllocatorLast<PmrAllocator>>>;
 // MacOS has trouble wiht this:
 // std::pmr::vector < pw::test::OpTrackerAllocatorLast < PmrAllocator >>> ;
 

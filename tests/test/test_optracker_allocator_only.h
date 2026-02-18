@@ -6,7 +6,7 @@
 
 namespace pw::test {
 
-struct OpTrackerAllocatorOnly : public OpTracker
+struct OpTrackerAllocatorOnly : OpTracker
 {
     static OpCounter& getCounter();
 

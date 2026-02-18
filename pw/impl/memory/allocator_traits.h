@@ -196,7 +196,7 @@ template<class T>
 constexpr size_t
 allocator_traits<Alloc>::max_size_impl(T const&, ...)
 {
-    return pw::numeric_limits<size_type>::max() / sizeof(value_type);
+    return numeric_limits<size_type>::max() / sizeof(value_type);
 }
 
 template<class Alloc>

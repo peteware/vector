@@ -34,7 +34,7 @@ permute(std::string& value, int depth)
     {
         return false;
     }
-    char const ch = value.empty() ? 'a' : static_cast<char>('a' + ((value.back() - 'a') + 1) % 26);
+    char const ch = value.empty() ? 'a' : static_cast<char>('a' + (value.back() - 'a' + 1) % 26);
     value.push_back(ch);
     return true;
 }

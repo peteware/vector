@@ -50,4 +50,4 @@ ThrowingType::reset()
     construction_count = 0;
     throw_after_n      = -1;
 }
-}; // namespace pw::test
+} // namespace pw::test

@@ -267,7 +267,7 @@ SCENARIO("Storage member functions work with OpTracker for operation counting", 
 {
     GIVEN("A Storage instance with OpTracker elements")
     {
-        struct TestOpTracker : public OpTracker
+        struct TestOpTracker : OpTracker
         {
             explicit TestOpTracker(OpCounter& opCounter)
                 : OpTracker(opCounter)

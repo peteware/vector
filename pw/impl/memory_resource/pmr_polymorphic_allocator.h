@@ -9,7 +9,7 @@
 
 namespace pw::pmr {
 
-template<class StorageUnit = pw::byte>
+template<class StorageUnit = byte>
 class polymorphic_allocator
 {
 public:

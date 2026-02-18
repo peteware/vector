@@ -15,11 +15,11 @@ template<class Type, class Alloc, class... Args>
 constexpr auto
 uses_allocator_construction_args(Alloc const& alloc, Args&&... args) noexcept
 {
-    if constexpr (!std::uses_allocator_v<pw::remove_cv_t<Type>, Alloc>)
+    if constexpr (!std::uses_allocator_v<remove_cv_t<Type>, Alloc>)
     {
         return std::forward_as_tuple(pw::forward<Args>(args)...);
     }
-    else if constexpr (std::uses_allocator_v<pw::remove_cv_t<Type>, Alloc> &&
+    else if constexpr (std::uses_allocator_v<remove_cv_t<Type>, Alloc> &&
                        std::is_constructible_v<Type, std::allocator_arg_t, Alloc const&, Args...>)
     {
         return std::tuple<std::allocator_arg_t, Alloc const&, Args&&...>(

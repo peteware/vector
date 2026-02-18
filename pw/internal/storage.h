@@ -10,8 +10,6 @@
 #include <pw/impl/utility/move.h>
 #include <pw/impl/utility/swap.h>
 
-#include <functional>
-
 namespace pw::internal {
 
 /**
@@ -255,7 +253,7 @@ template<class... Args>
 constexpr void
 Storage<Type, Allocator>::construct(iterator where, Args&&... args)
 {
-    pw::uninitialized_construct_using_allocator(pw::addressof(*where), m_alloc, std::forward<Args>(args)...);
+    pw::uninitialized_construct_using_allocator(pw::addressof(*where), m_alloc, pw::forward<Args>(args)...);
 }
 
 template<class Type, class Allocator>

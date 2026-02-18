@@ -7,7 +7,7 @@
 namespace pw::test {
 
 template<class Type>
-struct allocator_move_assignment : public allocator_base<Type>
+struct allocator_move_assignment : allocator_base<Type>
 {
     using propagate_on_container_move_assignment = true_type;
 

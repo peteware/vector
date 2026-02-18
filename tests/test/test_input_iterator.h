@@ -88,7 +88,7 @@ template<class Iterator>
 test_input_iterator<Iterator>::reference
 test_input_iterator<Iterator>::operator*() const
 {
-    return *(*m_underlying_iterator);
+    return **m_underlying_iterator;
 }
 
 template<class Iterator>
@@ -102,7 +102,7 @@ template<class Iterator>
 test_input_iterator<Iterator>&
 test_input_iterator<Iterator>::operator++()
 {
-    ++(*m_underlying_iterator);
+    ++*m_underlying_iterator;
     return *this;
 }
 
@@ -111,7 +111,7 @@ test_input_iterator<Iterator>
 test_input_iterator<Iterator>::operator++(int)
 {
     test_input_iterator temp(*this);
-    ++(*m_underlying_iterator);
+    ++*m_underlying_iterator;
     return temp;
 }
 } // namespace pw::test

@@ -26,7 +26,7 @@ public:
     using const_pointer          = allocator_traits<Allocator>::const_pointer;
     using iterator               = allocator_traits<Allocator>::pointer;
     using const_iterator         = allocator_traits<Allocator>::const_pointer;
-    using reverse_iterator       = pw::reverse_iterator<iterator>;
+    using reverse_iterator       = reverse_iterator<iterator>;
     using const_reverse_iterator = pw::reverse_iterator<const_iterator>;
 
     constexpr vector() noexcept(noexcept(allocator_type()));
@@ -126,7 +126,7 @@ constexpr auto operator<=>(vector<Type, Allocator> const& op1, vector<Type, Allo
 
 namespace pmr {
 template<class Type>
-using vector = pw::vector<Type, polymorphic_allocator<Type>>;
+using vector = vector<Type, polymorphic_allocator<Type>>;
 }
 } // namespace pw
 #endif /* INCLUDED_PW_IMPL_VECTOR_DECL_H */

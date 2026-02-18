@@ -6,7 +6,7 @@
 namespace pw {
 /// is_union
 template<class Type>
-struct is_union : public integral_constant<bool, __is_union(Type)>
+struct is_union : integral_constant<bool, __is_union(Type)>
 {
 };
 

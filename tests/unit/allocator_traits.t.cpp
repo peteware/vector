@@ -13,7 +13,7 @@ namespace pw::test {
 
 // Test allocator that provides select_on_container_copy_construction
 template<class Type>
-struct allocator_with_select : public allocator_base<Type>
+struct allocator_with_select : allocator_base<Type>
 {
     using base = allocator_base<Type>;
 
@@ -31,7 +31,7 @@ struct allocator_with_select : public allocator_base<Type>
 
 // Test allocator that does NOT provide select_on_container_copy_construction
 template<class Type>
-struct allocator_without_select : public allocator_base<Type>
+struct allocator_without_select : allocator_base<Type>
 {
     using base = allocator_base<Type>;
 
@@ -45,7 +45,7 @@ struct allocator_without_select : public allocator_base<Type>
 
 // Test allocator that provides max_size
 template<class Type>
-struct allocator_with_max_size : public allocator_base<Type>
+struct allocator_with_max_size : allocator_base<Type>
 {
     using base      = allocator_base<Type>;
     using size_type = base::size_type;

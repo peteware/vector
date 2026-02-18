@@ -5,7 +5,7 @@
 
 namespace pw::test {
 
-struct OpTrackerAllocatorNone : public OpTracker
+struct OpTrackerAllocatorNone : OpTracker
 {
     static OpCounter& getCounter();
 

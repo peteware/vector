@@ -8,7 +8,7 @@
 namespace pw::internal {
 
 template<class Type>
-struct check_empty1 : public Type
+struct check_empty1 : Type
 {
     double m_dummy;
 };
@@ -23,12 +23,12 @@ namespace pw {
 
 template<class Type, bool = is_class<Type>::value>
 struct is_empty
-    : public integral_constant<bool, sizeof(internal::check_empty1<Type>) == sizeof(internal::check_empty2)>
+    : integral_constant<bool, sizeof(internal::check_empty1<Type>) == sizeof(internal::check_empty2)>
 {
 };
 
 template<class Type>
-struct is_empty<Type, false> : public false_type
+struct is_empty<Type, false> : false_type
 {
 };
 

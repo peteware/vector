@@ -13,7 +13,7 @@ namespace pw::internal {
  * manage memory, making it a straightforward choice for scenarios where custom
  * memory management strategies are not necessary.
  */
-class memory_resource_new_delete : public pw::pmr::memory_resource
+class memory_resource_new_delete : public pmr::memory_resource
 {
 public:
     ~memory_resource_new_delete() noexcept override;

@@ -22,7 +22,7 @@ namespace pw::test {
  *
  * Note: copy constructible also satisfies this
  */
-struct OpTrackerMoveConstructible : public OpTracker
+struct OpTrackerMoveConstructible : OpTracker
 {
     static OpCounter& getCounter();
 

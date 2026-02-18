@@ -7,7 +7,7 @@
 namespace pw::test {
 
 template<typename Alloc>
-struct OpTrackerAllocatorLast : public OpTracker
+struct OpTrackerAllocatorLast : OpTracker
 {
     using allocator_type = Alloc;
 

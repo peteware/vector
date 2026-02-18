@@ -211,7 +211,8 @@ SCENARIO("is_constant_evaluated edge cases", "[is_constant_evaluated][edge_cases
             // ReSharper disable once CppDFAConstantFunctionResult
             constexpr auto ternary_test = []() constexpr {
                 return pw::is_constant_evaluated() ? (pw::is_constant_evaluated() ? 111 : 222)
-                                                   : (pw::is_constant_evaluated() ? 333 : 444);
+                                                   : pw::is_constant_evaluated()  ? 333
+                                                   : 444;
             };
 
             constexpr int compile_result = ternary_test();

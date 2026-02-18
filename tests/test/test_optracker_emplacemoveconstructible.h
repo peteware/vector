@@ -7,7 +7,7 @@
 
 namespace pw::test {
 
-struct OpTrackerEmplaceMoveConstructible : public OpTracker
+struct OpTrackerEmplaceMoveConstructible :  OpTracker
 {
     static OpCounter& getCounter();
     OpTrackerEmplaceMoveConstructible() = delete;
