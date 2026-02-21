@@ -1,8 +1,5 @@
 #include <pw/impl/algorithm/copy.h>
 
-#include <test_optracker_defaultcopyconstructible.h>
-// ReSharper disable once CppUnusedIncludeDirective
-
 #include <catch2/catch_test_macros.hpp>
 
 SCENARIO("copy", "[copy]")
