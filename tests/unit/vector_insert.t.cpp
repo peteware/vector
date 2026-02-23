@@ -102,13 +102,13 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
     GIVEN("an empty vector")
     {
         Vector v;
-        WHEN("insert(begin(), std::move(value)) is called")
+        WHEN("insert(begin(), pw::move(value)) is called")
         {
             typename Vector::iterator iter;
             value_type                value;
             pw::test::permute(value, 3);
             value_type moved_value = value;
-            iter                   = v.insert(v.begin(), std::move(moved_value));
+            iter                   = v.insert(v.begin(), pw::move(moved_value));
 
             THEN("size() is increased")
             {
@@ -123,13 +123,13 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(value == v.at(0));
             }
         }
-        WHEN("insert(end(), std::move(value)) is called")
+        WHEN("insert(end(), pw::move(value)) is called")
         {
             typename Vector::iterator iter;
             value_type                value;
             pw::test::permute(value, 3);
             value_type moved_value = value;
-            iter                   = v.insert(v.end(), std::move(moved_value));
+            iter                   = v.insert(v.end(), pw::move(moved_value));
 
             THEN("size() is increased")
             {
@@ -151,7 +151,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
         pw::test::Values<Vector> generate(5);
         Vector                   v(generate.values);
         REQUIRE(v.size() == v.capacity());
-        WHEN("insert(begin(), std::move(value)) is called with not enough capacity")
+        WHEN("insert(begin(), pw::move(value)) is called with not enough capacity")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -159,7 +159,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             value_type moved_value   = value;
             size_t     original_size = v.size();
 
-            iter                     = v.insert(v.begin(), std::move(moved_value));
+            iter                     = v.insert(v.begin(), pw::move(moved_value));
 
             THEN("size() is increased by 1")
             {
@@ -182,7 +182,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(generate.last_value == v.back());
             }
         }
-        WHEN("insert(end(), std::move(value)) is called")
+        WHEN("insert(end(), pw::move(value)) is called")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -190,7 +190,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             value_type moved_value   = value;
             size_t     original_size = v.size();
 
-            iter                     = v.insert(v.end(), std::move(moved_value));
+            iter                     = v.insert(v.end(), pw::move(moved_value));
 
             THEN("size() is increased by 1")
             {
@@ -209,7 +209,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(generate.first_value == v.front());
             }
         }
-        WHEN("insert(middle, std::move(value)) is called")
+        WHEN("insert(middle, pw::move(value)) is called")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -218,7 +218,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             size_t     original_size = v.size();
             size_t     insert_pos    = v.size() / 2;
 
-            iter                     = v.insert(v.begin() + insert_pos, std::move(moved_value));
+            iter                     = v.insert(v.begin() + insert_pos, pw::move(moved_value));
 
             THEN("size() is increased by 1")
             {
@@ -258,7 +258,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             v.push_back(val);
         }
 
-        WHEN("insert(end(), std::move(value)) is called")
+        WHEN("insert(end(), pw::move(value)) is called")
         {
             value_type value;
             pw::test::permute(value, 7);
@@ -274,7 +274,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
                 REQUIRE(v.front() == generate.first_value);
             }
         }
-        WHEN("insert(middle, std::move(value)) is called without reallocation")
+        WHEN("insert(middle, pw::move(value)) is called without reallocation")
         {
             typename Vector::iterator iter;
             value_type                value;
@@ -284,7 +284,7 @@ TEMPLATE_LIST_TEST_CASE("Test insert(pos, value&&)", "[vector][insert][move]", p
             size_t     original_size     = v.size();
             size_t     insert_pos        = v.size() / 2;
 
-            iter                         = v.insert(v.begin() + insert_pos, std::move(moved_value));
+            iter                         = v.insert(v.begin() + insert_pos, pw::move(moved_value));
 
             THEN("capacity() is unchanged")
             {

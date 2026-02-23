@@ -385,7 +385,7 @@ TEMPLATE_LIST_TEST_CASE("Constructors with int",
         {
             Vector source { 10, 20, 30 };
             Vector original_copy(source); // Keep a copy for comparison
-            Vector moved(std::move(source));
+            Vector moved(pw::move(source));
 
             THEN("the moved vector has the original content")
             {

@@ -282,7 +282,7 @@ SCENARIO("Storage member functions work with OpTracker for operation counting", 
             {
             }
             TestOpTracker(TestOpTracker&& other) noexcept
-                : OpTracker(std::move(other))
+                : OpTracker(pw::move(other))
             {
             }
             TestOpTracker& operator=(TestOpTracker const& other)
@@ -292,7 +292,7 @@ SCENARIO("Storage member functions work with OpTracker for operation counting", 
             }
             TestOpTracker& operator=(TestOpTracker&& other) noexcept
             {
-                OpTracker::operator=(std::move(other));
+                OpTracker::operator=(pw::move(other));
                 return *this;
             }
         };

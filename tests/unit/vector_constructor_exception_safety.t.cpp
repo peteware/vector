@@ -111,7 +111,7 @@ TEMPLATE_LIST_TEST_CASE("Constructor Exception Safety",
 
         // Move constructor should succeed even with throwing move constructor
         // because it should use allocation + copy instead of direct move
-        REQUIRE_NOTHROW(Vector(std::move(original)));
+        REQUIRE_NOTHROW(Vector(pw::move(original)));
     }
 
     SECTION("Iterator constructor - allocation failure")
