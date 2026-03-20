@@ -34,6 +34,16 @@ constexpr Type*
 // ReSharper disable once CppMemberFunctionMayBeStatic
 allocator<Type>::allocate(size_type count)
 {
+    // `new Type[n]` (typed allocation) is required for constexpr.
+    // Raw `operator new(n)` is "untyped" and rejected by the compiler in
+    // constexpr contexts.  Guard with if constexpr so the branch is not
+    // instantiated for non-trivially-constructible types, which cannot be
+    // default-constructed via `new Type[n]`.
+    if constexpr (__is_trivially_constructible(Type))
+    {
+        if (is_constant_evaluated())
+            return new Type[count];
+    }
     return static_cast<Type*>(operator new(count * sizeof(Type)));
 }
 
@@ -42,11 +52,14 @@ constexpr void
 // ReSharper disable once CppMemberFunctionMayBeStatic
 allocator<Type>::deallocate(Type* ptr, size_type)
 {
-    if (is_constant_evaluated())
+    // Must match new Type[count] used in the constexpr allocate path.
+    if constexpr (__is_trivially_constructible(Type))
     {
-        // In constant evaluation, we cannot use `::operator delete` as it may not be available.
-        // This is a workaround to avoid issues in constant expressions.
-        return;
+        if (is_constant_evaluated())
+        {
+            delete[] ptr;
+            return;
+        }
     }
     operator delete(static_cast<void*>(ptr));
 }

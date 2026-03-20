@@ -50,7 +50,7 @@ struct allocator_traits
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
     using is_always_equal                        = is_empty<Alloc>::type;
 
-    static pointer             allocate(allocator_type& alloc, size_type n);
+    static constexpr pointer allocate(allocator_type& alloc, size_type n);
     static constexpr void      deallocate(allocator_type& alloc, pointer p, size_type count);
     static constexpr Alloc     select_on_container_copy_construction(Alloc const& alloc);
     static constexpr size_type max_size(Alloc const& alloc);
@@ -76,7 +76,7 @@ struct allocator_traits
     static constexpr void construct(allocator_type&, Type* p, Args&&... args);
 
     template<class Type>
-    static void destroy(Alloc& a, Type* p);
+    static constexpr void destroy(Alloc& a, Type* p);
 
 private:
     template<class T>
@@ -90,19 +90,17 @@ private:
     static constexpr Alloc select_on_container_copy_construction_impl(Alloc const& alloc, ...);
 
     template<typename A, typename T>
-    static auto destroy_impl(A& a, // NOLINT(runtime/references)
-                             T* p) -> decltype(a.destroy(p));
+    static constexpr auto destroy_impl(A& a, // NOLINT(runtime/references)
+                                       T* p) -> decltype(a.destroy(p));
     template<typename T>
-    static void destroy_impl(Alloc&, T* p);
+    static constexpr void destroy_impl(Alloc&, T* p);
 };
 
 // Implementation section
 template<class Alloc>
-allocator_traits<Alloc>::pointer
+constexpr allocator_traits<Alloc>::pointer
 allocator_traits<Alloc>::allocate(allocator_type& alloc, size_type n)
 {
-    if (n == 0)
-        return nullptr;
     return alloc.allocate(n);
 }
 
@@ -163,7 +161,7 @@ allocator_traits<Alloc>::construct(allocator_type& alloc, Type* p, Args&&... arg
 
 template<class Alloc>
 template<class Type>
-void
+constexpr void
 allocator_traits<Alloc>::destroy(allocator_type& a, Type* p)
 {
     destroy_impl(a, p);
@@ -217,7 +215,7 @@ allocator_traits<Alloc>::select_on_container_copy_construction_impl(allocator_ty
 
 template<class Alloc>
 template<typename A, typename T>
-auto
+constexpr auto
 allocator_traits<Alloc>::destroy_impl(A& a, // NOLINT(runtime/references)
                                       T* p) -> decltype(a.destroy(p))
 {
@@ -226,7 +224,7 @@ allocator_traits<Alloc>::destroy_impl(A& a, // NOLINT(runtime/references)
 
 template<class Alloc>
 template<typename T>
-void
+constexpr void
 allocator_traits<Alloc>::destroy_impl(Alloc&, T* p)
 {
     p->~T();
