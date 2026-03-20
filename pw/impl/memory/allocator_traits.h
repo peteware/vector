@@ -2,6 +2,7 @@
 #define INCLUDED_PW_IMPL_ALLOCATOR_TRAITS_H
 
 #include <pw/impl/cstddef/size.h>
+#include <pw/impl/memory/allocation_result.h>
 #include <pw/impl/memory/construct_at.h>
 #include <pw/impl/memory/pointer_traits.h>
 #include <pw/impl/numeric_limits/numeric_limits.h>
@@ -24,6 +25,17 @@ inline bool constexpr has_construct_impl<decltype((void)pw::declval<Alloc>().con
 template<class Alloc, class... Args>
 inline bool constexpr has_construct_v = has_construct_impl<void, Alloc, Args...>;
 
+template<class, class Alloc>
+inline bool constexpr has_allocate_at_least_impl = false;
+
+template<class Alloc>
+inline bool constexpr has_allocate_at_least_impl<decltype((void)pw::declval<Alloc>().allocate_at_least(
+                                                     pw::declval<typename Alloc::size_type>())),
+                                                 Alloc> = true;
+
+template<class Alloc>
+inline bool constexpr has_allocate_at_least_v = has_allocate_at_least_impl<void, Alloc>;
+
 /**
  * @brief Provides a uniform interface to allocator types.
  *
@@ -37,18 +49,33 @@ inline bool constexpr has_construct_v = has_construct_impl<void, Alloc, Args...>
 template<class Alloc>
 struct allocator_traits
 {
-    using allocator_type                         = Alloc;
-    using value_type                             = Alloc::value_type;
-    using pointer                                = pointer_traits<value_type*>::pointer;
-    using const_pointer                          = pointer_traits<pointer>::template rebind<value_type const>;
-    using void_pointer                           = pointer_traits<pointer>::template rebind<void>;
-    using const_void_pointer                     = pointer_traits<pointer>::template rebind<void const>;
-    using difference_type                        = pointer_traits<pointer>::difference_type;
-    using size_type                              = make_unsigned<difference_type>::type;
+    using allocator_type = Alloc;
+    using value_type     = Alloc::value_type;
+
+    // Each alias uses Alloc's own type when defined, then falls back to the
+    // pointer_traits-based default required by the standard.
+    using pointer = internal::def_or_type<internal::alloc_pointer, Alloc, value_type*>;
+    using const_pointer =
+        internal::def_or_type<internal::alloc_const_pointer,
+                              Alloc,
+                              typename pointer_traits<pointer>::template rebind<value_type const>>;
+    using void_pointer = internal::def_or_type<internal::alloc_void_pointer,
+                                               Alloc,
+                                               typename pointer_traits<pointer>::template rebind<void>>;
+    using const_void_pointer =
+        internal::def_or_type<internal::alloc_const_void_pointer,
+                              Alloc,
+                              typename pointer_traits<pointer>::template rebind<void const>>;
+    using difference_type = internal::def_or_type<internal::alloc_difference_type,
+                                                  Alloc,
+                                                  typename pointer_traits<pointer>::difference_type>;
+    using size_type       = internal::
+        def_or_type<internal::alloc_size_type, Alloc, typename make_unsigned<difference_type>::type>;
     using propagate_on_container_copy_assignment = decltype(internal::detect_prop_on_copy<Alloc>(0));
     using propagate_on_container_move_assignment = decltype(internal::detect_prop_on_move<Alloc>(0));
     using propagate_on_container_swap            = decltype(internal::detect_prop_on_swap<Alloc>(0));
-    using is_always_equal                        = is_empty<Alloc>::type;
+    using is_always_equal =
+        internal::def_or_type<internal::alloc_is_always_equal, Alloc, typename is_empty<Alloc>::type>;
 
     static constexpr pointer allocate(allocator_type& alloc, size_type n);
     static constexpr allocation_result<pointer, size_type>
