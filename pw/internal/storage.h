@@ -103,7 +103,7 @@ constexpr Storage<Type, Allocator>::Storage(allocator_type const& alloc)
 template<class Type, class Allocator>
 constexpr Storage<Type, Allocator>::Storage(allocator_type const& alloc, size_type count)
     : m_alloc(alloc)
-    , m_begin(allocator_traits<Allocator>::allocate(m_alloc, count))
+    , m_begin(count > 0 ? allocator_traits<Allocator>::allocate(m_alloc, count) : nullptr)
     , m_size(0)
     , m_allocated(count)
 {
