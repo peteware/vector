@@ -8,9 +8,13 @@
 #include <pw/impl/numeric_limits/numeric_limits.h>
 #include <pw/impl/type_traits/is_empty.h>
 #include <pw/impl/type_traits/make_unsigned.h>
+#include <pw/impl/type_traits/void.h>
 #include <pw/impl/utility/declval.h>
 #include <pw/impl/utility/forward.h>
+#include <pw/internal/allocator_detect.h>
 #include <pw/internal/detect_prop.h>
+#include <pw/internal/extract_or.h>
+#include <pw/internal/meta.h>
 
 namespace pw {
 

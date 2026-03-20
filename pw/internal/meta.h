@@ -19,7 +19,7 @@ using get_difference_type = Type::difference_type;
 template<class Type, class = void>
 struct difference_type
 {
-    using type = extract_or_type<get_difference_type, Type, ptrdiff_t>;
+    using type = def_or_type<get_difference_type, Type, ptrdiff_t>;
 };
 
 template<typename Type>
