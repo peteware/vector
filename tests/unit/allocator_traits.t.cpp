@@ -703,6 +703,35 @@ SCENARIO("allocator_traits::allocate_at_least returns at least n elements",
 }
 
 // ─── rebind_alloc / rebind_traits ────────────────────────────────────────────
+
+SCENARIO("allocator_traits::rebind_alloc rebinds allocator to a new value type",
+         "[allocator_traits][rebind_alloc]")
+{
+    GIVEN("allocator_base<int>")
+    {
+        using Alloc        = pw::test::allocator_base<int>;
+        using ReboundAlloc = pw::allocator_traits<Alloc>::rebind_alloc<double>;
+        THEN("rebind_alloc<double> is allocator_base<double>")
+        {
+            REQUIRE((pw::is_same_v<ReboundAlloc, pw::test::allocator_base<double>>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::rebind_traits provides traits for rebound allocator",
+         "[allocator_traits][rebind_traits]")
+{
+    GIVEN("allocator_base<int>")
+    {
+        using Alloc         = pw::test::allocator_base<int>;
+        using ReboundTraits = pw::allocator_traits<Alloc>::rebind_traits<double>;
+        THEN("rebind_traits<double>::value_type is double")
+        {
+            REQUIRE((pw::is_same_v<ReboundTraits::value_type, double>));
+        }
+    }
+}
+
 // ─── allocate(n=0) calls through ────────────────────────────────────────────
 
 SCENARIO("allocator_traits::allocate calls alloc.allocate even when n=0",

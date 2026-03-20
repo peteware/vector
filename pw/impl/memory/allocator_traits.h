@@ -84,22 +84,11 @@ struct allocator_traits
     static constexpr Alloc     select_on_container_copy_construction(Alloc const& alloc);
     static constexpr size_type max_size(Alloc const& alloc);
 
-    // template<typename U, typename = void>
-    // struct rebind_alloc_impl
-    // {
-    //     using type = internal::rebind_first_arg<Alloc, U>::type;
-    // };
-    //
-    // template<typename U>
-    // struct rebind_alloc_impl<U, void_t<typename Alloc::template rebind<U>::other>>
-    // {
-    //     using type = Alloc::template rebind<U>::other;
-    // };
-    //
-    // template<typename Type>
-    // using rebind_alloc = rebind_alloc_impl<Type>::type;
-    // template<typename Type>
-    // using rebind_traits = allocator_traits<rebind_alloc<Type>>;
+    template<typename Type>
+    using rebind_alloc = internal::rebind_alloc_helper<Alloc, Type>::type;
+
+    template<typename Type>
+    using rebind_traits = allocator_traits<rebind_alloc<Type>>;
 
     template<class Type, class... Args>
     static constexpr void construct(allocator_type&, Type* p, Args&&... args);
