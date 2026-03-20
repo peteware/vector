@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ \"$TOOL_INPUT\" =~ \\.(h|cpp|hpp|cc)\\\" ]]; then clang-format -i \"$(echo $TOOL_INPUT | grep -o '\"file_path\":\"[^\"]*\"' | cut -d'\"' -f4)\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
