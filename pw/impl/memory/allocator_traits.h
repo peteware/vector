@@ -51,6 +51,8 @@ struct allocator_traits
     using is_always_equal                        = is_empty<Alloc>::type;
 
     static constexpr pointer allocate(allocator_type& alloc, size_type n);
+    static constexpr allocation_result<pointer, size_type>
+                               allocate_at_least(allocator_type& alloc, size_type n);
     static constexpr void      deallocate(allocator_type& alloc, pointer p, size_type count);
     static constexpr Alloc     select_on_container_copy_construction(Alloc const& alloc);
     static constexpr size_type max_size(Alloc const& alloc);
@@ -102,6 +104,21 @@ constexpr allocator_traits<Alloc>::pointer
 allocator_traits<Alloc>::allocate(allocator_type& alloc, size_type n)
 {
     return alloc.allocate(n);
+}
+
+template<class Alloc>
+constexpr allocation_result<typename allocator_traits<Alloc>::pointer,
+                            typename allocator_traits<Alloc>::size_type>
+allocator_traits<Alloc>::allocate_at_least(allocator_type& alloc, size_type n)
+{
+    if constexpr (has_allocate_at_least_v<allocator_type>)
+    {
+        return alloc.allocate_at_least(n);
+    }
+    else
+    {
+        return { alloc.allocate(n), n };
+    }
 }
 
 template<class Alloc>

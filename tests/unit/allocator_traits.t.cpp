@@ -11,6 +11,26 @@
 
 namespace pw::test {
 
+// Allocator that counts how many times allocate() is called.
+// Used to verify allocator_traits::allocate does not short-circuit for n=0.
+template<class Type>
+struct counting_allocator : allocator_base<Type>
+{
+    int m_allocate_calls = 0;
+    explicit counting_allocator(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+
+    Type* allocate(size_t n)
+    {
+        ++m_allocate_calls;
+        if (n == 0)
+            return nullptr;
+        return allocator_base<Type>::allocate(n);
+    }
+};
+
 // Test allocator that provides select_on_container_copy_construction
 template<class Type>
 struct allocator_with_select : allocator_base<Type>
@@ -496,3 +516,42 @@ SCENARIO("allocator_traits::is_always_equal uses Alloc::is_always_equal when def
     }
 }
 
+
+SCENARIO("allocator_traits::allocate_at_least returns at least n elements",
+         "[allocator_traits][allocate_at_least]")
+{
+    GIVEN("A pw::allocator<int>")
+    {
+        pw::allocator<int> alloc;
+        WHEN("allocate_at_least(5) is called")
+        {
+            auto result = pw::allocator_traits<pw::allocator<int>>::allocate_at_least(alloc, 5);
+            THEN("the pointer is non-null and count is at least 5")
+            {
+                REQUIRE(result.ptr != nullptr);
+                REQUIRE(result.count >= 5);
+                pw::allocator_traits<pw::allocator<int>>::deallocate(alloc, result.ptr, result.count);
+            }
+        }
+    }
+}
+
+// ─── rebind_alloc / rebind_traits ────────────────────────────────────────────
+// ─── allocate(n=0) calls through ────────────────────────────────────────────
+
+SCENARIO("allocator_traits::allocate calls alloc.allocate even when n=0",
+         "[allocator_traits][allocate][n=0]")
+{
+    GIVEN("A counting allocator")
+    {
+        pw::test::counting_allocator<int> alloc;
+        WHEN("allocate is called with n=0")
+        {
+            pw::allocator_traits<pw::test::counting_allocator<int>>::allocate(alloc, 0);
+            THEN("the allocator's allocate was called once")
+            {
+                REQUIRE(alloc.m_allocate_calls == 1);
+            }
+        }
+    }
+}
