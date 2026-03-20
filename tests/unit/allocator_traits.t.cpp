@@ -1,7 +1,10 @@
 #include <pw/impl/allocator/allocator.h>
 #include <pw/impl/memory/allocator_traits.h>
+#include <pw/impl/memory/construct_at.h>
 #include <pw/impl/memory_resource/pmr_polymorphic_allocator.h>
+#include <pw/impl/type_traits/is_same.h>
 #include <test_allocator_base.h>
+#include <test_allocator_is_always_equal.h>
 #include <test_optracker_allocator_first.h>
 #include <test_optracker_emplacemoveconstructible.h>
 
@@ -10,6 +13,88 @@
 #include <limits>
 
 namespace pw::test {
+
+// Minimal fancy pointer for testing custom pointer type aliases in allocator_traits.
+// pointer_traits<fancy_ptr<T>> works via generic template:
+//   element_type = T (via fancy_ptr::element_type)
+//   difference_type = ptrdiff_t (fallback, fancy_ptr has none)
+//   rebind<U> = fancy_ptr<U> (via rebind_first_arg since fancy_ptr<T> is template<T>)
+template<class T>
+struct fancy_ptr
+{
+    using element_type = T;
+    T*   raw;
+    explicit fancy_ptr(T* p = nullptr)
+        : raw(p)
+    {
+    }
+};
+
+// Allocator that defines pointer = fancy_ptr<Type>
+template<class Type>
+struct allocator_with_fancy_pointer : allocator_base<Type>
+{
+    using pointer = fancy_ptr<Type>;
+    explicit allocator_with_fancy_pointer(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
+
+// Allocator with custom size_type distinct from make_unsigned<ptrdiff_t>::type (= size_t)
+template<class Type>
+struct allocator_with_size_type : allocator_base<Type>
+{
+    using size_type = unsigned short;
+    explicit allocator_with_size_type(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
+
+// Allocator with custom difference_type distinct from pointer_traits<Type*>::difference_type (= ptrdiff_t)
+template<class Type>
+struct allocator_with_diff_type : allocator_base<Type>
+{
+    using difference_type = short;
+    explicit allocator_with_diff_type(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
+
+// Allocator with custom const_pointer distinct from pointer_traits<Type*>::rebind<const Type> (= const Type*)
+template<class Type>
+struct allocator_with_const_pointer : allocator_base<Type>
+{
+    using const_pointer = Type const* const*;
+    explicit allocator_with_const_pointer(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
+
+// Allocator with custom void_pointer distinct from pointer_traits<Type*>::rebind<void> (= void*)
+template<class Type>
+struct allocator_with_void_pointer : allocator_base<Type>
+{
+    using void_pointer = long*;
+    explicit allocator_with_void_pointer(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
+
+// Allocator with custom const_void_pointer distinct from pointer_traits<Type*>::rebind<const void> (= const void*)
+template<class Type>
+struct allocator_with_const_void_pointer : allocator_base<Type>
+{
+    using const_void_pointer = long const*;
+    explicit allocator_with_const_void_pointer(int instance = 1)
+        : allocator_base<Type>(instance)
+    {
+    }
+};
 
 // Allocator that counts how many times allocate() is called.
 // Used to verify allocator_traits::allocate does not short-circuit for n=0.
@@ -516,6 +601,87 @@ SCENARIO("allocator_traits::is_always_equal uses Alloc::is_always_equal when def
     }
 }
 
+SCENARIO("allocator_traits::pointer uses Alloc::pointer when defined",
+         "[allocator_traits][pointer]")
+{
+    GIVEN("An allocator that defines pointer = fancy_ptr<Type>")
+    {
+        using Alloc  = pw::test::allocator_with_fancy_pointer<int>;
+        using FancyP = pw::test::fancy_ptr<int>;
+        THEN("allocator_traits::pointer is fancy_ptr<int>")
+        {
+            REQUIRE((pw::is_same_v<pw::allocator_traits<Alloc>::pointer, FancyP>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::size_type uses Alloc::size_type when defined",
+         "[allocator_traits][size_type]")
+{
+    GIVEN("An allocator that defines size_type = unsigned short")
+    {
+        using Alloc = pw::test::allocator_with_size_type<int>;
+        THEN("allocator_traits::size_type is unsigned short")
+        {
+            REQUIRE((pw::is_same_v<pw::allocator_traits<Alloc>::size_type, unsigned short>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::difference_type uses Alloc::difference_type when defined",
+         "[allocator_traits][difference_type]")
+{
+    GIVEN("An allocator that defines difference_type = short")
+    {
+        using Alloc = pw::test::allocator_with_diff_type<int>;
+        THEN("allocator_traits::difference_type is short")
+        {
+            REQUIRE((pw::is_same_v<pw::allocator_traits<Alloc>::difference_type, short>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::const_pointer uses Alloc::const_pointer when defined",
+         "[allocator_traits][const_pointer]")
+{
+    GIVEN("An allocator that defines const_pointer = int const* const*")
+    {
+        using Alloc = pw::test::allocator_with_const_pointer<int>;
+        THEN("allocator_traits::const_pointer is int const* const*")
+        {
+            REQUIRE((pw::is_same_v<pw::allocator_traits<Alloc>::const_pointer, int const* const*>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::void_pointer uses Alloc::void_pointer when defined",
+         "[allocator_traits][void_pointer]")
+{
+    GIVEN("An allocator that defines void_pointer = long*")
+    {
+        using Alloc = pw::test::allocator_with_void_pointer<int>;
+        THEN("allocator_traits::void_pointer is long*")
+        {
+            REQUIRE((pw::is_same_v<pw::allocator_traits<Alloc>::void_pointer, long*>));
+        }
+    }
+}
+
+SCENARIO("allocator_traits::const_void_pointer uses Alloc::const_void_pointer when defined",
+         "[allocator_traits][const_void_pointer]")
+{
+    GIVEN("An allocator that defines const_void_pointer = long const*")
+    {
+        using Alloc = pw::test::allocator_with_const_void_pointer<int>;
+        THEN("allocator_traits::const_void_pointer is long const*")
+        {
+            REQUIRE(
+                (pw::is_same_v<pw::allocator_traits<Alloc>::const_void_pointer, long const*>));
+        }
+    }
+}
+
+// ─── allocate_at_least (C++23) ───────────────────────────────────────────────
 
 SCENARIO("allocator_traits::allocate_at_least returns at least n elements",
          "[allocator_traits][allocate_at_least]")
